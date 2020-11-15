@@ -1,7 +1,6 @@
 package blackjack.ui;
 
 import blackjack.domain.Card;
-import blackjack.domain.Deck;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -11,6 +10,8 @@ import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.util.*;
+
+import static blackjack.domain.Deck.*;
 
 public class Controller implements Initializable {
 
@@ -24,7 +25,7 @@ public class Controller implements Initializable {
         double screenHeight = screen.getHeight();
         double screenWidth = screen.getWidth();
 
-        Stack<Card> deck = Deck.shuffle();
+        Stack<Card> deck = shuffle(fresh());
         Set<Card> dealerHand = new HashSet<>();
         Set<Card> playerHand = new HashSet<>();
         playerHand.add(deck.pop());

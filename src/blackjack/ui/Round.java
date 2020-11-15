@@ -1,7 +1,6 @@
-package blackjack;
+package blackjack.ui;
 
 import blackjack.domain.Card;
-import blackjack.ui.IMAGE_KEY;
 import javafx.scene.image.Image;
 
 import java.util.*;
@@ -13,7 +12,6 @@ import static blackjack.ui.IMAGE_KEY.*;
 public class Round {
     public static Map<IMAGE_KEY, Image> opening() {
         Stack<Card> deck = shuffle(fresh());
-
         Set<Card> dealerHand = new HashSet<>();
         Set<Card> playerHand = new HashSet<>();
 

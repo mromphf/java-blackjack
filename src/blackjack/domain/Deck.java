@@ -1,5 +1,6 @@
 package blackjack.domain;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -16,7 +17,7 @@ public class Deck {
         return result;
     }
 
-    public static Stack<Card> shuffle(Stack<Card> deck) {
+    public static Stack<Card> shuffle(List<Card> deck) {
         Stack<Card> stack = new Stack<>();
         while(!deck.isEmpty()) {
             Random r = new Random();

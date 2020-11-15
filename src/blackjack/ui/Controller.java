@@ -34,21 +34,23 @@ public class Controller implements Initializable {
 
         Iterator<Card> player = playerHand.iterator();
         Iterator<Card> dealer = dealerHand.iterator();
-        final Image img1 = imageName(dealer.next());
-        final Image img2 = imageName(dealer.next());
-        final Image img3 = imageName(player.next());
-        final Image img4 = imageName(player.next());
+        Map<String, Image> imageMap = new HashMap<>();
+
+        imageMap.put("img1", imageFile(dealer.next()));
+        imageMap.put("img2", imageFile(dealer.next()));
+        imageMap.put("img3", imageFile(player.next()));
+        imageMap.put("img4", imageFile(player.next()));
 
         foreground.setHeight(screenHeight);
         foreground.setWidth(screenWidth);
 
-        context.drawImage(img1, 800, 200);
-        context.drawImage(img2, 1000, 200);
-        context.drawImage(img3, 800, 600);
-        context.drawImage(img4, 1000, 600);
+        context.drawImage(imageMap.get("img1"), 800, 200);
+        context.drawImage(imageMap.get("img2"), 1000, 200);
+        context.drawImage(imageMap.get("img3"), 800, 600);
+        context.drawImage(imageMap.get("img4"), 1000, 600);
     }
 
-    private Image imageName(Card c) {
+    private Image imageFile(Card c) {
         String imageName = c.getSuit().name().toLowerCase() + c.getValue();
         return  new Image(String.format("file:graphics/%s.jpg", imageName));
     }

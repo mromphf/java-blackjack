@@ -18,6 +18,11 @@ public class Controller implements Initializable {
     @FXML
     private Canvas foreground;
 
+    private final String DLR_CARD_1 = "img1";
+    private final String DLR_CARD_2 = "img2";
+    private final String PLR_CARD_1 = "img3";
+    private final String PLR_CARD_2 = "img4";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
@@ -35,20 +40,21 @@ public class Controller implements Initializable {
 
         Iterator<Card> player = playerHand.iterator();
         Iterator<Card> dealer = dealerHand.iterator();
-        Map<String, Image> imageMap = new HashMap<>();
 
-        imageMap.put("img1", imageFile(dealer.next()));
-        imageMap.put("img2", imageFile(dealer.next()));
-        imageMap.put("img3", imageFile(player.next()));
-        imageMap.put("img4", imageFile(player.next()));
+        Map<String, Image> imageMap = new HashMap<String, Image>() {{
+            put(DLR_CARD_1, imageFile(dealer.next()));
+            put(DLR_CARD_2, imageFile(dealer.next()));
+            put(PLR_CARD_1, imageFile(player.next()));
+            put(PLR_CARD_2, imageFile(player.next()));
+        }};
 
         foreground.setHeight(screenHeight);
         foreground.setWidth(screenWidth);
 
-        context.drawImage(imageMap.get("img1"), 800, 200);
-        context.drawImage(imageMap.get("img2"), 1000, 200);
-        context.drawImage(imageMap.get("img3"), 800, 600);
-        context.drawImage(imageMap.get("img4"), 1000, 600);
+        context.drawImage(imageMap.get(DLR_CARD_1), 800, 200);
+        context.drawImage(imageMap.get(DLR_CARD_2), 1000, 200);
+        context.drawImage(imageMap.get(PLR_CARD_1), 800, 600);
+        context.drawImage(imageMap.get(PLR_CARD_2), 1000, 600);
     }
 
     private Image imageFile(Card c) {

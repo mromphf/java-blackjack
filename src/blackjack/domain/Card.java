@@ -1,16 +1,12 @@
 package blackjack.domain;
 
 public class Card {
-    private int value;
-    private Suit suit;
+    private final int value;
+    private final Suit suit;
 
     public Card(int value, Suit suit) {
         this.value = value;
         this.suit = suit;
-    }
-
-    public boolean isFace() {
-        return value > 10;
     }
 
     public boolean isAce() {
@@ -19,5 +15,9 @@ public class Card {
 
     public int getValue() {
         return value;
+    }
+
+    public Suit getSuit() {
+        return suit;
     }
 }

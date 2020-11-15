@@ -53,6 +53,6 @@ public class Controller implements Initializable {
 
     private Image imageFile(Card c) {
         String imageName = c.getSuit().name().toLowerCase() + c.getValue();
-        return  new Image(String.format("file:graphics/%s.jpg", imageName));
+        return new Image(String.format("file:graphics/%s.jpg", imageName));
     }
 }

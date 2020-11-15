@@ -1,12 +1,10 @@
 package blackjack.domain;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Stack;
 
 public class Deck {
-    public static Collection<Card> shuffle() {
-        Set<Card> result = new HashSet<>();
+    public static Stack<Card> shuffle() {
+        Stack<Card> result = new Stack<>();
         for (Suit suit : Suit.values()) {
             for (int i = 1; i < 14; i++) {
                 result.add(new Card(i, suit));

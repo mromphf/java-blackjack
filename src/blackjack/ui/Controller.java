@@ -27,10 +27,10 @@ public class Controller implements Initializable {
         Stack<Card> deck = Deck.shuffle();
         Set<Card> dealerHand = new HashSet<>();
         Set<Card> playerHand = new HashSet<>();
-        dealerHand.add(deck.pop());
         playerHand.add(deck.pop());
         dealerHand.add(deck.pop());
         playerHand.add(deck.pop());
+        dealerHand.add(deck.pop());
 
         Iterator<Card> player = playerHand.iterator();
         Iterator<Card> dealer = dealerHand.iterator();

@@ -10,16 +10,12 @@ import java.net.URL;
 import java.util.*;
 
 import static blackjack.domain.Deck.*;
+import static blackjack.ui.IMAGE_KEY.*;
 
 public class Controller implements Initializable {
 
     @FXML
     private Canvas foreground;
-
-    public final String DLR_CARD_1 = "img1";
-    public final String DLR_CARD_2 = "img2";
-    public final String PLR_CARD_1 = "img3";
-    public final String PLR_CARD_2 = "img4";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -34,7 +30,7 @@ public class Controller implements Initializable {
         Iterator<Card> player = playerHand.iterator();
         Iterator<Card> dealer = dealerHand.iterator();
 
-        Map<String, Image> imageMap = new HashMap<String, Image>() {{
+        Map<IMAGE_KEY, Image> imageMap = new HashMap<IMAGE_KEY, Image>() {{
             put(DLR_CARD_1, imageFile(dealer.next()));
             put(DLR_CARD_2, imageFile(dealer.next()));
             put(PLR_CARD_1, imageFile(player.next()));

@@ -1,6 +1,4 @@
-package blackjack.ui;
-
-import blackjack.domain.Card;
+package blackjack.domain;
 
 import java.util.*;
 
@@ -14,7 +12,7 @@ public class Round {
         playerHand.add(deck.pop());
         dealerHand.add(deck.pop());
 
-        return new HashMap<String, Set<Card>> () {{
+        return new HashMap<String, Set<Card>>() {{
             put("dealer", dealerHand);
             put("player", playerHand);
         }};

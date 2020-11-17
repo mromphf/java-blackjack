@@ -1,8 +1,6 @@
 package blackjack.domain;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class Deck {
     private static final int CARDS_PER_SUIT = 13;
@@ -26,5 +24,20 @@ public class Deck {
             deck.remove(ri);
         }
         return stack;
+    }
+
+    public static Map<String, Set<Card>> openingHand(Stack<Card> deck) {
+        Set<Card> dealerHand = new HashSet<>();
+        Set<Card> playerHand = new HashSet<>();
+
+        playerHand.add(deck.pop());
+        dealerHand.add(deck.pop());
+        playerHand.add(deck.pop());
+        dealerHand.add(deck.pop());
+
+        return new HashMap<String, Set<Card>>() {{
+            put("dealer", dealerHand);
+            put("player", playerHand);
+        }};
     }
 }

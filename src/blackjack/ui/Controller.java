@@ -1,6 +1,7 @@
 package blackjack.ui;
+
 import blackjack.domain.Card;
-import blackjack.domain.Round;
+import blackjack.domain.Deck;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -12,7 +13,6 @@ import java.util.*;
 import static blackjack.domain.Deck.fresh;
 import static blackjack.domain.Deck.shuffle;
 import static blackjack.ui.IMAGE_KEY.*;
-import static blackjack.ui.IMAGE_KEY.PLR_CARD_2;
 
 public class Controller implements Initializable {
 
@@ -24,7 +24,7 @@ public class Controller implements Initializable {
         Stack<Card> deck = shuffle(fresh());
         Screen screen = new Screen(foreground);
 
-        Map<String, Set<Card>> hands = Round.opening(deck);
+        Map<String, Set<Card>> hands = Deck.openingHand(deck);
         Iterator<Card> dealer = hands.get("dealer").iterator();
         Iterator<Card> player = hands.get("player").iterator();
 

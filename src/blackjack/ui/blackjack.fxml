@@ -1,7 +1,16 @@
 <?import javafx.scene.layout.GridPane?>
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 <GridPane fx:controller="blackjack.ui.Controller"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-    <Canvas fx:id="foreground"/>
+    <padding>
+        <Insets top="5" bottom="5" left="5"/>
+    </padding>
+
+    <Canvas GridPane.rowIndex="0" fx:id="foreground"/>
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="0">Double</Button>
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="1">Hit</Button>
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="2">Stand</Button>
 </GridPane>

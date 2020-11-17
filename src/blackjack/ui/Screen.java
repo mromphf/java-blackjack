@@ -14,7 +14,7 @@ public class Screen {
     public Screen(Canvas foreground) {
         context = foreground.getGraphicsContext2D();
         Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
-        foreground.setHeight(screen.getHeight());
+        foreground.setHeight(1000);
         foreground.setWidth(screen.getWidth());
     }
 

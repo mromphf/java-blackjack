@@ -4,13 +4,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 <GridPane fx:controller="blackjack.ui.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-    <padding>
-        <Insets top="5" bottom="5" left="5"/>
-    </padding>
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
 
-    <Canvas GridPane.rowIndex="0" fx:id="foreground"/>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="0">Double</Button>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="1">Hit</Button>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="2">Stand</Button>
+    <GridPane GridPane.rowIndex="0">
+        <Canvas fx:id="foreground"/>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0">Double</Button>
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1">Hit</Button>
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="2">Stand</Button>
+    </GridPane>
 </GridPane>

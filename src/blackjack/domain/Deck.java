@@ -30,6 +30,7 @@ public class Deck {
         Set<Card> dealerHand = new HashSet<>();
         Set<Card> playerHand = new HashSet<>();
 
+        // TODO: Need safety checks for an empty stack
         playerHand.add(deck.pop());
         dealerHand.add(deck.pop());
         playerHand.add(deck.pop());

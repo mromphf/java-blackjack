@@ -33,6 +33,7 @@ public class Controller implements Initializable {
     }
 
     private Map<IMAGE_KEY, Image> imageMap(Iterator<Card> dealer, Iterator<Card> player) {
+        //TODO: Should have safety checks for empty iterators
         return new HashMap<IMAGE_KEY, Image>() {{
             put(DLR_CARD_1, imageFile(dealer.next()));
             put(DLR_CARD_2, imageFile(dealer.next()));

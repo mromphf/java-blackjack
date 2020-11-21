@@ -40,6 +40,12 @@ public class Screen {
     }
 
     public void blackScreen() {
+        context.setFill(Color.BLACK);
+        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
+    }
+
+    public void blueScreen() {
+        context.setFill(Color.BLUE);
         context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
     }
 

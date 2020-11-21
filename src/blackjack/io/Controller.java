@@ -25,6 +25,9 @@ public class Controller implements Initializable {
     @FXML
     private Button btnHit;
 
+    @FXML
+    private Button btnDouble;
+
     private List<Card> deck;
     private Map<String, List<Card>> hands;
     private Screen screen;
@@ -34,12 +37,17 @@ public class Controller implements Initializable {
         screen = new Screen(foreground);
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
+        btnDouble.setOnAction(event -> onDouble());
 
         deck = shuffle(fresh());
         hands = openingHand(deck);
         deck = burn(4, deck);
 
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+    }
+
+    public void onDouble() {
+        screen.blueScreen();
     }
 
     public void onStand() {

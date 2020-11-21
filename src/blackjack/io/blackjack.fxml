@@ -11,7 +11,7 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0">Double</Button>
+        <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0">Double</Button>
         <Button fx:id="btnHit" GridPane.rowIndex="0" GridPane.columnIndex="1">Hit</Button>
         <Button fx:id="btnStand" GridPane.rowIndex="0" GridPane.columnIndex="2">Stand</Button>
     </GridPane>

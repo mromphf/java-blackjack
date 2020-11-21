@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static blackjack.domain.Deck.fresh;
 import static blackjack.domain.Deck.shuffle;
@@ -23,22 +24,15 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Stack<Card> deck = shuffle(fresh());
         Screen screen = new Screen(foreground);
-
-        Map<String, Set<Card>> hands = Deck.openingHand(deck);
-        Iterator<Card> dealer = hands.get("dealer").iterator();
-        Iterator<Card> player = hands.get("player").iterator();
-
-        Map<IMAGE_KEY, Image> imageMap = imageMap( dealer, player );
+        Map<String, List<Card>> hands = Deck.openingHand(deck);
+        Map<IMAGE_KEY, List<Image>> imageMap = imageMap(hands.get("dealer"), hands.get("player"));
         screen.drawCards(imageMap);
     }
 
-    private Map<IMAGE_KEY, Image> imageMap(Iterator<Card> dealer, Iterator<Card> player) {
-        //TODO: Should have safety checks for empty iterators
-        return new HashMap<IMAGE_KEY, Image>() {{
-            put(DLR_CARD_1, imageFileName(dealer.next()));
-            put(DLR_CARD_2, imageFileName(dealer.next()));
-            put(PLR_CARD_1, imageFileName(player.next()));
-            put(PLR_CARD_2, imageFileName(player.next()));
+    private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
+        return new HashMap<IMAGE_KEY, List<Image>>() {{
+            put(DEALER_CARDS, dealer.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));
         }};
     }
 

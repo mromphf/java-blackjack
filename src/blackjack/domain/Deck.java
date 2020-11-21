@@ -26,9 +26,9 @@ public class Deck {
         return stack;
     }
 
-    public static Map<String, Set<Card>> openingHand(Stack<Card> deck) {
-        Set<Card> dealerHand = new HashSet<>();
-        Set<Card> playerHand = new HashSet<>();
+    public static Map<String, List<Card>> openingHand(Stack<Card> deck) {
+        List<Card> dealerHand = new LinkedList<>();
+        List<Card> playerHand = new LinkedList<>();
 
         // TODO: Need safety checks for an empty stack
         playerHand.add(deck.pop());
@@ -36,7 +36,7 @@ public class Deck {
         playerHand.add(deck.pop());
         dealerHand.add(deck.pop());
 
-        return new HashMap<String, Set<Card>>() {{
+        return new HashMap<String, List<Card>>() {{
             put("dealer", dealerHand);
             put("player", playerHand);
         }};

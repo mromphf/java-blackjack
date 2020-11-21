@@ -15,8 +15,12 @@ public class Rules {
     }
 
     public static int score(Collection<Card> cards) {
-        //TODO: Ace logic
-        return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
+        //TODO: Soft total Ace logic
+        if (isBlackjack(cards)) {
+            return 21;
+        } else {
+            return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
+        }
     }
 
     public static int concealedScore(Collection<Card> cards) {

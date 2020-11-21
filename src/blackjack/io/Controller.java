@@ -64,12 +64,15 @@ public class Controller implements Initializable {
 
     public void onHit() {
         btnDouble.setDisable(true);
+        // TODO: Need safety check for empty deck
         hands.get("player").add(deck.get(0));
         deck = burn(1, deck);
 
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+
+        //TODO: Add Push logic
 
         if (bust(hands.get("player"))) {
             allButtons().forEach(b -> b.setDisable(true));

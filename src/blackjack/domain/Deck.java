@@ -27,6 +27,7 @@ public class Deck {
     }
 
     public static List<Card> burn(int cards, List<Card> deck) {
+        // TODO: This is probably broken
         return deck.subList(cards, deck.size() - cards);
     }
 

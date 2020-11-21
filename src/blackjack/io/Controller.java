@@ -1,4 +1,4 @@
-package blackjack.ui;
+package blackjack.io;
 
 import blackjack.domain.Card;
 import blackjack.domain.Deck;
@@ -12,7 +12,7 @@ import java.util.*;
 
 import static blackjack.domain.Deck.fresh;
 import static blackjack.domain.Deck.shuffle;
-import static blackjack.ui.IMAGE_KEY.*;
+import static blackjack.io.IMAGE_KEY.*;
 
 public class Controller implements Initializable {
 

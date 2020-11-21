@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("ui/blackjack.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("io/blackjack.fxml"));
         Scene scene = new Scene(root);
 
         root.requestFocus();

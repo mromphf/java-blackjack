@@ -1,4 +1,4 @@
-package blackjack.ui;
+package blackjack.io;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;

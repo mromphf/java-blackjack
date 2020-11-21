@@ -1,4 +1,4 @@
-package blackjack.ui;
+package blackjack.io;
 
 public enum IMAGE_KEY {
     DLR_CARD_1,

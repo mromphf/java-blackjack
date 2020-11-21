@@ -16,7 +16,8 @@ public class Rules {
     }
 
     public static int concealedScore(Collection<Card> cards) {
-        return normalizeFaceValues(cards.iterator().next());
+        Card c = cards.iterator().next();
+        return c.isAce() ? 11 : normalizeFaceValues(c);
     }
 
     private static int normalizeFaceValues(Card c) {

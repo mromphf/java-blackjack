@@ -56,12 +56,14 @@ public class Controller implements Initializable {
     }
 
     public void onStand() {
+        allButtons().forEach(b -> b.setDisable(true));
         screen.reset();
         screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
     public void onHit() {
+        btnDouble.setDisable(true);
         hands.get("player").add(deck.get(0));
         deck = burn(1, deck);
 

@@ -46,6 +46,10 @@ public class Screen {
         drawLineOfCards("Your Hand", imageMap.get(PLAYER_CARDS), 450);
     }
 
+    public void blackScreen() {
+        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
+    }
+
     private void drawLineOfCards(String label, List<Image> cards, int y) {
         final Font f = new Font("Arial", 30);
         final int HOR_CENTER = (int) (foreground.getWidth() / 2);

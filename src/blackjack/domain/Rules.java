@@ -15,11 +15,12 @@ public class Rules {
     }
 
     public static int score(Collection<Card> cards) {
-        //TODO: Soft total Ace logic
         if (isBlackjack(cards)) {
             return 21;
+        } else if (atLeastOneAce(cards) && hardTotalFavorable(cards)) {
+            return hardTotal(cards);
         } else {
-            return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
+            return softTotal(cards);
         }
     }
 
@@ -28,7 +29,23 @@ public class Rules {
         return c.isAce() ? 11 : normalizeFaceValues(c);
     }
 
-    private static int normalizeFaceValues(Card c) {
+    public static boolean atLeastOneAce(Collection<Card> cards) {
+        return cards.stream().anyMatch(Card::isAce);
+    }
+
+    public static boolean hardTotalFavorable(Collection<Card> cards) {
+        return hardTotal(cards) < 21;
+    }
+
+    public static int normalizeFaceValues(Card c) {
         return c.getValue() < 11 ? c.getValue() : 10;
+    }
+
+    public static int hardTotal(Collection<Card> cards) {
+        return softTotal(cards) + 10;
+    }
+
+    public static int softTotal(Collection<Card> cards) {
+        return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
     }
 }

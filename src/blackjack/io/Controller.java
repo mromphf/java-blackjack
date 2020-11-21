@@ -35,14 +35,14 @@ public class Controller implements Initializable {
     private Map<IMAGE_KEY, Image> imageMap(Iterator<Card> dealer, Iterator<Card> player) {
         //TODO: Should have safety checks for empty iterators
         return new HashMap<IMAGE_KEY, Image>() {{
-            put(DLR_CARD_1, imageFile(dealer.next()));
-            put(DLR_CARD_2, imageFile(dealer.next()));
-            put(PLR_CARD_1, imageFile(player.next()));
-            put(PLR_CARD_2, imageFile(player.next()));
+            put(DLR_CARD_1, imageFileName(dealer.next()));
+            put(DLR_CARD_2, imageFileName(dealer.next()));
+            put(PLR_CARD_1, imageFileName(player.next()));
+            put(PLR_CARD_2, imageFileName(player.next()));
         }};
     }
 
-    private static Image imageFile(Card c) {
+    private static Image imageFileName(Card c) {
         String imageName = c.getSuit().name().toLowerCase() + c.getValue();
         return new Image(String.format("file:graphics/%s.jpg", imageName));
     }

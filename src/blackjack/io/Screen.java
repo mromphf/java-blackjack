@@ -23,6 +23,8 @@ public class Screen {
     private final static int SCREEN_WIDTH = (int) SCREEN.getWidth();
     private final static int TEXT_OFFSET = 50;
 
+    private final int HOR_CENTER;
+    private final int VER_CENTER;
     private final Canvas foreground;
     private final GraphicsContext context;
 
@@ -30,6 +32,8 @@ public class Screen {
         this.foreground = foreground;
         this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
         this.foreground.setWidth(SCREEN_WIDTH * 0.6);
+        HOR_CENTER = (int) foreground.getWidth() / 2;
+        VER_CENTER = (int) foreground.getHeight() / 2;
         context = foreground.getGraphicsContext2D();
     }
 
@@ -43,9 +47,11 @@ public class Screen {
         drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }
 
-    public void blackScreen() {
-        context.setFill(Color.BLACK);
-        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
+    public void bust() {
+        final Font f = new Font("Arial", 150);
+        context.setFont(f);
+        context.setFill(Color.RED);
+        context.fillText("BUST!", HOR_CENTER - 200, VER_CENTER);
     }
 
     public void blueScreen() {
@@ -66,14 +72,11 @@ public class Screen {
 
     private void drawLabel(String label, int y) {
         final Font f = new Font("Arial", 30);
-        final int HOR_CENTER = (int) (foreground.getWidth() / 2);
         context.setFont(f);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
     }
 
     private void drawLineOfCards(List<Image> cards, int y) {
-        final int HOR_CENTER = (int) (foreground.getWidth() / 2);
-
         final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + (CARD_WIDTH / 2);
 
         for (int i = 0, x = START_POS; i < cards.size(); i++, x += GAP_BETWEEN_CARDS) {

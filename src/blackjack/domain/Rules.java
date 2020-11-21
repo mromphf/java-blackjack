@@ -10,6 +10,10 @@ public class Rules {
         return twoCards && oneAce && tenOrHigher;
     }
 
+    public static boolean bust(Collection<Card> cards) {
+        return score(cards) > 21;
+    }
+
     public static int score(Collection<Card> cards) {
         //TODO: Ace logic
         return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();

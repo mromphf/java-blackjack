@@ -64,9 +64,24 @@ public class Controller implements Initializable {
     public void onHit() {
         hands.get("player").add(deck.get(0));
         deck = burn(1, deck);
+
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+
+        if (bust(hands.get("player"))) {
+            allButtons().forEach(b -> b.setDisable(true));
+            onStand();
+            screen.bust();
+        }
+    }
+
+    private List<Button> allButtons() {
+        return new ArrayList<Button>() {{
+            add(btnHit);
+            add(btnDouble);
+            add(btnStand);
+        }};
     }
 
     private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {

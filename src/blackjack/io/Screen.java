@@ -21,7 +21,7 @@ public class Screen {
     private final static int GAP_BETWEEN_CARDS = 225;
     private final static int SCREEN_HEIGHT = (int) SCREEN.getHeight();
     private final static int SCREEN_WIDTH = (int) SCREEN.getWidth();
-    private final static int TEXT_OFFSET = 75;
+    private final static int TEXT_OFFSET = 50;
 
     private final Canvas foreground;
     private final GraphicsContext context;
@@ -34,8 +34,8 @@ public class Screen {
     }
 
     public void drawLabels(int dealerScore, int playerScore) {
-        drawLabel(String.format("Dealer's Hand: %s", dealerScore), 100);
-        drawLabel(String.format("Your Hand: %s", playerScore), 450);
+        drawLabel(String.format("Dealer: %s", dealerScore), 100);
+        drawLabel(String.format("You: %s", playerScore), 450);
     }
 
     public void drawCards(Map<IMAGE_KEY, List<Image>> imageMap) {
@@ -74,7 +74,7 @@ public class Screen {
     private void drawLineOfCards(List<Image> cards, int y) {
         final int HOR_CENTER = (int) (foreground.getWidth() / 2);
 
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + CARD_WIDTH;
+        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + (CARD_WIDTH / 2);
 
         for (int i = 0, x = START_POS; i < cards.size(); i++, x += GAP_BETWEEN_CARDS) {
             context.drawImage(cards.get(i), x, y, CARD_WIDTH, CARD_HEIGHT);

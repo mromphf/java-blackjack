@@ -26,7 +26,7 @@ public class Rules {
 
     public static int concealedScore(Collection<Card> cards) {
         Card c = cards.iterator().next();
-        return c.isAce() ? 11 : normalizeFaceValues(c);
+        return c.isAce() ? 11 : normalizeFaceValue(c);
     }
 
     public static boolean atLeastOneAce(Collection<Card> cards) {
@@ -37,7 +37,7 @@ public class Rules {
         return hardTotal(cards) < 21;
     }
 
-    public static int normalizeFaceValues(Card c) {
+    public static int normalizeFaceValue(Card c) {
         return c.getValue() < 11 ? c.getValue() : 10;
     }
 
@@ -46,6 +46,6 @@ public class Rules {
     }
 
     public static int softTotal(Collection<Card> cards) {
-        return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
+        return cards.stream().mapToInt(Rules::normalizeFaceValue).sum();
     }
 }

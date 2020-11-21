@@ -1,8 +1,6 @@
 package blackjack.io;
 
 import blackjack.domain.Card;
-import blackjack.io.eventHandling.onHit;
-import blackjack.io.eventHandling.onStand;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -34,14 +32,18 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         screen = new Screen(foreground);
-        btnHit.setOnAction(new onHit(this));
-        btnStand.setOnAction(new onStand(screen));
+        btnHit.setOnAction(event -> onHit());
+        btnStand.setOnAction(event -> onStand());
 
         deck = shuffle(fresh());
         hands = openingHand(deck);
         deck = burn(4, deck);
 
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+    }
+
+    public void onStand() {
+        screen.blackScreen();
     }
 
     public void onHit() {

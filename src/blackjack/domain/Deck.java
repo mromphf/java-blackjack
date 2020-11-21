@@ -27,7 +27,7 @@ public class Deck {
     }
 
     public static List<Card> burn(int cards, List<Card> deck) {
-        return deck.subList(0, deck.size() - cards);
+        return deck.subList(cards, deck.size() - cards);
     }
 
     public static Map<String, List<Card>> openingHand(List<Card> deck) {

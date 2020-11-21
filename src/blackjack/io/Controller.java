@@ -48,7 +48,7 @@ public class Controller implements Initializable {
 
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
     }
 
     public void onDouble() {
@@ -56,7 +56,9 @@ public class Controller implements Initializable {
     }
 
     public void onStand() {
-        screen.blackScreen();
+        screen.reset();
+        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
     public void onHit() {
@@ -64,10 +66,17 @@ public class Controller implements Initializable {
         deck = burn(1, deck);
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
     }
 
     private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
+        return new HashMap<IMAGE_KEY, List<Image>>() {{
+            put(DEALER_CARDS, dealer.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+        }};
+    }
+
+    private Map<IMAGE_KEY, List<Image>> concealedImageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
             put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));

@@ -30,8 +30,21 @@ public class Screen {
         this.foreground = foreground;
         this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
         this.foreground.setWidth(SCREEN_WIDTH * 0.6);
-
         context = foreground.getGraphicsContext2D();
+    }
+
+    public void drawCards(Map<IMAGE_KEY, List<Image>> imageMap) {
+        resetScreen();
+        drawLineOfCards("Dealer's Hand", imageMap.get(DEALER_CARDS), 100);
+        drawLineOfCards("Your Hand", imageMap.get(PLAYER_CARDS), 450);
+    }
+
+    public void blackScreen() {
+        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
+    }
+
+    private void resetScreen() {
+        context.clearRect(0, 0, foreground.getWidth(), foreground.getHeight());
 
         context.setFill(Color.WHITE);
         context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
@@ -39,15 +52,6 @@ public class Screen {
         context.setFill(Color.BLACK);
         context.rect(0, 0, foreground.getWidth(), foreground.getHeight());
         context.stroke();
-    }
-
-    public void drawCards(Map<IMAGE_KEY, List<Image>> imageMap) {
-        drawLineOfCards("Dealer's Hand", imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards("Your Hand", imageMap.get(PLAYER_CARDS), 450);
-    }
-
-    public void blackScreen() {
-        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
     }
 
     private void drawLineOfCards(String label, List<Image> cards, int y) {

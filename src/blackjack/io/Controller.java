@@ -67,14 +67,25 @@ public class Controller implements Initializable {
 
     private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
-            put(DEALER_CARDS, dealer.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+            put(DEALER_CARDS, conceal(dealer));
             put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+        }};
+    }
+
+    private List<Image> conceal(List<Card> cards) {
+        return new LinkedList<Image>() {{
+            add(imageFileName(cards.get(0)));
+            add(blankCard());
         }};
     }
 
     private static Image imageFileName(Card c) {
         String imageName = c.getSuit().name().toLowerCase() + c.getValue();
         return new Image(String.format("file:graphics/%s.jpg", imageName));
+    }
+
+    private static Image blankCard() {
+        return new Image("file:graphics/card_blue.jpg");
     }
 }
 

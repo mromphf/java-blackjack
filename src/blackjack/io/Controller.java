@@ -32,9 +32,11 @@ public class Controller implements Initializable {
     private List<Card> deck;
     private Map<String, List<Card>> hands;
     private Screen screen;
+    private boolean useBlueDeck;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        useBlueDeck = new Random().nextInt(10) % 2 == 0;
         screen = new Screen(foreground);
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
@@ -75,7 +77,7 @@ public class Controller implements Initializable {
     private List<Image> conceal(List<Card> cards) {
         return new LinkedList<Image>() {{
             add(imageFileName(cards.get(0)));
-            add(blankCard());
+            add(blankCard(useBlueDeck));
         }};
     }
 
@@ -84,8 +86,12 @@ public class Controller implements Initializable {
         return new Image(String.format("file:graphics/%s.jpg", imageName));
     }
 
-    private static Image blankCard() {
-        return new Image("file:graphics/card_blue.jpg");
+    private static Image blankCard(boolean blue) {
+        if (blue) {
+            return new Image("file:graphics/card_blue.jpg");
+        } else {
+            return new Image("file:graphics/card_red.jpg");
+        }
     }
 }
 

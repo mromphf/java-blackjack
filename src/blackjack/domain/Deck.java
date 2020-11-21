@@ -26,15 +26,22 @@ public class Deck {
         return stack;
     }
 
-    public static Map<String, List<Card>> openingHand(Stack<Card> deck) {
-        List<Card> dealerHand = new LinkedList<>();
-        List<Card> playerHand = new LinkedList<>();
+    public static List<Card> burn(int cards, List<Card> deck) {
+        return deck.subList(0, deck.size() - cards);
+    }
 
-        // TODO: Need safety checks for an empty stack
-        playerHand.add(deck.pop());
-        dealerHand.add(deck.pop());
-        playerHand.add(deck.pop());
-        dealerHand.add(deck.pop());
+    public static Map<String, List<Card>> openingHand(List<Card> deck) {
+        // TODO: Need safety checks against null pointers
+
+        final List<Card> dealerHand = new LinkedList<Card>() {{
+            add(deck.get(1));
+            add(deck.get(3));
+        }};
+
+        final List<Card> playerHand = new LinkedList<Card>() {{
+            add(deck.get(0));
+            add(deck.get(2));
+        }};
 
         return new HashMap<String, List<Card>>() {{
             put("dealer", dealerHand);

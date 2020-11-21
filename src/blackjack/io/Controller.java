@@ -1,7 +1,6 @@
 package blackjack.io;
 
 import blackjack.domain.Card;
-import blackjack.domain.Deck;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -11,8 +10,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static blackjack.domain.Deck.fresh;
-import static blackjack.domain.Deck.shuffle;
+import static blackjack.domain.Deck.*;
 import static blackjack.io.IMAGE_KEY.*;
 
 public class Controller implements Initializable {
@@ -22,10 +20,12 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Stack<Card> deck = shuffle(fresh());
-        Screen screen = new Screen(foreground);
-        Map<String, List<Card>> hands = Deck.openingHand(deck);
+        List<Card> deck = shuffle(fresh());
+        Map<String, List<Card>> hands = openingHand(deck);
         Map<IMAGE_KEY, List<Image>> imageMap = imageMap(hands.get("dealer"), hands.get("player"));
+        deck = burn(4, deck);
+
+        Screen screen = new Screen(foreground);
         screen.drawCards(imageMap);
     }
 

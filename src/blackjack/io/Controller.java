@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static blackjack.domain.Deck.*;
+import static blackjack.domain.Rules.*;
 import static blackjack.io.IMAGE_KEY.*;
 
 public class Controller implements Initializable {
@@ -43,6 +44,8 @@ public class Controller implements Initializable {
         hands = openingHand(deck);
         deck = burn(4, deck);
 
+        screen.reset();
+        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
@@ -57,6 +60,8 @@ public class Controller implements Initializable {
     public void onHit() {
         hands.get("player").add(deck.get(0));
         deck = burn(1, deck);
+        screen.reset();
+        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 

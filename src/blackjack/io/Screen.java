@@ -33,10 +33,14 @@ public class Screen {
         context = foreground.getGraphicsContext2D();
     }
 
+    public void drawLabels(int dealerScore, int playerScore) {
+        drawLabel(String.format("Dealer's Hand: %s", dealerScore), 100);
+        drawLabel(String.format("Your Hand: %s", playerScore), 450);
+    }
+
     public void drawCards(Map<IMAGE_KEY, List<Image>> imageMap) {
-        resetScreen();
-        drawLineOfCards("Dealer's Hand", imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards("Your Hand", imageMap.get(PLAYER_CARDS), 450);
+        drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
+        drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }
 
     public void blackScreen() {
@@ -49,7 +53,7 @@ public class Screen {
         context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
     }
 
-    private void resetScreen() {
+    public void reset() {
         context.clearRect(0, 0, foreground.getWidth(), foreground.getHeight());
 
         context.setFill(Color.WHITE);
@@ -60,14 +64,17 @@ public class Screen {
         context.stroke();
     }
 
-    private void drawLineOfCards(String label, List<Image> cards, int y) {
+    private void drawLabel(String label, int y) {
         final Font f = new Font("Arial", 30);
         final int HOR_CENTER = (int) (foreground.getWidth() / 2);
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + CARD_WIDTH;
-
         context.setFont(f);
-
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
+    }
+
+    private void drawLineOfCards(List<Image> cards, int y) {
+        final int HOR_CENTER = (int) (foreground.getWidth() / 2);
+
+        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + CARD_WIDTH;
 
         for (int i = 0, x = START_POS; i < cards.size(); i++, x += GAP_BETWEEN_CARDS) {
             context.drawImage(cards.get(i), x, y, CARD_WIDTH, CARD_HEIGHT);

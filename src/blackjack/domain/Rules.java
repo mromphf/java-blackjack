@@ -9,4 +9,13 @@ public class Rules {
         boolean twoCards = cards.size() == 2;
         return twoCards && oneAce && tenOrHigher;
     }
+
+    public static int score(Collection<Card> cards) {
+        //TODO: Ace logic
+        return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
+    }
+
+    private static int normalizeFaceValues(Card c) {
+        return c.getValue() < 11 ? c.getValue() : 10;
+    }
 }

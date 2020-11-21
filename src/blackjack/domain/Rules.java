@@ -15,6 +15,10 @@ public class Rules {
         return cards.stream().mapToInt(Rules::normalizeFaceValues).sum();
     }
 
+    public static int concealedScore(Collection<Card> cards) {
+        return normalizeFaceValues(cards.iterator().next());
+    }
+
     private static int normalizeFaceValues(Card c) {
         return c.getValue() < 11 ? c.getValue() : 10;
     }

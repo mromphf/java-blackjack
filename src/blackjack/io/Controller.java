@@ -47,7 +47,7 @@ public class Controller implements Initializable {
         deck = burn(4, deck);
 
         screen.reset();
-        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
@@ -63,7 +63,7 @@ public class Controller implements Initializable {
         hands.get("player").add(deck.get(0));
         deck = burn(1, deck);
         screen.reset();
-        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 

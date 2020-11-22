@@ -4,11 +4,9 @@ import blackjack.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,10 +36,9 @@ public class GameController implements Initializable {
     private GameView gameView;
     private boolean useBlueDeck;
 
-    public GameController(Stage stage, FXMLLoader fxmlLoader) throws IOException {
+    public GameController(FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
-        stage.setScene(new Scene(fxmlLoader.getRoot()));
     }
 
     @Override

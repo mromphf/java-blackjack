@@ -1,20 +1,20 @@
 package blackjack;
 
-import blackjack.io.Controller;
+import blackjack.io.game.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private final static String BLACKJACK_FXML = "io/blackjack.fxml";
+    private final static String BLACKJACK_FXML = "io/game/blackjack.fxml";
 
     @Override
     public void start(Stage stage) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
 
         try {
-            new Controller(stage, fxmlLoader);
+            new GameController(stage, fxmlLoader);
         } catch (Exception exception) {
             System.out.print("I couldn't load FXML from specified location! Quitting...");
             System.exit(1);

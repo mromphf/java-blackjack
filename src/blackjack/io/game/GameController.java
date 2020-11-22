@@ -1,4 +1,4 @@
-package blackjack.io;
+package blackjack.io.game;
 
 import blackjack.domain.Card;
 import javafx.fxml.FXML;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 import static blackjack.domain.Deck.*;
 import static blackjack.domain.Rules.*;
-import static blackjack.io.IMAGE_KEY.*;
+import static blackjack.io.game.IMAGE_KEY.*;
 
-public class Controller implements Initializable {
+public class GameController implements Initializable {
 
     @FXML
     private Canvas foreground;
@@ -35,10 +35,10 @@ public class Controller implements Initializable {
 
     private Stack<Card> deck;
     private Map<String, List<Card>> hands;
-    private Screen screen;
+    private GameView gameView;
     private boolean useBlueDeck;
 
-    public Controller(Stage stage, FXMLLoader fxmlLoader) throws IOException {
+    public GameController(Stage stage, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
         stage.setScene(new Scene(fxmlLoader.getRoot()));
@@ -47,7 +47,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         useBlueDeck = new Random().nextInt(10) % 2 == 0;
-        screen = new Screen(foreground);
+        gameView = new GameView(foreground);
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
         btnDouble.setOnAction(event -> onDouble());
@@ -55,13 +55,13 @@ public class Controller implements Initializable {
         deck = shuffle(fresh());
         hands = openingHand(deck);
 
-        screen.reset();
-        screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        gameView.reset();
+        gameView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        gameView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
     }
 
     public void onDouble() {
-        screen.blueScreen();
+        gameView.blueScreen();
     }
 
     public void onStand() {
@@ -73,13 +73,13 @@ public class Controller implements Initializable {
         // TODO: Need safety check for empty deck
         hands.get("player").add(deck.pop());
 
-        screen.reset();
-        screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        gameView.reset();
+        gameView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        gameView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
 
         if (bust(hands.get("player"))) {
             revealAllHands();
-            screen.bust();
+            gameView.bust();
         }
     }
 
@@ -93,9 +93,9 @@ public class Controller implements Initializable {
 
     private void revealAllHands() {
         allButtons().forEach(b -> b.setDisable(true));
-        screen.reset();
-        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        gameView.reset();
+        gameView.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        gameView.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
     private List<Button> allButtons() {
@@ -108,15 +108,15 @@ public class Controller implements Initializable {
 
     private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
-            put(DEALER_CARDS, dealer.stream().map(Controller::imageFileName).collect(Collectors.toList()));
-            put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+            put(DEALER_CARDS, dealer.stream().map(GameController::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(GameController::imageFileName).collect(Collectors.toList()));
         }};
     }
 
     private Map<IMAGE_KEY, List<Image>> concealedImageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
-            put(PLAYER_CARDS, player.stream().map(Controller::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(GameController::imageFileName).collect(Collectors.toList()));
         }};
     }
 

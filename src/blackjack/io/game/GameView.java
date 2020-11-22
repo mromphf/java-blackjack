@@ -1,5 +1,6 @@
-package blackjack.io;
+package blackjack.io.game;
 
+import blackjack.io.game.IMAGE_KEY;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,10 +11,10 @@ import javafx.scene.text.Font;
 import java.util.List;
 import java.util.Map;
 
-import static blackjack.io.IMAGE_KEY.DEALER_CARDS;
-import static blackjack.io.IMAGE_KEY.PLAYER_CARDS;
+import static blackjack.io.game.IMAGE_KEY.DEALER_CARDS;
+import static blackjack.io.game.IMAGE_KEY.PLAYER_CARDS;
 
-public class Screen {
+public class GameView {
 
     private final static Rectangle2D SCREEN = javafx.stage.Screen.getPrimary().getBounds();
     private final static int CARD_WIDTH = 125;
@@ -28,7 +29,7 @@ public class Screen {
     private final Canvas foreground;
     private final GraphicsContext context;
 
-    public Screen(Canvas foreground) {
+    public GameView(Canvas foreground) {
         this.foreground = foreground;
         this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
         this.foreground.setWidth(SCREEN_WIDTH);

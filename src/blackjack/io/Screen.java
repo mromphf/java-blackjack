@@ -31,7 +31,7 @@ public class Screen {
     public Screen(Canvas foreground) {
         this.foreground = foreground;
         this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
-        this.foreground.setWidth(SCREEN_WIDTH * 0.6);
+        this.foreground.setWidth(SCREEN_WIDTH);
         HOR_CENTER = (int) foreground.getWidth() / 2;
         VER_CENTER = (int) foreground.getHeight() / 2;
         context = foreground.getGraphicsContext2D();

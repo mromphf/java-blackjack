@@ -26,29 +26,22 @@ public class Deck {
         return stack;
     }
 
-    public static List<Card> burn(int cards, List<Card> deck) {
-        // TODO: This is probably broken
-        return deck.subList(cards, deck.size() - cards);
-    }
+    public static Map<String, List<Card>> openingHand(Stack<Card> deck) {
+        if (deck.size() < 4) {
+            throw new IllegalArgumentException("Deck must contain at least four cards to deal the opening hand.");
+        } else {
+            final List<Card> dealerHand = new LinkedList<>();
+            final List<Card> playerHand = new LinkedList<>();
 
-    public static Map<String, List<Card>> openingHand(List<Card> deck) {
-        if (deck.size() > 3) {
-            final List<Card> dealerHand = new LinkedList<Card>() {{
-                add(deck.get(1));
-                add(deck.get(3));
-            }};
-
-            final List<Card> playerHand = new LinkedList<Card>() {{
-                add(deck.get(0));
-                add(deck.get(2));
-            }};
+            playerHand.add(deck.pop());
+            dealerHand.add(deck.pop());
+            playerHand.add(deck.pop());
+            dealerHand.add(deck.pop());
 
             return new HashMap<String, List<Card>>() {{
                 put("dealer", dealerHand);
                 put("player", playerHand);
             }};
-        } else {
-            throw new IllegalArgumentException("Deck must contain at least four cards to deal the opening hand.");
         }
     }
 }

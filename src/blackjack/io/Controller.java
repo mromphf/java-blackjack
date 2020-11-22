@@ -29,7 +29,7 @@ public class Controller implements Initializable {
     @FXML
     private Button btnDouble;
 
-    private List<Card> deck;
+    private Stack<Card> deck;
     private Map<String, List<Card>> hands;
     private Screen screen;
     private boolean useBlueDeck;
@@ -44,7 +44,6 @@ public class Controller implements Initializable {
 
         deck = shuffle(fresh());
         hands = openingHand(deck);
-        deck = burn(4, deck);
 
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
@@ -56,15 +55,13 @@ public class Controller implements Initializable {
     }
 
     public void onStand() {
-        revealAllHands();
         dealerTurn();
     }
 
     public void onHit() {
         btnDouble.setDisable(true);
         // TODO: Need safety check for empty deck
-        hands.get("player").add(deck.get(0));
-        deck = burn(1, deck);
+        hands.get("player").add(deck.pop());
 
         screen.reset();
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
@@ -78,8 +75,8 @@ public class Controller implements Initializable {
 
     private void dealerTurn() {
         while (score(hands.get("dealer")) < 16) {
-            hands.get("dealer").add(deck.get(0));
-            deck = burn(1, deck);
+            // TODO: Need safety check for empty deck
+            hands.get("dealer").add(deck.pop());
         }
         revealAllHands();
     }

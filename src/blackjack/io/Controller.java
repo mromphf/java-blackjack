@@ -2,11 +2,15 @@ package blackjack.io;
 
 import blackjack.domain.Card;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,6 +37,12 @@ public class Controller implements Initializable {
     private Map<String, List<Card>> hands;
     private Screen screen;
     private boolean useBlueDeck;
+
+    public Controller(Stage stage, FXMLLoader fxmlLoader) throws IOException {
+        fxmlLoader.setController(this);
+        fxmlLoader.load();
+        stage.setScene(new Scene(fxmlLoader.getRoot()));
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

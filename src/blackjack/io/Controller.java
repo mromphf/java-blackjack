@@ -72,8 +72,6 @@ public class Controller implements Initializable {
         screen.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
 
-        //TODO: Add Push logic
-
         if (bust(hands.get("player"))) {
             allButtons().forEach(b -> b.setDisable(true));
             onStand();

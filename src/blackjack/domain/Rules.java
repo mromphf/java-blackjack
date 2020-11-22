@@ -14,6 +14,10 @@ public class Rules {
         return score(cards) > 21;
     }
 
+    public static boolean push(Collection<Card> hand1, Collection<Card> hand2) {
+        return score(hand1) == score(hand2);
+    }
+
     public static int score(Collection<Card> cards) {
         if (isBlackjack(cards)) {
             return 21;

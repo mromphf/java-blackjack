@@ -47,6 +47,13 @@ public class Screen {
         drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }
 
+    public void push() {
+        final Font f = new Font("Arial", 150);
+        context.setFont(f);
+        context.setFill(Color.ORANGE);
+        context.fillText("PUSH", HOR_CENTER - 200, VER_CENTER);
+    }
+
     public void bust() {
         final Font f = new Font("Arial", 150);
         context.setFont(f);

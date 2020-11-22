@@ -56,10 +56,8 @@ public class Controller implements Initializable {
     }
 
     public void onStand() {
-        allButtons().forEach(b -> b.setDisable(true));
-        screen.reset();
-        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        revealAllHands();
+        dealerTurn();
     }
 
     public void onHit() {
@@ -73,10 +71,24 @@ public class Controller implements Initializable {
         screen.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
 
         if (bust(hands.get("player"))) {
-            allButtons().forEach(b -> b.setDisable(true));
-            onStand();
+            revealAllHands();
             screen.bust();
         }
+    }
+
+    private void dealerTurn() {
+        while (score(hands.get("dealer")) < 16) {
+            hands.get("dealer").add(deck.get(0));
+            deck = burn(1, deck);
+        }
+        revealAllHands();
+    }
+
+    private void revealAllHands() {
+        allButtons().forEach(b -> b.setDisable(true));
+        screen.reset();
+        screen.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        screen.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
     private List<Button> allButtons() {

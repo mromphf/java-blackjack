@@ -22,7 +22,7 @@ public class MainController implements Initializable {
         fxmlLoader.setController(this);
         fxmlLoader.load();
         this.btnPlay.setOnAction(event -> main.switchToBetScreen());
-        this.btnExit.setOnAction(event -> System.exit(1));
+        this.btnExit.setOnAction(event -> System.exit(0));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package blackjack.io.game;
 
+import blackjack.Main;
 import blackjack.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +25,12 @@ public class GameController implements Initializable {
     private Canvas foreground;
 
     @FXML
+    private GridPane gameControls;
+
+    @FXML
+    private GridPane gameOverControls;
+
+    @FXML
     private Button btnStand;
 
     @FXML
@@ -31,14 +39,19 @@ public class GameController implements Initializable {
     @FXML
     private Button btnDouble;
 
+    @FXML
+    private Button btnNext;
+
+    private final Main main;
     private Stack<Card> deck;
     private Map<String, List<Card>> hands;
     private GameView gameView;
     private boolean useBlueDeck;
 
-    public GameController(FXMLLoader fxmlLoader) throws IOException {
+    public GameController(Main main, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
+        this.main = main;
     }
 
     @Override
@@ -48,6 +61,7 @@ public class GameController implements Initializable {
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
         btnDouble.setOnAction(event -> onDouble());
+        btnNext.setOnAction(event -> moveOntoNextHand());
 
         deck = shuffle(fresh());
         hands = openingHand(deck);
@@ -77,7 +91,17 @@ public class GameController implements Initializable {
         if (bust(hands.get("player"))) {
             revealAllHands();
             gameView.bust();
+            onRoundOver();
         }
+    }
+
+    private void onRoundOver() {
+        gameControls.setVisible(false);
+        gameOverControls.setVisible(true);
+    }
+
+    private void moveOntoNextHand() {
+        main.switchToBetScreen();
     }
 
     private void dealerTurn() {
@@ -86,6 +110,7 @@ public class GameController implements Initializable {
             hands.get("dealer").add(deck.pop());
         }
         revealAllHands();
+        onRoundOver();
     }
 
     private void revealAllHands() {

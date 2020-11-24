@@ -29,7 +29,7 @@ public class Main extends Application {
         try {
             new MainController(this, mainLoader);
             new BetController(this, betLoader);
-            new GameController(gameLoader);
+            new GameController(this, gameLoader);
             scene = new Scene(mainLoader.getRoot());
             stage.setScene(scene);
             stage.setTitle("Blackjack");

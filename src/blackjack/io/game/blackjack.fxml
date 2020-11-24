@@ -8,7 +8,7 @@
         <Canvas fx:id="foreground"/>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
+    <GridPane fx:id="gameControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
         <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
             Double
         </Button>
@@ -19,6 +19,12 @@
 
         <Button fx:id="btnStand" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50">
             Stand
+        </Button>
+    </GridPane>
+
+    <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
+        <Button fx:id="btnNext" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
+            Next Hand
         </Button>
     </GridPane>
 </GridPane>

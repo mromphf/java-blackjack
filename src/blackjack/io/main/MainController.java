@@ -21,7 +21,7 @@ public class MainController implements Initializable {
     public MainController(Main main, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
-        this.btnPlay.setOnAction(event -> main.startGame());
+        this.btnPlay.setOnAction(event -> main.switchToBetScreen());
         this.btnExit.setOnAction(event -> System.exit(1));
     }
 

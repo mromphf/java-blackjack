@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
     private final static String MAIN_FXML = "io/main/main.fxml";
@@ -34,7 +36,7 @@ public class Main extends Application {
             stage.setFullScreen(true);
             stage.setMaximized(true);
             stage.show();
-        } catch (Exception exception) {
+        } catch (IOException exception) {
             System.out.print("I couldn't load FXML from specified location! Quitting...");
             System.exit(1);
         }

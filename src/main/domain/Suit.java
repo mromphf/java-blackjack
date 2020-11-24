@@ -1,4 +1,4 @@
-package blackjack.domain;
+package main.domain;
 
 public enum Suit {
     HEARTS,

@@ -1,7 +1,7 @@
-package blackjack.io.blackjack;
+package main.io.blackjack;
 
-import blackjack.Main;
-import blackjack.domain.Card;
+import main.Main;
+import main.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,9 +15,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static blackjack.domain.Deck.*;
-import static blackjack.domain.Rules.*;
-import static blackjack.io.blackjack.IMAGE_KEY.*;
+import static main.domain.Deck.*;
+import static main.domain.Rules.*;
+import static main.io.blackjack.IMAGE_KEY.*;
 
 public class BlackjackController implements Initializable {
 

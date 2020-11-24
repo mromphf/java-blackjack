@@ -1,4 +1,4 @@
-package blackjack.io.blackjack;
+package main.io.blackjack;
 
 public enum IMAGE_KEY {
     DEALER_CARDS,

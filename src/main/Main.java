@@ -1,8 +1,8 @@
-package blackjack;
+package main;
 
-import blackjack.io.bet.BetController;
-import blackjack.io.blackjack.BlackjackController;
-import blackjack.io.main.MainController;
+import main.io.bet.BetController;
+import main.io.blackjack.BlackjackController;
+import main.io.main.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

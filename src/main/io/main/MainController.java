@@ -1,6 +1,6 @@
-package blackjack.io.main;
+package main.io.main;
 
-import blackjack.Main;
+import main.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

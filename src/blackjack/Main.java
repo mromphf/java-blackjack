@@ -1,7 +1,7 @@
 package blackjack;
 
 import blackjack.io.bet.BetController;
-import blackjack.io.game.BlackjackController;
+import blackjack.io.blackjack.BlackjackController;
 import blackjack.io.main.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private final static String MAIN_FXML = "io/main/main.fxml";
-    private final static String BLACKJACK_FXML = "io/game/blackjack.fxml";
+    private final static String BLACKJACK_FXML = "io/blackjack/blackjack.fxml";
     private final static String BET_FXML = "io/bet/bet.fxml";
 
     private Scene scene;

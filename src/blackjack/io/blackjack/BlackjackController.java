@@ -1,4 +1,4 @@
-package blackjack.io.game;
+package blackjack.io.blackjack;
 
 import blackjack.Main;
 import blackjack.domain.Card;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static blackjack.domain.Deck.*;
 import static blackjack.domain.Rules.*;
-import static blackjack.io.game.IMAGE_KEY.*;
+import static blackjack.io.blackjack.IMAGE_KEY.*;
 
 public class BlackjackController implements Initializable {
 

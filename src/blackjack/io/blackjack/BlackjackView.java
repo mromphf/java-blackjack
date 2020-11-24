@@ -1,4 +1,4 @@
-package blackjack.io.game;
+package blackjack.io.blackjack;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
@@ -10,8 +10,8 @@ import javafx.scene.text.Font;
 import java.util.List;
 import java.util.Map;
 
-import static blackjack.io.game.IMAGE_KEY.DEALER_CARDS;
-import static blackjack.io.game.IMAGE_KEY.PLAYER_CARDS;
+import static blackjack.io.blackjack.IMAGE_KEY.DEALER_CARDS;
+import static blackjack.io.blackjack.IMAGE_KEY.PLAYER_CARDS;
 
 public class BlackjackView {
 

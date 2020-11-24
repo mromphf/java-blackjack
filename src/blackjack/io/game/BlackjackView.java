@@ -13,7 +13,7 @@ import java.util.Map;
 import static blackjack.io.game.IMAGE_KEY.DEALER_CARDS;
 import static blackjack.io.game.IMAGE_KEY.PLAYER_CARDS;
 
-public class GameView {
+public class BlackjackView {
 
     private final static Rectangle2D SCREEN = javafx.stage.Screen.getPrimary().getBounds();
     private final static int CARD_WIDTH = 125;
@@ -28,7 +28,7 @@ public class GameView {
     private final Canvas foreground;
     private final GraphicsContext context;
 
-    public GameView(Canvas foreground) {
+    public BlackjackView(Canvas foreground) {
         this.foreground = foreground;
         this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
         this.foreground.setWidth(SCREEN_WIDTH);

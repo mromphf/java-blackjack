@@ -1,7 +1,7 @@
 package blackjack;
 
 import blackjack.io.bet.BetController;
-import blackjack.io.game.GameController;
+import blackjack.io.game.BlackjackController;
 import blackjack.io.main.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +29,7 @@ public class Main extends Application {
         try {
             new MainController(this, mainLoader);
             new BetController(this, betLoader);
-            new GameController(this, gameLoader);
+            new BlackjackController(this, gameLoader);
             scene = new Scene(mainLoader.getRoot());
             stage.setScene(scene);
             stage.setTitle("Blackjack");

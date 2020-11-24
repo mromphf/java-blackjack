@@ -19,7 +19,7 @@ import static blackjack.domain.Deck.*;
 import static blackjack.domain.Rules.*;
 import static blackjack.io.game.IMAGE_KEY.*;
 
-public class GameController implements Initializable {
+public class BlackjackController implements Initializable {
 
     @FXML
     private Canvas foreground;
@@ -45,22 +45,22 @@ public class GameController implements Initializable {
     private final Main main;
     private final Stack<Card> deck;
     private final Map<String, List<Card>> hands;
-    private final GameView gameView;
+    private final BlackjackView blackjackView;
     private final boolean useBlueDeck;
 
-    public GameController(Main main, FXMLLoader fxmlLoader) throws IOException {
+    public BlackjackController(Main main, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
 
         this.main = main;
         this.useBlueDeck = new Random().nextInt(10) % 2 == 0;
-        this.gameView = new GameView(foreground);
+        this.blackjackView = new BlackjackView(foreground);
         this.deck = shuffle(fresh());
         this.hands = openingHand(deck);
 
-        gameView.reset();
-        gameView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        gameView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.reset();
+        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        blackjackView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
     }
 
     @Override
@@ -85,13 +85,13 @@ public class GameController implements Initializable {
         // TODO: Need safety check for empty deck
         hands.get("player").add(deck.pop());
 
-        gameView.reset();
-        gameView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        gameView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.reset();
+        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        blackjackView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
 
         if (bust(hands.get("player"))) {
             revealAllHands();
-            gameView.bust();
+            blackjackView.bust();
             onRoundOver();
         }
     }
@@ -116,9 +116,9 @@ public class GameController implements Initializable {
 
     private void revealAllHands() {
         allButtons().forEach(b -> b.setDisable(true));
-        gameView.reset();
-        gameView.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        gameView.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.reset();
+        blackjackView.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        blackjackView.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
     }
 
     private List<Button> allButtons() {
@@ -131,15 +131,15 @@ public class GameController implements Initializable {
 
     private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
-            put(DEALER_CARDS, dealer.stream().map(GameController::imageFileName).collect(Collectors.toList()));
-            put(PLAYER_CARDS, player.stream().map(GameController::imageFileName).collect(Collectors.toList()));
+            put(DEALER_CARDS, dealer.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
         }};
     }
 
     private Map<IMAGE_KEY, List<Image>> concealedImageMap(List<Card> dealer, List<Card> player) {
         return new HashMap<IMAGE_KEY, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
-            put(PLAYER_CARDS, player.stream().map(GameController::imageFileName).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
         }};
     }
 

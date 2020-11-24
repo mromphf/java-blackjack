@@ -46,7 +46,9 @@ public class Rules {
     }
 
     public static int hardTotal(Collection<Card> cards) {
-        return softTotal(cards) + 10;
+        return atLeastOneAce(cards)
+            ? softTotal(cards) + 10
+            : softTotal(cards);
     }
 
     public static int softTotal(Collection<Card> cards) {

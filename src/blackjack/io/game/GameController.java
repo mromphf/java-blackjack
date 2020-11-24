@@ -43,36 +43,37 @@ public class GameController implements Initializable {
     private Button btnNext;
 
     private final Main main;
-    private Stack<Card> deck;
-    private Map<String, List<Card>> hands;
-    private GameView gameView;
-    private boolean useBlueDeck;
+    private final Stack<Card> deck;
+    private final Map<String, List<Card>> hands;
+    private final GameView gameView;
+    private final boolean useBlueDeck;
 
     public GameController(Main main, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
+
         this.main = main;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        useBlueDeck = new Random().nextInt(10) % 2 == 0;
-        gameView = new GameView(foreground);
-        btnHit.setOnAction(event -> onHit());
-        btnStand.setOnAction(event -> onStand());
-        btnDouble.setOnAction(event -> onDouble());
-        btnNext.setOnAction(event -> moveOntoNextHand());
-
-        deck = shuffle(fresh());
-        hands = openingHand(deck);
+        this.useBlueDeck = new Random().nextInt(10) % 2 == 0;
+        this.gameView = new GameView(foreground);
+        this.deck = shuffle(fresh());
+        this.hands = openingHand(deck);
 
         gameView.reset();
         gameView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
         gameView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        btnHit.setOnAction(event -> onHit());
+        btnStand.setOnAction(event -> onStand());
+        btnDouble.setOnAction(event -> onDouble());
+        btnNext.setOnAction(event -> moveOntoNextHand());
+    }
+
     public void onDouble() {
-        gameView.blueScreen();
+        onHit();
+        dealerTurn();
     }
 
     public void onStand() {

@@ -1,6 +1,5 @@
 package blackjack.io.game;
 
-import blackjack.io.game.IMAGE_KEY;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,11 +59,6 @@ public class GameView {
         context.setFont(f);
         context.setFill(Color.RED);
         context.fillText("BUST!", HOR_CENTER - 200, VER_CENTER);
-    }
-
-    public void blueScreen() {
-        context.setFill(Color.BLUE);
-        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
     }
 
     public void reset() {

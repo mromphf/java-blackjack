@@ -1,6 +1,6 @@
 package main.io.bet;
 
-import main.Main;
+import main.AppRoot;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,10 +15,10 @@ public class BetController implements Initializable {
     @FXML
     private Button btnDeal;
 
-    public BetController(Main main, FXMLLoader fxmlLoader) throws IOException {
+    public BetController(AppRoot appRoot, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
-        btnDeal.setOnAction(event -> main.switchToBlackjackScreen());
+        btnDeal.setOnAction(event -> appRoot.switchToBlackjackScreen());
     }
 
     @Override

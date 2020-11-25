@@ -1,6 +1,6 @@
 package main.io.blackjack;
 
-import main.Main;
+import main.AppRoot;
 import main.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,16 +39,16 @@ public class BlackjackController implements Initializable {
     @FXML
     private Button btnNext;
 
-    private final Main main;
+    private final AppRoot appRoot;
     private final Stack<Card> deck;
     private final Map<String, List<Card>> hands;
     private final BlackjackView blackjackView;
 
-    public BlackjackController(Main main, FXMLLoader fxmlLoader) throws IOException {
+    public BlackjackController(AppRoot appRoot, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
 
-        this.main = main;
+        this.appRoot = appRoot;
         this.blackjackView = new BlackjackView(foreground);
         this.deck = shuffle(fresh());
         this.hands = openingHand(deck);
@@ -97,7 +97,7 @@ public class BlackjackController implements Initializable {
     }
 
     private void moveOntoNextHand() {
-        main.switchToBetScreen();
+        appRoot.switchToBetScreen();
     }
 
     private void dealerTurn() {

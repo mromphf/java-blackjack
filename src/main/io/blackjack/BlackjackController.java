@@ -7,17 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static main.domain.Deck.*;
 import static main.domain.Rules.*;
-import static main.io.blackjack.IMAGE_KEY.*;
 
 public class BlackjackController implements Initializable {
 
@@ -46,21 +43,19 @@ public class BlackjackController implements Initializable {
     private final Stack<Card> deck;
     private final Map<String, List<Card>> hands;
     private final BlackjackView blackjackView;
-    private final boolean useBlueDeck;
 
     public BlackjackController(Main main, FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
 
         this.main = main;
-        this.useBlueDeck = new Random().nextInt(10) % 2 == 0;
         this.blackjackView = new BlackjackView(foreground);
         this.deck = shuffle(fresh());
         this.hands = openingHand(deck);
 
         blackjackView.reset();
         blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
     }
 
     @Override
@@ -87,7 +82,7 @@ public class BlackjackController implements Initializable {
 
         blackjackView.reset();
         blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(concealedImageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
 
         if (bust(hands.get("player"))) {
             revealAllHands();
@@ -118,7 +113,7 @@ public class BlackjackController implements Initializable {
         allButtons().forEach(b -> b.setDisable(true));
         blackjackView.reset();
         blackjackView.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(imageMap(hands.get("dealer"), hands.get("player")));
+        blackjackView.drawCards(ImageMap.of(hands.get("dealer"), hands.get("player")));
     }
 
     private List<Button> allButtons() {
@@ -128,39 +123,4 @@ public class BlackjackController implements Initializable {
             add(btnStand);
         }};
     }
-
-    private Map<IMAGE_KEY, List<Image>> imageMap(List<Card> dealer, List<Card> player) {
-        return new HashMap<IMAGE_KEY, List<Image>>() {{
-            put(DEALER_CARDS, dealer.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
-            put(PLAYER_CARDS, player.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
-        }};
-    }
-
-    private Map<IMAGE_KEY, List<Image>> concealedImageMap(List<Card> dealer, List<Card> player) {
-        return new HashMap<IMAGE_KEY, List<Image>>() {{
-            put(DEALER_CARDS, conceal(dealer));
-            put(PLAYER_CARDS, player.stream().map(BlackjackController::imageFileName).collect(Collectors.toList()));
-        }};
-    }
-
-    private List<Image> conceal(List<Card> cards) {
-        return new LinkedList<Image>() {{
-            add(imageFileName(cards.get(0)));
-            add(blankCard(useBlueDeck));
-        }};
-    }
-
-    private static Image imageFileName(Card c) {
-        String imageName = c.getSuit().name().toLowerCase() + c.getValue();
-        return new Image(String.format("file:graphics/%s.jpg", imageName));
-    }
-
-    private static Image blankCard(boolean blue) {
-        if (blue) {
-            return new Image("file:graphics/card_blue.jpg");
-        } else {
-            return new Image("file:graphics/card_red.jpg");
-        }
-    }
 }
-

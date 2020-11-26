@@ -1,9 +1,30 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 
 <GridPane fx:controller="main.io.bet.BetController"
-        xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
-    <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
+    <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50">
+        Bet: $0
+    </Label>
+
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="50" minHeight="50" onAction="#onBet5">
+        5
+    </Button>
+
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="2" minWidth="50" minHeight="50" onAction="#onBet10">
+        10
+    </Button>
+
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="3" minWidth="50" minHeight="50" onAction="#onBet25">
+        25
+    </Button>
+
+    <Button GridPane.rowIndex="1" GridPane.columnIndex="4" minWidth="50" minHeight="50" onAction="#onBet100">
+        100
+    </Button>
+
+    <Button fx:id="btnDeal" GridPane.rowIndex="2" GridPane.columnIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onPlay">
         Deal
     </Button>
 </GridPane>

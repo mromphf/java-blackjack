@@ -12,8 +12,8 @@ import java.util.Map;
 public class AppRoot {
 
     private final static String MAIN_FXML = "io/main/main.fxml";
-    private final static String BLACKJACK_FXML = "io/blackjack/blackjack.fxml";
-    private final static String BET_FXML = "io/bet/bet.fxml";
+    private final static String BLACKJACK_FXML = "io/blackjack/BlackjackView.fxml";
+    private final static String BET_FXML = "io/bet/BetView.fxml";
 
 
     private static final Map<Layout, Parent> layoutMap = new HashMap<>();

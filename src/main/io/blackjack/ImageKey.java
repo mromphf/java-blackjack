@@ -1,6 +1,6 @@
 package main.io.blackjack;
 
-public enum IMAGE_KEY {
+public enum ImageKey {
     DEALER_CARDS,
     PLAYER_CARDS
 }

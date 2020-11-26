@@ -6,20 +6,20 @@ import main.domain.Card;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static main.io.blackjack.IMAGE_KEY.DEALER_CARDS;
-import static main.io.blackjack.IMAGE_KEY.PLAYER_CARDS;
+import static main.io.blackjack.ImageKey.DEALER_CARDS;
+import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class ImageMap {
 
-    public static Map<IMAGE_KEY, List<Image>> of(List<Card> dealer, List<Card> player) {
-        return new HashMap<IMAGE_KEY, List<Image>>() {{
+    public static Map<ImageKey, List<Image>> of(List<Card> dealer, List<Card> player) {
+        return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, dealer.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
             put(PLAYER_CARDS, player.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
         }};
     }
 
-    public static Map<IMAGE_KEY, List<Image>> ofConcealed(List<Card> dealer, List<Card> player) {
-        return new HashMap<IMAGE_KEY, List<Image>>() {{
+    public static Map<ImageKey, List<Image>> ofConcealed(List<Card> dealer, List<Card> player) {
+        return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
             put(PLAYER_CARDS, player.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
         }};

@@ -10,8 +10,8 @@ import javafx.scene.text.Font;
 import java.util.List;
 import java.util.Map;
 
-import static main.io.blackjack.IMAGE_KEY.DEALER_CARDS;
-import static main.io.blackjack.IMAGE_KEY.PLAYER_CARDS;
+import static main.io.blackjack.ImageKey.DEALER_CARDS;
+import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class BlackjackView {
 
@@ -42,7 +42,7 @@ public class BlackjackView {
         drawLabel(String.format("You: %s", playerScore), 450);
     }
 
-    public void drawCards(Map<IMAGE_KEY, List<Image>> imageMap) {
+    public void drawCards(Map<ImageKey, List<Image>> imageMap) {
         drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
         drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }

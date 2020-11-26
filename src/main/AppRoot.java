@@ -6,15 +6,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppRoot {
 
     private final static String MAIN_FXML = "io/main/main.fxml";
     private final static String BLACKJACK_FXML = "io/blackjack/blackjack.fxml";
     private final static String BET_FXML = "io/bet/bet.fxml";
+    private static final Map<String, Parent> layoutMap = new HashMap<>();
     private static Scene scene;
-    private static Parent betRoot;
-    private static Parent gameRoot;
 
     public AppRoot(Stage stage) {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
@@ -29,11 +30,11 @@ public class AppRoot {
             e.printStackTrace();
         }
 
-        Parent home = mainLoader.getRoot();
-        betRoot = betLoader.getRoot();
-        gameRoot = gameLoader.getRoot();
+        layoutMap.put("home", mainLoader.getRoot());
+        layoutMap.put("bet", betLoader.getRoot());
+        layoutMap.put("game", gameLoader.getRoot());
 
-        scene = new Scene(home);
+        scene = new Scene(layoutMap.get("home"));
         stage.setScene(scene);
         stage.setTitle("Blackjack");
         stage.setFullScreen(true);
@@ -42,10 +43,10 @@ public class AppRoot {
     }
 
     public static void switchToBetScreen() {
-        scene.setRoot(betRoot);
+        scene.setRoot(layoutMap.get("bet"));
     }
 
     public static void switchToBlackjackScreen() {
-        scene.setRoot(gameRoot);
+        scene.setRoot(layoutMap.get("game"));
     }
 }

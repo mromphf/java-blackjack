@@ -41,21 +41,16 @@ public class BlackjackController implements Initializable {
 
     private final AppRoot appRoot;
     private final Stack<Card> deck;
-    private final Map<String, List<Card>> hands;
     private final BlackjackView blackjackView;
+    private Map<String, List<Card>> hands;
 
-    public BlackjackController(AppRoot appRoot, FXMLLoader fxmlLoader) throws IOException {
+    public BlackjackController(AppRoot appRoot, FXMLLoader fxmlLoader, Stack<Card> deck) throws IOException {
         fxmlLoader.setController(this);
         fxmlLoader.load();
-
         this.appRoot = appRoot;
         this.blackjackView = new BlackjackView(foreground);
-        this.deck = shuffle(fresh());
-        this.hands = openingHand(deck);
-
-        blackjackView.reset();
-        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
+        this.deck = deck;
+        reset();
     }
 
     @Override
@@ -64,6 +59,16 @@ public class BlackjackController implements Initializable {
         btnStand.setOnAction(event -> onStand());
         btnDouble.setOnAction(event -> onDouble());
         btnNext.setOnAction(event -> moveOntoNextHand());
+    }
+
+    public void reset() {
+        this.hands = openingHand(deck);
+        allButtons().forEach(button -> button.setDisable(false));
+        gameControls.setVisible(true);
+        gameOverControls.setVisible(false);
+        blackjackView.reset();
+        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
     }
 
     public void onDouble() {
@@ -98,6 +103,7 @@ public class BlackjackController implements Initializable {
 
     private void moveOntoNextHand() {
         appRoot.switchToBetScreen();
+        reset();
     }
 
     private void dealerTurn() {

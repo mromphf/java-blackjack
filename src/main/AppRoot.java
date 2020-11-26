@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static main.domain.Deck.fresh;
+import static main.domain.Deck.shuffle;
+
 public class AppRoot {
 
     private final static String MAIN_FXML = "io/main/main.fxml";
@@ -26,7 +29,7 @@ public class AppRoot {
         try {
             new MainController(this, mainLoader);
             new BetController(this, betLoader);
-            new BlackjackController(this, gameLoader);
+            new BlackjackController(this, gameLoader, shuffle(fresh()));
             scene = new Scene(mainLoader.getRoot());
             stage.setScene(scene);
             stage.setTitle("Blackjack");

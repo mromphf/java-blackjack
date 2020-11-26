@@ -99,7 +99,7 @@ public class BlackjackController implements Initializable {
     }
 
     private void moveOntoNextHand() {
-        AppRoot.switchToBetScreen();
+        AppRoot.setLayout("bet");
         reset();
     }
 

@@ -15,6 +15,6 @@ public class BetController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnDeal.setOnAction(event -> AppRoot.switchToBlackjackScreen());
+        btnDeal.setOnAction(event -> AppRoot.setLayout("game"));
     }
 }

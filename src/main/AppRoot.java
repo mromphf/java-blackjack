@@ -42,11 +42,7 @@ public class AppRoot {
         stage.show();
     }
 
-    public static void switchToBetScreen() {
-        scene.setRoot(layoutMap.get("bet"));
-    }
-
-    public static void switchToBlackjackScreen() {
-        scene.setRoot(layoutMap.get("game"));
+    public static void setLayout(String layout) {
+        scene.setRoot(layoutMap.get(layout));
     }
 }

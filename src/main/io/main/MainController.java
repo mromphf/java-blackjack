@@ -18,7 +18,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnPlay.setOnAction(event -> AppRoot.switchToBetScreen());
+        btnPlay.setOnAction(event -> AppRoot.setLayout("bet"));
         btnExit.setOnAction(event -> System.exit(0));
     }
 }

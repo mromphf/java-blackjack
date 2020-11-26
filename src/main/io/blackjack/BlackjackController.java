@@ -39,7 +39,7 @@ public class BlackjackController implements Initializable {
     private Button btnNext;
 
     private final Stack<Card> deck;
-    private BlackjackView blackjackView;
+    private GameDisplay gameDisplay;
     private Map<String, List<Card>> hands;
 
     public BlackjackController() {
@@ -49,7 +49,7 @@ public class BlackjackController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.blackjackView = new BlackjackView(foreground);
+        this.gameDisplay = new GameDisplay(foreground);
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
         btnDouble.setOnAction(event -> onDouble());
@@ -62,9 +62,9 @@ public class BlackjackController implements Initializable {
         allButtons().forEach(button -> button.setDisable(false));
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-        blackjackView.reset();
-        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
+        gameDisplay.reset();
+        gameDisplay.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        gameDisplay.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
     }
 
     public void onDouble() {
@@ -81,13 +81,13 @@ public class BlackjackController implements Initializable {
         // TODO: Need safety check for empty deck
         hands.get("player").add(deck.pop());
 
-        blackjackView.reset();
-        blackjackView.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
+        gameDisplay.reset();
+        gameDisplay.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
+        gameDisplay.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
 
         if (bust(hands.get("player"))) {
             revealAllHands();
-            blackjackView.bust();
+            gameDisplay.bust();
             onRoundOver();
         }
     }
@@ -113,9 +113,9 @@ public class BlackjackController implements Initializable {
 
     private void revealAllHands() {
         allButtons().forEach(b -> b.setDisable(true));
-        blackjackView.reset();
-        blackjackView.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        blackjackView.drawCards(ImageMap.of(hands.get("dealer"), hands.get("player")));
+        gameDisplay.reset();
+        gameDisplay.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
+        gameDisplay.drawCards(ImageMap.of(hands.get("dealer"), hands.get("player")));
     }
 
     private List<Button> allButtons() {

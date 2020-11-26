@@ -52,12 +52,14 @@ public class BlackjackController implements Initializable {
 
     public void reset() {
         this.hands = openingHand(deck);
-        allButtons().forEach(button -> button.setDisable(false));
+        List<Card> dealerHand = hands.get("dealer");
+        List<Card> playerHand = hands.get("player");
+        setGameButtonsDisabled(false);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
         gameDisplay.reset();
-        gameDisplay.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        gameDisplay.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
+        gameDisplay.drawLabels(concealedScore(dealerHand), score(playerHand));
+        gameDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
     }
 
     @FXML
@@ -73,15 +75,18 @@ public class BlackjackController implements Initializable {
 
     @FXML
     public void onHit() {
+        List<Card> playerHand = hands.get("player");
+        List<Card> dealerHand = hands.get("dealer");
+
         btnDouble.setDisable(true);
         // TODO: Need safety check for empty deck
-        hands.get("player").add(deck.pop());
+        playerHand.add(deck.pop());
 
         gameDisplay.reset();
-        gameDisplay.drawLabels(concealedScore(hands.get("dealer")), score(hands.get("player")) );
-        gameDisplay.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
+        gameDisplay.drawLabels(concealedScore(dealerHand), score(playerHand) );
+        gameDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
 
-        if (bust(hands.get("player"))) {
+        if (bust(playerHand)) {
             revealAllHands();
             gameDisplay.bust();
             onRoundOver();
@@ -109,17 +114,17 @@ public class BlackjackController implements Initializable {
     }
 
     private void revealAllHands() {
-        allButtons().forEach(b -> b.setDisable(true));
+        setGameButtonsDisabled(true);
         gameDisplay.reset();
         gameDisplay.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
         gameDisplay.drawCards(ImageMap.of(hands.get("dealer"), hands.get("player")));
     }
 
-    private List<Button> allButtons() {
-        return new ArrayList<Button>() {{
+    private void setGameButtonsDisabled(boolean disabled) {
+        new ArrayList<Button>() {{
             add(btnHit);
             add(btnDouble);
             add(btnStand);
-        }};
+        }}.forEach(b -> b.setDisable(disabled));
     }
 }

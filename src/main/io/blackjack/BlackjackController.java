@@ -3,13 +3,12 @@ package main.io.blackjack;
 import main.AppRoot;
 import main.domain.Card;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import main.Layout;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -99,7 +98,7 @@ public class BlackjackController implements Initializable {
     }
 
     private void moveOntoNextHand() {
-        AppRoot.setLayout("bet");
+        AppRoot.setLayout(Layout.BET);
         reset();
     }
 

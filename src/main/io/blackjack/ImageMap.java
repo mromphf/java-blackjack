@@ -11,6 +11,8 @@ import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class ImageMap {
 
+    private static final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
+
     public static Map<ImageKey, List<Image>> of(List<Card> dealer, List<Card> player) {
         return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, dealer.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
@@ -27,10 +29,9 @@ public class ImageMap {
 
     private static List<Image> conceal(List<Card> cards) {
         // TODO: Need a check for empty list
-        boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
         return new LinkedList<Image>() {{
             add(imageFileName(cards.get(0)));
-            add(blankCard(useBlueDeck));
+            add(blankCard());
         }};
     }
 
@@ -39,8 +40,8 @@ public class ImageMap {
         return new Image(String.format("file:graphics/%s.jpg", imageName));
     }
 
-    private static Image blankCard(boolean blue) {
-        if (blue) {
+    private static Image blankCard() {
+        if (ImageMap.useBlueDeck) {
             return new Image("file:graphics/card_blue.jpg");
         } else {
             return new Image("file:graphics/card_red.jpg");

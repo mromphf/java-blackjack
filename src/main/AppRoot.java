@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class AppRoot {
 
-    private final static String MAIN_FXML = "io/main/main.fxml";
+    private final static String MAIN_FXML = "io/home/HomeView.fxml";
     private final static String BLACKJACK_FXML = "io/blackjack/BlackjackView.fxml";
     private final static String BET_FXML = "io/bet/BetView.fxml";
 

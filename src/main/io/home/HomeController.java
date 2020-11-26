@@ -1,4 +1,4 @@
-package main.io.main;
+package main.io.home;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,7 +9,7 @@ import main.Layout;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class HomeController implements Initializable {
 
     @FXML
     public Button btnPlay;

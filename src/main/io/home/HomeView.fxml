@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 
-<GridPane fx:controller="main.io.main.MainController"
+<GridPane fx:controller="main.io.home.HomeController"
         xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
     <Button fx:id="btnPlay" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
         Play

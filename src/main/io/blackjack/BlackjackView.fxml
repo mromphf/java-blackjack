@@ -10,21 +10,21 @@
     </GridPane>
 
     <GridPane fx:id="gameControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
-        <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
+        <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onDouble">
             Double
         </Button>
 
-        <Button fx:id="btnHit" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50">
+        <Button fx:id="btnHit" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onHit">
             Hit
         </Button>
 
-        <Button fx:id="btnStand" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50">
+        <Button fx:id="btnStand" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onStand">
             Stand
         </Button>
     </GridPane>
 
     <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
-        <Button fx:id="btnNext" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
+        <Button fx:id="btnNext" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onMoveToNextHand">
             Next Hand
         </Button>
     </GridPane>

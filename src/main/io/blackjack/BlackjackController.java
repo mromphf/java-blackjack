@@ -35,9 +35,6 @@ public class BlackjackController implements Initializable {
     @FXML
     private Button btnDouble;
 
-    @FXML
-    private Button btnNext;
-
     private final Stack<Card> deck;
     private GameDisplay gameDisplay;
     private Map<String, List<Card>> hands;
@@ -50,10 +47,6 @@ public class BlackjackController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.gameDisplay = new GameDisplay(foreground);
-        btnHit.setOnAction(event -> onHit());
-        btnStand.setOnAction(event -> onStand());
-        btnDouble.setOnAction(event -> onDouble());
-        btnNext.setOnAction(event -> moveOntoNextHand());
         reset();
     }
 
@@ -67,15 +60,18 @@ public class BlackjackController implements Initializable {
         gameDisplay.drawCards(ImageMap.ofConcealed(hands.get("dealer"), hands.get("player")));
     }
 
+    @FXML
     public void onDouble() {
         onHit();
         dealerTurn();
     }
 
+    @FXML
     public void onStand() {
         dealerTurn();
     }
 
+    @FXML
     public void onHit() {
         btnDouble.setDisable(true);
         // TODO: Need safety check for empty deck
@@ -92,14 +88,15 @@ public class BlackjackController implements Initializable {
         }
     }
 
+    @FXML
+    private void onMoveToNextHand() {
+        AppRoot.setLayout(Layout.BET);
+        reset();
+    }
+
     private void onRoundOver() {
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
-    }
-
-    private void moveOntoNextHand() {
-        AppRoot.setLayout(Layout.BET);
-        reset();
     }
 
     private void dealerTurn() {

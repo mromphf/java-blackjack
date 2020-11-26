@@ -39,26 +39,23 @@ public class BlackjackController implements Initializable {
     @FXML
     private Button btnNext;
 
-    private final AppRoot appRoot;
     private final Stack<Card> deck;
-    private final BlackjackView blackjackView;
+    private BlackjackView blackjackView;
     private Map<String, List<Card>> hands;
 
-    public BlackjackController(AppRoot appRoot, FXMLLoader fxmlLoader, Stack<Card> deck) throws IOException {
-        fxmlLoader.setController(this);
-        fxmlLoader.load();
-        this.appRoot = appRoot;
-        this.blackjackView = new BlackjackView(foreground);
-        this.deck = deck;
-        reset();
+    public BlackjackController() {
+        this.deck = shuffle(fresh());
+        this.hands = openingHand(deck);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.blackjackView = new BlackjackView(foreground);
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
         btnDouble.setOnAction(event -> onDouble());
         btnNext.setOnAction(event -> moveOntoNextHand());
+        reset();
     }
 
     public void reset() {
@@ -102,7 +99,7 @@ public class BlackjackController implements Initializable {
     }
 
     private void moveOntoNextHand() {
-        appRoot.switchToBetScreen();
+        AppRoot.switchToBetScreen();
         reset();
     }
 

@@ -1,12 +1,10 @@
 package main.io.main;
 
-import main.AppRoot;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import main.AppRoot;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,13 +16,9 @@ public class MainController implements Initializable {
     @FXML
     public Button btnExit;
 
-    public MainController(AppRoot appRoot, FXMLLoader fxmlLoader) throws IOException {
-        fxmlLoader.setController(this);
-        fxmlLoader.load();
-        this.btnPlay.setOnAction(event -> appRoot.switchToBetScreen());
-        this.btnExit.setOnAction(event -> System.exit(0));
-    }
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        btnPlay.setOnAction(event -> AppRoot.switchToBetScreen());
+        btnExit.setOnAction(event -> System.exit(0));
+    }
 }

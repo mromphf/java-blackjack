@@ -130,10 +130,8 @@ public class BlackjackController implements Initializable {
     }
 
     private void setGameButtonsDisabled(boolean disabled) {
-        new ArrayList<Button>() {{
-            add(btnHit);
-            add(btnDouble);
-            add(btnStand);
-        }}.forEach(b -> b.setDisable(disabled));
+        btnHit.setDisable(disabled);
+        btnDouble.setDisable(disabled);
+        btnStand.setDisable(disabled);
     }
 }

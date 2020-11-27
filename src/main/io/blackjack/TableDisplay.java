@@ -34,7 +34,7 @@ public class TableDisplay extends Canvas {
         VER_CENTER = (int) getHeight() / 2;
     }
 
-    public void drawLabels(int dealerScore, int playerScore) {
+    public void drawScores(int dealerScore, int playerScore) {
         drawLabel(String.format("Dealer: %s", dealerScore), 100);
         drawLabel(String.format("You: %s", playerScore), 450);
     }
@@ -44,18 +44,20 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }
 
-    public void push() {
-        final Font f = new Font("Arial", 150);
-        context.setFont(f);
-        context.setFill(Color.ORANGE);
-        context.fillText("PUSH", HOR_CENTER - 200, VER_CENTER);
+    public void drawPush() {
+        drawResults("Push", Color.ORANGE);
     }
 
-    public void bust() {
-        final Font f = new Font("Arial", 150);
-        context.setFont(f);
-        context.setFill(Color.RED);
-        context.fillText("BUST!", HOR_CENTER - 200, VER_CENTER);
+    public void drawWin() {
+        drawResults("Win", Color.GREEN);
+    }
+
+    public void drawLose() {
+        drawResults("Dealer Wins", Color.RED);
+    }
+
+    public void drawBust() {
+        drawResults("BUST", Color.RED);
     }
 
     public void reset() {
@@ -67,6 +69,13 @@ public class TableDisplay extends Canvas {
         context.setFill(Color.BLACK);
         context.rect(0, 0, getWidth(), getHeight());
         context.stroke();
+    }
+
+    private void drawResults(String text, Color color) {
+        final Font f = new Font("Arial", 150);
+        context.setFont(f);
+        context.setFill(color);
+        context.fillText(text, HOR_CENTER - 300, VER_CENTER);
     }
 
     private void drawLabel(String label, int y) {

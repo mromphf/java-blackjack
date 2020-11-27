@@ -55,7 +55,7 @@ public class BlackjackController implements Initializable {
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
         tableDisplay.reset();
-        tableDisplay.drawLabels(concealedScore(dealerHand), score(playerHand));
+        tableDisplay.drawScores(concealedScore(dealerHand), score(playerHand));
         tableDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
     }
 
@@ -80,7 +80,7 @@ public class BlackjackController implements Initializable {
         playerHand.add(deck.pop());
 
         tableDisplay.reset();
-        tableDisplay.drawLabels(concealedScore(dealerHand), score(playerHand) );
+        tableDisplay.drawScores(concealedScore(dealerHand), score(playerHand) );
         tableDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
 
         if (bust(playerHand)) {
@@ -115,13 +115,17 @@ public class BlackjackController implements Initializable {
 
         setGameButtonsDisabled(true);
         tableDisplay.reset();
-        tableDisplay.drawLabels(score(dealerHand), score(playerHand) );
+        tableDisplay.drawScores(score(dealerHand), score(playerHand) );
         tableDisplay.drawCards(ImageMap.of(dealerHand, playerHand));
 
         if (bust(playerHand)) {
-            tableDisplay.bust();
+            tableDisplay.drawBust();
         } else if (push(playerHand, dealerHand)) {
-            tableDisplay.push();
+            tableDisplay.drawPush();
+        } else if (playerWins(hands)) {
+            tableDisplay.drawWin();
+        } else {
+            tableDisplay.drawLose();
         }
     }
 

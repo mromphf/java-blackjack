@@ -1,12 +1,11 @@
 <?import javafx.scene.layout.GridPane?>
-
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import main.io.blackjack.TableDisplay?>
 
 <GridPane fx:controller="main.io.blackjack.BlackjackController"
-        xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
     <GridPane GridPane.rowIndex="0">
-        <Canvas fx:id="foreground"/>
+        <TableDisplay fx:id="tableDisplay"/>
     </GridPane>
 
     <GridPane fx:id="gameControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">

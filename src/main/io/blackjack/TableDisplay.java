@@ -13,7 +13,7 @@ import java.util.Map;
 import static main.io.blackjack.ImageKey.DEALER_CARDS;
 import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
-public class TableDisplay {
+public class TableDisplay extends Canvas {
 
     private final static Rectangle2D SCREEN = javafx.stage.Screen.getPrimary().getBounds();
     private final static int CARD_WIDTH = 125;
@@ -25,16 +25,13 @@ public class TableDisplay {
 
     private final int HOR_CENTER;
     private final int VER_CENTER;
-    private final Canvas foreground;
-    private final GraphicsContext context;
+    private final GraphicsContext context = getGraphicsContext2D();
 
-    public TableDisplay(Canvas foreground) {
-        this.foreground = foreground;
-        this.foreground.setHeight(SCREEN_HEIGHT * 0.6);
-        this.foreground.setWidth(SCREEN_WIDTH);
-        HOR_CENTER = (int) foreground.getWidth() / 2;
-        VER_CENTER = (int) foreground.getHeight() / 2;
-        context = foreground.getGraphicsContext2D();
+    public TableDisplay() {
+        setHeight(SCREEN_HEIGHT * 0.6);
+        setWidth(SCREEN_WIDTH);
+        HOR_CENTER = (int) getWidth() / 2;
+        VER_CENTER = (int) getHeight() / 2;
     }
 
     public void drawLabels(int dealerScore, int playerScore) {
@@ -62,13 +59,13 @@ public class TableDisplay {
     }
 
     public void reset() {
-        context.clearRect(0, 0, foreground.getWidth(), foreground.getHeight());
+        context.clearRect(0, 0, getWidth(), getHeight());
 
         context.setFill(Color.WHITE);
-        context.fillRect(0, 0, foreground.getWidth(), foreground.getHeight());
+        context.fillRect(0, 0, getWidth(), getHeight());
 
         context.setFill(Color.BLACK);
-        context.rect(0, 0, foreground.getWidth(), foreground.getHeight());
+        context.rect(0, 0, getWidth(), getHeight());
         context.stroke();
     }
 

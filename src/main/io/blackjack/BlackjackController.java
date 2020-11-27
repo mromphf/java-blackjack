@@ -4,7 +4,6 @@ import main.AppRoot;
 import main.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import main.Layout;
@@ -18,7 +17,7 @@ import static main.domain.Rules.*;
 public class BlackjackController implements Initializable {
 
     @FXML
-    private Canvas foreground;
+    private TableDisplay tableDisplay;
 
     @FXML
     private GridPane gameControls;
@@ -36,7 +35,6 @@ public class BlackjackController implements Initializable {
     private Button btnDouble;
 
     private final Stack<Card> deck;
-    private TableDisplay tableDisplay;
     private Map<String, List<Card>> hands;
 
     public BlackjackController() {
@@ -46,7 +44,6 @@ public class BlackjackController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.tableDisplay = new TableDisplay(foreground);
         reset();
     }
 

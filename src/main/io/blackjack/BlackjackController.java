@@ -40,7 +40,6 @@ public class BlackjackController implements Initializable {
 
     public BlackjackController() {
         this.deck = shuffle(fresh());
-        this.hands = openingHand(deck);
     }
 
     @Override
@@ -77,7 +76,12 @@ public class BlackjackController implements Initializable {
         List<Card> dealerHand = hands.get("dealer");
 
         btnDouble.setDisable(true);
-        // TODO: Need safety check for empty deck
+
+        if (deck.isEmpty()) {
+            System.out.println("No more cards! Quitting...");
+            System.exit(0);
+        }
+
         playerHand.add(deck.pop());
 
         tableDisplay.reset();
@@ -103,7 +107,10 @@ public class BlackjackController implements Initializable {
 
     private void dealerTurn() {
         while (score(hands.get("dealer")) < 16) {
-            // TODO: Need safety check for empty deck
+            if (deck.isEmpty()) {
+                System.out.println("No more cards! Quitting...");
+                System.exit(0);
+            }
             hands.get("dealer").add(deck.pop());
         }
         revealAllHands();

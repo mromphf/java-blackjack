@@ -15,13 +15,13 @@ import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class TableDisplay extends Canvas {
 
-    private final static int CARD_WIDTH = 125;
-    private final static int CARD_HEIGHT = 150;
-    private final static int GAP_BETWEEN_CARDS = 225;
     private final static int TEXT_OFFSET = 50;
 
     private final int HOR_CENTER;
     private final int VER_CENTER;
+    private final int CARD_WIDTH;
+    private final int CARD_HEIGHT;
+    private final int GAP_BETWEEN_CARDS;
     private final GraphicsContext context = getGraphicsContext2D();
 
     public TableDisplay() {
@@ -30,6 +30,9 @@ public class TableDisplay extends Canvas {
         setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;
+        CARD_HEIGHT = (int) (screen.getHeight() * 0.13);
+        CARD_WIDTH = (int) (screen.getWidth() * 0.08);
+        GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
     }
 
     public void reset() {
@@ -45,12 +48,12 @@ public class TableDisplay extends Canvas {
 
     public void drawScores(int dealerScore, int playerScore) {
         drawLabel(String.format("Dealer: %s", dealerScore), 100);
-        drawLabel(String.format("You: %s", playerScore), 450);
+        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 50);
     }
 
     public void drawCards(Map<ImageKey, List<Image>> imageMap) {
         drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
+        drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 50);
     }
 
     public void drawResults(String text, Color color) {

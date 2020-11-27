@@ -1,5 +1,6 @@
 package main.io.blackjack;
 
+import javafx.scene.paint.Color;
 import main.AppRoot;
 import main.domain.Card;
 import javafx.fxml.FXML;
@@ -119,13 +120,13 @@ public class BlackjackController implements Initializable {
         tableDisplay.drawCards(ImageMap.of(dealerHand, playerHand));
 
         if (bust(playerHand)) {
-            tableDisplay.drawBust();
+            tableDisplay.drawResults("Bust", Color.RED);
         } else if (push(playerHand, dealerHand)) {
-            tableDisplay.drawPush();
+            tableDisplay.drawResults("Orange", Color.ORANGE);
         } else if (playerWins(hands)) {
-            tableDisplay.drawWin();
+            tableDisplay.drawResults("Win", Color.GREEN);
         } else {
-            tableDisplay.drawLose();
+            tableDisplay.drawResults("Lose", Color.RED);
         }
     }
 

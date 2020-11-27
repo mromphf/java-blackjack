@@ -44,20 +44,11 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(imageMap.get(PLAYER_CARDS), 450);
     }
 
-    public void drawPush() {
-        drawResults("Push", Color.ORANGE);
-    }
-
-    public void drawWin() {
-        drawResults("Win", Color.GREEN);
-    }
-
-    public void drawLose() {
-        drawResults("Dealer Wins", Color.RED);
-    }
-
-    public void drawBust() {
-        drawResults("BUST", Color.RED);
+    public void drawResults(String text, Color color) {
+        final Font f = new Font("Arial", 150);
+        context.setFont(f);
+        context.setFill(color);
+        context.fillText(text, HOR_CENTER - 300, VER_CENTER);
     }
 
     public void reset() {
@@ -69,13 +60,6 @@ public class TableDisplay extends Canvas {
         context.setFill(Color.BLACK);
         context.rect(0, 0, getWidth(), getHeight());
         context.stroke();
-    }
-
-    private void drawResults(String text, Color color) {
-        final Font f = new Font("Arial", 150);
-        context.setFont(f);
-        context.setFill(color);
-        context.fillText(text, HOR_CENTER - 300, VER_CENTER);
     }
 
     private void drawLabel(String label, int y) {

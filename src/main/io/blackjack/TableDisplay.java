@@ -15,12 +15,9 @@ import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class TableDisplay extends Canvas {
 
-    private final static Rectangle2D SCREEN = javafx.stage.Screen.getPrimary().getBounds();
     private final static int CARD_WIDTH = 125;
     private final static int CARD_HEIGHT = 150;
     private final static int GAP_BETWEEN_CARDS = 225;
-    private final static int SCREEN_HEIGHT = (int) SCREEN.getHeight();
-    private final static int SCREEN_WIDTH = (int) SCREEN.getWidth();
     private final static int TEXT_OFFSET = 50;
 
     private final int HOR_CENTER;
@@ -28,10 +25,22 @@ public class TableDisplay extends Canvas {
     private final GraphicsContext context = getGraphicsContext2D();
 
     public TableDisplay() {
-        setHeight(SCREEN_HEIGHT * 0.6);
-        setWidth(SCREEN_WIDTH);
+        final Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
+        setHeight((int) screen.getHeight() * 0.6);
+        setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;
+    }
+
+    public void reset() {
+        context.clearRect(0, 0, getWidth(), getHeight());
+
+        context.setFill(Color.WHITE);
+        context.fillRect(0, 0, getWidth(), getHeight());
+
+        context.setFill(Color.BLACK);
+        context.rect(0, 0, getWidth(), getHeight());
+        context.stroke();
     }
 
     public void drawScores(int dealerScore, int playerScore) {
@@ -49,17 +58,6 @@ public class TableDisplay extends Canvas {
         context.setFont(f);
         context.setFill(color);
         context.fillText(text, HOR_CENTER - 300, VER_CENTER);
-    }
-
-    public void reset() {
-        context.clearRect(0, 0, getWidth(), getHeight());
-
-        context.setFill(Color.WHITE);
-        context.fillRect(0, 0, getWidth(), getHeight());
-
-        context.setFill(Color.BLACK);
-        context.rect(0, 0, getWidth(), getHeight());
-        context.stroke();
     }
 
     private void drawLabel(String label, int y) {

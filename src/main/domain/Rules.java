@@ -1,6 +1,7 @@
 package main.domain;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class Rules {
     public static boolean isBlackjack(Collection<Card> cards) {
@@ -29,6 +30,7 @@ public class Rules {
     }
 
     public static int concealedScore(Collection<Card> cards) {
+        //TODO: Need check for empty iterator
         Card c = cards.iterator().next();
         return c.isAce() ? 11 : normalizeFaceValue(c);
     }
@@ -53,5 +55,9 @@ public class Rules {
 
     public static int softTotal(Collection<Card> cards) {
         return cards.stream().mapToInt(Rules::normalizeFaceValue).sum();
+    }
+
+    public static boolean playerWins(Map<String, ? extends Collection<Card>> hands) {
+        return score(hands.get("player")) > score(hands.get("dealer"));
     }
 }

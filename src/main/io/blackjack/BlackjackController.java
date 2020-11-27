@@ -85,7 +85,6 @@ public class BlackjackController implements Initializable {
 
         if (bust(playerHand)) {
             revealAllHands();
-            tableDisplay.bust();
             onRoundOver();
         }
     }
@@ -111,10 +110,19 @@ public class BlackjackController implements Initializable {
     }
 
     private void revealAllHands() {
+        List<Card> dealerHand = hands.get("dealer");
+        List<Card> playerHand = hands.get("player");
+
         setGameButtonsDisabled(true);
         tableDisplay.reset();
-        tableDisplay.drawLabels(score(hands.get("dealer")), score(hands.get("player")) );
-        tableDisplay.drawCards(ImageMap.of(hands.get("dealer"), hands.get("player")));
+        tableDisplay.drawLabels(score(dealerHand), score(playerHand) );
+        tableDisplay.drawCards(ImageMap.of(dealerHand, playerHand));
+
+        if (bust(playerHand)) {
+            tableDisplay.bust();
+        } else if (push(playerHand, dealerHand)) {
+            tableDisplay.push();
+        }
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

@@ -1,16 +1,19 @@
 package main.io.blackjack;
 
-import javafx.scene.paint.Color;
-import main.AppRoot;
-import main.domain.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import main.AppRoot;
 import main.Layout;
+import main.domain.Card;
 
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Stack;
 
 import static main.domain.Deck.*;
 import static main.domain.Rules.*;

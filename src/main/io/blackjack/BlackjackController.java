@@ -122,8 +122,8 @@ public class BlackjackController implements Initializable {
         if (bust(playerHand)) {
             tableDisplay.drawResults("Bust", Color.RED);
         } else if (push(playerHand, dealerHand)) {
-            tableDisplay.drawResults("Orange", Color.ORANGE);
-        } else if (playerWins(hands)) {
+            tableDisplay.drawResults("Push", Color.ORANGE);
+        } else if (playerWins(playerHand, dealerHand)) {
             tableDisplay.drawResults("Win", Color.GREEN);
         } else {
             tableDisplay.drawResults("Lose", Color.RED);

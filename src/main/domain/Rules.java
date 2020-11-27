@@ -57,7 +57,7 @@ public class Rules {
         return cards.stream().mapToInt(Rules::normalizeFaceValue).sum();
     }
 
-    public static boolean playerWins(Map<String, ? extends Collection<Card>> hands) {
-        return score(hands.get("player")) > score(hands.get("dealer"));
+    public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
+        return bust(dealerCards) || score(playerCards) > score(dealerCards);
     }
 }

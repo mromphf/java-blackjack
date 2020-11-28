@@ -2,7 +2,6 @@ package main.domain;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 public class Rules {
     public static boolean isBlackjack(Collection<Card> cards) {
@@ -63,6 +62,6 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return bust(dealerCards) || score(playerCards) > score(dealerCards);
+        return bust(dealerCards) || (!bust(playerCards) && score(playerCards) > score(dealerCards));
     }
 }

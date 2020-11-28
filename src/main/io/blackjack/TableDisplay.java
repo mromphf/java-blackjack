@@ -30,7 +30,7 @@ public class TableDisplay extends Canvas {
         setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;
-        CARD_HEIGHT = (int) (screen.getHeight() * 0.13);
+        CARD_HEIGHT = (int) (screen.getHeight() * 0.15);
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
         GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
     }
@@ -44,6 +44,13 @@ public class TableDisplay extends Canvas {
         context.setFill(Color.BLACK);
         context.rect(0, 0, getWidth(), getHeight());
         context.stroke();
+    }
+
+    public void drawDeck(Image cardImage, int cardsRemaining) {
+        final Font f = new Font("Arial", 30);
+        context.setFont(f);
+        context.drawImage(cardImage, HOR_CENTER + 500, VER_CENTER - 175, CARD_WIDTH, CARD_HEIGHT);
+        context.fillText(String.format("%s", cardsRemaining), HOR_CENTER + 550, VER_CENTER + 30);
     }
 
     public void drawBet(int bet) {

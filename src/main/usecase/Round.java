@@ -15,6 +15,7 @@ public class Round implements ControlListener {
     private final AppRoot appRoot;
     private final Stack<Card> deck;
     private final Collection<RoundListener> roundListeners;
+    private final Collection<OutcomeListener> outcomeListeners;
     private Map<String, List<Card>> hands;
     private int bet;
 
@@ -22,14 +23,19 @@ public class Round implements ControlListener {
         this.appRoot = appRoot;
         this.deck = deck;
         this.roundListeners = new ArrayList<>();
+        this.outcomeListeners = new ArrayList<>();
         this.hands = new HashMap<String, List<Card>>() {{
             put("dealer", new ArrayList<>());
             put("player", new ArrayList<>());
         }};
     }
 
-    public void registerBetListener(RoundListener roundListener) {
+    public void registerRoundListener(RoundListener roundListener) {
         this.roundListeners.add(roundListener);
+    }
+
+    public void registerOutcomeListener(OutcomeListener outcomeListener) {
+        outcomeListeners.add(outcomeListener);
     }
 
     @Override
@@ -62,7 +68,8 @@ public class Round implements ControlListener {
             roundListeners.forEach(l -> l.onUpdate(gameState()));
 
             if (bust(hands.get("player"))) {
-                roundListeners.forEach(l -> l.onShowdown(gameState()));
+                outcomeListeners.forEach(l -> l.onShowdown(gameState()));
+                outcomeListeners.forEach(OutcomeListener::onBust);
             }
         }
     }
@@ -76,7 +83,16 @@ public class Round implements ControlListener {
             }
             hands.get("dealer").add(deck.pop());
         }
-        roundListeners.forEach(l -> l.onShowdown(gameState()));
+
+        outcomeListeners.forEach(l -> l.onShowdown(gameState()));
+
+        if (gameState().playerHasWon) {
+            outcomeListeners.forEach(OutcomeListener::onPlayerWins);
+        } else if(gameState().isPush) {
+            outcomeListeners.forEach(OutcomeListener::onPush);
+        } else {
+            outcomeListeners.forEach(OutcomeListener::onDealerWins);
+        }
     }
 
     private GameState gameState() {

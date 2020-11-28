@@ -37,8 +37,9 @@ public class AppRoot {
         BlackjackController blackjackController = new BlackjackController();
         BetController betController = new BetController();
 
-        round.registerBetListener(betController);
-        round.registerBetListener(blackjackController);
+        round.registerRoundListener(betController);
+        round.registerRoundListener(blackjackController);
+        round.registerOutcomeListener(blackjackController);
         homeController.registerControlListener(round);
         betController.registerControlListener(round);
         blackjackController.registerControlListener(round);

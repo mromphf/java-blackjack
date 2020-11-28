@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 
 import main.usecase.ControlListener;
 import main.usecase.GameState;
+import main.usecase.OutcomeListener;
 import main.usecase.RoundListener;
 
 import java.net.URL;
@@ -18,7 +19,7 @@ import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
 
-public class BlackjackController implements Initializable, RoundListener {
+public class BlackjackController implements Initializable, RoundListener, OutcomeListener {
 
     @FXML
     private TableDisplay tableDisplay;
@@ -74,16 +75,26 @@ public class BlackjackController implements Initializable, RoundListener {
         renderExposedTable(gameState);
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
+    }
 
-        if (gameState.playerBusted) {
-            tableDisplay.drawResults("Bust", Color.RED);
-        } else if (gameState.isPush) {
-            tableDisplay.drawResults("Push", Color.ORANGE);
-        } else if (gameState.playerHasWon) {
-            tableDisplay.drawResults("Win", Color.GREEN);
-        } else {
-            tableDisplay.drawResults("Lose", Color.RED);
-        }
+    @Override
+    public void onDealerWins() {
+        tableDisplay.drawResults("Lose", Color.RED);
+    }
+
+    @Override
+    public void onPlayerWins() {
+        tableDisplay.drawResults("Win", Color.GREEN);
+    }
+
+    @Override
+    public void onBust() {
+        tableDisplay.drawResults("Bust", Color.RED);
+    }
+
+    @Override
+    public void onPush() {
+        tableDisplay.drawResults("Push", Color.ORANGE);
     }
 
     private void onDouble() {

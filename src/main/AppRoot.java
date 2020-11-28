@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import main.domain.Card;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.home.HomeController;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
@@ -35,9 +33,7 @@ public class AppRoot {
         FXMLLoader betLoader = new FXMLLoader(getClass().getResource(BET_FXML));
         FXMLLoader gameLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
 
-        Stack<Card> deck = shuffle(fresh());
-
-        Round round = new Round(this, deck);
+        Round round = new Round(this, shuffle(fresh()));
 
         HomeController homeController = new HomeController(round);
         BlackjackController blackjackController = new BlackjackController(round);

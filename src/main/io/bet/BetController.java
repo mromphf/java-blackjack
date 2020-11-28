@@ -32,14 +32,12 @@ public class BetController implements Initializable {
     @FXML
     public Button btnBet100;
 
-    private final Collection<BetListener> betListeners;
     private final Round round;
     private int bet;
 
-    public BetController(Round round, Collection<BetListener> betListeners) {
+    public BetController(Round round) {
         this.bet = 0;
         this.round = round;
-        this.betListeners = betListeners;
     }
 
     @Override
@@ -59,7 +57,7 @@ public class BetController implements Initializable {
 
     @FXML
     public void onPlay() {
-        round.start(bet, betListeners);
+        round.start(bet);
         bet = 0;
         refresh();
     }

@@ -17,7 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static main.domain.Deck.*;
+import static main.domain.Deck.fresh;
+import static main.domain.Deck.shuffle;
+
 
 public class AppRoot {
 
@@ -34,11 +36,13 @@ public class AppRoot {
 
         Stack<Card> deck = shuffle(fresh());
 
-        Round round = new Round(this, deck, openingHand(deck));
+        Round round = new Round(this, deck);
 
         HomeController homeController = new HomeController(round);
         BlackjackController blackjackController = new BlackjackController(round);
-        BetController betController = new BetController(round, new ArrayList<BetListener>() {{
+        BetController betController = new BetController(round);
+
+        round.registerBetListeners(new ArrayList<BetListener>() {{
             add(blackjackController);
         }});
 

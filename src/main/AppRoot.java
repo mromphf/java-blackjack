@@ -53,10 +53,6 @@ public class AppRoot {
         betController.registerControlListener(round);
         blackjackController.registerControlListener(round);
 
-        homeLoader.setController(homeController);
-        betLoader.setController(betController);
-        blackjackLoader.setController(blackjackController);
-
         layoutMap.put(Layout.HOME, homeLoader.getRoot());
         layoutMap.put(Layout.BET, betLoader.getRoot());
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());

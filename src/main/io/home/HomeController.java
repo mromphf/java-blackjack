@@ -2,24 +2,38 @@ package main.io.home;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
-import main.AppRoot;
-import main.Layout;
+import main.usecase.Round;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    @FXML
+    public Button btnPlay;
 
     @FXML
-    public void onPlay() {
-        AppRoot.setLayout(Layout.BET);
+    public Button btnExit;
+
+    private final Round round;
+
+    public HomeController(Round round) {
+        this.round = round;
     }
 
-    @FXML void onExit() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        btnPlay.setOnAction(event -> onPlay());
+        btnExit.setOnAction(event -> onExit());
+    }
+
+    public void onPlay() {
+        round.placeBet();
+    }
+
+    public void onExit() {
         System.exit(0);
     }
 }

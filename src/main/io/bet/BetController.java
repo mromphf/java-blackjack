@@ -5,8 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import main.AppRoot;
-import main.Layout;
+import main.usecase.Round;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,46 +16,48 @@ public class BetController implements Initializable {
     private Label lblBet;
 
     @FXML
-    Button btnDeal;
+    public Button btnDeal;
 
+    @FXML
+    public Button btnBet5;
+
+    @FXML
+    public Button btnBet10;
+
+    @FXML
+    public Button btnBet25;
+
+    @FXML
+    public Button btnBet100;
+
+    private final Round round;
     private int bet;
+
+    public BetController(Round round) {
+        this.bet = 0;
+        this.round = round;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Font f = new Font("Arial", 50);
-        this.bet = 0;
-        lblBet.setFont(f);
+        lblBet.setFont(new Font("Arial", 50));
+        btnBet5.setOnAction(event -> onBet(5));
+        btnBet10.setOnAction(event -> onBet(10));
+        btnBet25.setOnAction(event -> onBet(25));
+        btnBet100.setOnAction(event -> onBet(100));
+        btnDeal.setOnAction(event -> onPlay());
     }
 
-    @FXML
-    public void onBet5() {
-        bet += 5;
-        refresh();
-    }
-
-    @FXML
-    public void onBet10() {
-        bet += 10;
-        refresh();
-    }
-
-    @FXML
-    public void onBet25() {
-        bet += 25;
-        refresh();
-    }
-
-    @FXML
-    public void onBet100() {
-        bet += 100;
+    public void onBet(int amount) {
+        bet += amount;
         refresh();
     }
 
     @FXML
     public void onPlay() {
+        round.start(bet);
         bet = 0;
         refresh();
-        AppRoot.setLayout(Layout.GAME);
     }
 
     private void refresh() {

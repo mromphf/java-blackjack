@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import static main.domain.Deck.openingHand;
 import static main.domain.Rules.bust;
 import static main.domain.Rules.score;
 
@@ -15,7 +16,7 @@ public class Round {
 
     private final AppRoot appRoot;
     private final Stack<Card> deck;
-    private final Map<String, List<Card>> hands;
+    private Map<String, List<Card>> hands;
     private int bet = 0;
 
     public Round(AppRoot appRoot, Stack<Card> deck, Map<String, List<Card>> hands) {
@@ -36,14 +37,15 @@ public class Round {
         return hands.get(player);
     }
 
-    public void start(int bet) {
-        this.bet = bet;
-        AppRoot.setLayout(Layout.GAME);
+    public void placeBet() {
+        this.bet = 0;
+        hands = openingHand(deck);
+        appRoot.setLayout(Layout.BET);
     }
 
-    public void finishRound() {
-        this.bet = 0;
-        AppRoot.setLayout(Layout.BET);
+    public void start(int bet) {
+        this.bet = bet;
+        appRoot.setLayout(Layout.GAME);
     }
 
     public void hit() {

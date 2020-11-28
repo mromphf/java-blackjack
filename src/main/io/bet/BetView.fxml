@@ -2,29 +2,29 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane fx:controller="main.io.bet.BetController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
+<GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
+
     <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50">
         Bet: $0
     </Label>
 
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="50" minHeight="50" onAction="#onBet5">
+    <Button fx:id="btnBet5" GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="50" minHeight="50">
         5
     </Button>
 
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="2" minWidth="50" minHeight="50" onAction="#onBet10">
+    <Button fx:id="btnBet10" GridPane.rowIndex="1" GridPane.columnIndex="2" minWidth="50" minHeight="50">
         10
     </Button>
 
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="3" minWidth="50" minHeight="50" onAction="#onBet25">
+    <Button fx:id="btnBet25" GridPane.rowIndex="1" GridPane.columnIndex="3" minWidth="50" minHeight="50">
         25
     </Button>
 
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="4" minWidth="50" minHeight="50" onAction="#onBet100">
+    <Button fx:id="btnBet100" GridPane.rowIndex="1" GridPane.columnIndex="4" minWidth="50" minHeight="50">
         100
     </Button>
 
-    <Button fx:id="btnDeal" GridPane.rowIndex="2" GridPane.columnIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onPlay">
+    <Button fx:id="btnDeal" GridPane.rowIndex="2" GridPane.columnIndex="0" minWidth="250" minHeight="50" disable="true">
         Deal
     </Button>
 </GridPane>

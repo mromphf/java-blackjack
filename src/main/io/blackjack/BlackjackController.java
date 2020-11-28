@@ -5,17 +5,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import main.AppRoot;
-import main.Layout;
+
 import main.domain.Card;
+import main.usecase.Round;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Stack;
 
-import static main.domain.Deck.*;
 import static main.domain.Rules.*;
 
 public class BlackjackController implements Initializable {
@@ -38,22 +35,27 @@ public class BlackjackController implements Initializable {
     @FXML
     private Button btnDouble;
 
-    private final Stack<Card> deck;
-    private Map<String, List<Card>> hands;
+    @FXML
+    private Button btnNext;
 
-    public BlackjackController() {
-        this.deck = shuffle(fresh());
+    private final Round round;
+
+    public BlackjackController(Round round) {
+        this.round = round;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        btnDouble.setOnAction(event -> onDouble());
+        btnHit.setOnAction(event -> onHit());
+        btnStand.setOnAction(event -> onStand());
+        btnNext.setOnAction(event -> onMoveToNextHand());
         reset();
     }
 
     public void reset() {
-        this.hands = openingHand(deck);
-        List<Card> dealerHand = hands.get("dealer");
-        List<Card> playerHand = hands.get("player");
+        List<Card> dealerHand = round.getHand("dealer");
+        List<Card> playerHand = round.getHand("player");
         setGameButtonsDisabled(false);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
@@ -62,30 +64,22 @@ public class BlackjackController implements Initializable {
         tableDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
     }
 
-    @FXML
     public void onDouble() {
         onHit();
         dealerTurn();
     }
 
-    @FXML
     public void onStand() {
         dealerTurn();
     }
 
-    @FXML
     public void onHit() {
-        List<Card> playerHand = hands.get("player");
-        List<Card> dealerHand = hands.get("dealer");
+        List<Card> playerHand = round.getHand("player");
+        List<Card> dealerHand = round.getHand("dealer");
 
         btnDouble.setDisable(true);
 
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
-        }
-
-        playerHand.add(deck.pop());
+        round.hit();
 
         tableDisplay.reset();
         tableDisplay.drawScores(concealedScore(dealerHand), score(playerHand) );
@@ -97,9 +91,8 @@ public class BlackjackController implements Initializable {
         }
     }
 
-    @FXML
     private void onMoveToNextHand() {
-        AppRoot.setLayout(Layout.BET);
+        round.placeBet();
         reset();
     }
 
@@ -109,27 +102,21 @@ public class BlackjackController implements Initializable {
     }
 
     private void dealerTurn() {
-        while (score(hands.get("dealer")) < 16) {
-            if (deck.isEmpty()) {
-                System.out.println("No more cards! Quitting...");
-                System.exit(0);
-            }
-            hands.get("dealer").add(deck.pop());
-        }
+        round.dealerTurn();
         revealAllHands();
         onRoundOver();
     }
 
     private void revealAllHands() {
-        List<Card> dealerHand = hands.get("dealer");
-        List<Card> playerHand = hands.get("player");
+        List<Card> dealerHand = round.getHand("dealer");
+        List<Card> playerHand = round.getHand("player");
 
         setGameButtonsDisabled(true);
         tableDisplay.reset();
         tableDisplay.drawScores(score(dealerHand), score(playerHand) );
         tableDisplay.drawCards(ImageMap.of(dealerHand, playerHand));
 
-        if (bust(playerHand)) {
+        if (round.playerBusted()) {
             tableDisplay.drawResults("Bust", Color.RED);
         } else if (push(playerHand, dealerHand)) {
             tableDisplay.drawResults("Push", Color.ORANGE);

@@ -7,16 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import main.io.RootController;
 import main.usecase.ControlListener;
 import main.usecase.GameState;
 import main.usecase.GameStateListener;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
-public class BetController implements Initializable, GameStateListener {
+public class BetController extends RootController implements Initializable, GameStateListener {
 
     @FXML
     private Label lblBet;
@@ -40,16 +39,7 @@ public class BetController implements Initializable, GameStateListener {
     public Button btnBet100;
 
     private final static int MAX_BET = 500;
-    private final Collection<ControlListener> controlListeners;
     private int bet = 0;
-
-    public BetController() {
-        controlListeners = new ArrayList<>();
-    }
-
-    public void registerControlListener(ControlListener controlListener) {
-        this.controlListeners.add(controlListener);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

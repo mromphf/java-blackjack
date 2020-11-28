@@ -6,19 +6,18 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.io.RootController;
 import main.usecase.ControlListener;
 import main.usecase.GameState;
 import main.usecase.OutcomeListener;
 import main.usecase.GameStateListener;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
 
-public class BlackjackController implements Initializable, GameStateListener, OutcomeListener {
+public class BlackjackController extends RootController implements Initializable, GameStateListener, OutcomeListener {
 
     @FXML
     private TableDisplay tableDisplay;
@@ -40,16 +39,6 @@ public class BlackjackController implements Initializable, GameStateListener, Ou
 
     @FXML
     private Button btnNext;
-
-    private final Collection<ControlListener> controlListeners;
-
-    public BlackjackController() {
-        this.controlListeners = new ArrayList<>();
-    }
-
-    public void registerControlListener(ControlListener controlListener) {
-        controlListeners.add(controlListener);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

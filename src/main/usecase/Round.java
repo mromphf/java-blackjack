@@ -63,10 +63,11 @@ public class Round implements ControlListener {
             System.out.println("No more cards! Quitting...");
             System.exit(0);
         } else {
-            hands.get("player").add(deck.pop());
+            final List<Card> playerHand = hands.get("player");
+            playerHand.add(deck.pop());
             roundListeners.forEach(l -> l.onUpdate(gameState()));
 
-            if (bust(hands.get("player"))) {
+            if (bust(playerHand)) {
                 outcomeListeners.forEach(l -> l.onBust(gameState()));
             }
         }
@@ -74,19 +75,22 @@ public class Round implements ControlListener {
 
     @Override
     public void onDealerTurn() {
-        while (score(hands.get("dealer")) < 16) {
+        final List<Card> playerHand = hands.get("player");
+        final List<Card> dealerHand = hands.get("dealer");
+
+        while (score(dealerHand) < 16) {
             if (deck.isEmpty()) {
                 System.out.println("No more cards! Quitting...");
                 System.exit(0);
             }
-            hands.get("dealer").add(deck.pop());
+            dealerHand.add(deck.pop());
         }
 
-        if (playerWins(hands.get("player"), hands.get("dealer"))) {
+        if (playerWins(playerHand, dealerHand)) {
             outcomeListeners.forEach(l -> l.onPlayerWins(gameState()));
-        } else if(push(hands.get("player"), hands.get("dealer"))) {
+        } else if(push(playerHand, dealerHand)) {
             outcomeListeners.forEach(l -> l.onPush(gameState()));
-        } else if (bust(hands.get("player"))) {
+        } else if (bust(playerHand)) {
             outcomeListeners.forEach(l -> l.onBust(gameState()));
         } else {
             outcomeListeners.forEach(l -> l.onDealerWins(gameState()));

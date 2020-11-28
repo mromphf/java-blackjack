@@ -58,7 +58,7 @@ public class BetController extends RootController implements Initializable, Game
 
     @FXML
     private void onDeal() {
-        controlListeners.forEach(ControlListener::onStartGame);
+        controlListeners.forEach(ControlListener::onStartNewRound);
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

@@ -1,7 +1,7 @@
 package main.usecase;
 
 public interface ControlListener {
-    void onStartGame();
+    void onStartNewRound();
     void onBetPlaced(int bet);
     void onMoveToBettingTable();
     void onHit();

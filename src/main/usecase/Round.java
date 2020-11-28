@@ -38,7 +38,7 @@ public class Round implements ControlListener {
     }
 
     @Override
-    public void onStartGame() {
+    public void onStartNewRound() {
         hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));

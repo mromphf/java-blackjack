@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.usecase.GameState;
 import main.usecase.RoundListener;
 import main.usecase.Round;
 
@@ -53,7 +54,7 @@ public class BlackjackController implements Initializable, RoundListener {
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate(GameState gameState) {
         setGameButtonsDisabled(false);
         renderConcealedTable();
         gameControls.setVisible(true);

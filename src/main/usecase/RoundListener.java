@@ -1,5 +1,5 @@
 package main.usecase;
 
 public interface RoundListener {
-    void onUpdate();
+    void onUpdate(GameState gameState);
 }

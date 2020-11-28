@@ -37,12 +37,14 @@ public class AppRoot {
 
         HomeController homeController = new HomeController(round);
         BlackjackController blackjackController = new BlackjackController(round);
-        BetController betController = new BetController(round);
+        BetController betController = new BetController();
 
         round.registerBetListeners(new ArrayList<RoundListener>() {{
             add(betController);
             add(blackjackController);
         }});
+
+        betController.registerControlListener(round);
 
         mainLoader.setController(homeController);
         betLoader.setController(betController);

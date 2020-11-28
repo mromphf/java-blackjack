@@ -7,10 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import main.usecase.Round;
+import main.usecase.ControlListener;
+import main.usecase.GameState;
 import main.usecase.RoundListener;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class BetController implements Initializable, RoundListener {
@@ -37,10 +40,15 @@ public class BetController implements Initializable, RoundListener {
     public Button btnBet100;
 
     private final static int MAX_BET = 500;
-    private final Round round;
+    private final Collection<ControlListener> controlListeners;
+    private int bet = 0;
 
-    public BetController(Round round) {
-        this.round = round;
+    public BetController() {
+        controlListeners = new ArrayList<>();
+    }
+
+    public void registerControlListener(ControlListener controlListener) {
+        this.controlListeners.add(controlListener);
     }
 
     @Override
@@ -55,26 +63,25 @@ public class BetController implements Initializable, RoundListener {
     }
 
     @Override
-    public void onUpdate() {
-        refresh();
+    public void onUpdate(GameState gameState) {
+        this.bet = gameState.bet;
+        btnDeal.setDisable(bet <= 0);
+        lblBet.setText("Bet: $" + bet);
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            round.setBet(Math.min(MAX_BET, round.getBet() + amount));
+            int bet = Math.min(MAX_BET, this.bet + amount);
+            controlListeners.forEach(cl -> cl.onBetPlaced(bet));
         } else {
-            round.setBet(Math.max(0, round.getBet() - amount));
+            int bet = Math.max(0, this.bet - amount);
+            controlListeners.forEach(cl -> cl.onBetPlaced(bet));
         }
-        refresh();
+        btnDeal.setDisable(bet <= 0);
+        lblBet.setText("Bet: $" + bet);
     }
 
     private void onPlay() {
-        round.startGame();
-        refresh();
-    }
-
-    private void refresh() {
-        btnDeal.setDisable(round.getBet() <= 0);
-        lblBet.setText("Bet: $" + round.getBet());
+        controlListeners.forEach(ControlListener::onStartGame);
     }
 }

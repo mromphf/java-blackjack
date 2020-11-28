@@ -10,7 +10,7 @@ import java.util.*;
 import static main.domain.Deck.openingHand;
 import static main.domain.Rules.*;
 
-public class Round {
+public class Round implements ControlListener {
 
     private final AppRoot appRoot;
     private final Stack<Card> deck;
@@ -26,6 +26,19 @@ public class Round {
             put("dealer", new ArrayList<>());
             put("player", new ArrayList<>());
         }};
+    }
+
+    @Override
+    public void onStartGame() {
+        hands = openingHand(deck);
+        appRoot.setLayout(Layout.GAME);
+        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+    }
+
+    @Override
+    public void onBetPlaced(int bet) {
+        this.bet = bet;
+        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
     }
 
     public void registerBetListeners(Collection<RoundListener> roundListeners) {
@@ -63,13 +76,7 @@ public class Round {
     public void moveToBettingTable() {
         setBet(0);
         appRoot.setLayout(Layout.BET);
-        roundListeners.forEach(RoundListener::onUpdate);
-    }
-
-    public void startGame() {
-        hands = openingHand(deck);
-        appRoot.setLayout(Layout.GAME);
-        roundListeners.forEach(RoundListener::onUpdate);
+        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
     }
 
     public void hit() {
@@ -78,7 +85,7 @@ public class Round {
             System.exit(0);
         } else {
             hands.get("player").add(deck.pop());
-            roundListeners.forEach(RoundListener::onUpdate);
+            roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
         }
     }
 
@@ -89,7 +96,11 @@ public class Round {
                 System.exit(0);
             }
             hands.get("dealer").add(deck.pop());
-            roundListeners.forEach(RoundListener::onUpdate);
+            roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
         }
+    }
+
+    private GameState gameState() {
+        return new GameState(bet);
     }
 }

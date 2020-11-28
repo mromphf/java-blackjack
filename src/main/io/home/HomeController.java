@@ -30,7 +30,7 @@ public class HomeController implements Initializable {
     }
 
     public void onPlay() {
-        round.placeBet();
+        round.moveToBettingTable();
     }
 
     public void onExit() {

@@ -48,59 +48,47 @@ public class BlackjackController implements Initializable, RoundListener {
         btnDouble.setOnAction(event -> onDouble());
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
-        btnNext.setOnAction(event -> onMoveToNextHand());
+        btnNext.setOnAction(event -> round.moveToBettingTable());
     }
 
     @Override
     public void onUpdate() {
         reset();
+
+        btnDouble.setDisable(round.getHand("player").size() > 2);
+
+        if (round.playerBusted()) {
+            showdown();
+        }
     }
 
-    public void reset() {
+    private void reset() {
         setGameButtonsDisabled(false);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
         renderConcealedTable();
     }
 
-    public void onDouble() {
-        onHit();
-        dealerTurn();
-    }
-
-    public void onStand() {
-        dealerTurn();
-    }
-
-    public void onHit() {
-        btnDouble.setDisable(true);
+    private void onDouble() {
         round.hit();
-        renderConcealedTable();
-
-        if (round.playerBusted()) {
-            showdown();
-            onRoundOver();
-        }
-    }
-
-    private void onMoveToNextHand() {
-        round.placeBet();
-    }
-
-    private void onRoundOver() {
-        gameControls.setVisible(false);
-        gameOverControls.setVisible(true);
-    }
-
-    private void dealerTurn() {
         round.dealerTurn();
         showdown();
-        onRoundOver();
+    }
+
+    private void onStand() {
+        round.dealerTurn();
+        showdown();
+    }
+
+    private void onHit() {
+        round.hit();
     }
 
     private void showdown() {
         setGameButtonsDisabled(true);
         renderExposedTable();
+        gameControls.setVisible(false);
+        gameOverControls.setVisible(true);
 
         if (round.playerBusted()) {
             tableDisplay.drawResults("Bust", Color.RED);

@@ -47,19 +47,18 @@ public class BetController implements Initializable, RoundListener {
         btnDeal.setOnAction(event -> onPlay());
     }
 
-    public void onBet(int amount) {
+    @Override
+    public void onUpdate() {
+        refresh();
+    }
+
+    private void onBet(int amount) {
         round.setBet(round.getBet() + amount);
         refresh();
     }
 
-    @FXML
-    public void onPlay() {
-        round.start();
-        refresh();
-    }
-
-    @Override
-    public void onUpdate() {
+    private void onPlay() {
+        round.startGame();
         refresh();
     }
 
@@ -67,5 +66,4 @@ public class BetController implements Initializable, RoundListener {
         btnDeal.setDisable(round.getBet() <= 0);
         lblBet.setText("Bet: $" + round.getBet());
     }
-
 }

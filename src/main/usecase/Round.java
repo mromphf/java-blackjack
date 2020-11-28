@@ -56,13 +56,13 @@ public class Round {
         return hands.get(player);
     }
 
-    public void placeBet() {
+    public void moveToBettingTable() {
         setBet(0);
         appRoot.setLayout(Layout.BET);
         roundListeners.forEach(RoundListener::onUpdate);
     }
 
-    public void start() {
+    public void startGame() {
         hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
         roundListeners.forEach(RoundListener::onUpdate);
@@ -74,6 +74,7 @@ public class Round {
             System.exit(0);
         } else {
             hands.get("player").add(deck.pop());
+            roundListeners.forEach(RoundListener::onUpdate);
         }
     }
 
@@ -84,6 +85,7 @@ public class Round {
                 System.exit(0);
             }
             hands.get("dealer").add(deck.pop());
+            roundListeners.forEach(RoundListener::onUpdate);
         }
     }
 }

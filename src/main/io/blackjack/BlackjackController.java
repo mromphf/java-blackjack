@@ -54,20 +54,16 @@ public class BlackjackController implements Initializable, RoundListener {
 
     @Override
     public void onUpdate() {
-        reset();
+        setGameButtonsDisabled(false);
+        renderConcealedTable();
+        gameControls.setVisible(true);
+        gameOverControls.setVisible(false);
 
         btnDouble.setDisable(round.getHand("player").size() > 2);
 
         if (round.playerBusted()) {
             showdown();
         }
-    }
-
-    private void reset() {
-        setGameButtonsDisabled(false);
-        gameControls.setVisible(true);
-        gameOverControls.setVisible(false);
-        renderConcealedTable();
     }
 
     private void onDouble() {

@@ -14,9 +14,9 @@ public class Round implements ControlListener {
 
     private final AppRoot appRoot;
     private final Stack<Card> deck;
+    private final Collection<RoundListener> roundListeners;
     private Map<String, List<Card>> hands;
     private int bet;
-    private Collection<RoundListener> roundListeners;
 
     public Round(AppRoot appRoot, Stack<Card> deck) {
         this.appRoot = appRoot;
@@ -41,8 +41,15 @@ public class Round implements ControlListener {
         roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
     }
 
-    public void registerBetListeners(Collection<RoundListener> roundListeners) {
-        this.roundListeners = roundListeners;
+    @Override
+    public void onMoveToBettingTable() {
+        bet = 0;
+        appRoot.setLayout(Layout.BET);
+        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+    }
+
+    public void registerBetListener(RoundListener roundListener) {
+        this.roundListeners.add(roundListener);
     }
 
     public boolean playerBusted() {
@@ -61,10 +68,6 @@ public class Round implements ControlListener {
         return bet;
     }
 
-    public void setBet(int bet) {
-        this.bet = bet;
-    }
-
     public List<Card> getHand(String player) {
         return hands.get(player);
     }
@@ -74,9 +77,7 @@ public class Round implements ControlListener {
     }
 
     public void moveToBettingTable() {
-        setBet(0);
-        appRoot.setLayout(Layout.BET);
-        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+        onMoveToBettingTable();
     }
 
     public void hit() {

@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
-import main.usecase.Round;
+import main.usecase.ControlListener;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
@@ -17,10 +19,10 @@ public class HomeController implements Initializable {
     @FXML
     public Button btnExit;
 
-    private final Round round;
+    private final Collection<ControlListener> controlListeners;
 
-    public HomeController(Round round) {
-        this.round = round;
+    public HomeController() {
+        this.controlListeners = new ArrayList<>();
     }
 
     @Override
@@ -29,8 +31,12 @@ public class HomeController implements Initializable {
         btnExit.setOnAction(event -> onExit());
     }
 
+    public void registerControlListener(ControlListener controlListener) {
+        controlListeners.add(controlListener);
+    }
+
     public void onPlay() {
-        round.moveToBettingTable();
+        controlListeners.forEach(ControlListener::onMoveToBettingTable);
     }
 
     public void onExit() {

@@ -8,11 +8,9 @@ import javafx.stage.Stage;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.home.HomeController;
-import main.usecase.RoundListener;
 import main.usecase.Round;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,15 +33,13 @@ public class AppRoot {
 
         Round round = new Round(this, shuffle(fresh()));
 
-        HomeController homeController = new HomeController(round);
+        HomeController homeController = new HomeController();
         BlackjackController blackjackController = new BlackjackController(round);
         BetController betController = new BetController();
 
-        round.registerBetListeners(new ArrayList<RoundListener>() {{
-            add(betController);
-            add(blackjackController);
-        }});
-
+        round.registerBetListener(betController);
+        round.registerBetListener(blackjackController);
+        homeController.registerControlListener(round);
         betController.registerControlListener(round);
 
         mainLoader.setController(homeController);

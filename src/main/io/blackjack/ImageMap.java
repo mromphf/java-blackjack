@@ -47,7 +47,7 @@ public class ImageMap {
     }
 
     private static Image imageFileName(Card c) {
-        String imageName = c.getSuit().name().toLowerCase() + c.getValue();
+        String imageName = c.getSuit().name().toLowerCase() + c.getFaceValue();
         return new Image(String.format("file:graphics/%s.jpg", imageName));
     }
 }

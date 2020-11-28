@@ -6,7 +6,7 @@ import java.util.Iterator;
 public class Rules {
     public static boolean isBlackjack(Collection<Card> cards) {
         boolean oneAce = cards.stream().filter(Card::isAce).count() == 1;
-        boolean tenOrHigher = cards.stream().filter(c -> c.getValue() > 9).count() == 1;
+        boolean tenOrHigher = cards.stream().filter(c -> c.getBlackjackValue() > 9).count() == 1;
         boolean twoCards = cards.size() == 2;
         return twoCards && oneAce && tenOrHigher;
     }
@@ -33,7 +33,7 @@ public class Rules {
         Iterator<Card> cardIterator = cards.iterator();
         if (cardIterator.hasNext()) {
             Card c = cardIterator.next();
-            return c.isAce() ? 11 : normalizeFaceValue(c);
+            return c.isAce() ? 11 : c.getBlackjackValue();
         } else {
             return 0;
         }
@@ -47,10 +47,6 @@ public class Rules {
         return hardTotal(cards) < 21;
     }
 
-    public static int normalizeFaceValue(Card c) {
-        return c.getValue() < 11 ? c.getValue() : 10;
-    }
-
     public static int hardTotal(Collection<Card> cards) {
         return atLeastOneAce(cards)
             ? softTotal(cards) + 10
@@ -58,7 +54,7 @@ public class Rules {
     }
 
     public static int softTotal(Collection<Card> cards) {
-        return cards.stream().mapToInt(Rules::normalizeFaceValue).sum();
+        return cards.stream().mapToInt(Card::getBlackjackValue).sum();
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {

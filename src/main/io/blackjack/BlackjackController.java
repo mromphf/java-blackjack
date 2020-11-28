@@ -70,30 +70,26 @@ public class BlackjackController implements Initializable, RoundListener, Outcom
     }
 
     @Override
-    public void onShowdown(GameState gameState) {
-        setGameButtonsDisabled(true);
-        renderExposedTable(gameState);
-        gameControls.setVisible(false);
-        gameOverControls.setVisible(true);
-    }
-
-    @Override
-    public void onDealerWins() {
+    public void onDealerWins(GameState gameState) {
+        turnOffControls(gameState);
         tableDisplay.drawResults("Lose", Color.RED);
     }
 
     @Override
-    public void onPlayerWins() {
+    public void onPlayerWins(GameState gameState) {
+        turnOffControls(gameState);
         tableDisplay.drawResults("Win", Color.GREEN);
     }
 
     @Override
-    public void onBust() {
+    public void onBust(GameState gameState) {
+        turnOffControls(gameState);
         tableDisplay.drawResults("Bust", Color.RED);
     }
 
     @Override
-    public void onPush() {
+    public void onPush(GameState gameState) {
+        turnOffControls(gameState);
         tableDisplay.drawResults("Push", Color.ORANGE);
     }
 
@@ -108,6 +104,13 @@ public class BlackjackController implements Initializable, RoundListener, Outcom
 
     private void onHit() {
         controlListeners.forEach(ControlListener::onHit);
+    }
+
+    private void turnOffControls(GameState gameState) {
+        setGameButtonsDisabled(true);
+        renderExposedTable(gameState);
+        gameControls.setVisible(false);
+        gameOverControls.setVisible(true);
     }
 
     private void renderExposedTable(GameState gameState) {

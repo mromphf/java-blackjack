@@ -68,8 +68,7 @@ public class Round implements ControlListener {
             roundListeners.forEach(l -> l.onUpdate(gameState()));
 
             if (bust(hands.get("player"))) {
-                outcomeListeners.forEach(l -> l.onShowdown(gameState()));
-                outcomeListeners.forEach(OutcomeListener::onBust);
+                outcomeListeners.forEach(l -> l.onBust(gameState()));
             }
         }
     }
@@ -84,14 +83,14 @@ public class Round implements ControlListener {
             hands.get("dealer").add(deck.pop());
         }
 
-        outcomeListeners.forEach(l -> l.onShowdown(gameState()));
-
         if (gameState().playerHasWon) {
-            outcomeListeners.forEach(OutcomeListener::onPlayerWins);
+            outcomeListeners.forEach(l -> l.onPlayerWins(gameState()));
         } else if(gameState().isPush) {
-            outcomeListeners.forEach(OutcomeListener::onPush);
+            outcomeListeners.forEach(l -> l.onPush(gameState()));
+        } else if (bust(hands.get("player"))) {
+            outcomeListeners.forEach(l -> l.onBust(gameState()));
         } else {
-            outcomeListeners.forEach(OutcomeListener::onDealerWins);
+            outcomeListeners.forEach(l -> l.onDealerWins(gameState()));
         }
     }
 

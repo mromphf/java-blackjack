@@ -15,7 +15,7 @@ public class Round implements ControlListener {
     private final Stack<Card> deck;
     private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
-    private Map<String, List<Card>> hands;
+    private Map<String, Collection<Card>> hands;
     private int bet;
 
     public Round(AppRoot appRoot, Stack<Card> deck) {
@@ -23,14 +23,14 @@ public class Round implements ControlListener {
         this.deck = deck;
         this.gameStateListeners = new ArrayList<>();
         this.outcomeListeners = new ArrayList<>();
-        this.hands = new HashMap<String, List<Card>>() {{
+        this.hands = new HashMap<String, Collection<Card>>() {{
             put("dealer", new ArrayList<>());
             put("player", new ArrayList<>());
         }};
     }
 
     public void registerRoundListener(GameStateListener gameStateListener) {
-        this.gameStateListeners.add(gameStateListener);
+        gameStateListeners.add(gameStateListener);
     }
 
     public void registerOutcomeListener(OutcomeListener outcomeListener) {
@@ -63,7 +63,7 @@ public class Round implements ControlListener {
             System.out.println("No more cards! Quitting...");
             System.exit(0);
         } else {
-            final List<Card> playerHand = hands.get("player");
+            final Collection<Card> playerHand = hands.get("player");
             playerHand.add(deck.pop());
             gameStateListeners.forEach(l -> l.onUpdate(gameState()));
 
@@ -75,8 +75,8 @@ public class Round implements ControlListener {
 
     @Override
     public void onDealerTurn() {
-        final List<Card> playerHand = hands.get("player");
-        final List<Card> dealerHand = hands.get("dealer");
+        final Collection<Card> playerHand = hands.get("player");
+        final Collection<Card> dealerHand = hands.get("dealer");
 
         while (score(dealerHand) < 16) {
             if (deck.isEmpty()) {

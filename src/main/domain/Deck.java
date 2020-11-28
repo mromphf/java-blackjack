@@ -26,7 +26,7 @@ public class Deck {
         return stack;
     }
 
-    public static Map<String, List<Card>> openingHand(Stack<Card> deck) {
+    public static Map<String, Collection<Card>> openingHand(Stack<Card> deck) {
         if (deck.size() < 4) {
             throw new IllegalArgumentException("Deck must contain at least four cards to deal the opening hand.");
         } else {
@@ -38,7 +38,7 @@ public class Deck {
             playerHand.add(deck.pop());
             dealerHand.add(deck.pop());
 
-            return new HashMap<String, List<Card>>() {{
+            return new HashMap<String, Collection<Card>>() {{
                 put("dealer", dealerHand);
                 put("player", playerHand);
             }};

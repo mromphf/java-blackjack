@@ -31,11 +31,20 @@ public class AppRoot {
         FXMLLoader betLoader = new FXMLLoader(getClass().getResource(BET_FXML));
         FXMLLoader blackjackLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
 
+        try {
+            homeLoader.load();
+            betLoader.load();
+            blackjackLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
         Round round = new Round(this, shuffle(fresh()));
 
-        HomeController homeController = new HomeController();
-        BlackjackController blackjackController = new BlackjackController();
-        BetController betController = new BetController();
+        HomeController homeController = homeLoader.getController();
+        BlackjackController blackjackController = blackjackLoader.getController();
+        BetController betController = betLoader.getController();
 
         round.registerRoundListener(betController);
         round.registerRoundListener(blackjackController);
@@ -47,14 +56,6 @@ public class AppRoot {
         homeLoader.setController(homeController);
         betLoader.setController(betController);
         blackjackLoader.setController(blackjackController);
-
-        try {
-            homeLoader.load();
-            betLoader.load();
-            blackjackLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         layoutMap.put(Layout.HOME, homeLoader.getRoot());
         layoutMap.put(Layout.BET, betLoader.getRoot());

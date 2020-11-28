@@ -97,6 +97,13 @@ public class Round implements ControlListener {
         }
     }
 
+    @Override
+    public void onDouble() {
+        bet *= 2;
+        onHit();
+        onDealerTurn();
+    }
+
     private GameState gameState() {
         final boolean cardDrawn = hands.get("player").size() > 2;
         return new GameState(bet, deck.size(), cardDrawn, hands.get("dealer"), hands.get("player") );

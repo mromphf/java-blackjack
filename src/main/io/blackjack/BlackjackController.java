@@ -82,8 +82,7 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     private void onDouble() {
-        controlListeners.forEach(ControlListener::onHit);
-        controlListeners.forEach(ControlListener::onDealerTurn);
+        controlListeners.forEach(ControlListener::onDouble);
     }
 
     private void onStand() {

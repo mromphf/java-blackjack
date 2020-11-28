@@ -6,4 +6,5 @@ public interface ControlListener {
     void onMoveToBettingTable();
     void onHit();
     void onDealerTurn();
+    void onDouble();
 }

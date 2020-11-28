@@ -16,20 +16,20 @@ public class Round {
     private final Stack<Card> deck;
     private Map<String, List<Card>> hands;
     private int bet;
-    private Collection<BetListener> betListeners;
+    private Collection<RoundListener> roundListeners;
 
     public Round(AppRoot appRoot, Stack<Card> deck) {
         this.appRoot = appRoot;
         this.deck = deck;
-        this.betListeners = new ArrayList<>();
+        this.roundListeners = new ArrayList<>();
         this.hands = new HashMap<String, List<Card>>() {{
             put("dealer", new ArrayList<>());
             put("player", new ArrayList<>());
         }};
     }
 
-    public void registerBetListeners(Collection<BetListener> betListeners) {
-        this.betListeners = betListeners;
+    public void registerBetListeners(Collection<RoundListener> roundListeners) {
+        this.roundListeners = roundListeners;
     }
 
     public boolean playerBusted() {
@@ -60,7 +60,7 @@ public class Round {
         this.bet = bet;
         hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
-        betListeners.forEach(BetListener::onBetPlaced);
+        roundListeners.forEach(RoundListener::onBetPlaced);
     }
 
     public void hit() {

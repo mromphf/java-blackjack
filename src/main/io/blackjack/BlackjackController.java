@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import main.usecase.BetListener;
+import main.usecase.RoundListener;
 import main.usecase.Round;
 
 import java.net.URL;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
 
-public class BlackjackController implements Initializable, BetListener {
+public class BlackjackController implements Initializable, RoundListener {
 
     @FXML
     private TableDisplay tableDisplay;

@@ -1,5 +1,5 @@
 package main.usecase;
 
-public interface BetListener {
+public interface RoundListener {
     public void onBetPlaced();
 }

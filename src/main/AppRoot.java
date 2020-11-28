@@ -9,7 +9,7 @@ import main.domain.Card;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.home.HomeController;
-import main.usecase.BetListener;
+import main.usecase.RoundListener;
 import main.usecase.Round;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class AppRoot {
         BlackjackController blackjackController = new BlackjackController(round);
         BetController betController = new BetController(round);
 
-        round.registerBetListeners(new ArrayList<BetListener>() {{
+        round.registerBetListeners(new ArrayList<RoundListener>() {{
             add(blackjackController);
         }});
 

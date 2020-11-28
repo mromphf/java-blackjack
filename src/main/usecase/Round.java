@@ -48,19 +48,24 @@ public class Round {
         return bet;
     }
 
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+
     public List<Card> getHand(String player) {
         return hands.get(player);
     }
 
     public void placeBet() {
+        setBet(0);
         appRoot.setLayout(Layout.BET);
+        roundListeners.forEach(RoundListener::onUpdate);
     }
 
-    public void start(int bet) {
-        this.bet = bet;
+    public void start() {
         hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
-        roundListeners.forEach(RoundListener::onBetPlaced);
+        roundListeners.forEach(RoundListener::onUpdate);
     }
 
     public void hit() {

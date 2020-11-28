@@ -52,7 +52,7 @@ public class BlackjackController implements Initializable, RoundListener {
     }
 
     @Override
-    public void onBetPlaced() {
+    public void onUpdate() {
         reset();
     }
 

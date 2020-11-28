@@ -44,6 +44,7 @@ public class AppRoot {
         BetController betController = new BetController(round);
 
         round.registerBetListeners(new ArrayList<RoundListener>() {{
+            add(betController);
             add(blackjackController);
         }});
 

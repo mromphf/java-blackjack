@@ -3,6 +3,7 @@ package main.io.blackjack;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -104,6 +105,7 @@ public class BlackjackController implements Initializable, RoundListener {
     private void renderExposedTable() {
         tableDisplay.reset();
         tableDisplay.drawBet(round.getBet());
+        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), round.numCardsRemaining());
         tableDisplay.drawScores(
                 score(round.getHand("dealer")),
                 score(round.getHand("player")) );
@@ -116,6 +118,7 @@ public class BlackjackController implements Initializable, RoundListener {
     private void renderConcealedTable() {
         tableDisplay.reset();
         tableDisplay.drawBet(round.getBet());
+        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), round.numCardsRemaining());
         tableDisplay.drawScores(
                 concealedScore(round.getHand("dealer")),
                 score(round.getHand("player")));

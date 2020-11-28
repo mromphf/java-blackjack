@@ -56,6 +56,10 @@ public class Round {
         return hands.get(player);
     }
 
+    public int numCardsRemaining() {
+        return deck.size();
+    }
+
     public void moveToBettingTable() {
         setBet(0);
         appRoot.setLayout(Layout.BET);

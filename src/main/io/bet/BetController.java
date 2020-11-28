@@ -9,14 +9,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import main.usecase.ControlListener;
 import main.usecase.GameState;
-import main.usecase.RoundListener;
+import main.usecase.GameStateListener;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-public class BetController implements Initializable, RoundListener {
+public class BetController implements Initializable, GameStateListener {
 
     @FXML
     private Label lblBet;

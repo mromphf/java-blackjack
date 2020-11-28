@@ -13,7 +13,7 @@ public class Round implements ControlListener {
 
     private final AppRoot appRoot;
     private final Stack<Card> deck;
-    private final Collection<RoundListener> roundListeners;
+    private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
     private Map<String, List<Card>> hands;
     private int bet;
@@ -21,7 +21,7 @@ public class Round implements ControlListener {
     public Round(AppRoot appRoot, Stack<Card> deck) {
         this.appRoot = appRoot;
         this.deck = deck;
-        this.roundListeners = new ArrayList<>();
+        this.gameStateListeners = new ArrayList<>();
         this.outcomeListeners = new ArrayList<>();
         this.hands = new HashMap<String, List<Card>>() {{
             put("dealer", new ArrayList<>());
@@ -29,8 +29,8 @@ public class Round implements ControlListener {
         }};
     }
 
-    public void registerRoundListener(RoundListener roundListener) {
-        this.roundListeners.add(roundListener);
+    public void registerRoundListener(GameStateListener gameStateListener) {
+        this.gameStateListeners.add(gameStateListener);
     }
 
     public void registerOutcomeListener(OutcomeListener outcomeListener) {
@@ -41,20 +41,20 @@ public class Round implements ControlListener {
     public void onStartGame() {
         hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
-        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
     }
 
     @Override
     public void onBetPlaced(int bet) {
         this.bet = bet;
-        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
     }
 
     @Override
     public void onMoveToBettingTable() {
         bet = 0;
         appRoot.setLayout(Layout.BET);
-        roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Round implements ControlListener {
         } else {
             final List<Card> playerHand = hands.get("player");
             playerHand.add(deck.pop());
-            roundListeners.forEach(l -> l.onUpdate(gameState()));
+            gameStateListeners.forEach(l -> l.onUpdate(gameState()));
 
             if (bust(playerHand)) {
                 outcomeListeners.forEach(l -> l.onBust(gameState()));

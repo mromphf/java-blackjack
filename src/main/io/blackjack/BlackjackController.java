@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import main.usecase.ControlListener;
 import main.usecase.GameState;
 import main.usecase.OutcomeListener;
-import main.usecase.RoundListener;
+import main.usecase.GameStateListener;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
 
-public class BlackjackController implements Initializable, RoundListener, OutcomeListener {
+public class BlackjackController implements Initializable, GameStateListener, OutcomeListener {
 
     @FXML
     private TableDisplay tableDisplay;

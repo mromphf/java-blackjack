@@ -3,11 +3,11 @@
 
 <GridPane fx:controller="main.io.home.HomeController"
         xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
-    <Button fx:id="btnPlay" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
+    <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
         Play
     </Button>
 
-    <Button fx:id="btnExit" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50">
+    <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
         Exit
     </Button>
 </GridPane>

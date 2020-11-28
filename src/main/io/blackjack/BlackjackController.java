@@ -6,11 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import main.domain.Card;
 import main.usecase.Round;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
@@ -54,14 +52,10 @@ public class BlackjackController implements Initializable {
     }
 
     public void reset() {
-        List<Card> dealerHand = round.getHand("dealer");
-        List<Card> playerHand = round.getHand("player");
         setGameButtonsDisabled(false);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-        tableDisplay.reset();
-        tableDisplay.drawScores(concealedScore(dealerHand), score(playerHand));
-        tableDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
+        renderConcealedTable();
     }
 
     public void onDouble() {
@@ -74,24 +68,18 @@ public class BlackjackController implements Initializable {
     }
 
     public void onHit() {
-        List<Card> playerHand = round.getHand("player");
-        List<Card> dealerHand = round.getHand("dealer");
-
         btnDouble.setDisable(true);
-
         round.hit();
+        renderConcealedTable();
 
-        tableDisplay.reset();
-        tableDisplay.drawScores(concealedScore(dealerHand), score(playerHand) );
-        tableDisplay.drawCards(ImageMap.ofConcealed(dealerHand, playerHand));
-
-        if (bust(playerHand)) {
-            revealAllHands();
+        if (round.playerBusted()) {
+            showdown();
             onRoundOver();
         }
     }
 
     private void onMoveToNextHand() {
+        round.reset();
         round.placeBet();
         reset();
     }
@@ -103,28 +91,45 @@ public class BlackjackController implements Initializable {
 
     private void dealerTurn() {
         round.dealerTurn();
-        revealAllHands();
+        showdown();
         onRoundOver();
     }
 
-    private void revealAllHands() {
-        List<Card> dealerHand = round.getHand("dealer");
-        List<Card> playerHand = round.getHand("player");
-
+    private void showdown() {
         setGameButtonsDisabled(true);
-        tableDisplay.reset();
-        tableDisplay.drawScores(score(dealerHand), score(playerHand) );
-        tableDisplay.drawCards(ImageMap.of(dealerHand, playerHand));
+        renderExposedTable();
 
         if (round.playerBusted()) {
             tableDisplay.drawResults("Bust", Color.RED);
-        } else if (push(playerHand, dealerHand)) {
+        } else if (round.isPush()) {
             tableDisplay.drawResults("Push", Color.ORANGE);
-        } else if (playerWins(playerHand, dealerHand)) {
+        } else if (round.playerHasWon()) {
             tableDisplay.drawResults("Win", Color.GREEN);
         } else {
             tableDisplay.drawResults("Lose", Color.RED);
         }
+    }
+
+    private void renderExposedTable() {
+        tableDisplay.reset();
+        tableDisplay.drawScores(
+                score(round.getHand("dealer")),
+                score(round.getHand("player")) );
+        tableDisplay.drawCards(
+                ImageMap.of(
+                        round.getHand("dealer"),
+                        round.getHand("player")));
+    }
+
+    private void renderConcealedTable() {
+        tableDisplay.reset();
+        tableDisplay.drawScores(
+                concealedScore(round.getHand("dealer")),
+                score(round.getHand("player")));
+        tableDisplay.drawCards(
+                ImageMap.ofConcealed(
+                        round.getHand("dealer"),
+                        round.getHand("player")));
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

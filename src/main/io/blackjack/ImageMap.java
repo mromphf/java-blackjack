@@ -28,11 +28,14 @@ public class ImageMap {
     }
 
     private static List<Image> conceal(List<Card> cards) {
-        // TODO: Need a check for empty list
-        return new LinkedList<Image>() {{
-            add(imageFileName(cards.get(0)));
-            add(blankCard());
-        }};
+        if (cards.isEmpty()) {
+            return new LinkedList<>();
+        } else {
+            return new LinkedList<Image>() {{
+                add(imageFileName(cards.get(0)));
+                add(blankCard());
+            }};
+        }
     }
 
     private static Image imageFileName(Card c) {

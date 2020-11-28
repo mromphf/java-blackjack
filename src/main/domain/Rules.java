@@ -1,6 +1,7 @@
 package main.domain;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Rules {
@@ -30,9 +31,13 @@ public class Rules {
     }
 
     public static int concealedScore(Collection<Card> cards) {
-        //TODO: Need check for empty iterator
-        Card c = cards.iterator().next();
-        return c.isAce() ? 11 : normalizeFaceValue(c);
+        Iterator<Card> cardIterator = cards.iterator();
+        if (cardIterator.hasNext()) {
+            Card c = cardIterator.next();
+            return c.isAce() ? 11 : normalizeFaceValue(c);
+        } else {
+            return 0;
+        }
     }
 
     public static boolean atLeastOneAce(Collection<Card> cards) {

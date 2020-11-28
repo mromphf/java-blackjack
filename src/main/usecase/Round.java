@@ -3,14 +3,12 @@ package main.usecase;
 import main.AppRoot;
 import main.Layout;
 import main.domain.Card;
+import main.domain.Rules;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import static main.domain.Deck.openingHand;
-import static main.domain.Rules.bust;
-import static main.domain.Rules.score;
+import static main.domain.Rules.*;
 
 public class Round {
 
@@ -29,6 +27,14 @@ public class Round {
         return bust(hands.get("player"));
     }
 
+    public boolean playerHasWon() {
+        return Rules.playerWins(hands.get("player"), hands.get("dealer"));
+    }
+
+    public boolean isPush() {
+        return push(hands.get("player"), hands.get("dealer"));
+    }
+
     public int getBet() {
         return bet;
     }
@@ -39,7 +45,6 @@ public class Round {
 
     public void placeBet() {
         this.bet = 0;
-        hands = openingHand(deck);
         appRoot.setLayout(Layout.BET);
     }
 
@@ -65,5 +70,9 @@ public class Round {
             }
             hands.get("dealer").add(deck.pop());
         }
+    }
+
+    public void reset() {
+        this.hands = openingHand(deck);
     }
 }

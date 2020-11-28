@@ -5,9 +5,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import main.BetListener;
 import main.usecase.Round;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class BetController implements Initializable {
@@ -30,12 +32,14 @@ public class BetController implements Initializable {
     @FXML
     public Button btnBet100;
 
+    private final Collection<BetListener> betListeners;
     private final Round round;
     private int bet;
 
-    public BetController(Round round) {
+    public BetController(Round round, Collection<BetListener> betListeners) {
         this.bet = 0;
         this.round = round;
+        this.betListeners = betListeners;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class BetController implements Initializable {
 
     @FXML
     public void onPlay() {
-        round.start(bet);
+        round.start(bet, betListeners);
         bet = 0;
         refresh();
     }

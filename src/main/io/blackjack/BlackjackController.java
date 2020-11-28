@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.BetListener;
 import main.usecase.Round;
 
 import java.net.URL;
@@ -13,7 +14,7 @@ import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
 
-public class BlackjackController implements Initializable {
+public class BlackjackController implements Initializable, BetListener {
 
     @FXML
     private TableDisplay tableDisplay;
@@ -48,6 +49,10 @@ public class BlackjackController implements Initializable {
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
         btnNext.setOnAction(event -> onMoveToNextHand());
+    }
+
+    @Override
+    public void onBetPlaced() {
         reset();
     }
 
@@ -79,9 +84,7 @@ public class BlackjackController implements Initializable {
     }
 
     private void onMoveToNextHand() {
-        round.reset();
         round.placeBet();
-        reset();
     }
 
     private void onRoundOver() {
@@ -112,6 +115,7 @@ public class BlackjackController implements Initializable {
 
     private void renderExposedTable() {
         tableDisplay.reset();
+        tableDisplay.drawBet(round.getBet());
         tableDisplay.drawScores(
                 score(round.getHand("dealer")),
                 score(round.getHand("player")) );
@@ -123,6 +127,7 @@ public class BlackjackController implements Initializable {
 
     private void renderConcealedTable() {
         tableDisplay.reset();
+        tableDisplay.drawBet(round.getBet());
         tableDisplay.drawScores(
                 concealedScore(round.getHand("dealer")),
                 score(round.getHand("player")));

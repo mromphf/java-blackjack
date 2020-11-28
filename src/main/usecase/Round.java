@@ -1,6 +1,7 @@
 package main.usecase;
 
 import main.AppRoot;
+import main.BetListener;
 import main.Layout;
 import main.domain.Card;
 import main.domain.Rules;
@@ -15,12 +16,15 @@ public class Round {
     private final AppRoot appRoot;
     private final Stack<Card> deck;
     private Map<String, List<Card>> hands;
-    private int bet = 0;
+    private int bet;
 
     public Round(AppRoot appRoot, Stack<Card> deck, Map<String, List<Card>> hands) {
         this.appRoot = appRoot;
         this.deck = deck;
-        this.hands = hands;
+        this.hands = new HashMap<String, List<Card>>() {{
+            put("dealer", new ArrayList<>());
+            put("player", new ArrayList<>());
+        }};
     }
 
     public boolean playerBusted() {
@@ -44,13 +48,14 @@ public class Round {
     }
 
     public void placeBet() {
-        this.bet = 0;
         appRoot.setLayout(Layout.BET);
     }
 
-    public void start(int bet) {
+    public void start(int bet, Collection<BetListener> betListeners) {
         this.bet = bet;
+        hands = openingHand(deck);
         appRoot.setLayout(Layout.GAME);
+        betListeners.forEach(BetListener::onBetPlaced);
     }
 
     public void hit() {
@@ -70,9 +75,5 @@ public class Round {
             }
             hands.get("dealer").add(deck.pop());
         }
-    }
-
-    public void reset() {
-        this.hands = openingHand(deck);
     }
 }

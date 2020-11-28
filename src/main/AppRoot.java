@@ -12,6 +12,7 @@ import main.io.home.HomeController;
 import main.usecase.Round;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -36,8 +37,10 @@ public class AppRoot {
         Round round = new Round(this, deck, openingHand(deck));
 
         HomeController homeController = new HomeController(round);
-        BetController betController = new BetController(round);
         BlackjackController blackjackController = new BlackjackController(round);
+        BetController betController = new BetController(round, new ArrayList<BetListener>() {{
+            add(blackjackController);
+        }});
 
         mainLoader.setController(homeController);
         betLoader.setController(betController);

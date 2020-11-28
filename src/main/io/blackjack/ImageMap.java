@@ -27,6 +27,14 @@ public class ImageMap {
         }};
     }
 
+    public static Image blankCard() {
+        if (ImageMap.useBlueDeck) {
+            return new Image("file:graphics/card_blue.jpg");
+        } else {
+            return new Image("file:graphics/card_red.jpg");
+        }
+    }
+
     private static List<Image> conceal(Collection<Card> cards) {
         if (cards.isEmpty()) {
             return new LinkedList<>();
@@ -41,13 +49,5 @@ public class ImageMap {
     private static Image imageFileName(Card c) {
         String imageName = c.getSuit().name().toLowerCase() + c.getValue();
         return new Image(String.format("file:graphics/%s.jpg", imageName));
-    }
-
-    private static Image blankCard() {
-        if (ImageMap.useBlueDeck) {
-            return new Image("file:graphics/card_blue.jpg");
-        } else {
-            return new Image("file:graphics/card_red.jpg");
-        }
     }
 }

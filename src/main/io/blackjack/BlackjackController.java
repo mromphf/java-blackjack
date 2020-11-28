@@ -3,7 +3,6 @@ package main.io.blackjack;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -116,8 +115,8 @@ public class BlackjackController implements Initializable, RoundListener, Outcom
     private void renderExposedTable(GameState gameState) {
         tableDisplay.reset();
         tableDisplay.drawBet(gameState.bet);
-        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
-        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
+        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
+        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
         tableDisplay.drawScores(score(gameState.dealerHand), score(gameState.playerHand));
         tableDisplay.drawCards(ImageMap.of(gameState.dealerHand, gameState.playerHand));
     }
@@ -125,7 +124,7 @@ public class BlackjackController implements Initializable, RoundListener, Outcom
     private void renderConcealedTable(GameState gameState) {
         tableDisplay.reset();
         tableDisplay.drawBet(gameState.bet);
-        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
+        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
         tableDisplay.drawScores(concealedScore(gameState.dealerHand), score(gameState.playerHand));
         tableDisplay.drawCards(ImageMap.ofConcealed( gameState.dealerHand, gameState.playerHand));
     }

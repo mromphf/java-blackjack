@@ -13,26 +13,26 @@ public class ImageMap {
 
     private static final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
 
-    public static Map<ImageKey, List<Image>> of(List<Card> dealer, List<Card> player) {
+    public static Map<ImageKey, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
         return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, dealer.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
             put(PLAYER_CARDS, player.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
         }};
     }
 
-    public static Map<ImageKey, List<Image>> ofConcealed(List<Card> dealer, List<Card> player) {
+    public static Map<ImageKey, List<Image>> ofConcealed(Collection<Card> dealer, Collection<Card> player) {
         return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
             put(PLAYER_CARDS, player.stream().map(ImageMap::imageFileName).collect(Collectors.toList()));
         }};
     }
 
-    private static List<Image> conceal(List<Card> cards) {
+    private static List<Image> conceal(Collection<Card> cards) {
         if (cards.isEmpty()) {
             return new LinkedList<>();
         } else {
             return new LinkedList<Image>() {{
-                add(imageFileName(cards.get(0)));
+                add(imageFileName(cards.iterator().next()));
                 add(blankCard());
             }};
         }

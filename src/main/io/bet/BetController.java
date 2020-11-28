@@ -69,6 +69,9 @@ public class BetController implements Initializable, RoundListener {
         lblBet.setText("Bet: $" + bet);
     }
 
+    @Override
+    public void onShowdown(GameState gameState) {}
+
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             int bet = Math.min(MAX_BET, this.bet + amount);

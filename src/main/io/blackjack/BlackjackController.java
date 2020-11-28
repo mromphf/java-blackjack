@@ -7,11 +7,13 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.usecase.ControlListener;
 import main.usecase.GameState;
 import main.usecase.RoundListener;
-import main.usecase.Round;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static main.domain.Rules.*;
@@ -39,10 +41,14 @@ public class BlackjackController implements Initializable, RoundListener {
     @FXML
     private Button btnNext;
 
-    private final Round round;
+    private final Collection<ControlListener> controlListeners;
 
-    public BlackjackController(Round round) {
-        this.round = round;
+    public BlackjackController() {
+        this.controlListeners = new ArrayList<>();
+    }
+
+    public void registerControlListener(ControlListener controlListener) {
+        controlListeners.add(controlListener);
     }
 
     @Override
@@ -50,79 +56,64 @@ public class BlackjackController implements Initializable, RoundListener {
         btnDouble.setOnAction(event -> onDouble());
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
-        btnNext.setOnAction(event -> round.moveToBettingTable());
+        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
     }
 
     @Override
     public void onUpdate(GameState gameState) {
         setGameButtonsDisabled(false);
-        renderConcealedTable();
+        renderConcealedTable(gameState);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-
-        btnDouble.setDisable(round.getHand("player").size() > 2);
-
-        if (round.playerBusted()) {
-            showdown();
-        }
+        btnDouble.setDisable(gameState.cardDrawn);
     }
 
-    private void onDouble() {
-        round.hit();
-        round.dealerTurn();
-        showdown();
-    }
-
-    private void onStand() {
-        round.dealerTurn();
-        showdown();
-    }
-
-    private void onHit() {
-        round.hit();
-    }
-
-    private void showdown() {
+    @Override
+    public void onShowdown(GameState gameState) {
         setGameButtonsDisabled(true);
-        renderExposedTable();
+        renderExposedTable(gameState);
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
 
-        if (round.playerBusted()) {
+        if (gameState.playerBusted) {
             tableDisplay.drawResults("Bust", Color.RED);
-        } else if (round.isPush()) {
+        } else if (gameState.isPush) {
             tableDisplay.drawResults("Push", Color.ORANGE);
-        } else if (round.playerHasWon()) {
+        } else if (gameState.playerHasWon) {
             tableDisplay.drawResults("Win", Color.GREEN);
         } else {
             tableDisplay.drawResults("Lose", Color.RED);
         }
     }
 
-    private void renderExposedTable() {
-        tableDisplay.reset();
-        tableDisplay.drawBet(round.getBet());
-        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), round.numCardsRemaining());
-        tableDisplay.drawScores(
-                score(round.getHand("dealer")),
-                score(round.getHand("player")) );
-        tableDisplay.drawCards(
-                ImageMap.of(
-                        round.getHand("dealer"),
-                        round.getHand("player")));
+    private void onDouble() {
+        controlListeners.forEach(ControlListener::onHit);
+        controlListeners.forEach(ControlListener::onDealerTurn);
     }
 
-    private void renderConcealedTable() {
+    private void onStand() {
+        controlListeners.forEach(ControlListener::onDealerTurn);
+    }
+
+    private void onHit() {
+        controlListeners.forEach(ControlListener::onHit);
+    }
+
+    private void renderExposedTable(GameState gameState) {
         tableDisplay.reset();
-        tableDisplay.drawBet(round.getBet());
-        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), round.numCardsRemaining());
-        tableDisplay.drawScores(
-                concealedScore(round.getHand("dealer")),
-                score(round.getHand("player")));
-        tableDisplay.drawCards(
-                ImageMap.ofConcealed(
-                        round.getHand("dealer"),
-                        round.getHand("player")));
+        tableDisplay.drawBet(gameState.bet);
+        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
+        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
+        tableDisplay.drawScores(score(gameState.dealerHand), score(gameState.playerHand));
+        tableDisplay.drawCards(ImageMap.of(gameState.dealerHand, gameState.playerHand));
+    }
+
+    private void renderConcealedTable(GameState gameState) {
+        tableDisplay.reset();
+        tableDisplay.drawBet(gameState.bet);
+        tableDisplay.drawDeck(new Image("file:graphics/card_blue.jpg"), gameState.cardsRemaining);
+        tableDisplay.drawScores(concealedScore(gameState.dealerHand), score(gameState.playerHand));
+        tableDisplay.drawCards(ImageMap.ofConcealed( gameState.dealerHand, gameState.playerHand));
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

@@ -28,6 +28,10 @@ public class Round implements ControlListener {
         }};
     }
 
+    public void registerBetListener(RoundListener roundListener) {
+        this.roundListeners.add(roundListener);
+    }
+
     @Override
     public void onStartGame() {
         hands = openingHand(deck);
@@ -48,60 +52,43 @@ public class Round implements ControlListener {
         roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
     }
 
-    public void registerBetListener(RoundListener roundListener) {
-        this.roundListeners.add(roundListener);
-    }
-
-    public boolean playerBusted() {
-        return bust(hands.get("player"));
-    }
-
-    public boolean playerHasWon() {
-        return Rules.playerWins(hands.get("player"), hands.get("dealer"));
-    }
-
-    public boolean isPush() {
-        return push(hands.get("player"), hands.get("dealer"));
-    }
-
-    public int getBet() {
-        return bet;
-    }
-
-    public List<Card> getHand(String player) {
-        return hands.get(player);
-    }
-
-    public int numCardsRemaining() {
-        return deck.size();
-    }
-
-    public void moveToBettingTable() {
-        onMoveToBettingTable();
-    }
-
-    public void hit() {
+    @Override
+    public void onHit() {
         if (deck.isEmpty()) {
             System.out.println("No more cards! Quitting...");
             System.exit(0);
         } else {
             hands.get("player").add(deck.pop());
-            roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
+            roundListeners.forEach(l -> l.onUpdate(gameState()));
+
+            if (bust(hands.get("player"))) {
+                roundListeners.forEach(l -> l.onShowdown(gameState()));
+            }
         }
     }
 
-    public void dealerTurn() {
+    @Override
+    public void onDealerTurn() {
         while (score(hands.get("dealer")) < 16) {
             if (deck.isEmpty()) {
                 System.out.println("No more cards! Quitting...");
                 System.exit(0);
             }
             hands.get("dealer").add(deck.pop());
-            roundListeners.forEach(roundListener -> roundListener.onUpdate(gameState()));
         }
+        roundListeners.forEach(l -> l.onShowdown(gameState()));
     }
 
     private GameState gameState() {
-        return new GameState(bet);
+        return new GameState(
+                bet,
+                deck.size(),
+                hands.get("player").size() > 2,
+                bust(hands.get("player")),
+                push(hands.get("player"), hands.get("dealer")),
+                Rules.playerWins(hands.get("player"), hands.get("dealer")),
+                hands.get("dealer"),
+                hands.get("player")
+        );
     }
 }

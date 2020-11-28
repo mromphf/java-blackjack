@@ -34,13 +34,14 @@ public class AppRoot {
         Round round = new Round(this, shuffle(fresh()));
 
         HomeController homeController = new HomeController();
-        BlackjackController blackjackController = new BlackjackController(round);
+        BlackjackController blackjackController = new BlackjackController();
         BetController betController = new BetController();
 
         round.registerBetListener(betController);
         round.registerBetListener(blackjackController);
         homeController.registerControlListener(round);
         betController.registerControlListener(round);
+        blackjackController.registerControlListener(round);
 
         mainLoader.setController(homeController);
         betLoader.setController(betController);

@@ -27,9 +27,9 @@ public class AppRoot {
     private final Scene scene;
 
     public AppRoot(Stage stage) {
-        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
+        FXMLLoader homeLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
         FXMLLoader betLoader = new FXMLLoader(getClass().getResource(BET_FXML));
-        FXMLLoader gameLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
+        FXMLLoader blackjackLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
 
         Round round = new Round(this, shuffle(fresh()));
 
@@ -43,21 +43,21 @@ public class AppRoot {
         betController.registerControlListener(round);
         blackjackController.registerControlListener(round);
 
-        mainLoader.setController(homeController);
+        homeLoader.setController(homeController);
         betLoader.setController(betController);
-        gameLoader.setController(blackjackController);
+        blackjackLoader.setController(blackjackController);
 
         try {
-            mainLoader.load();
+            homeLoader.load();
             betLoader.load();
-            gameLoader.load();
+            blackjackLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        layoutMap.put(Layout.HOME, mainLoader.getRoot());
+        layoutMap.put(Layout.HOME, homeLoader.getRoot());
         layoutMap.put(Layout.BET, betLoader.getRoot());
-        layoutMap.put(Layout.GAME, gameLoader.getRoot());
+        layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
 
         scene = new Scene(layoutMap.get(Layout.HOME));
 

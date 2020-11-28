@@ -3,6 +3,7 @@ package main.io.blackjack;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
@@ -18,6 +19,12 @@ import java.util.ResourceBundle;
 import static main.domain.Rules.*;
 
 public class BlackjackController extends RootController implements Initializable, GameStateListener, OutcomeListener {
+
+    @FXML
+    private Label lblBet;
+
+    @FXML
+    private Label lblCards;
 
     @FXML
     private TableDisplay tableDisplay;
@@ -101,18 +108,17 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     private void renderExposedTable(GameState gameState) {
+        lblBet.setText(String.format("Bet: $%s", gameState.bet));
+        lblCards.setText(String.format("Cards Remaining: %s", gameState.cardsRemaining));
         tableDisplay.reset();
-        tableDisplay.drawBet(gameState.bet);
-        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
-        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
         tableDisplay.drawScores(score(gameState.dealerHand), score(gameState.playerHand));
         tableDisplay.drawCards(ImageMap.of(gameState.dealerHand, gameState.playerHand));
     }
 
     private void renderConcealedTable(GameState gameState) {
+        lblBet.setText(String.format("Bet: $%s", gameState.bet));
+        lblCards.setText(String.format("Cards Remaining: %s", gameState.cardsRemaining));
         tableDisplay.reset();
-        tableDisplay.drawBet(gameState.bet);
-        tableDisplay.drawDeck(ImageMap.blankCard(), gameState.cardsRemaining);
         tableDisplay.drawScores(concealedScore(gameState.dealerHand), score(gameState.playerHand));
         tableDisplay.drawCards(ImageMap.ofConcealed( gameState.dealerHand, gameState.playerHand));
     }

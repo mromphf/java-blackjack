@@ -1,14 +1,32 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
 <?import main.io.blackjack.TableDisplay?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 
 <GridPane fx:controller="main.io.blackjack.BlackjackController"
-        xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
-    <GridPane GridPane.rowIndex="0">
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100">
+            Bet: $0
+            <font>
+                <Font name="Arial" size="20" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblCards" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" alignment="CENTER_RIGHT">
+            Cards Remaining: 0
+            <font>
+                <Font name="Arial" size="20" />
+            </font>
+        </Label>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="1">
         <TableDisplay fx:id="tableDisplay"/>
     </GridPane>
 
-    <GridPane fx:id="gameControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
+    <GridPane fx:id="gameControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
         <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
             Double
         </Button>
@@ -22,7 +40,7 @@
         </Button>
     </GridPane>
 
-    <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="1" alignment="center" hgap="20" vgap="20">
+    <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
         <Button fx:id="btnNext" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
             Next Hand
         </Button>

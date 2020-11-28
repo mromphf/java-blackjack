@@ -46,19 +46,6 @@ public class TableDisplay extends Canvas {
         context.stroke();
     }
 
-    public void drawDeck(Image cardImage, int cardsRemaining) {
-        final Font f = new Font("Arial", 30);
-        context.setFont(f);
-        context.drawImage(cardImage, HOR_CENTER + 500, VER_CENTER - 175, CARD_WIDTH, CARD_HEIGHT);
-        context.fillText(String.format("%s", cardsRemaining), HOR_CENTER + 550, VER_CENTER + 30);
-    }
-
-    public void drawBet(int bet) {
-        final Font f = new Font("Arial", 50);
-        context.setFont(f);
-        context.fillText(String.format("Bet: $%s", bet), 150, VER_CENTER);
-    }
-
     public void drawScores(int dealerScore, int playerScore) {
         drawLabel(String.format("Dealer: %s", dealerScore), 100);
         drawLabel(String.format("You: %s", playerScore), VER_CENTER + 50);

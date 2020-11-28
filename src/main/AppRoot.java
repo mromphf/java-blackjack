@@ -65,7 +65,6 @@ public class AppRoot {
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");
-        stage.setFullScreen(true);
         stage.setMaximized(true);
         stage.show();
     }

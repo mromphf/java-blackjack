@@ -1,7 +1,6 @@
 package main.usecase;
 
 import main.AppRoot;
-import main.BetListener;
 import main.Layout;
 import main.domain.Card;
 import main.domain.Rules;

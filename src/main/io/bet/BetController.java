@@ -5,11 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import main.BetListener;
 import main.usecase.Round;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class BetController implements Initializable {

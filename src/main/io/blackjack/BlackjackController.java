@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import main.BetListener;
+import main.usecase.BetListener;
 import main.usecase.Round;
 
 import java.net.URL;

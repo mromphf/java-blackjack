@@ -3,7 +3,6 @@ package main.usecase;
 import main.AppRoot;
 import main.Layout;
 import main.domain.Card;
-import main.domain.Rules;
 
 import java.util.*;
 
@@ -83,9 +82,9 @@ public class Round implements ControlListener {
             hands.get("dealer").add(deck.pop());
         }
 
-        if (gameState().playerHasWon) {
+        if (playerWins(hands.get("player"), hands.get("dealer"))) {
             outcomeListeners.forEach(l -> l.onPlayerWins(gameState()));
-        } else if(gameState().isPush) {
+        } else if(push(hands.get("player"), hands.get("dealer"))) {
             outcomeListeners.forEach(l -> l.onPush(gameState()));
         } else if (bust(hands.get("player"))) {
             outcomeListeners.forEach(l -> l.onBust(gameState()));
@@ -95,15 +94,7 @@ public class Round implements ControlListener {
     }
 
     private GameState gameState() {
-        return new GameState(
-                bet,
-                deck.size(),
-                hands.get("player").size() > 2,
-                bust(hands.get("player")),
-                push(hands.get("player"), hands.get("dealer")),
-                Rules.playerWins(hands.get("player"), hands.get("dealer")),
-                hands.get("dealer"),
-                hands.get("player")
-        );
+        final boolean cardDrawn = hands.get("player").size() > 2;
+        return new GameState(bet, deck.size(), cardDrawn, hands.get("dealer"), hands.get("player") );
     }
 }

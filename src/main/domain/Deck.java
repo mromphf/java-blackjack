@@ -28,7 +28,10 @@ public class Deck {
 
     public static Map<String, Collection<Card>> openingHand(Stack<Card> deck) {
         if (deck.size() < 4) {
-            throw new IllegalArgumentException("Deck must contain at least four cards to deal the opening hand.");
+            final String failureMsg = "Not enough cards to start a new round! Quitting...";
+            System.out.println(failureMsg);
+            System.exit(0);
+            throw new IllegalStateException(failureMsg);
         } else {
             final List<Card> dealerHand = new LinkedList<>();
             final List<Card> playerHand = new LinkedList<>();

@@ -19,6 +19,16 @@ public class Rules {
         return score(hand1) == score(hand2);
     }
 
+    public static boolean canSplit(Collection<Card> cards) {
+        final Iterator<Card> iterator = cards.iterator();
+        boolean twoCards = cards.size() == 2;
+        if (twoCards) {
+            return iterator.next().getBlackjackValue() == iterator.next().getBlackjackValue();
+        } else {
+            return false;
+        }
+    }
+
     public static int score(Collection<Card> cards) {
         if (isBlackjack(cards)) {
             return 21;

@@ -336,4 +336,44 @@ class RulesTest {
 
         assertFalse(playerWins(playerHand, dealerHand));
     }
+
+    @Test
+    public void canSplit_shouldReturnTrue_whenGivenTwoEqualCards() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(5, Suit.HEARTS));
+            add(new Card(5, Suit.SPADES));
+        }};
+
+        assertTrue(canSplit(cards));
+    }
+
+    @Test
+    public void canSplit_shouldReturnFalse_whenGivenTwoUnequalCards() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(5, Suit.HEARTS));
+            add(new Card(6, Suit.SPADES));
+        }};
+
+        assertFalse(canSplit(cards));
+    }
+
+    @Test
+    public void canSplit_shouldReturnFalse_whenGivenMoreThanTwoCards() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(5, Suit.HEARTS));
+            add(new Card(5, Suit.SPADES));
+            add(new Card(5, Suit.CLUBS));
+        }};
+
+        assertFalse(canSplit(cards));
+    }
+
+    @Test
+    public void canSplit_shouldReturnFalse_whenGivenFewerThanTwoCards() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(5, Suit.HEARTS));
+        }};
+
+        assertFalse(canSplit(cards));
+    }
 }

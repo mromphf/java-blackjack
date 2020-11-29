@@ -7,6 +7,9 @@ public class Card {
     private final Suit suit;
 
     public Card(int value, Suit suit) {
+        if (value > 13 || value < 1) {
+            throw new IllegalArgumentException("Card value must be greater than 0 and less than 14.");
+        }
         this.faceValue = value;
         this.suit = suit;
     }

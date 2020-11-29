@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 
 import main.io.RootController;
 import main.usecase.ControlListener;
-import main.usecase.GameState;
+import main.domain.GameState;
 import main.usecase.OutcomeListener;
 import main.usecase.GameStateListener;
 
@@ -64,8 +64,8 @@ public class BlackjackController extends RootController implements Initializable
         renderConcealedTable(gameState);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-        btnDouble.setDisable(gameState.atLeastOneCardDrawn);
-        lblBalance.setText(String.format("Balance: $%s", gameState.balance));
+        btnDouble.setDisable(gameState.isAtLeastOneCardDrawn());
+        lblBalance.setText(String.format("Balance: $%s", gameState.getBalance()));
     }
 
     @Override
@@ -112,19 +112,19 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     private void renderExposedTable(GameState gameState) {
-        lblBet.setText(String.format("Bet: $%s", gameState.bet));
-        lblCards.setText(String.format("Cards Remaining: %s", gameState.cardsRemaining));
+        lblBet.setText(String.format("Bet: $%s", gameState.getBet()));
+        lblCards.setText(String.format("Cards Remaining: %s", gameState.getCardsRemaining()));
         tableDisplay.reset();
-        tableDisplay.drawScores(score(gameState.dealerHand), score(gameState.playerHand));
-        tableDisplay.drawCards(ImageMap.of(gameState.dealerHand, gameState.playerHand));
+        tableDisplay.drawScores(score(gameState.getDealerHand()), score(gameState.getPlayerHand()));
+        tableDisplay.drawCards(ImageMap.of(gameState.getDealerHand(), gameState.getPlayerHand()));
     }
 
     private void renderConcealedTable(GameState gameState) {
-        lblBet.setText(String.format("Bet: $%s", gameState.bet));
-        lblCards.setText(String.format("Cards Remaining: %s", gameState.cardsRemaining));
+        lblBet.setText(String.format("Bet: $%s", gameState.getBet()));
+        lblCards.setText(String.format("Cards Remaining: %s", gameState.getCardsRemaining()));
         tableDisplay.reset();
-        tableDisplay.drawScores(concealedScore(gameState.dealerHand), score(gameState.playerHand));
-        tableDisplay.drawCards(ImageMap.ofConcealed( gameState.dealerHand, gameState.playerHand));
+        tableDisplay.drawScores(concealedScore(gameState.getDealerHand()), score(gameState.getPlayerHand()));
+        tableDisplay.drawCards(ImageMap.ofConcealed(gameState.getDealerHand(), gameState.getPlayerHand()));
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

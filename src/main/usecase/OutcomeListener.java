@@ -1,5 +1,7 @@
 package main.usecase;
 
+import main.domain.GameState;
+
 public interface OutcomeListener {
     void onDealerWins(GameState gameState);
     void onPlayerWins(GameState gameState);

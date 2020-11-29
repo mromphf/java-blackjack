@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.io.RootController;
 import main.usecase.ControlListener;
-import main.usecase.GameState;
+import main.domain.GameState;
 import main.usecase.GameStateListener;
 
 import java.net.URL;
@@ -54,10 +54,10 @@ public class BetController extends RootController implements Initializable, Game
 
     @Override
     public void onUpdate(GameState gameState) {
-        this.bet = gameState.bet;
-        btnDeal.setDisable(bet > gameState.balance || bet <= 0);
+        this.bet = gameState.getBet();
+        btnDeal.setDisable(bet > gameState.getBalance() || bet <= 0);
         lblBet.setText("Bet: $" + bet);
-        lblBalance.setText(String.format("Balance: $%s", gameState.balance));
+        lblBalance.setText(String.format("Balance: $%s", gameState.getBalance()));
     }
 
     @FXML

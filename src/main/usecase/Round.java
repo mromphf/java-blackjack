@@ -1,30 +1,19 @@
 package main.usecase;
 
-import main.domain.Card;
+import main.domain.GameState;
 
 import java.util.*;
 
-import static main.domain.Deck.openingHand;
-import static main.domain.Rules.*;
-
 public class Round implements ControlListener {
 
-    private final Stack<Card> deck;
     private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
-    private Map<String, Collection<Card>> hands;
-    private int balance;
-    private int bet;
+    private final GameState gameState;
 
-    public Round(Stack<Card> deck, int balance) {
-        this.deck = deck;
-        this.balance = balance;
+    public Round(GameState gameState) {
         this.gameStateListeners = new ArrayList<>();
         this.outcomeListeners = new ArrayList<>();
-        this.hands = new HashMap<String, Collection<Card>>() {{
-            put("dealer", new ArrayList<>());
-            put("player", new ArrayList<>());
-        }};
+        this.gameState = gameState;
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -37,90 +26,65 @@ public class Round implements ControlListener {
 
     @Override
     public void onStartNewRound() {
-        try {
-            hands = openingHand(deck);
-        } catch (IllegalArgumentException ex) {
-            System.out.println("Not enough cards to deal new hand! Quitting...");
-            System.exit(0);
-        }
-        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
+        gameState.dealOpeningHand();
+        gameStateListeners.forEach(l -> l.onUpdate(gameState));
     }
 
     @Override
     public void onBetPlaced(int bet) {
-        this.bet = bet;
-        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
+        gameState.setBet(bet);
+        gameStateListeners.forEach(l -> l.onUpdate(gameState));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        bet = 0;
-        gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
-        if (balance <= 0) {
+        gameState.setBet(0);
+        gameStateListeners.forEach(l -> l.onUpdate(gameState));
+        if (gameState.outOfMoney()) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         }
     }
 
     @Override
-    public void onStopPlaying() {}
-
-    @Override
     public void onHit() {
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
-        } else {
-            final Collection<Card> playerHand = hands.get("player");
-            playerHand.add(deck.pop());
-            gameStateListeners.forEach(l -> l.onUpdate(gameState()));
-
-            if (isBust(playerHand)) {
-                onBust();
-            }
+        gameState.addCardToPlayerHand();
+        gameStateListeners.forEach(l -> l.onUpdate(gameState));
+        if (gameState.playerBusted()) {
+            gameState.loseBet();
+            outcomeListeners.forEach(l -> l.onBust(gameState));
         }
     }
 
     @Override
     public void onDealerTurn() {
-        final Collection<Card> playerHand = hands.get("player");
-        final Collection<Card> dealerHand = hands.get("dealer");
-
-        while (score(dealerHand) < 16) {
-            if (deck.isEmpty()) {
-                System.out.println("No more cards! Quitting...");
-                System.exit(0);
-            }
-            dealerHand.add(deck.pop());
+        while (gameState.dealerShouldHit()) {
+            gameState.addCardToDealerHand();
         }
 
-        if (playerWins(playerHand, dealerHand)) {
-            balance += bet;
-            outcomeListeners.forEach(l -> l.onPlayerWins(gameState()));
-        } else if(isPush(playerHand, dealerHand)) {
-            outcomeListeners.forEach(l -> l.onPush(gameState()));
-        } else if (isBust(playerHand)) {
-            onBust();
-        } else {
-            balance -= bet;
-            outcomeListeners.forEach(l -> l.onDealerWins(gameState()));
+        switch(gameState.determineOutcome()) {
+            case WIN:
+                outcomeListeners.forEach(l -> l.onPlayerWins(gameState));
+                break;
+            case PUSH:
+                outcomeListeners.forEach(l -> l.onPush(gameState));
+                break;
+            case BUST:
+                outcomeListeners.forEach(l -> l.onBust(gameState));
+                break;
+            default:
+                outcomeListeners.forEach(l -> l.onDealerWins(gameState));
+                break;
         }
     }
 
     @Override
     public void onDouble() {
-        bet *= 2;
+        gameState.doubleBet();
         onHit();
         onDealerTurn();
     }
 
-    private void onBust() {
-        balance -= bet;
-        outcomeListeners.forEach(l -> l.onBust(gameState()));
-    }
-
-    private GameState gameState() {
-        final boolean atLeastOneCardDrawn = hands.get("player").size() > 2;
-        return new GameState(bet, balance, deck.size(), atLeastOneCardDrawn, hands.get("dealer"), hands.get("player") );
-    }
+    @Override
+    public void onStopPlaying() {}
 }

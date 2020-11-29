@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.home.HomeController;
+import main.domain.GameState;
 import main.usecase.Round;
 
 import java.io.IOException;
@@ -37,7 +38,8 @@ public class AppRoot {
             e.printStackTrace();
         }
 
-        Round round = new Round(shuffle(fresh()), 200);
+        GameState gameState = new GameState(200, shuffle(fresh()));
+        Round round = new Round(gameState);
 
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();

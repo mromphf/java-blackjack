@@ -11,11 +11,11 @@ public class Rules {
         return twoCards && oneAce && tenOrHigher;
     }
 
-    public static boolean bust(Collection<Card> cards) {
+    public static boolean isBust(Collection<Card> cards) {
         return score(cards) > 21;
     }
 
-    public static boolean push(Collection<Card> hand1, Collection<Card> hand2) {
+    public static boolean isPush(Collection<Card> hand1, Collection<Card> hand2) {
         return score(hand1) == score(hand2);
     }
 
@@ -58,6 +58,6 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return bust(dealerCards) || (!bust(playerCards) && score(playerCards) > score(dealerCards));
+        return isBust(dealerCards) || (!isBust(playerCards) && score(playerCards) > score(dealerCards));
     }
 }

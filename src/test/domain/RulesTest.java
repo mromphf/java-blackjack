@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static main.domain.Rules.bust;
+import static main.domain.Rules.isBust;
 import static main.domain.Rules.isBlackjack;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,6 +72,6 @@ class RulesTest {
             add(new Card(2, Suit.DIAMONDS));
         }};
 
-        assertTrue(bust(cards));
+        assertTrue(isBust(cards));
     }
 }

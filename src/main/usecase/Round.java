@@ -37,7 +37,12 @@ public class Round implements ControlListener {
 
     @Override
     public void onStartNewRound() {
-        hands = openingHand(deck);
+        try {
+            hands = openingHand(deck);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Not enough cards to deal new hand! Quitting...");
+            System.exit(0);
+        }
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
     }
 

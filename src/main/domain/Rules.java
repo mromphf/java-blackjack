@@ -44,7 +44,7 @@ public class Rules {
     }
 
     public static boolean hardTotalFavorable(Collection<Card> cards) {
-        return hardTotal(cards) < 21;
+        return hardTotal(cards) <= 21;
     }
 
     public static int hardTotal(Collection<Card> cards) {

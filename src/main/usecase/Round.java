@@ -29,7 +29,7 @@ public class Round implements ControlListener {
         }};
     }
 
-    public void registerRoundListener(GameStateListener gameStateListener) {
+    public void registerGameStateListener(GameStateListener gameStateListener) {
         gameStateListeners.add(gameStateListener);
     }
 
@@ -105,7 +105,7 @@ public class Round implements ControlListener {
     }
 
     private GameState gameState() {
-        final boolean cardDrawn = hands.get("player").size() > 2;
-        return new GameState(bet, deck.size(), cardDrawn, hands.get("dealer"), hands.get("player") );
+        final boolean atLeastOneCardDrawn = hands.get("player").size() > 2;
+        return new GameState(bet, deck.size(), atLeastOneCardDrawn, hands.get("dealer"), hands.get("player") );
     }
 }

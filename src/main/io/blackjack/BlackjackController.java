@@ -61,7 +61,7 @@ public class BlackjackController extends RootController implements Initializable
         renderConcealedTable(gameState);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-        btnDouble.setDisable(gameState.cardDrawn);
+        btnDouble.setDisable(gameState.atLeastOneCardDrawn);
     }
 
     @Override

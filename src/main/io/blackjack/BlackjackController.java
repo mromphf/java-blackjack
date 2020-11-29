@@ -24,6 +24,9 @@ public class BlackjackController extends RootController implements Initializable
     private Label lblBet;
 
     @FXML
+    private Label lblBalance;
+
+    @FXML
     private Label lblCards;
 
     @FXML
@@ -62,6 +65,7 @@ public class BlackjackController extends RootController implements Initializable
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
         btnDouble.setDisable(gameState.atLeastOneCardDrawn);
+        lblBalance.setText(String.format("Balance: $%s", gameState.balance));
     }
 
     @Override

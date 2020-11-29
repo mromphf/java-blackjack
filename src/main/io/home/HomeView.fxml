@@ -1,13 +1,27 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <GridPane fx:controller="main.io.home.HomeController"
-        xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="50">
-    <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
-        Play
-    </Button>
+          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
 
-    <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
-        Exit
-    </Button>
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="5">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
+            Play
+        </Button>
+
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
+            Exit
+        </Button>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0">
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="200" textAlignment="CENTER">
+            Balance: $200
+            <font>
+                <Font name="Arial" size="30" />
+            </font>
+        </Label>
+    </GridPane>
 </GridPane>

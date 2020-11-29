@@ -16,11 +16,13 @@ public class Round implements ControlListener {
     private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
     private Map<String, Collection<Card>> hands;
+    private int balance;
     private int bet;
 
-    public Round(AppRoot appRoot, Stack<Card> deck) {
+    public Round(AppRoot appRoot, Stack<Card> deck, int balance) {
         this.appRoot = appRoot;
         this.deck = deck;
+        this.balance = balance;
         this.gameStateListeners = new ArrayList<>();
         this.outcomeListeners = new ArrayList<>();
         this.hands = new HashMap<String, Collection<Card>>() {{
@@ -55,6 +57,10 @@ public class Round implements ControlListener {
         bet = 0;
         appRoot.setLayout(Layout.BET);
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
+        if (balance <= 0) {
+            System.out.println("Balance has reached $0.00! Please leave the casino.");
+            System.exit(0);
+        }
     }
 
     @Override
@@ -68,6 +74,7 @@ public class Round implements ControlListener {
             gameStateListeners.forEach(l -> l.onUpdate(gameState()));
 
             if (isBust(playerHand)) {
+                balance -= bet;
                 outcomeListeners.forEach(l -> l.onBust(gameState()));
             }
         }
@@ -87,12 +94,15 @@ public class Round implements ControlListener {
         }
 
         if (playerWins(playerHand, dealerHand)) {
+            balance += bet;
             outcomeListeners.forEach(l -> l.onPlayerWins(gameState()));
         } else if(isPush(playerHand, dealerHand)) {
             outcomeListeners.forEach(l -> l.onPush(gameState()));
         } else if (isBust(playerHand)) {
+            balance -= bet;
             outcomeListeners.forEach(l -> l.onBust(gameState()));
         } else {
+            balance -= bet;
             outcomeListeners.forEach(l -> l.onDealerWins(gameState()));
         }
     }
@@ -106,6 +116,6 @@ public class Round implements ControlListener {
 
     private GameState gameState() {
         final boolean atLeastOneCardDrawn = hands.get("player").size() > 2;
-        return new GameState(bet, deck.size(), atLeastOneCardDrawn, hands.get("dealer"), hands.get("player") );
+        return new GameState(bet, balance, deck.size(), atLeastOneCardDrawn, hands.get("dealer"), hands.get("player") );
     }
 }

@@ -45,4 +45,13 @@
             Next Hand
         </Button>
     </GridPane>
+
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
+            Balance: $0
+            <font>
+                <Font name="Arial" size="30" />
+            </font>
+        </Label>
+    </GridPane>
 </GridPane>

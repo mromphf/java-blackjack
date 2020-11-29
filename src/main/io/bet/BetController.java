@@ -20,6 +20,9 @@ public class BetController extends RootController implements Initializable, Game
     private Label lblBet;
 
     @FXML
+    private Label lblBalance;
+
+    @FXML
     public Button btnDeal;
 
     @FXML
@@ -52,8 +55,9 @@ public class BetController extends RootController implements Initializable, Game
     @Override
     public void onUpdate(GameState gameState) {
         this.bet = gameState.bet;
-        btnDeal.setDisable(bet <= 0);
+        btnDeal.setDisable(bet > gameState.balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);
+        lblBalance.setText(String.format("Balance: $%s", gameState.balance));
     }
 
     @FXML
@@ -69,7 +73,6 @@ public class BetController extends RootController implements Initializable, Game
             int bet = Math.max(0, this.bet - amount);
             controlListeners.forEach(cl -> cl.onBetPlaced(bet));
         }
-        btnDeal.setDisable(bet <= 0);
         lblBet.setText("Bet: $" + bet);
     }
 }

@@ -6,17 +6,20 @@ import java.util.Collection;
 
 public class GameState {
     public final int bet;
+    public final int balance;
     public final int cardsRemaining;
     public final boolean atLeastOneCardDrawn;
     public final Collection<Card> dealerHand;
     public final Collection<Card> playerHand;
 
     public GameState(int bet,
+                     int balance,
                      int cardsRemaining,
                      boolean atLeastOneCardDrawn,
                      Collection<Card> dealerHand,
                      Collection<Card> playerHand) {
         this.bet = bet;
+        this.balance = balance;
         this.cardsRemaining = cardsRemaining;
         this.atLeastOneCardDrawn = atLeastOneCardDrawn;
         this.dealerHand = dealerHand;

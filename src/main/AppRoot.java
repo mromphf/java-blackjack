@@ -40,7 +40,7 @@ public class AppRoot {
 
         }
 
-        Round round = new Round(this, shuffle(fresh()));
+        Round round = new Round(this, shuffle(fresh()), 200);
 
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();

@@ -3,8 +3,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
+<?import main.io.blackjack.TableDisplay?>
 <GridPane fx:controller="main.io.bet.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50">
+
     <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" vgap="20">
         <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
             Bet: $0
@@ -13,7 +15,7 @@
             </font>
         </Label>
 
-        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="100" alignment="BASELINE_CENTER">
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="100" alignment="BASELINE_CENTER" textAlignment="CENTER">
             Right-click to decrease.
         </Label>
     </GridPane>
@@ -44,5 +46,14 @@
         <Button fx:id="btnDeal" GridPane.rowIndex="2" GridPane.columnIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
             Deal
         </Button>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
+            Balance: $0
+            <font>
+                <Font name="Arial" size="30" />
+            </font>
+        </Label>
     </GridPane>
 </GridPane>

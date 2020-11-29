@@ -35,7 +35,6 @@ public class AppRoot {
             blackjackLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
 
         Round round = new Round(shuffle(fresh()), 200);
@@ -50,15 +49,17 @@ public class AppRoot {
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
 
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
-
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
 
         round.registerGameStateListener(betController);
         round.registerGameStateListener(blackjackController);
+        round.registerGameStateListener(homeController);
         round.registerOutcomeListener(blackjackController);
+
         homeController.registerControlListener(round);
         betController.registerControlListener(round);
         blackjackController.registerControlListener(round);
+
         homeController.registerControlListener(layoutManager);
         betController.registerControlListener(layoutManager);
         blackjackController.registerControlListener(layoutManager);

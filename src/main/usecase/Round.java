@@ -58,6 +58,9 @@ public class Round implements ControlListener {
     }
 
     @Override
+    public void onStopPlaying() {}
+
+    @Override
     public void onHit() {
         if (deck.isEmpty()) {
             System.out.println("No more cards! Quitting...");

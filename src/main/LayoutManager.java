@@ -27,6 +27,11 @@ public class LayoutManager implements ControlListener {
     }
 
     @Override
+    public void onStopPlaying() {
+        scene.setRoot(layoutMap.get(Layout.HOME));
+    }
+
+    @Override
     public void onBetPlaced(int bet) {}
 
     @Override

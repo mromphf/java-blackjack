@@ -65,6 +65,10 @@ public class BetController extends RootController implements Initializable, Game
         controlListeners.forEach(ControlListener::onStartNewRound);
     }
 
+    @FXML void onQuit() {
+        controlListeners.forEach(ControlListener::onStopPlaying);
+    }
+
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             int bet = Math.min(MAX_BET, this.bet + amount);

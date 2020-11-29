@@ -17,8 +17,7 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0">
-        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="200" textAlignment="CENTER">
-            Balance: $200
+        <Label fx:id="lblBalance" text="Balance: $200" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="200" textAlignment="CENTER">
             <font>
                 <Font name="Arial" size="30" />
             </font>

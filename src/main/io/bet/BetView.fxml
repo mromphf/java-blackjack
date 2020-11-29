@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-<?import main.io.blackjack.TableDisplay?>
 <GridPane fx:controller="main.io.bet.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50">
 
@@ -42,9 +41,12 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
-        <Button fx:id="btnDeal" GridPane.rowIndex="2" GridPane.columnIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
+    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
+        <Button fx:id="btnDeal" GridPane.rowIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
             Deal
+        </Button>
+        <Button GridPane.rowIndex="1" minWidth="250" minHeight="50" onAction="#onQuit">
+            Quit
         </Button>
     </GridPane>
 

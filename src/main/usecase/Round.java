@@ -71,8 +71,7 @@ public class Round implements ControlListener {
             gameStateListeners.forEach(l -> l.onUpdate(gameState()));
 
             if (isBust(playerHand)) {
-                balance -= bet;
-                outcomeListeners.forEach(l -> l.onBust(gameState()));
+                onBust();
             }
         }
     }
@@ -96,8 +95,7 @@ public class Round implements ControlListener {
         } else if(isPush(playerHand, dealerHand)) {
             outcomeListeners.forEach(l -> l.onPush(gameState()));
         } else if (isBust(playerHand)) {
-            balance -= bet;
-            outcomeListeners.forEach(l -> l.onBust(gameState()));
+            onBust();
         } else {
             balance -= bet;
             outcomeListeners.forEach(l -> l.onDealerWins(gameState()));
@@ -109,6 +107,11 @@ public class Round implements ControlListener {
         bet *= 2;
         onHit();
         onDealerTurn();
+    }
+
+    private void onBust() {
+        balance -= bet;
+        outcomeListeners.forEach(l -> l.onBust(gameState()));
     }
 
     private GameState gameState() {

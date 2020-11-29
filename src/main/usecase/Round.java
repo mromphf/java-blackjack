@@ -1,7 +1,5 @@
 package main.usecase;
 
-import main.AppRoot;
-import main.Layout;
 import main.domain.Card;
 
 import java.util.*;
@@ -11,7 +9,6 @@ import static main.domain.Rules.*;
 
 public class Round implements ControlListener {
 
-    private final AppRoot appRoot;
     private final Stack<Card> deck;
     private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
@@ -19,8 +16,7 @@ public class Round implements ControlListener {
     private int balance;
     private int bet;
 
-    public Round(AppRoot appRoot, Stack<Card> deck, int balance) {
-        this.appRoot = appRoot;
+    public Round(Stack<Card> deck, int balance) {
         this.deck = deck;
         this.balance = balance;
         this.gameStateListeners = new ArrayList<>();
@@ -42,7 +38,6 @@ public class Round implements ControlListener {
     @Override
     public void onStartNewRound() {
         hands = openingHand(deck);
-        appRoot.setLayout(Layout.GAME);
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
     }
 
@@ -55,7 +50,6 @@ public class Round implements ControlListener {
     @Override
     public void onMoveToBettingTable() {
         bet = 0;
-        appRoot.setLayout(Layout.BET);
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
         if (balance <= 0) {
             System.out.println("Balance has reached $0.00! Please leave the casino.");

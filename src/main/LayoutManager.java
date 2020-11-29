@@ -1,0 +1,40 @@
+package main;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import main.usecase.ControlListener;
+
+import java.util.Map;
+
+public class LayoutManager implements ControlListener {
+
+    private final Scene scene;
+    private final Map<Layout, Parent> layoutMap;
+
+    public LayoutManager(Scene scene, Map<Layout, Parent> layoutMap) {
+        this.scene = scene;
+        this.layoutMap = layoutMap;
+    }
+
+    @Override
+    public void onStartNewRound() {
+        scene.setRoot(layoutMap.get(Layout.GAME));
+    }
+
+    @Override
+    public void onMoveToBettingTable() {
+        scene.setRoot(layoutMap.get(Layout.BET));
+    }
+
+    @Override
+    public void onBetPlaced(int bet) {}
+
+    @Override
+    public void onHit() {}
+
+    @Override
+    public void onDealerTurn() {}
+
+    @Override
+    public void onDouble() {}
+}

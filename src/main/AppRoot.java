@@ -23,8 +23,6 @@ public class AppRoot {
     private final static String MAIN_FXML = "io/home/HomeView.fxml";
     private final static String BLACKJACK_FXML = "io/blackjack/BlackjackView.fxml";
     private final static String BET_FXML = "io/bet/BetView.fxml";
-    private final Map<Layout, Parent> layoutMap = new HashMap<>();
-    private final Scene scene;
 
     public AppRoot(Stage stage) {
         FXMLLoader homeLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
@@ -40,11 +38,20 @@ public class AppRoot {
 
         }
 
-        Round round = new Round(this, shuffle(fresh()), 200);
+        Round round = new Round(shuffle(fresh()), 200);
 
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();
         BetController betController = betLoader.getController();
+
+        Map<Layout, Parent> layoutMap = new HashMap<>();
+        layoutMap.put(Layout.HOME, homeLoader.getRoot());
+        layoutMap.put(Layout.BET, betLoader.getRoot());
+        layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
+
+        Scene scene = new Scene(layoutMap.get(Layout.HOME));
+
+        LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
 
         round.registerGameStateListener(betController);
         round.registerGameStateListener(blackjackController);
@@ -52,20 +59,13 @@ public class AppRoot {
         homeController.registerControlListener(round);
         betController.registerControlListener(round);
         blackjackController.registerControlListener(round);
-
-        layoutMap.put(Layout.HOME, homeLoader.getRoot());
-        layoutMap.put(Layout.BET, betLoader.getRoot());
-        layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
-
-        scene = new Scene(layoutMap.get(Layout.HOME));
+        homeController.registerControlListener(layoutManager);
+        betController.registerControlListener(layoutManager);
+        blackjackController.registerControlListener(layoutManager);
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");
         stage.setMaximized(true);
         stage.show();
-    }
-
-    public void setLayout(Layout layout) {
-        scene.setRoot(layoutMap.get(layout));
     }
 }

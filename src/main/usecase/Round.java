@@ -52,7 +52,7 @@ public class Round implements ControlListener {
         bet = 0;
         gameStateListeners.forEach(gameStateListener -> gameStateListener.onUpdate(gameState()));
         if (balance <= 0) {
-            System.out.println("Balance has reached $0.00! Please leave the casino.");
+            System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         }
     }

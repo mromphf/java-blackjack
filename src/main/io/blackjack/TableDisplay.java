@@ -60,7 +60,7 @@ public class TableDisplay extends Canvas {
         final Font f = new Font("Arial", 150);
         context.setFont(f);
         context.setFill(color);
-        context.fillText(text, HOR_CENTER - 300, VER_CENTER);
+        context.fillText(text, 100, VER_CENTER);
     }
 
     private void drawLabel(String label, int y) {

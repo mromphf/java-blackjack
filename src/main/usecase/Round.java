@@ -1,6 +1,6 @@
 package main.usecase;
 
-import main.domain.GameState;
+import main.domain.Game;
 
 import java.util.*;
 
@@ -8,12 +8,12 @@ public class Round implements ControlListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Collection<OutcomeListener> outcomeListeners;
-    private final GameState gameState;
+    private final Game game;
 
-    public Round(GameState gameState) {
+    public Round(Game game) {
         this.gameStateListeners = new ArrayList<>();
         this.outcomeListeners = new ArrayList<>();
-        this.gameState = gameState;
+        this.game = game;
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -26,21 +26,21 @@ public class Round implements ControlListener {
 
     @Override
     public void onStartNewRound() {
-        gameState.dealOpeningHand();
-        gameStateListeners.forEach(l -> l.onUpdate(gameState));
+        game.dealOpeningHand();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onBetPlaced(int bet) {
-        gameState.setBet(bet);
-        gameStateListeners.forEach(l -> l.onUpdate(gameState));
+        game.setBet(bet);
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        gameState.setBet(0);
-        gameStateListeners.forEach(l -> l.onUpdate(gameState));
-        if (gameState.outOfMoney()) {
+        game.setBet(0);
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        if (game.outOfMoney()) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         }
@@ -48,39 +48,39 @@ public class Round implements ControlListener {
 
     @Override
     public void onHit() {
-        gameState.addCardToPlayerHand();
-        gameStateListeners.forEach(l -> l.onUpdate(gameState));
-        if (gameState.playerBusted()) {
-            gameState.loseBet();
-            outcomeListeners.forEach(l -> l.onBust(gameState));
+        game.addCardToPlayerHand();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        if (game.playerBusted()) {
+            game.loseBet();
+            outcomeListeners.forEach(l -> l.onBust(game.getSnapshot()));
         }
     }
 
     @Override
     public void onDealerTurn() {
-        while (gameState.dealerShouldHit()) {
-            gameState.addCardToDealerHand();
+        while (game.dealerShouldHit()) {
+            game.addCardToDealerHand();
         }
 
-        switch(gameState.determineOutcome()) {
+        switch(game.determineOutcome()) {
             case WIN:
-                outcomeListeners.forEach(l -> l.onPlayerWins(gameState));
+                outcomeListeners.forEach(l -> l.onPlayerWins(game.getSnapshot()));
                 break;
             case PUSH:
-                outcomeListeners.forEach(l -> l.onPush(gameState));
+                outcomeListeners.forEach(l -> l.onPush(game.getSnapshot()));
                 break;
             case BUST:
-                outcomeListeners.forEach(l -> l.onBust(gameState));
+                outcomeListeners.forEach(l -> l.onBust(game.getSnapshot()));
                 break;
             default:
-                outcomeListeners.forEach(l -> l.onDealerWins(gameState));
+                outcomeListeners.forEach(l -> l.onDealerWins(game.getSnapshot()));
                 break;
         }
     }
 
     @Override
     public void onDouble() {
-        gameState.doubleBet();
+        game.doubleBet();
         onHit();
         onDealerTurn();
     }

@@ -4,9 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Label;
+import main.domain.StateSnapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
-import main.domain.GameState;
 import main.usecase.GameStateListener;
 
 import java.net.URL;
@@ -31,7 +31,7 @@ public class HomeController extends RootController implements Initializable, Gam
     }
 
     @Override
-    public void onUpdate(GameState gameState) {
-        lblBalance.setText(String.format("Balance: $%s", gameState.getBalance()));
+    public void onUpdate(StateSnapshot stateSnapshot) {
+        lblBalance.setText(String.format("Balance: $%s", stateSnapshot.balance));
     }
 }

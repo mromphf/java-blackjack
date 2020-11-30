@@ -10,7 +10,7 @@ import java.util.Stack;
 import static main.domain.Deck.openingHand;
 import static main.domain.Rules.*;
 
-public class GameState {
+public class Game {
 
     private Collection<Card> dealerHand;
     private Collection<Card> playerHand;
@@ -18,11 +18,11 @@ public class GameState {
     private int balance;
     private int bet;
 
-    public GameState(int balance, Stack<Card> deck) {
+    public Game(int balance, Stack<Card> deck) {
         this.balance = balance;
         this.bet = 0;
-        this.dealerHand = new ArrayList<>();
         this.deck = deck;
+        this.dealerHand = new ArrayList<>();
         this.playerHand = new ArrayList<>();
     }
 
@@ -69,30 +69,6 @@ public class GameState {
         playerHand.add(deck.pop());
     }
 
-    public int getBalance() {
-        return balance;
-    }
-
-    public int getBet() {
-        return bet;
-    }
-
-    public int getCardsRemaining() {
-        return deck.size();
-    }
-
-    public Collection<Card> getDealerHand() {
-        return dealerHand;
-    }
-
-    public Collection<Card> getPlayerHand() {
-        return playerHand;
-    }
-
-    public boolean isAtLeastOneCardDrawn() {
-        return playerHand.size() > 2;
-    }
-
     public Outcome determineOutcome() {
         if (playerWins(playerHand, dealerHand)) {
             winBet();
@@ -118,5 +94,10 @@ public class GameState {
 
     public boolean dealerShouldHit() {
         return score(dealerHand) < 16;
+    }
+
+    public StateSnapshot getSnapshot() {
+        final boolean atLeastOneCardDrawn = playerHand.size() > 2;
+        return new StateSnapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, playerHand);
     }
 }

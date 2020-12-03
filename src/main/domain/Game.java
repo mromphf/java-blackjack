@@ -69,17 +69,28 @@ public class Game {
         playerHand.add(deck.pop());
     }
 
+    public void settle(Outcome outcome) {
+        switch (outcome) {
+            case WIN:
+                winBet();
+                break;
+            case LOSE:
+            case BUST:
+                loseBet();
+                break;
+            default:
+                break;
+        }
+    }
+
     public Outcome determineOutcome() {
         if (playerWins(playerHand, dealerHand)) {
-            winBet();
             return Outcome.WIN;
         } else if(isPush(playerHand, dealerHand)) {
             return Outcome.PUSH;
         } else if (isBust(playerHand)) {
-            loseBet();
             return Outcome.BUST;
         } else {
-            loseBet();
             return Outcome.LOSE;
         }
     }

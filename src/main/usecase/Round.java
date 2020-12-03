@@ -62,7 +62,9 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
-        switch(game.determineOutcome()) {
+        Outcome outcome = game.determineOutcome();
+        game.settle(outcome);
+        switch(outcome) {
             case WIN:
                 outcomeListeners.forEach(l -> l.onPlayerWins(game.getSnapshot()));
                 break;

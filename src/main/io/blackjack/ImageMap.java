@@ -14,6 +14,8 @@ public class ImageMap {
 
     private static final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
     private static final Map<String, Image> imageMap = new HashMap<>();
+    private static final String BLUE_CARD = "card_blue";
+    private static final String RED_CARD = "card_red";
 
     public static void load() {
         for(Card c : fresh()) {
@@ -23,12 +25,10 @@ public class ImageMap {
             imageMap.put(imageName, image);
         }
 
-        final String blueCardName = "card_blue";
-        final String redCardName = "card_red";
-        final Image blueCardImage = new Image(ImageMap.class.getResource("/card_blue.jpg").toString());
-        final Image redCardImage = new Image(ImageMap.class.getResource("/card_red.jpg").toString());
-        imageMap.put(blueCardName, blueCardImage);
-        imageMap.put(redCardName, redCardImage);
+        final Image blueCardImage = new Image(ImageMap.class.getResource(String.format("/%s.jpg", BLUE_CARD)).toString());
+        final Image redCardImage = new Image(ImageMap.class.getResource(String.format("/%s.jpg", RED_CARD)).toString());
+        imageMap.put(BLUE_CARD, blueCardImage);
+        imageMap.put(RED_CARD, redCardImage);
     }
 
     public static Map<ImageKey, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
@@ -47,9 +47,9 @@ public class ImageMap {
 
     public static Image blankCard() {
         if (ImageMap.useBlueDeck) {
-            return imageMap.get("card_blue");
+            return imageMap.get(BLUE_CARD);
         } else {
-            return imageMap.get("card_red");
+            return imageMap.get(RED_CARD);
         }
     }
 

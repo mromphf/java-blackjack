@@ -2,7 +2,7 @@ package main.domain;
 
 import java.util.Collection;
 
-public class StateSnapshot {
+public class Snapshot {
     public final int balance;
     public final int bet;
     public final int deckSize;
@@ -10,7 +10,7 @@ public class StateSnapshot {
     public final Collection<Card> dealerHand;
     public final Collection<Card> playerHand;
 
-    public StateSnapshot(int balance, int bet, int deckSize, boolean atLeastOneCardDrawn, Collection<Card> dealerHand, Collection<Card> playerHand) {
+    public Snapshot(int balance, int bet, int deckSize, boolean atLeastOneCardDrawn, Collection<Card> dealerHand, Collection<Card> playerHand) {
         this.balance = balance;
         this.bet = bet;
         this.deckSize = deckSize;

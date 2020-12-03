@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import main.domain.StateSnapshot;
+import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
 import main.usecase.OutcomeListener;
@@ -59,36 +59,36 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     @Override
-    public void onUpdate(StateSnapshot stateSnapshot) {
+    public void onUpdate(Snapshot snapshot) {
         setGameButtonsDisabled(false);
-        renderConcealedTable(stateSnapshot);
+        renderConcealedTable(snapshot);
         gameControls.setVisible(true);
         gameOverControls.setVisible(false);
-        btnDouble.setDisable(stateSnapshot.atLeastOneCardDrawn);
-        lblBalance.setText(String.format("Balance: $%s", stateSnapshot.balance));
+        btnDouble.setDisable(snapshot.atLeastOneCardDrawn);
+        lblBalance.setText(String.format("Balance: $%s", snapshot.balance));
     }
 
     @Override
-    public void onDealerWins(StateSnapshot stateSnapshot) {
-        turnOffControls(stateSnapshot);
+    public void onDealerWins(Snapshot snapshot) {
+        turnOffControls(snapshot);
         tableDisplay.drawResults("Lose", Color.RED);
     }
 
     @Override
-    public void onPlayerWins(StateSnapshot stateSnapshot) {
-        turnOffControls(stateSnapshot);
+    public void onPlayerWins(Snapshot snapshot) {
+        turnOffControls(snapshot);
         tableDisplay.drawResults("Win", Color.GREEN);
     }
 
     @Override
-    public void onBust(StateSnapshot stateSnapshot) {
-        turnOffControls(stateSnapshot);
+    public void onBust(Snapshot snapshot) {
+        turnOffControls(snapshot);
         tableDisplay.drawResults("Bust", Color.RED);
     }
 
     @Override
-    public void onPush(StateSnapshot stateSnapshot) {
-        turnOffControls(stateSnapshot);
+    public void onPush(Snapshot snapshot) {
+        turnOffControls(snapshot);
         tableDisplay.drawResults("Push", Color.ORANGE);
     }
 
@@ -104,27 +104,27 @@ public class BlackjackController extends RootController implements Initializable
         controlListeners.forEach(ControlListener::onHit);
     }
 
-    private void turnOffControls(StateSnapshot stateSnapshot) {
+    private void turnOffControls(Snapshot snapshot) {
         setGameButtonsDisabled(true);
-        renderExposedTable(stateSnapshot);
+        renderExposedTable(snapshot);
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
     }
 
-    private void renderExposedTable(StateSnapshot stateSnapshot) {
-        lblBet.setText(String.format("Bet: $%s", stateSnapshot.bet));
-        lblCards.setText(String.format("Cards Remaining: %s", stateSnapshot.deckSize));
+    private void renderExposedTable(Snapshot snapshot) {
+        lblBet.setText(String.format("Bet: $%s", snapshot.bet));
+        lblCards.setText(String.format("Cards Remaining: %s", snapshot.deckSize));
         tableDisplay.reset();
-        tableDisplay.drawScores(score(stateSnapshot.dealerHand), score(stateSnapshot.playerHand));
-        tableDisplay.drawCards(ImageMap.of(stateSnapshot.dealerHand, stateSnapshot.playerHand));
+        tableDisplay.drawScores(score(snapshot.dealerHand), score(snapshot.playerHand));
+        tableDisplay.drawCards(ImageMap.of(snapshot.dealerHand, snapshot.playerHand));
     }
 
-    private void renderConcealedTable(StateSnapshot stateSnapshot) {
-        lblBet.setText(String.format("Bet: $%s", stateSnapshot.bet));
-        lblCards.setText(String.format("Cards Remaining: %s", stateSnapshot.deckSize));
+    private void renderConcealedTable(Snapshot snapshot) {
+        lblBet.setText(String.format("Bet: $%s", snapshot.bet));
+        lblCards.setText(String.format("Cards Remaining: %s", snapshot.deckSize));
         tableDisplay.reset();
-        tableDisplay.drawScores(concealedScore(stateSnapshot.dealerHand), score(stateSnapshot.playerHand));
-        tableDisplay.drawCards(ImageMap.ofConcealed(stateSnapshot.dealerHand, stateSnapshot.playerHand));
+        tableDisplay.drawScores(concealedScore(snapshot.dealerHand), score(snapshot.playerHand));
+        tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.dealerHand, snapshot.playerHand));
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

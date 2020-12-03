@@ -1,7 +1,7 @@
 package main.usecase;
 
-import main.domain.StateSnapshot;
+import main.domain.Snapshot;
 
 public interface GameStateListener {
-    void onUpdate(StateSnapshot stateSnapshot);
+    void onUpdate(Snapshot snapshot);
 }

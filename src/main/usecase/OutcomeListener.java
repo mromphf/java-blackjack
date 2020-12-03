@@ -1,10 +1,10 @@
 package main.usecase;
 
-import main.domain.StateSnapshot;
+import main.domain.Snapshot;
 
 public interface OutcomeListener {
-    void onDealerWins(StateSnapshot stateSnapshot);
-    void onPlayerWins(StateSnapshot stateSnapshot);
-    void onBust(StateSnapshot stateSnapshot);
-    void onPush(StateSnapshot stateSnapshot);
+    void onDealerWins(Snapshot snapshot);
+    void onPlayerWins(Snapshot snapshot);
+    void onBust(Snapshot snapshot);
+    void onPush(Snapshot snapshot);
 }

@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import main.domain.StateSnapshot;
+import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
 import main.usecase.GameStateListener;
@@ -53,11 +53,11 @@ public class BetController extends RootController implements Initializable, Game
     }
 
     @Override
-    public void onUpdate(StateSnapshot stateSnapshot) {
-        this.bet = stateSnapshot.bet;
-        btnDeal.setDisable(bet > stateSnapshot.balance || bet <= 0);
+    public void onUpdate(Snapshot snapshot) {
+        this.bet = snapshot.bet;
+        btnDeal.setDisable(bet > snapshot.balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);
-        lblBalance.setText(String.format("Balance: $%s", stateSnapshot.balance));
+        lblBalance.setText(String.format("Balance: $%s", snapshot.balance));
     }
 
     @FXML

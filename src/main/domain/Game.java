@@ -96,8 +96,8 @@ public class Game {
         return score(dealerHand) < 16;
     }
 
-    public StateSnapshot getSnapshot() {
+    public Snapshot getSnapshot() {
         final boolean atLeastOneCardDrawn = playerHand.size() > 2;
-        return new StateSnapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, playerHand);
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, playerHand);
     }
 }

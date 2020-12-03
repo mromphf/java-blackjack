@@ -1,17 +1,18 @@
 package main;
 
-import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import main.domain.Game;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
+import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
-import main.domain.Game;
 import main.usecase.Round;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class AppRoot {
             homeLoader.load();
             betLoader.load();
             blackjackLoader.load();
+            ImageMap.load();
         } catch (IOException e) {
             e.printStackTrace();
         }

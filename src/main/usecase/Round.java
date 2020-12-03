@@ -27,6 +27,9 @@ public class Round implements ControlListener {
     @Override
     public void onStartNewRound() {
         game.dealOpeningHand();
+        if (game.playerCanSplit()) {
+            game.split();
+        }
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 

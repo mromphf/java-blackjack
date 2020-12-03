@@ -2,19 +2,17 @@ package main.domain;
 
 import main.usecase.Outcome;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import static main.domain.Deck.openingHand;
 import static main.domain.Rules.*;
 
 public class Game {
 
-    private Collection<Card> dealerHand;
-    private Collection<Card> playerHand;
+    private final Stack<Stack <Card>> playerHands;
     private final Stack<Card> deck;
+    private Collection<Card> dealerHand;
+    private Stack<Card> currentHand;
     private int balance;
     private int bet;
 
@@ -22,8 +20,9 @@ public class Game {
         this.balance = balance;
         this.bet = 0;
         this.deck = deck;
-        this.dealerHand = new ArrayList<>();
-        this.playerHand = new ArrayList<>();
+        this.dealerHand = new LinkedList<>();
+        this.currentHand = new Stack<>();
+        this.playerHands = new Stack<>();
     }
 
     public void setBet(int bet) {
@@ -32,13 +31,24 @@ public class Game {
 
     public void dealOpeningHand() {
         try {
-            Map<String, Collection<Card>> openingHand = openingHand(deck);
-            playerHand = openingHand.get("player");
+            Map<String, Stack<Card>> openingHand = openingHand(deck);
+            playerHands.add(openingHand.get("player"));
+            currentHand = playerHands.peek();
             dealerHand = openingHand.get("dealer");
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
         }
+    }
+
+    public void split() {
+        // TODO: Need safety check for empty deck
+        Stack<Card> newHand = new Stack<Card>() {{
+            add(currentHand.pop());
+        }};
+        currentHand.add(deck.pop());
+        newHand.add(deck.pop());
+        playerHands.add(newHand);
     }
 
     public void doubleBet() {
@@ -66,7 +76,7 @@ public class Game {
             System.out.println("No more cards! Quitting...");
             System.exit(0);
         }
-        playerHand.add(deck.pop());
+        currentHand.add(deck.pop());
     }
 
     public void settle(Outcome outcome) {
@@ -81,22 +91,30 @@ public class Game {
             default:
                 break;
         }
+
+        if (!playerHands.isEmpty()) {
+            currentHand = playerHands.pop();
+        }
     }
 
     public Outcome determineOutcome() {
-        if (playerWins(playerHand, dealerHand)) {
+        if (playerWins(currentHand, dealerHand)) {
             return Outcome.WIN;
-        } else if(isPush(playerHand, dealerHand)) {
+        } else if(isPush(currentHand, dealerHand)) {
             return Outcome.PUSH;
-        } else if (isBust(playerHand)) {
+        } else if (isBust(currentHand)) {
             return Outcome.BUST;
         } else {
             return Outcome.LOSE;
         }
     }
 
+    public boolean playerCanSplit() {
+        return canSplit(currentHand);
+    }
+
     public boolean playerBusted() {
-        return isBust(playerHand);
+        return isBust(currentHand);
     }
 
     public boolean outOfMoney() {
@@ -108,7 +126,7 @@ public class Game {
     }
 
     public Snapshot getSnapshot() {
-        final boolean atLeastOneCardDrawn = playerHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, playerHand);
+        final boolean atLeastOneCardDrawn = currentHand.size() > 2;
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, currentHand);
     }
 }

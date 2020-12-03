@@ -348,6 +348,16 @@ class RulesTest {
     }
 
     @Test
+    public void canSplit_shouldReturnTrue_whenGivenATenAndAQueen() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(10, Suit.HEARTS));
+            add(new Card(12, Suit.SPADES));
+        }};
+
+        assertTrue(canSplit(cards));
+    }
+
+    @Test
     public void canSplit_shouldReturnFalse_whenGivenTwoUnequalCards() {
         List<Card> cards = new LinkedList<Card>() {{
             add(new Card(5, Suit.HEARTS));

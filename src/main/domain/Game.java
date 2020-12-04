@@ -32,6 +32,7 @@ public class Game {
     public void dealOpeningHand() {
         try {
             Map<String, Stack<Card>> openingHand = openingHand(deck);
+            playerHands.removeAllElements();
             playerHands.add(openingHand.get("player"));
             currentHand = playerHands.peek();
             dealerHand = openingHand.get("dealer");
@@ -48,6 +49,7 @@ public class Game {
         }};
         currentHand.add(deck.pop());
         newHand.add(deck.pop());
+        playerHands.pop();
         playerHands.add(newHand);
     }
 
@@ -61,6 +63,10 @@ public class Game {
 
     public void loseBet() {
         balance -= bet;
+    }
+
+    public void playNextHand() {
+        currentHand = playerHands.pop();
     }
 
     public void addCardToDealerHand() {
@@ -91,10 +97,6 @@ public class Game {
             default:
                 break;
         }
-
-        if (!playerHands.isEmpty()) {
-            currentHand = playerHands.pop();
-        }
     }
 
     public Outcome determineOutcome() {
@@ -107,6 +109,10 @@ public class Game {
         } else {
             return Outcome.LOSE;
         }
+    }
+
+    public boolean moreHandsToPlay() {
+        return !playerHands.isEmpty();
     }
 
     public boolean playerCanSplit() {
@@ -127,6 +133,6 @@ public class Game {
 
     public Snapshot getSnapshot() {
         final boolean atLeastOneCardDrawn = currentHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, dealerHand, currentHand);
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, playerHands.isEmpty(), dealerHand, currentHand);
     }
 }

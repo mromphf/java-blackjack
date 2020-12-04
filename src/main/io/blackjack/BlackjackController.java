@@ -55,7 +55,7 @@ public class BlackjackController extends RootController implements Initializable
         btnDouble.setOnAction(event -> onDouble());
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
-        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
+        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onStartNewRound));
     }
 
     @Override
@@ -105,6 +105,9 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     private void turnOffControls(Snapshot snapshot) {
+        if (snapshot.isRoundFinished) {
+            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
+        }
         setGameButtonsDisabled(true);
         renderExposedTable(snapshot);
         gameControls.setVisible(false);

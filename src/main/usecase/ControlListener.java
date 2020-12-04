@@ -8,4 +8,7 @@ public interface ControlListener {
     void onHit();
     void onDealerTurn();
     void onDouble();
+    void onStand();
+    void onSettleHand();
+    void onSplit();
 }

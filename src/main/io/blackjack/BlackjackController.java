@@ -39,6 +39,9 @@ public class BlackjackController extends RootController implements Initializable
     private GridPane gameOverControls;
 
     @FXML
+    private GridPane splitControls;
+
+    @FXML
     private Button btnStand;
 
     @FXML
@@ -55,14 +58,15 @@ public class BlackjackController extends RootController implements Initializable
         btnDouble.setOnAction(event -> onDouble());
         btnHit.setOnAction(event -> onHit());
         btnStand.setOnAction(event -> onStand());
-        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onStartNewRound));
+        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onSettleHand));
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
         setGameButtonsDisabled(false);
         renderConcealedTable(snapshot);
-        gameControls.setVisible(true);
+        gameControls.setVisible(!canSplit(snapshot.playerHand));
+        splitControls.setVisible(canSplit(snapshot.playerHand));
         gameOverControls.setVisible(false);
         btnDouble.setDisable(snapshot.atLeastOneCardDrawn);
         lblBalance.setText(String.format("Balance: $%s", snapshot.balance));
@@ -92,12 +96,23 @@ public class BlackjackController extends RootController implements Initializable
         tableDisplay.drawResults("Push", Color.ORANGE);
     }
 
+    @FXML
+    public void onSplit() {
+        controlListeners.forEach(ControlListener::onSplit);
+    }
+
+    @FXML
+    public void onNoSplit() {
+        splitControls.setVisible(false);
+        gameControls.setVisible(true);
+    }
+
     private void onDouble() {
         controlListeners.forEach(ControlListener::onDouble);
     }
 
     private void onStand() {
-        controlListeners.forEach(ControlListener::onDealerTurn);
+        controlListeners.forEach(ControlListener::onStand);
     }
 
     private void onHit() {

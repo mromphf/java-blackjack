@@ -42,4 +42,15 @@ public class LayoutManager implements ControlListener {
 
     @Override
     public void onDouble() {}
+
+    @Override
+    public void onStand() {}
+
+    @Override
+    public void onSettleHand() {}
+
+    @Override
+    public void onSplit() {
+
+    }
 }

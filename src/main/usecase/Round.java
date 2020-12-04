@@ -32,10 +32,6 @@ public class Round implements ControlListener {
             game.dealOpeningHand();
         }
 
-        if (game.playerCanSplit()) {
-            game.split();
-        }
-
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
@@ -56,12 +52,21 @@ public class Round implements ControlListener {
     }
 
     @Override
+    public void onSplit() {
+        game.split();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+    }
+
+    @Override
     public void onHit() {
         game.addCardToPlayerHand();
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        if (game.playerBusted()) {
+        if (game.playerBusted() && game.moreHandsToPlay()) {
             game.loseBet();
-            outcomeListeners.forEach(l -> l.onBust(game.getSnapshot()));
+            onStartNewRound();
+        } else if (game.playerBusted()) {
+            game.loseBet();
+            settleHand(Outcome.BUST);
         }
     }
 
@@ -71,7 +76,37 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
-        Outcome outcome = game.determineOutcome();
+        settleHand(game.determineOutcome());
+    }
+
+    @Override
+    public void onDouble() {
+        game.doubleBet();
+        onHit();
+        onStand();
+    }
+
+    @Override
+    public void onStand() {
+        if (game.moreHandsToPlay()) {
+            onStartNewRound();
+        } else {
+            onDealerTurn();
+        }
+    }
+
+    @Override
+    public void onSettleHand() {
+        if (game.moreHandsToSettle()) {
+            game.rewind();
+        }
+        settleHand(game.determineOutcome());
+    }
+
+    @Override
+    public void onStopPlaying() {}
+
+    private void settleHand(Outcome outcome) {
         game.settle(outcome);
         switch(outcome) {
             case WIN:
@@ -88,14 +123,4 @@ public class Round implements ControlListener {
                 break;
         }
     }
-
-    @Override
-    public void onDouble() {
-        game.doubleBet();
-        onHit();
-        onDealerTurn();
-    }
-
-    @Override
-    public void onStopPlaying() {}
 }

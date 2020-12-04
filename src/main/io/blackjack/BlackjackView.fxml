@@ -40,6 +40,16 @@
         </Button>
     </GridPane>
 
+    <GridPane visible="false" fx:id="splitControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onSplit">
+            Split
+        </Button>
+
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onNoSplit">
+            Don't Split
+        </Button>
+    </GridPane>
+
     <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
         <Button fx:id="btnNext" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50">
             Next Hand

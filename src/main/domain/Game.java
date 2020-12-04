@@ -10,6 +10,7 @@ import static main.domain.Rules.*;
 public class Game {
 
     private final Stack<Stack <Card>> playerHands;
+    private final Stack<Snapshot> handsToSettle;
     private final Stack<Card> deck;
     private Collection<Card> dealerHand;
     private Stack<Card> currentHand;
@@ -23,6 +24,7 @@ public class Game {
         this.dealerHand = new LinkedList<>();
         this.currentHand = new Stack<>();
         this.playerHands = new Stack<>();
+        this.handsToSettle = new Stack<>();
     }
 
     public void setBet(int bet) {
@@ -33,8 +35,7 @@ public class Game {
         try {
             Map<String, Stack<Card>> openingHand = openingHand(deck);
             playerHands.removeAllElements();
-            playerHands.add(openingHand.get("player"));
-            currentHand = playerHands.peek();
+            currentHand = openingHand.get("player");
             dealerHand = openingHand.get("dealer");
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
@@ -49,7 +50,6 @@ public class Game {
         }};
         currentHand.add(deck.pop());
         newHand.add(deck.pop());
-        playerHands.pop();
         playerHands.add(newHand);
     }
 
@@ -66,7 +66,14 @@ public class Game {
     }
 
     public void playNextHand() {
+        handsToSettle.add(getSnapshot());
         currentHand = playerHands.pop();
+    }
+
+    public void rewind() {
+        Snapshot snapshot = handsToSettle.pop();
+        this.currentHand = (Stack<Card>) snapshot.playerHand;
+        this.dealerHand = snapshot.dealerHand;
     }
 
     public void addCardToDealerHand() {
@@ -115,6 +122,10 @@ public class Game {
         return !playerHands.isEmpty();
     }
 
+    public boolean moreHandsToSettle() {
+        return !handsToSettle.isEmpty();
+    }
+
     public boolean playerCanSplit() {
         return canSplit(currentHand);
     }
@@ -133,6 +144,6 @@ public class Game {
 
     public Snapshot getSnapshot() {
         final boolean atLeastOneCardDrawn = currentHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, playerHands.isEmpty(), dealerHand, currentHand);
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand);
     }
 }

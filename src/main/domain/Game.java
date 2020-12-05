@@ -3,6 +3,8 @@ package main.domain;
 import java.util.*;
 
 import static main.domain.Deck.openingHand;
+import static main.domain.Outcome.*;
+import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
 public class Game {
@@ -10,7 +12,6 @@ public class Game {
     private final Stack<Card> deck;
     private final Stack<Stack <Card>> handsToPlay;
     private final Stack<Stack <Card>> handsToSettle;
-    private final Outcome outcome;
 
     private Collection<Card> dealerHand;
     private Stack<Card> currentHand;
@@ -21,7 +22,6 @@ public class Game {
         this.balance = balance;
         this.bet = 0;
         this.deck = deck;
-        this.outcome = Outcome.UNRESOLVED;
         this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
@@ -99,13 +99,13 @@ public class Game {
 
     public Outcome determineOutcome() {
         if (playerWins(currentHand, dealerHand)) {
-            return Outcome.WIN;
+            return WIN;
         } else if(isPush(currentHand, dealerHand)) {
-            return Outcome.PUSH;
+            return PUSH;
         } else if (isBust(currentHand)) {
-            return Outcome.BUST;
+            return BUST;
         } else {
-            return Outcome.LOSE;
+            return LOSE;
         }
     }
 
@@ -122,7 +122,7 @@ public class Game {
     }
 
     public Snapshot getSnapshot() {
-        return new Snapshot(balance, bet, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
+        return new Snapshot(balance, bet, UNRESOLVED, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
     }
 
     public Snapshot getResolvedSnapshot() {

@@ -10,7 +10,7 @@ import static main.domain.Rules.*;
 public class Game {
 
     private final Stack<Stack <Card>> playerHands;
-    private final Stack<Snapshot> handsToSettle;
+    private final Stack<Stack <Card>> handsToSettle;
     private final Stack<Card> deck;
     private Collection<Card> dealerHand;
     private Stack<Card> currentHand;
@@ -58,13 +58,12 @@ public class Game {
     }
 
     public void playNextHand() {
-        handsToSettle.add(getSnapshot());
+        handsToSettle.add(currentHand);
         currentHand = playerHands.pop();
     }
 
     public void rewind() {
-        Snapshot snapshot = handsToSettle.pop();
-        this.currentHand = (Stack<Card>) snapshot.playerHand;
+        this.currentHand = handsToSettle.pop();
     }
 
     public void addCardToDealerHand() {
@@ -123,6 +122,6 @@ public class Game {
 
     public Snapshot getSnapshot() {
         final boolean atLeastOneCardDrawn = currentHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand);
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand, playerHands);
     }
 }

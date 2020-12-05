@@ -22,6 +22,7 @@ public class TableDisplay extends Canvas {
     private final int CARD_WIDTH;
     private final int CARD_HEIGHT;
     private final int GAP_BETWEEN_CARDS;
+    private final int BOTTOM;
     private final GraphicsContext context = getGraphicsContext2D();
 
     public TableDisplay() {
@@ -33,6 +34,7 @@ public class TableDisplay extends Canvas {
         CARD_HEIGHT = (int) (screen.getHeight() * 0.15);
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
         GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
+        BOTTOM = (int) getHeight();
     }
 
     public void reset() {
@@ -56,6 +58,12 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 50);
     }
 
+    public void drawHandsToPlay(List<List<Image>> cards) {
+        for (int i = 0, y = BOTTOM - 100; i < cards.size(); i++, y -= 120) {
+            drawSmallLineOfCards(cards.get(i), y);
+        }
+    }
+
     public void drawResults(String text, Color color) {
         final Font f = new Font("Arial", 150);
         context.setFont(f);
@@ -74,6 +82,12 @@ public class TableDisplay extends Canvas {
 
         for (int i = 0, x = START_POS; i < cards.size(); i++, x += GAP_BETWEEN_CARDS) {
             context.drawImage(cards.get(i), x, y, CARD_WIDTH, CARD_HEIGHT);
+        }
+    }
+
+    private void drawSmallLineOfCards(List<Image> cards, int y) {
+        for (int i = 0, x = 30; i < cards.size(); i++, x += GAP_BETWEEN_CARDS * 0.3) {
+            context.drawImage(cards.get(i), x, y, CARD_WIDTH * 0.5, CARD_HEIGHT * 0.5);
         }
     }
 }

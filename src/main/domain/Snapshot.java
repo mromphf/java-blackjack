@@ -1,6 +1,7 @@
 package main.domain;
 
 import java.util.Collection;
+import java.util.Stack;
 
 public class Snapshot {
     public final int balance;
@@ -10,8 +11,16 @@ public class Snapshot {
     public final boolean isRoundFinished;
     public final Collection<Card> dealerHand;
     public final Collection<Card> playerHand;
+    public final Stack<Stack<Card>> handsToPlay;
 
-    public Snapshot(int balance, int bet, int deckSize, boolean atLeastOneCardDrawn, boolean isRoundFinished, Collection<Card> dealerHand, Collection<Card> playerHand) {
+    public Snapshot(int balance,
+                    int bet,
+                    int deckSize,
+                    boolean atLeastOneCardDrawn,
+                    boolean isRoundFinished,
+                    Collection<Card> dealerHand,
+                    Collection<Card> playerHand,
+                    Stack<Stack <Card>> handsToPlay) {
         this.balance = balance;
         this.bet = bet;
         this.deckSize = deckSize;
@@ -19,5 +28,6 @@ public class Snapshot {
         this.isRoundFinished = isRoundFinished;
         this.dealerHand = dealerHand;
         this.playerHand = playerHand;
+        this.handsToPlay = handsToPlay;
     }
 }

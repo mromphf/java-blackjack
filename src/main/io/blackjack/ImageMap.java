@@ -45,6 +45,14 @@ public class ImageMap {
         }};
     }
 
+    public static List<List<Image>> ofHandsToSettle(Stack<Stack<Card>> handsToSettle) {
+        return handsToSettle.stream()
+                .map(cards -> cards.stream()
+                        .map(ImageMap::imageByCard)
+                        .collect(Collectors.toList()))
+                .collect(Collectors.toList());
+    }
+
     public static Image blankCard() {
         if (ImageMap.useBlueDeck) {
             return imageMap.get(BLUE_CARD);

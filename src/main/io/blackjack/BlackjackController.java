@@ -135,6 +135,7 @@ public class BlackjackController extends RootController implements Initializable
         tableDisplay.reset();
         tableDisplay.drawScores(score(snapshot.dealerHand), score(snapshot.playerHand));
         tableDisplay.drawCards(ImageMap.of(snapshot.dealerHand, snapshot.playerHand));
+        tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.handsToPlay));
     }
 
     private void renderConcealedTable(Snapshot snapshot) {
@@ -143,6 +144,7 @@ public class BlackjackController extends RootController implements Initializable
         tableDisplay.reset();
         tableDisplay.drawScores(concealedScore(snapshot.dealerHand), score(snapshot.playerHand));
         tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.dealerHand, snapshot.playerHand));
+        tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.handsToPlay));
     }
 
     private void setGameButtonsDisabled(boolean disabled) {

@@ -81,6 +81,7 @@ public class Round implements ControlListener {
 
     @Override
     public void onDouble() {
+        // TODO: Bug - this will double the bet for all unsettled hands
         game.doubleBet();
         game.addCardToPlayerHand();
         onStand();

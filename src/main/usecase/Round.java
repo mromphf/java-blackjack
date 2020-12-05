@@ -45,10 +45,12 @@ public class Round implements ControlListener {
     public void onMoveToBettingTable() {
         game.settle(game.determineOutcome());
         game.setBet(0);
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+
         if (game.getSnapshot().balance <= 0) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
+        } else {
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
         }
     }
 

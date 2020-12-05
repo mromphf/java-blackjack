@@ -76,6 +76,7 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
+        gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
         outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getResolvedSnapshot()));
     }
 

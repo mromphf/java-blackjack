@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.domain.Outcome;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
@@ -55,9 +56,9 @@ public class BlackjackController extends RootController implements Initializable
     @Override
     public void onUpdate(Snapshot snapshot) {
         renderConcealedTable(snapshot);
-        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()));
+        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.getOutcome().equals(Outcome.UNRESOLVED));
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()));
-        gameOverControls.setVisible(false);
+        gameOverControls.setVisible(!snapshot.getOutcome().equals(Outcome.UNRESOLVED));
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
     }
@@ -69,8 +70,6 @@ public class BlackjackController extends RootController implements Initializable
         }
 
         renderExposedTable(snapshot);
-        gameControls.setVisible(false);
-        gameOverControls.setVisible(true);
 
         switch (snapshot.getOutcome()) {
             case WIN:

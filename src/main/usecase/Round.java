@@ -76,7 +76,7 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
-        publishOutcome(game.determineOutcome());
+        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getSnapshot(), game.determineOutcome()));
     }
 
     @Override
@@ -103,26 +103,9 @@ public class Round implements ControlListener {
             game.rewind();
         }
 
-        publishOutcome(game.determineOutcome());
+        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getSnapshot(), game.determineOutcome()));
     }
 
     @Override
     public void onStopPlaying() {}
-
-    private void publishOutcome(Outcome outcome) {
-        switch(outcome) {
-            case WIN:
-                outcomeListeners.forEach(l -> l.onPlayerWins(game.getSnapshot()));
-                break;
-            case PUSH:
-                outcomeListeners.forEach(l -> l.onPush(game.getSnapshot()));
-                break;
-            case BUST:
-                outcomeListeners.forEach(l -> l.onBust(game.getSnapshot()));
-                break;
-            default:
-                outcomeListeners.forEach(l -> l.onDealerWins(game.getSnapshot()));
-                break;
-        }
-    }
 }

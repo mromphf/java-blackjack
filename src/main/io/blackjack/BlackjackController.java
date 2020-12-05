@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
+import main.usecase.Outcome;
 import main.usecase.OutcomeListener;
 import main.usecase.GameStateListener;
 
@@ -63,27 +64,29 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     @Override
-    public void onDealerWins(Snapshot snapshot) {
-        turnOffControls(snapshot);
-        tableDisplay.drawResults("Lose", Color.RED);
-    }
+    public void onOutcomeDecided(Snapshot snapshot, Outcome outcome) {
+        if (snapshot.isRoundFinished) {
+            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
+        }
 
-    @Override
-    public void onPlayerWins(Snapshot snapshot) {
-        turnOffControls(snapshot);
-        tableDisplay.drawResults("Win", Color.GREEN);
-    }
+        renderExposedTable(snapshot);
+        gameControls.setVisible(false);
+        gameOverControls.setVisible(true);
 
-    @Override
-    public void onBust(Snapshot snapshot) {
-        turnOffControls(snapshot);
-        tableDisplay.drawResults("Bust", Color.RED);
-    }
-
-    @Override
-    public void onPush(Snapshot snapshot) {
-        turnOffControls(snapshot);
-        tableDisplay.drawResults("Push", Color.ORANGE);
+        switch (outcome) {
+            case WIN:
+                tableDisplay.drawResults("Win", Color.GREEN);
+                break;
+            case LOSE:
+                tableDisplay.drawResults("Lose", Color.RED);
+                break;
+            case BUST:
+                tableDisplay.drawResults("Bust", Color.RED);
+                break;
+            default:
+                tableDisplay.drawResults("Push", Color.ORANGE);
+                break;
+        }
     }
 
     @FXML
@@ -110,15 +113,6 @@ public class BlackjackController extends RootController implements Initializable
     @FXML
     private void onDouble() {
         controlListeners.forEach(ControlListener::onDouble);
-    }
-
-    private void turnOffControls(Snapshot snapshot) {
-        if (snapshot.isRoundFinished) {
-            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
-        }
-        renderExposedTable(snapshot);
-        gameControls.setVisible(false);
-        gameOverControls.setVisible(true);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

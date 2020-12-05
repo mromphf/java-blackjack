@@ -321,6 +321,23 @@ class RulesTest {
     }
 
     @Test
+    public void playerWins_shouldReturnFalse_whenPlayerBothPlayerAndDealerBust() {
+        List<Card> playerHand = new LinkedList<Card>() {{
+            add(new Card(10, Suit.HEARTS));
+            add(new Card(13, Suit.SPADES));
+            add(new Card(8, Suit.DIAMONDS));
+        }};
+
+        List<Card> dealerHand = new LinkedList<Card>() {{
+            add(new Card(10, Suit.HEARTS));
+            add(new Card(10, Suit.SPADES));
+            add(new Card(2, Suit.SPADES));
+        }};
+
+        assertFalse(playerWins(playerHand, dealerHand));
+    }
+
+    @Test
     public void playerWins_shouldReturnFalse_whenHandsAreOfEqualValue() {
         List<Card> playerHand = new LinkedList<Card>() {{
             add(new Card(10, Suit.HEARTS));

@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
-import main.usecase.Outcome;
 import main.usecase.OutcomeListener;
 import main.usecase.GameStateListener;
 

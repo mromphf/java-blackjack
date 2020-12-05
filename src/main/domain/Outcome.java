@@ -1,4 +1,4 @@
-package main.usecase;
+package main.domain;
 
 public enum Outcome {
     BUST,

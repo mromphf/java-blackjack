@@ -1,7 +1,5 @@
 package main.domain;
 
-import main.usecase.Outcome;
-
 import java.util.*;
 
 import static main.domain.Deck.openingHand;

@@ -57,14 +57,6 @@ public class Game {
         bet *= 2;
     }
 
-    public void winBet() {
-        balance += bet;
-    }
-
-    public void loseBet() {
-        balance -= bet;
-    }
-
     public void playNextHand() {
         handsToSettle.add(getSnapshot());
         currentHand = playerHands.pop();
@@ -94,11 +86,11 @@ public class Game {
     public void settle(Outcome outcome) {
         switch (outcome) {
             case WIN:
-                winBet();
+                balance += bet;
                 break;
             case LOSE:
             case BUST:
-                loseBet();
+                balance -= bet;
                 break;
             default:
                 break;

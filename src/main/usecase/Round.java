@@ -46,7 +46,7 @@ public class Round implements ControlListener {
         game.settle(game.determineOutcome());
         game.setBet(0);
 
-        if (game.getSnapshot().balance <= 0) {
+        if (game.getSnapshot().getBalance() <= 0) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         } else {
@@ -99,7 +99,7 @@ public class Round implements ControlListener {
     public void onSettleHand() {
         game.settle(game.determineOutcome());
 
-        if (!game.getSnapshot().isRoundFinished) {
+        if (!game.getSnapshot().isRoundFinished()) {
             game.rewind();
         }
 

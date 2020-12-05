@@ -17,7 +17,7 @@ public class LayoutManager implements ControlListener {
     }
 
     @Override
-    public void onStartNewRound() {
+    public void onStartNewRound(int bet) {
         scene.setRoot(layoutMap.get(Layout.GAME));
     }
 
@@ -30,9 +30,6 @@ public class LayoutManager implements ControlListener {
     public void onStopPlaying() {
         scene.setRoot(layoutMap.get(Layout.HOME));
     }
-
-    @Override
-    public void onBetPlaced(int bet) {}
 
     @Override
     public void onHit() {}

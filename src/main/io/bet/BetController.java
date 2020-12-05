@@ -42,6 +42,7 @@ public class BetController extends RootController implements Initializable, Game
 
     private final static int MAX_BET = 500;
     private int bet = 0;
+    private int balance = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,15 +55,15 @@ public class BetController extends RootController implements Initializable, Game
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        this.bet = snapshot.getBet();
-        btnDeal.setDisable(bet > snapshot.getBalance() || bet <= 0);
+        this.balance = snapshot.getBalance();
         lblBet.setText("Bet: $" + bet);
         lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
     }
 
     @FXML
     private void onDeal() {
-        controlListeners.forEach(ControlListener::onStartNewRound);
+        controlListeners.forEach(l -> l.onStartNewRound(bet));
+        bet = 0;
     }
 
     @FXML void onQuit() {
@@ -71,12 +72,11 @@ public class BetController extends RootController implements Initializable, Game
 
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            int bet = Math.min(MAX_BET, this.bet + amount);
-            controlListeners.forEach(cl -> cl.onBetPlaced(bet));
+            this.bet = Math.min(MAX_BET, this.bet + amount);
         } else {
-            int bet = Math.max(0, this.bet - amount);
-            controlListeners.forEach(cl -> cl.onBetPlaced(bet));
+            this.bet = Math.max(0, this.bet - amount);
         }
+        btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);
     }
 }

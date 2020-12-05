@@ -19,19 +19,14 @@ public class Round implements ControlListener {
     }
 
     @Override
-    public void onStartNewRound() {
+    public void onStartNewRound(int bet) {
+        game.setBet(bet);
         if (game.moreHandsToPlay()) {
             game.playNextHand();
         } else {
             game.dealOpeningHand();
         }
 
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-    }
-
-    @Override
-    public void onBetPlaced(int bet) {
-        game.setBet(bet);
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
@@ -75,7 +70,7 @@ public class Round implements ControlListener {
     @Override
     public void onStand() {
         if (game.moreHandsToPlay()) {
-            onStartNewRound();
+            onStartNewRound(game.getSnapshot().getBet());
         } else {
             while (game.dealerShouldHit()) {
                 game.addCardToDealerHand();

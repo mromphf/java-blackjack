@@ -1,10 +1,9 @@
 package main.usecase;
 
 public interface ControlListener {
-    void onStartNewRound();
+    void onStartNewRound(int bet);
     void onMoveToBettingTable();
     void onStopPlaying();
-    void onBetPlaced(int bet);
     void onHit();
     void onDouble();
     void onStand();

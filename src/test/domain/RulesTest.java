@@ -403,4 +403,41 @@ class RulesTest {
 
         assertFalse(canSplit(cards));
     }
+
+    @Test
+    public void insuranceAvailable_shouldReturnTrue_whenTheFirstCardIsAnAce() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(1, Suit.HEARTS));
+            add(new Card(4, Suit.DIAMONDS));
+        }};
+
+        assertTrue(insuranceAvailable(cards));
+    }
+
+    @Test
+    public void insuranceAvailable_shouldReturnFalse_whenTheSecondCardIsAnAceButTheFirstIsNot() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(4, Suit.HEARTS));
+            add(new Card(1, Suit.DIAMONDS));
+        }};
+
+        assertFalse(insuranceAvailable(cards));
+    }
+
+    @Test
+    public void insuranceAvailable_shouldReturnFalse_whenNoAces() {
+        List<Card> cards = new LinkedList<Card>() {{
+            add(new Card(4, Suit.HEARTS));
+            add(new Card(7, Suit.DIAMONDS));
+        }};
+
+        assertFalse(insuranceAvailable(cards));
+    }
+
+    @Test
+    public void insuranceAvailable_shouldReturnFalse_whenGivenEmptyCollection() {
+        List<Card> cards = new LinkedList<Card>();
+
+        assertFalse(insuranceAvailable(cards));
+    }
 }

@@ -68,6 +68,14 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return (isBust(dealerCards) && !isBust(playerCards)) || (!isBust(playerCards) && score(playerCards) > score(dealerCards));
+        return (isBust(dealerCards) && !isBust(playerCards)) ||
+                (!isBust(playerCards) && score(playerCards) > score(dealerCards));
+    }
+
+    public static boolean insuranceAvailable(Collection<Card> dealerHand) {
+        if (dealerHand.size() > 0) {
+            return dealerHand.iterator().next().isAce();
+        }
+        return false;
     }
 }

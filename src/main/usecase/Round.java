@@ -43,9 +43,10 @@ public class Round implements ControlListener {
 
     @Override
     public void onMoveToBettingTable() {
+        game.settle(game.determineOutcome());
         game.setBet(0);
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        if (game.outOfMoney()) {
+        if (game.getSnapshot().balance <= 0) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         }
@@ -61,12 +62,9 @@ public class Round implements ControlListener {
     public void onHit() {
         game.addCardToPlayerHand();
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        if (game.playerBusted() && game.moreHandsToPlay()) {
-            game.loseBet();
-            onStartNewRound();
-        } else if (game.playerBusted()) {
-            game.loseBet();
-            settleHand(Outcome.BUST);
+
+        if (game.playerHasBusted()) {
+            onStand();
         }
     }
 
@@ -76,7 +74,7 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
-        settleHand(game.determineOutcome());
+        publishOutcome(game.determineOutcome());
     }
 
     @Override
@@ -97,17 +95,19 @@ public class Round implements ControlListener {
 
     @Override
     public void onSettleHand() {
-        if (game.moreHandsToSettle()) {
+        game.settle(game.determineOutcome());
+
+        if (!game.getSnapshot().isRoundFinished) {
             game.rewind();
         }
-        settleHand(game.determineOutcome());
+
+        publishOutcome(game.determineOutcome());
     }
 
     @Override
     public void onStopPlaying() {}
 
-    private void settleHand(Outcome outcome) {
-        game.settle(outcome);
+    private void publishOutcome(Outcome outcome) {
         switch(outcome) {
             case WIN:
                 outcomeListeners.forEach(l -> l.onPlayerWins(game.getSnapshot()));

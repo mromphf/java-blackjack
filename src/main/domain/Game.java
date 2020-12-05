@@ -21,7 +21,7 @@ public class Game {
         this.balance = balance;
         this.bet = 0;
         this.deck = deck;
-        this.dealerHand = new LinkedList<>();
+        this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
         this.playerHands = new Stack<>();
         this.handsToSettle = new Stack<>();
@@ -73,7 +73,6 @@ public class Game {
     public void rewind() {
         Snapshot snapshot = handsToSettle.pop();
         this.currentHand = (Stack<Card>) snapshot.playerHand;
-        this.dealerHand = snapshot.dealerHand;
     }
 
     public void addCardToDealerHand() {
@@ -118,24 +117,12 @@ public class Game {
         }
     }
 
-    public boolean moreHandsToPlay() {
-        return !playerHands.isEmpty();
-    }
-
-    public boolean moreHandsToSettle() {
-        return !handsToSettle.isEmpty();
-    }
-
-    public boolean playerCanSplit() {
-        return canSplit(currentHand);
-    }
-
-    public boolean playerBusted() {
+    public boolean playerHasBusted() {
         return isBust(currentHand);
     }
 
-    public boolean outOfMoney() {
-        return balance <= 0;
+    public boolean moreHandsToPlay() {
+        return !playerHands.isEmpty();
     }
 
     public boolean dealerShouldHit() {

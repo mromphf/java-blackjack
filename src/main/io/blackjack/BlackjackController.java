@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
-import main.usecase.OutcomeListener;
 import main.usecase.GameStateListener;
 
 import java.net.URL;
@@ -19,7 +18,7 @@ import java.util.ResourceBundle;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
-public class BlackjackController extends RootController implements Initializable, GameStateListener, OutcomeListener {
+public class BlackjackController extends RootController implements Initializable, GameStateListener {
 
     @FXML
     private Label lblBet;
@@ -54,7 +53,7 @@ public class BlackjackController extends RootController implements Initializable
     @Override
     public void onUpdate(Snapshot snapshot) {
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
-        splitControls.setVisible(canSplit(snapshot.getPlayerHand()));
+        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
         gameOverControls.setVisible(snapshot.isRoundFinished() && snapshot.isResolved());
 
@@ -81,13 +80,6 @@ public class BlackjackController extends RootController implements Initializable
         } else {
             renderConcealedTable(snapshot);
         }
-    }
-
-    @Override
-    public void onOutcomeDecided(Snapshot snapshot) {
-//        if (snapshot.isRoundFinished()) {
-//            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
-//        }
     }
 
     @FXML

@@ -6,7 +6,6 @@ public interface ControlListener {
     void onStopPlaying();
     void onBetPlaced(int bet);
     void onHit();
-    void onDealerTurn();
     void onDouble();
     void onStand();
     void onSettleHand();

@@ -38,9 +38,6 @@ public class LayoutManager implements ControlListener {
     public void onHit() {}
 
     @Override
-    public void onDealerTurn() {}
-
-    @Override
     public void onDouble() {}
 
     @Override
@@ -50,7 +47,5 @@ public class LayoutManager implements ControlListener {
     public void onSettleHand() {}
 
     @Override
-    public void onSplit() {
-
-    }
+    public void onSplit() {}
 }

@@ -7,21 +7,15 @@ import java.util.*;
 public class Round implements ControlListener {
 
     private final Collection<GameStateListener> gameStateListeners;
-    private final Collection<OutcomeListener> outcomeListeners;
     private final Game game;
 
     public Round(Game game) {
         this.gameStateListeners = new ArrayList<>();
-        this.outcomeListeners = new ArrayList<>();
         this.game = game;
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
         gameStateListeners.add(gameStateListener);
-    }
-
-    public void registerOutcomeListener(OutcomeListener outcomeListener) {
-        outcomeListeners.add(outcomeListener);
     }
 
     @Override
@@ -71,15 +65,6 @@ public class Round implements ControlListener {
     }
 
     @Override
-    public void onDealerTurn() {
-        while (game.dealerShouldHit()) {
-            game.addCardToDealerHand();
-        }
-
-        gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
-    }
-
-    @Override
     public void onDouble() {
         // TODO: Bug - this will double the bet for all unsettled hands
         game.doubleBet();
@@ -92,7 +77,11 @@ public class Round implements ControlListener {
         if (game.moreHandsToPlay()) {
             onStartNewRound();
         } else {
-            onDealerTurn();
+            while (game.dealerShouldHit()) {
+                game.addCardToDealerHand();
+            }
+
+            gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
         }
     }
 

@@ -9,7 +9,7 @@ import static main.domain.Rules.*;
 
 public class Game {
 
-    private final Stack<Stack <Card>> playerHands;
+    private final Stack<Stack <Card>> handsToPlay;
     private final Stack<Stack <Card>> handsToSettle;
     private final Stack<Card> deck;
     private Collection<Card> dealerHand;
@@ -23,7 +23,7 @@ public class Game {
         this.deck = deck;
         this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
-        this.playerHands = new Stack<>();
+        this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
     }
 
@@ -34,7 +34,7 @@ public class Game {
     public void dealOpeningHand() {
         try {
             Map<String, Stack<Card>> openingHand = openingHand(deck);
-            playerHands.removeAllElements();
+            handsToPlay.removeAllElements();
             currentHand = openingHand.get("player");
             dealerHand = openingHand.get("dealer");
         } catch (IllegalArgumentException ex) {
@@ -50,7 +50,7 @@ public class Game {
         }};
         currentHand.add(deck.pop());
         newHand.add(deck.pop());
-        playerHands.add(newHand);
+        handsToPlay.add(newHand);
     }
 
     public void doubleBet() {
@@ -59,7 +59,7 @@ public class Game {
 
     public void playNextHand() {
         handsToSettle.add(currentHand);
-        currentHand = playerHands.pop();
+        currentHand = handsToPlay.pop();
     }
 
     public void rewind() {
@@ -113,7 +113,7 @@ public class Game {
     }
 
     public boolean moreHandsToPlay() {
-        return !playerHands.isEmpty();
+        return !handsToPlay.isEmpty();
     }
 
     public boolean dealerShouldHit() {
@@ -122,6 +122,6 @@ public class Game {
 
     public Snapshot getSnapshot() {
         final boolean atLeastOneCardDrawn = currentHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand, playerHands);
+        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand, handsToPlay);
     }
 }

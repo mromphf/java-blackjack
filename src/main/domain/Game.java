@@ -9,11 +9,11 @@ import static main.domain.Rules.*;
 
 public class Game {
 
-    private final Stack<Stack <Card>> handsToPlay;
-    private final Stack<Stack <Card>> handsToSettle;
     private final Stack<Card> deck;
     private Collection<Card> dealerHand;
     private Stack<Card> currentHand;
+    private final Stack<Stack <Card>> handsToPlay;
+    private final Stack<Stack <Card>> handsToSettle;
     private int balance;
     private int bet;
 
@@ -121,7 +121,6 @@ public class Game {
     }
 
     public Snapshot getSnapshot() {
-        final boolean atLeastOneCardDrawn = currentHand.size() > 2;
-        return new Snapshot(balance, bet, deck.size(), atLeastOneCardDrawn, handsToSettle.isEmpty(), dealerHand, currentHand, handsToPlay);
+        return new Snapshot(balance, bet, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
     }
 }

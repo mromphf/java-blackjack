@@ -1,11 +1,14 @@
 package main.domain;
 
+import main.usecase.Outcome;
+
 import java.util.Collection;
 import java.util.Stack;
 
 public class Snapshot {
     private final int balance;
     private final int bet;
+    private final Outcome outcome;
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
     private final Collection<Card> playerHand;
@@ -14,6 +17,7 @@ public class Snapshot {
 
     public Snapshot(int balance,
                     int bet,
+                    Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
                     Collection<Card> playerHand,
@@ -22,6 +26,7 @@ public class Snapshot {
         this.balance = balance;
         this.bet = bet;
         this.deck = deck;
+        this.outcome = outcome;
         this.dealerHand = dealerHand;
         this.playerHand = playerHand;
         this.handsToPlay = handsToPlay;
@@ -40,7 +45,11 @@ public class Snapshot {
         return deck.size();
     }
 
-   public boolean isAtLeastOneCardDrawn() {
+    public Outcome getOutcome() {
+        return outcome;
+    }
+
+    public boolean isAtLeastOneCardDrawn() {
         return playerHand.size() > 2;
     }
 

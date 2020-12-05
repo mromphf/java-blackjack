@@ -64,7 +64,7 @@ public class BlackjackController extends RootController implements Initializable
     }
 
     @Override
-    public void onOutcomeDecided(Snapshot snapshot, Outcome outcome) {
+    public void onOutcomeDecided(Snapshot snapshot) {
         if (snapshot.isRoundFinished()) {
             btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
         }
@@ -73,7 +73,7 @@ public class BlackjackController extends RootController implements Initializable
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
 
-        switch (outcome) {
+        switch (snapshot.getOutcome()) {
             case WIN:
                 tableDisplay.drawResults("Win", Color.GREEN);
                 break;

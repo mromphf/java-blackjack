@@ -76,7 +76,7 @@ public class Round implements ControlListener {
             game.addCardToDealerHand();
         }
 
-        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getSnapshot(), game.determineOutcome()));
+        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getResolvedSnapshot()));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Round implements ControlListener {
             game.rewind();
         }
 
-        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getSnapshot(), game.determineOutcome()));
+        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getResolvedSnapshot()));
     }
 
     @Override

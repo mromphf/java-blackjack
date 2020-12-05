@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import main.domain.Outcome;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
@@ -17,6 +16,7 @@ import main.usecase.GameStateListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
 public class BlackjackController extends RootController implements Initializable, GameStateListener, OutcomeListener {
@@ -56,9 +56,9 @@ public class BlackjackController extends RootController implements Initializable
     @Override
     public void onUpdate(Snapshot snapshot) {
         renderConcealedTable(snapshot);
-        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.getOutcome().equals(Outcome.UNRESOLVED));
+        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()));
-        gameOverControls.setVisible(!snapshot.getOutcome().equals(Outcome.UNRESOLVED));
+        gameOverControls.setVisible(!snapshot.is(UNRESOLVED));
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
     }

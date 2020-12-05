@@ -42,12 +42,6 @@ public class BlackjackController extends RootController implements Initializable
     private GridPane splitControls;
 
     @FXML
-    private Button btnStand;
-
-    @FXML
-    private Button btnHit;
-
-    @FXML
     private Button btnDouble;
 
     @FXML
@@ -55,15 +49,11 @@ public class BlackjackController extends RootController implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnDouble.setOnAction(event -> onDouble());
-        btnHit.setOnAction(event -> onHit());
-        btnStand.setOnAction(event -> onStand());
         btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onSettleHand));
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        setGameButtonsDisabled(false);
         renderConcealedTable(snapshot);
         gameControls.setVisible(!canSplit(snapshot.playerHand));
         splitControls.setVisible(canSplit(snapshot.playerHand));
@@ -107,23 +97,25 @@ public class BlackjackController extends RootController implements Initializable
         gameControls.setVisible(true);
     }
 
-    private void onDouble() {
-        controlListeners.forEach(ControlListener::onDouble);
-    }
-
+    @FXML
     private void onStand() {
         controlListeners.forEach(ControlListener::onStand);
     }
 
+    @FXML
     private void onHit() {
         controlListeners.forEach(ControlListener::onHit);
+    }
+
+    @FXML
+    private void onDouble() {
+        controlListeners.forEach(ControlListener::onDouble);
     }
 
     private void turnOffControls(Snapshot snapshot) {
         if (snapshot.isRoundFinished) {
             btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
         }
-        setGameButtonsDisabled(true);
         renderExposedTable(snapshot);
         gameControls.setVisible(false);
         gameOverControls.setVisible(true);
@@ -145,11 +137,5 @@ public class BlackjackController extends RootController implements Initializable
         tableDisplay.drawScores(concealedScore(snapshot.dealerHand), score(snapshot.playerHand));
         tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.dealerHand, snapshot.playerHand));
         tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.handsToPlay));
-    }
-
-    private void setGameButtonsDisabled(boolean disabled) {
-        btnHit.setDisable(disabled);
-        btnDouble.setDisable(disabled);
-        btnStand.setDisable(disabled);
     }
 }

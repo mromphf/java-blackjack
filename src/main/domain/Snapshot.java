@@ -51,6 +51,10 @@ public class Snapshot {
         return this.outcome.equals(outcome);
     }
 
+    public boolean isResolved() {
+        return !outcome.equals(Outcome.UNRESOLVED);
+    }
+
     public boolean isAtLeastOneCardDrawn() {
         return playerHand.size() > 2;
     }

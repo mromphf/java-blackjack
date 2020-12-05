@@ -37,6 +37,9 @@ public class BlackjackController extends RootController implements Initializable
     private GridPane gameControls;
 
     @FXML
+    private GridPane settleControls;
+
+    @FXML
     private GridPane gameOverControls;
 
     @FXML
@@ -45,46 +48,46 @@ public class BlackjackController extends RootController implements Initializable
     @FXML
     private Button btnDouble;
 
-    @FXML
-    private Button btnNext;
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onSettleHand));
-    }
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        renderConcealedTable(snapshot);
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()));
-        gameOverControls.setVisible(!snapshot.is(UNRESOLVED));
+        settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
+        gameOverControls.setVisible(snapshot.isRoundFinished() && snapshot.isResolved());
+
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
+
+        if (snapshot.isResolved()) {
+            renderExposedTable(snapshot);
+
+            switch (snapshot.getOutcome()) {
+                case WIN:
+                    tableDisplay.drawResults("Win", Color.GREEN);
+                    break;
+                case LOSE:
+                    tableDisplay.drawResults("Lose", Color.RED);
+                    break;
+                case BUST:
+                    tableDisplay.drawResults("Bust", Color.RED);
+                    break;
+                default:
+                    tableDisplay.drawResults("Push", Color.ORANGE);
+                    break;
+            }
+        } else {
+            renderConcealedTable(snapshot);
+        }
     }
 
     @Override
     public void onOutcomeDecided(Snapshot snapshot) {
-        if (snapshot.isRoundFinished()) {
-            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
-        }
-
-        renderExposedTable(snapshot);
-
-        switch (snapshot.getOutcome()) {
-            case WIN:
-                tableDisplay.drawResults("Win", Color.GREEN);
-                break;
-            case LOSE:
-                tableDisplay.drawResults("Lose", Color.RED);
-                break;
-            case BUST:
-                tableDisplay.drawResults("Bust", Color.RED);
-                break;
-            default:
-                tableDisplay.drawResults("Push", Color.ORANGE);
-                break;
-        }
+//        if (snapshot.isRoundFinished()) {
+//            btnNext.setOnAction(event -> controlListeners.forEach(ControlListener::onMoveToBettingTable));
+//        }
     }
 
     @FXML
@@ -101,6 +104,16 @@ public class BlackjackController extends RootController implements Initializable
     @FXML
     private void onStand() {
         controlListeners.forEach(ControlListener::onStand);
+    }
+
+    @FXML
+    private void onSettleNextHand() {
+        controlListeners.forEach(ControlListener::onSettleHand);
+    }
+
+    @FXML
+    private void onDone() {
+        controlListeners.forEach(ControlListener::onMoveToBettingTable);
     }
 
     @FXML

@@ -77,13 +77,12 @@ public class Round implements ControlListener {
         }
 
         gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
-        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getResolvedSnapshot()));
     }
 
     @Override
     public void onDouble() {
         game.doubleBet();
-        onHit();
+        game.addCardToPlayerHand();
         onStand();
     }
 
@@ -104,7 +103,7 @@ public class Round implements ControlListener {
             game.rewind();
         }
 
-        outcomeListeners.forEach(l -> l.onOutcomeDecided(game.getResolvedSnapshot()));
+        gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
     }
 
     @Override

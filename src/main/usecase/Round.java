@@ -91,14 +91,14 @@ public class Round implements ControlListener, NavListener {
 
     @Override
     public void onSettleHand() {
-        game.settle();
+        game.settleBet();
         game.rewind();
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        game.settle();
+        game.settleBet();
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 

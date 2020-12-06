@@ -99,7 +99,7 @@ public class Game {
         insuranceSettled = true;
     }
 
-    public void settle() {
+    public void settleBet() {
         switch (outcome) {
             case WIN:
                 this.balance += doubleDown ? bet * 2 : bet;

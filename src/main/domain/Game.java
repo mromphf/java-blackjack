@@ -8,11 +8,11 @@ import static main.domain.Rules.*;
 public class Game {
 
     private final Stack<Card> deck;
-    private final Stack<Stack <Card>> handsToPlay;
-    private final Stack<Stack <Card>> handsToSettle;
+    private final Stack<Collection <Card>> handsToPlay;
+    private final Stack<Collection <Card>> handsToSettle;
     private final Collection<Card> dealerHand;
 
-    private Stack<Card> currentHand;
+    private Collection<Card> currentHand;
     private int balance;
     private int bet;
     private Outcome outcome;
@@ -40,14 +40,20 @@ public class Game {
         }
     }
 
-    public void split() {
-        // TODO: Need safety check for empty deck
-        Stack<Card> newHand = new Stack<Card>() {{
-            add(currentHand.pop());
+    public void split() throws NoSuchElementException, EmptyStackException {
+        Iterator<Card> iterator = currentHand.iterator();
+
+        currentHand = new Stack<Card>() {{
+            add(iterator.next());
+            add(deck.pop());
         }};
-        currentHand.add(deck.pop());
-        newHand.add(deck.pop());
-        handsToPlay.add(newHand);
+
+        Stack<Card> pocketHand = new Stack<Card>() {{
+            add(iterator.next());
+            add(deck.pop());
+        }};
+
+        handsToPlay.add(pocketHand);
     }
 
     public void hit() {

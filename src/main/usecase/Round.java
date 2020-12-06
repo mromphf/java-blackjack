@@ -43,8 +43,13 @@ public class Round implements ControlListener, NavListener {
 
     @Override
     public void onSplit() {
-        game.split();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        try {
+            game.split();
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        } catch (EmptyStackException | NoSuchElementException ex) {
+            System.out.println("Not enough cards to split hand!");
+            System.exit(1);
+        }
     }
 
     @Override

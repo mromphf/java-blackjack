@@ -10,8 +10,8 @@ public class Snapshot {
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
     private final Collection<Card> playerHand;
-    private final Stack<Stack<Card>> handsToPlay;
-    private final Stack<Stack<Card>> handsToSettle;
+    private final Stack<Collection<Card>> handsToPlay;
+    private final Stack<Collection<Card>> handsToSettle;
 
     public Snapshot(int balance,
                     int bet,
@@ -19,8 +19,8 @@ public class Snapshot {
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
                     Collection<Card> playerHand,
-                    Stack<Stack<Card>> handsToPlay,
-                    Stack<Stack<Card>> handsToSettle) {
+                    Stack<Collection<Card>> handsToPlay,
+                    Stack<Collection<Card>> handsToSettle) {
         this.balance = balance;
         this.bet = bet;
         this.deck = deck;
@@ -71,7 +71,7 @@ public class Snapshot {
         return playerHand;
     }
 
-    public Stack<Stack<Card>> getHandsToPlay() {
+    public Stack<Collection<Card>> getHandsToPlay() {
         return handsToPlay;
     }
 }

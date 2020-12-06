@@ -6,8 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.ControlListener;
 import main.usecase.GameStateListener;
+import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,7 +22,7 @@ public class HomeController extends RootController implements Initializable, Gam
 
     @FXML
     public void onPlay() {
-        controlListeners.forEach(ControlListener::onMoveToBettingTable);
+        navListeners.forEach(NavListener::onMoveToBettingTable);
     }
 
     @FXML

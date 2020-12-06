@@ -5,7 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.domain.Card;
-import main.domain.Game;
 import main.domain.Suit;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
@@ -17,10 +16,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
-
-import static main.domain.Deck.fresh;
-import static main.domain.Deck.shuffle;
-
 
 public class AppRoot {
 
@@ -82,12 +77,15 @@ public class AppRoot {
         round.registerGameStateListener(homeController);
 
         homeController.registerControlListener(round);
+        homeController.registerNavListener(round);
         betController.registerControlListener(round);
+        betController.registerNavListener(round);
         blackjackController.registerControlListener(round);
+        blackjackController.registerNavListener(round);
 
-        homeController.registerControlListener(layoutManager);
-        betController.registerControlListener(layoutManager);
-        blackjackController.registerControlListener(layoutManager);
+        homeController.registerNavListener(layoutManager);
+        betController.registerNavListener(layoutManager);
+        blackjackController.registerNavListener(layoutManager);
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

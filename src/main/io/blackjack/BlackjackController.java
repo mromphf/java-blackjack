@@ -11,6 +11,7 @@ import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.ControlListener;
 import main.usecase.GameStateListener;
+import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -105,7 +106,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onDone() {
-        controlListeners.forEach(ControlListener::onMoveToBettingTable);
+        navListeners.forEach(NavListener::onMoveToBettingTable);
     }
 
     @FXML

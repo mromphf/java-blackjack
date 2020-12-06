@@ -8,8 +8,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.ControlListener;
 import main.usecase.GameStateListener;
+import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -62,12 +62,12 @@ public class BetController extends RootController implements Initializable, Game
 
     @FXML
     private void onDeal() {
-        controlListeners.forEach(l -> l.onStartNewRound(bet));
+        navListeners.forEach(l -> l.onStartNewRound(bet));
         bet = 0;
     }
 
     @FXML void onQuit() {
-        controlListeners.forEach(ControlListener::onStopPlaying);
+        navListeners.forEach(NavListener::onStopPlaying);
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

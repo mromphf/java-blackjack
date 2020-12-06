@@ -7,7 +7,7 @@ import java.util.*;
 
 import static main.domain.Deck.openingHand;
 
-public class Round implements ControlListener {
+public class Round implements ControlListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;

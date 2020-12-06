@@ -40,6 +40,7 @@ public class Game {
     }
 
     public void stand() throws EmptyStackException {
+        insuranceSettled = true;
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
@@ -69,13 +70,21 @@ public class Game {
     }
 
     public void hit() throws EmptyStackException {
+        insuranceSettled = true;
         currentHand.add(deck.pop());
         if (isBust(currentHand)) {
-            stand();
+            if (handsToPlay.isEmpty()) {
+                outcome = BUST;
+            } else {
+                handsToSettle.add(getSnapshot());
+                doubleDown = false;
+                currentHand = handsToPlay.pop();
+            }
         }
     }
 
     public void doubleDown() throws EmptyStackException{
+        insuranceSettled = true;
         currentHand.add(deck.pop());
         doubleDown = true;
         stand();

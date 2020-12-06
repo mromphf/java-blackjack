@@ -16,7 +16,7 @@ public class Round implements ControlListener, NavListener {
     public Round(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
-        game = new Game(200, 0, deck, new Stack<>(), new Stack<>());
+        game = new Game(200, 0, deck);
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -27,7 +27,11 @@ public class Round implements ControlListener, NavListener {
     public void onStartNewRound(int bet) {
         try {
             final Map<String, Stack<Card>> openingHand = openingHand(deck);
-            game = new Game(game.getSnapshot().getBalance(), bet, deck, openingHand.get("dealer"), openingHand.get("player"));
+            final Stack<Card> dealerHand = openingHand.get("dealer");
+            final Stack<Card> playerHand = openingHand.get("player");
+            final int currentBalance = game.getSnapshot().getBalance();
+
+            game = new Game(currentBalance, bet, deck, dealerHand, playerHand);
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());

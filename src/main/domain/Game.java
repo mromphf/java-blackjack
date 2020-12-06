@@ -14,9 +14,19 @@ public class Game {
     private final int bet;
 
     private Collection<Card> currentHand;
-    private Outcome outcome;
+    private Outcome outcome = UNRESOLVED;
+    private boolean doubleDown = false;
     private int balance;
-    private boolean doubleDown;
+
+    public Game(int balance, int bet, Stack<Card> deck) {
+        this.balance = balance;
+        this.bet = bet;
+        this.deck = deck;
+        this.dealerHand = new Stack<>();
+        this.currentHand = new Stack<>();
+        this.handsToPlay = new Stack<>();
+        this.handsToSettle = new Stack<>();
+    }
 
     public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
@@ -24,8 +34,6 @@ public class Game {
         this.deck = deck;
         this.dealerHand = dealerHand;
         this.currentHand = playerHand;
-        this.doubleDown = false;
-        this.outcome = UNRESOLVED;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
     }

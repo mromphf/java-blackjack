@@ -6,4 +6,5 @@ public interface ControlListener {
     void onStand();
     void onSettleHand();
     void onSplit();
+    void onPurchaseInsurance();
 }

@@ -50,6 +50,16 @@
         </Button>
     </GridPane>
 
+    <GridPane visible="false" fx:id="insuranceControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onTakeInsurance">
+            Take Insurance
+        </Button>
+
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onNoInsurance">
+            No Insurance
+        </Button>
+    </GridPane>
+
     <GridPane visible="false" fx:id="settleControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
         <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onSettleNextHand">
             Settle Next Hand

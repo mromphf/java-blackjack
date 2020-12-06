@@ -53,8 +53,8 @@ public class AppRoot {
             add(new Card(1, Suit.HEARTS));
             add(new Card(13, Suit.DIAMONDS));
             add(new Card(11, Suit.CLUBS));
-            add(new Card(12, Suit.CLUBS));
-            add(new Card(13, Suit.CLUBS));
+            add(new Card(9, Suit.CLUBS));
+            add(new Card(1, Suit.CLUBS));
             add(new Card(10, Suit.CLUBS));
         }};
         //Game game = new Game(200, shuffle(fresh()));

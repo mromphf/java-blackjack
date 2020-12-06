@@ -3,10 +3,13 @@ package main.domain;
 import java.util.Collection;
 import java.util.Stack;
 
+import static main.domain.Rules.insuranceAvailable;
+
 public class Snapshot {
     private final int balance;
     private final int bet;
     private final boolean doubleDown;
+    private final boolean insuranceSettled;
     private final Outcome outcome;
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
@@ -17,6 +20,7 @@ public class Snapshot {
     public Snapshot(int balance,
                     int bet,
                     boolean doubleDown,
+                    boolean insuranceSettled,
                     Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
@@ -26,6 +30,7 @@ public class Snapshot {
         this.balance = balance;
         this.bet = bet;
         this.doubleDown = doubleDown;
+        this.insuranceSettled = insuranceSettled;
         this.deck = deck;
         this.outcome = outcome;
         this.dealerHand = dealerHand;
@@ -68,6 +73,10 @@ public class Snapshot {
 
     public boolean isRoundFinished() {
         return handsToSettle.isEmpty();
+    }
+
+    public boolean isInsuranceAvailable() {
+        return insuranceAvailable(dealerHand) && balance >= bet && !insuranceSettled;
     }
 
     public Collection<Card> getDealerHand() {

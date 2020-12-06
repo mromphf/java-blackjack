@@ -16,6 +16,7 @@ public class Game {
     private Collection<Card> currentHand;
     private Outcome outcome = UNRESOLVED;
     private boolean doubleDown = false;
+    private boolean insuranceSettled = false;
     private int balance;
 
     public Game(int balance, int bet, Stack<Card> deck) {
@@ -43,7 +44,7 @@ public class Game {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
             }
-            outcome = determineOutcome(currentHand, dealerHand);
+            outcome = determineOutcome(currentHand, dealerHand, insuranceSettled);
         } else {
             handsToSettle.add(getSnapshot());
             doubleDown = false;
@@ -86,11 +87,20 @@ public class Game {
             currentHand = previousState.getPlayerHand();
             doubleDown = previousState.getDoubleDown();
         }
-        outcome = determineOutcome(currentHand, dealerHand);
+        outcome = determineOutcome(currentHand, dealerHand, insuranceSettled);
+    }
+
+    public void settleInsurance() {
+        if (isBlackjack(dealerHand)) {
+            outcome = WIN;
+        } else {
+            balance -= bet;
+        }
+        insuranceSettled = true;
     }
 
     public void settle() {
-        switch (determineOutcome(currentHand, dealerHand)) {
+        switch (determineOutcome(currentHand, dealerHand, insuranceSettled)) {
             case WIN:
                 this.balance += doubleDown ? bet * 2 : bet;
                 break;
@@ -104,6 +114,17 @@ public class Game {
     }
 
     public Snapshot getSnapshot() {
-        return new Snapshot(balance, bet, doubleDown, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
+        return new Snapshot(
+                balance,
+                bet,
+                doubleDown,
+                insuranceSettled,
+                outcome,
+                deck,
+                dealerHand,
+                currentHand,
+                handsToPlay,
+                handsToSettle
+        );
     }
 }

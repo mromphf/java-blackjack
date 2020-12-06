@@ -43,6 +43,9 @@ public class BlackjackController extends RootController implements Initializable
     private GridPane gameOverControls;
 
     @FXML
+    private GridPane insuranceControls;
+
+    @FXML
     private GridPane splitControls;
 
     @FXML
@@ -53,8 +56,9 @@ public class BlackjackController extends RootController implements Initializable
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
-        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED));
+        insuranceControls.setVisible(snapshot.isInsuranceAvailable() && snapshot.is(UNRESOLVED));
+        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
+        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
         gameOverControls.setVisible(snapshot.isRoundFinished() && snapshot.isResolved());
 
@@ -117,6 +121,17 @@ public class BlackjackController extends RootController implements Initializable
     @FXML
     private void onDouble() {
         controlListeners.forEach(ControlListener::onDouble);
+    }
+
+    @FXML
+    private void onTakeInsurance() {
+        controlListeners.forEach(ControlListener::onPurchaseInsurance);
+    }
+
+    @FXML
+    private void onNoInsurance() {
+        insuranceControls.setVisible(false);
+        gameControls.setVisible(true);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

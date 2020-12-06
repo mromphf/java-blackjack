@@ -76,7 +76,7 @@ public class Snapshot {
     }
 
     public boolean isInsuranceAvailable() {
-        return insuranceAvailable(dealerHand) && balance >= bet && !insuranceSettled;
+        return insuranceAvailable(dealerHand) && balance >= bet && !insuranceSettled && !isResolved();
     }
 
     public Collection<Card> getDealerHand() {

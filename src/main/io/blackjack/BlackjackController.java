@@ -56,12 +56,11 @@ public class BlackjackController extends RootController implements Initializable
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        insuranceControls.setVisible(snapshot.isInsuranceAvailable() && snapshot.is(UNRESOLVED));
+        insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
-        gameOverControls.setVisible(snapshot.isRoundFinished() && snapshot.isResolved());
-
+        gameOverControls.setVisible(snapshot.isResolved() && snapshot.isRoundFinished());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
 

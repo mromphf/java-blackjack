@@ -75,6 +75,7 @@ public class AppRoot {
         round.registerGameStateListener(betController);
         round.registerGameStateListener(blackjackController);
         round.registerGameStateListener(homeController);
+        round.registerGameStateListener(layoutManager);
 
         homeController.registerControlListener(round);
         homeController.registerNavListener(round);

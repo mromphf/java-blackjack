@@ -101,11 +101,6 @@ public class Game {
             default:
                 break;
         }
-
-        if (balance <= 0) {
-            System.out.println("You are out of money! Please leave the casino...");
-            System.exit(0);
-        }
     }
 
     public Snapshot getSnapshot() {

@@ -62,9 +62,8 @@ public class AppRoot {
             add(new Card(13, Suit.CLUBS));
             add(new Card(10, Suit.CLUBS));
         }};
-        Game game = new Game(200, deck);
         //Game game = new Game(200, shuffle(fresh()));
-        Round round = new Round(game);
+        Round round = new Round(deck);
 
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();

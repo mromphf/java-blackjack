@@ -2,9 +2,7 @@ package main.domain;
 
 import java.util.*;
 
-import static main.domain.Deck.openingHand;
 import static main.domain.Outcome.*;
-import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
 public class Game {
@@ -12,20 +10,20 @@ public class Game {
     private final Stack<Card> deck;
     private final Stack<Stack <Card>> handsToPlay;
     private final Stack<Stack <Card>> handsToSettle;
+    private final Collection<Card> dealerHand;
 
-    private Collection<Card> dealerHand;
     private Stack<Card> currentHand;
     private int balance;
     private int bet;
     private Outcome outcome;
 
-    public Game(int balance, Stack<Card> deck) {
+    public Game(int balance, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
         this.bet = 0;
         this.deck = deck;
         this.outcome = UNRESOLVED;
-        this.dealerHand = new Stack<>();
-        this.currentHand = new Stack<>();
+        this.dealerHand = dealerHand;
+        this.currentHand = playerHand;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
     }
@@ -34,19 +32,10 @@ public class Game {
         this.bet = bet;
     }
 
-    public void initializeHand() {
-        outcome = UNRESOLVED;
+    public void stand() {
         if (!handsToPlay.isEmpty()) {
             handsToSettle.add(currentHand);
             currentHand = handsToPlay.pop();
-        } else {
-            dealOpeningHand();
-        }
-    }
-
-    public void stand() {
-        if (!handsToPlay.isEmpty()) {
-            initializeHand();
         } else {
             while (score(dealerHand) < 16) {
                 addCardToDealerHand();
@@ -118,17 +107,6 @@ public class Game {
             return BUST;
         } else {
             return LOSE;
-        }
-    }
-
-    private void dealOpeningHand() {
-        try {
-            Map<String, Stack<Card>> openingHand = openingHand(deck);
-            currentHand = openingHand.get("player");
-            dealerHand = openingHand.get("dealer");
-        } catch (IllegalArgumentException ex) {
-            System.out.println("Not enough cards to deal new hand! Quitting...");
-            System.exit(0);
         }
     }
 

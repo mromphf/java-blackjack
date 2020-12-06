@@ -1,17 +1,22 @@
 package main.usecase;
 
+import main.domain.Card;
 import main.domain.Game;
 
 import java.util.*;
 
+import static main.domain.Deck.openingHand;
+
 public class Round implements ControlListener {
 
     private final Collection<GameStateListener> gameStateListeners;
-    private final Game game;
+    private final Stack<Card> deck;
+    private Game game;
 
-    public Round(Game game) {
+    public Round(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
-        this.game = game;
+        this.deck = deck;
+        game = new Game(200, deck, new Stack<>(), new Stack<>());
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -20,9 +25,15 @@ public class Round implements ControlListener {
 
     @Override
     public void onStartNewRound(int bet) {
-        game.setBet(bet);
-        game.initializeHand();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        try {
+            final Map<String, Stack<Card>> openingHand = openingHand(deck);
+            game = new Game(game.getSnapshot().getBalance(), deck, openingHand.get("dealer"), openingHand.get("player"));
+            game.setBet(bet);
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Not enough cards to deal new hand! Quitting...");
+            System.exit(0);
+        }
     }
 
     @Override

@@ -30,7 +30,7 @@ public class Round implements ControlListener, NavListener {
             game = new Game(game.getSnapshot().getBalance(), bet, deck, openingHand.get("dealer"), openingHand.get("player"));
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
         } catch (IllegalArgumentException ex) {
-            System.out.println("Not enough cards to deal new hand! Quitting...");
+            System.out.println(ex.getMessage());
             System.exit(0);
         }
     }
@@ -68,7 +68,7 @@ public class Round implements ControlListener, NavListener {
         try {
             game.doubleDown();
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        } catch (IllegalStateException ex) {
+        } catch (EmptyStackException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -79,7 +79,7 @@ public class Round implements ControlListener, NavListener {
         try {
             game.stand();
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        } catch (IllegalStateException ex) {
+        } catch (EmptyStackException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

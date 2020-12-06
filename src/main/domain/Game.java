@@ -7,8 +7,6 @@ import static main.domain.Rules.*;
 
 public class Game {
 
-    private static final String ERROR_MSG = "No more cards! Quitting...";
-
     private final Stack<Card> deck;
     private final Stack<Collection <Card>> handsToPlay;
     private final Stack<Collection <Card>> handsToSettle;
@@ -30,14 +28,10 @@ public class Game {
         this.handsToSettle = new Stack<>();
     }
 
-    public void stand() throws IllegalStateException {
+    public void stand() throws EmptyStackException {
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
-                if (deck.isEmpty()) {
-                    throw new IllegalStateException(ERROR_MSG);
-                } else {
-                    dealerHand.add(deck.pop());
-                }
+                dealerHand.add(deck.pop());
             }
             outcome = determineOutcome(currentHand, dealerHand);
         } else {
@@ -62,26 +56,18 @@ public class Game {
         handsToPlay.add(pocketHand);
     }
 
-    public void hit() throws IllegalStateException {
-        if (deck.isEmpty()) {
-            throw new IllegalStateException(ERROR_MSG);
-        } else {
-            currentHand.add(deck.pop());
-            if (isBust(currentHand)) {
-                stand();
-            }
+    public void hit() throws EmptyStackException {
+        currentHand.add(deck.pop());
+        if (isBust(currentHand)) {
+            stand();
         }
     }
 
     // TODO: Bug - this will double the bet for all unsettled hands;
-    public void doubleDown() throws IllegalStateException {
-        if (deck.isEmpty()) {
-            throw new IllegalStateException(ERROR_MSG);
-        } else {
-            bet *= 2;
-            currentHand.add(deck.pop());
-            stand();
-        }
+    public void doubleDown() throws EmptyStackException{
+        currentHand.add(deck.pop());
+        bet *= 2;
+        stand();
     }
 
     public void rewind() {

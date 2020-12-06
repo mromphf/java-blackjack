@@ -40,7 +40,7 @@ public class Game {
                     dealerHand.add(deck.pop());
                 }
             }
-            outcome = determineOutcome();
+            outcome = determineOutcome(currentHand, dealerHand);
         }
     }
 
@@ -86,11 +86,11 @@ public class Game {
         if (!handsToSettle.isEmpty()) {
             this.currentHand = handsToSettle.pop();
         }
-        outcome = determineOutcome();
+        outcome = determineOutcome(currentHand, dealerHand);
     }
 
     public void settle() {
-        switch (determineOutcome()) {
+        switch (determineOutcome(currentHand, dealerHand)) {
             case WIN:
                 balance += bet;
                 break;
@@ -105,17 +105,5 @@ public class Game {
 
     public Snapshot getSnapshot() {
         return new Snapshot(balance, bet, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
-    }
-
-    private Outcome determineOutcome() {
-        if (playerWins(currentHand, dealerHand)) {
-            return WIN;
-        } else if(isPush(currentHand, dealerHand)) {
-            return PUSH;
-        } else if (isBust(currentHand)) {
-            return BUST;
-        } else {
-            return LOSE;
-        }
     }
 }

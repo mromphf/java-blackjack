@@ -3,6 +3,8 @@ package main.domain;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static main.domain.Outcome.*;
+
 public class Rules {
     public static boolean isBlackjack(Collection<Card> cards) {
         boolean oneAce = cards.stream().filter(Card::isAce).count() == 1;
@@ -77,5 +79,17 @@ public class Rules {
             return dealerHand.iterator().next().isAce();
         }
         return false;
+    }
+
+    public static Outcome determineOutcome(Collection<Card> playerHand, Collection<Card> dealerHand) {
+        if (playerWins(playerHand, dealerHand)) {
+            return WIN;
+        } else if(isPush(playerHand, dealerHand)) {
+            return PUSH;
+        } else if (isBust(playerHand)) {
+            return BUST;
+        } else {
+            return LOSE;
+        }
     }
 }

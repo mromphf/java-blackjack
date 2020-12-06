@@ -99,6 +99,7 @@ public class Game {
         outcome = determineOutcome(currentHand, dealerHand);
     }
 
+    // TODO: go back and check when insurance is supposed to pay out
     public void settleInsurance() {
         if (isBlackjack(dealerHand)) {
             outcome = WIN;

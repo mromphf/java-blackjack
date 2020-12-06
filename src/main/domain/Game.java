@@ -17,19 +17,15 @@ public class Game {
     private int bet;
     private Outcome outcome;
 
-    public Game(int balance, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
+    public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
-        this.bet = 0;
+        this.bet = bet;
         this.deck = deck;
         this.outcome = UNRESOLVED;
         this.dealerHand = dealerHand;
         this.currentHand = playerHand;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
-    }
-
-    public void setBet(int bet) {
-        this.bet = bet;
     }
 
     public void stand() {

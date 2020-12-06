@@ -16,7 +16,7 @@ public class Round implements ControlListener, NavListener {
     public Round(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
-        game = new Game(200, deck, new Stack<>(), new Stack<>());
+        game = new Game(200, 0, deck, new Stack<>(), new Stack<>());
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -27,8 +27,7 @@ public class Round implements ControlListener, NavListener {
     public void onStartNewRound(int bet) {
         try {
             final Map<String, Stack<Card>> openingHand = openingHand(deck);
-            game = new Game(game.getSnapshot().getBalance(), deck, openingHand.get("dealer"), openingHand.get("player"));
-            game.setBet(bet);
+            game = new Game(game.getSnapshot().getBalance(), bet, deck, openingHand.get("dealer"), openingHand.get("player"));
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");

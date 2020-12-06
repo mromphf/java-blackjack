@@ -21,26 +21,14 @@ public class Round implements ControlListener {
     @Override
     public void onStartNewRound(int bet) {
         game.setBet(bet);
-
-        if (game.moreHandsToPlay()) {
-            game.playNextHand();
-        } else {
-            game.dealOpeningHand();
-        }
-
+        game.initializeHand();
         gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        game.settle(game.determineOutcome());
-
-        if (game.getSnapshot().getBalance() <= 0) {
-            System.out.println("You are out of money! Please leave the casino...");
-            System.exit(0);
-        } else {
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        }
+        game.settle();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
@@ -51,45 +39,27 @@ public class Round implements ControlListener {
 
     @Override
     public void onHit() {
-        game.addCardToPlayerHand();
-
-        if (game.playerHasBusted()) {
-            onStand();
-        } else {
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        }
+        game.hit();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onDouble() {
-        // TODO: Bug - this will double the bet for all unsettled hands
-        game.doubleBet();
-        game.addCardToPlayerHand();
-        onStand();
+        game.doubleDown();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onStand() {
-        if (game.moreHandsToPlay()) {
-            onStartNewRound(game.getSnapshot().getBet());
-        } else {
-            while (game.dealerShouldHit()) {
-                game.addCardToDealerHand();
-            }
-
-            gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
-        }
+        game.stand();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override
     public void onSettleHand() {
-        game.settle(game.determineOutcome());
-
-        if (!game.getSnapshot().isRoundFinished()) {
-            game.rewind();
-        }
-
-        gameStateListeners.forEach(l -> l.onUpdate(game.getResolvedSnapshot()));
+        game.settle();
+        game.rewind();
+        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
     }
 
     @Override

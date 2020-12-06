@@ -17,11 +17,13 @@ public class Game {
     private Stack<Card> currentHand;
     private int balance;
     private int bet;
+    private Outcome outcome;
 
     public Game(int balance, Stack<Card> deck) {
         this.balance = balance;
         this.bet = 0;
         this.deck = deck;
+        this.outcome = UNRESOLVED;
         this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
@@ -32,14 +34,24 @@ public class Game {
         this.bet = bet;
     }
 
-    public void dealOpeningHand() {
-        try {
-            Map<String, Stack<Card>> openingHand = openingHand(deck);
-            currentHand = openingHand.get("player");
-            dealerHand = openingHand.get("dealer");
-        } catch (IllegalArgumentException ex) {
-            System.out.println("Not enough cards to deal new hand! Quitting...");
-            System.exit(0);
+    public void initializeHand() {
+        outcome = UNRESOLVED;
+        if (!handsToPlay.isEmpty()) {
+            handsToSettle.add(currentHand);
+            currentHand = handsToPlay.pop();
+        } else {
+            dealOpeningHand();
+        }
+    }
+
+    public void stand() {
+        if (!handsToPlay.isEmpty()) {
+            initializeHand();
+        } else {
+            while (score(dealerHand) < 16) {
+                addCardToDealerHand();
+            }
+            outcome = determineOutcome();
         }
     }
 
@@ -53,37 +65,29 @@ public class Game {
         handsToPlay.add(newHand);
     }
 
-    public void doubleBet() {
-        bet *= 2;
+    public void hit() {
+        addCardToPlayerHand();
+        if (isBust(currentHand)) {
+            stand();
+        }
     }
 
-    public void playNextHand() {
-        handsToSettle.add(currentHand);
-        currentHand = handsToPlay.pop();
+    public void doubleDown() {
+        // TODO: Bug - this will double the bet for all unsettled hands;
+        bet *= 2;
+        addCardToPlayerHand();
+        stand();
     }
 
     public void rewind() {
-        this.currentHand = handsToSettle.pop();
-    }
-
-    public void addCardToDealerHand() {
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
+        if (!handsToSettle.isEmpty()) {
+            this.currentHand = handsToSettle.pop();
         }
-        dealerHand.add(deck.pop());
+        outcome = determineOutcome();
     }
 
-    public void addCardToPlayerHand() {
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
-        }
-        currentHand.add(deck.pop());
-    }
-
-    public void settle(Outcome outcome) {
-        switch (outcome) {
+    public void settle() {
+        switch (determineOutcome()) {
             case WIN:
                 balance += bet;
                 break;
@@ -94,9 +98,18 @@ public class Game {
             default:
                 break;
         }
+
+        if (balance <= 0) {
+            System.out.println("You are out of money! Please leave the casino...");
+            System.exit(0);
+        }
     }
 
-    public Outcome determineOutcome() {
+    public Snapshot getSnapshot() {
+        return new Snapshot(balance, bet, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
+    }
+
+    private Outcome determineOutcome() {
         if (playerWins(currentHand, dealerHand)) {
             return WIN;
         } else if(isPush(currentHand, dealerHand)) {
@@ -108,23 +121,30 @@ public class Game {
         }
     }
 
-    public boolean playerHasBusted() {
-        return isBust(currentHand);
+    private void dealOpeningHand() {
+        try {
+            Map<String, Stack<Card>> openingHand = openingHand(deck);
+            currentHand = openingHand.get("player");
+            dealerHand = openingHand.get("dealer");
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Not enough cards to deal new hand! Quitting...");
+            System.exit(0);
+        }
     }
 
-    public boolean moreHandsToPlay() {
-        return !handsToPlay.isEmpty();
+    private void addCardToDealerHand() {
+        if (deck.isEmpty()) {
+            System.out.println("No more cards! Quitting...");
+            System.exit(0);
+        }
+        dealerHand.add(deck.pop());
     }
 
-    public boolean dealerShouldHit() {
-        return score(dealerHand) < 16;
-    }
-
-    public Snapshot getSnapshot() {
-        return new Snapshot(balance, bet, UNRESOLVED, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
-    }
-
-    public Snapshot getResolvedSnapshot() {
-        return new Snapshot(balance, bet, determineOutcome(), deck, dealerHand, currentHand, handsToPlay, handsToSettle);
+    private void addCardToPlayerHand() {
+        if (deck.isEmpty()) {
+            System.out.println("No more cards! Quitting...");
+            System.exit(0);
+        }
+        currentHand.add(deck.pop());
     }
 }

@@ -31,10 +31,7 @@ public class Game {
     }
 
     public void stand() throws IllegalStateException {
-        if (!handsToPlay.isEmpty()) {
-            handsToSettle.add(currentHand);
-            currentHand = handsToPlay.pop();
-        } else {
+        if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
                 if (deck.isEmpty()) {
                     throw new IllegalStateException(ERROR_MSG);
@@ -43,6 +40,9 @@ public class Game {
                 }
             }
             outcome = determineOutcome(currentHand, dealerHand);
+        } else {
+            handsToSettle.add(currentHand);
+            currentHand = handsToPlay.pop();
         }
     }
 

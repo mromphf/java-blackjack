@@ -44,7 +44,7 @@ public class Game {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
             }
-            outcome = determineOutcome(currentHand, dealerHand, insuranceSettled);
+            outcome = determineOutcome(currentHand, dealerHand);
         } else {
             handsToSettle.add(getSnapshot());
             doubleDown = false;
@@ -87,7 +87,7 @@ public class Game {
             currentHand = previousState.getPlayerHand();
             doubleDown = previousState.getDoubleDown();
         }
-        outcome = determineOutcome(currentHand, dealerHand, insuranceSettled);
+        outcome = determineOutcome(currentHand, dealerHand);
     }
 
     public void settleInsurance() {
@@ -100,7 +100,7 @@ public class Game {
     }
 
     public void settle() {
-        switch (determineOutcome(currentHand, dealerHand, insuranceSettled)) {
+        switch (outcome) {
             case WIN:
                 this.balance += doubleDown ? bet * 2 : bet;
                 break;

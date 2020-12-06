@@ -81,10 +81,8 @@ public class Rules {
         return false;
     }
 
-    public static Outcome determineOutcome(Collection<Card> playerHand, Collection<Card> dealerHand, boolean insuranceSettled) {
-        if (isBlackjack(dealerHand) && insuranceSettled) {
-            return WIN;
-        } else if (playerWins(playerHand, dealerHand)) {
+    public static Outcome determineOutcome(Collection<Card> playerHand, Collection<Card> dealerHand) {
+        if (playerWins(playerHand, dealerHand)) {
             return WIN;
         } else if(isPush(playerHand, dealerHand)) {
             return PUSH;

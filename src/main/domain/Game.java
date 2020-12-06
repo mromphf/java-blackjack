@@ -7,6 +7,8 @@ import static main.domain.Rules.*;
 
 public class Game {
 
+    private static final String ERROR_MSG = "No more cards! Quitting...";
+
     private final Stack<Card> deck;
     private final Stack<Collection <Card>> handsToPlay;
     private final Stack<Collection <Card>> handsToSettle;
@@ -35,7 +37,7 @@ public class Game {
         } else {
             while (score(dealerHand) < 16) {
                 if (deck.isEmpty()) {
-                    throw new IllegalStateException("No more cards! Quitting...");
+                    throw new IllegalStateException(ERROR_MSG);
                 } else {
                     dealerHand.add(deck.pop());
                 }
@@ -62,7 +64,7 @@ public class Game {
 
     public void hit() throws IllegalStateException {
         if (deck.isEmpty()) {
-            throw new IllegalStateException("No more cards! Quitting...");
+            throw new IllegalStateException(ERROR_MSG);
         } else {
             currentHand.add(deck.pop());
             if (isBust(currentHand)) {
@@ -74,7 +76,7 @@ public class Game {
     // TODO: Bug - this will double the bet for all unsettled hands;
     public void doubleDown() throws IllegalStateException {
         if (deck.isEmpty()) {
-            throw new IllegalStateException("No more cards! Quitting...");
+            throw new IllegalStateException(ERROR_MSG);
         } else {
             bet *= 2;
             currentHand.add(deck.pop());

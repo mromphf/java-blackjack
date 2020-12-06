@@ -52,10 +52,11 @@ public class Round implements ControlListener {
     @Override
     public void onHit() {
         game.addCardToPlayerHand();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
 
         if (game.playerHasBusted()) {
             onStand();
+        } else {
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
         }
     }
 

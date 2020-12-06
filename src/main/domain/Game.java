@@ -13,9 +13,9 @@ public class Game {
     private final Collection<Card> dealerHand;
 
     private Collection<Card> currentHand;
+    private Outcome outcome;
     private int balance;
     private int bet;
-    private Outcome outcome;
 
     public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
@@ -28,13 +28,17 @@ public class Game {
         this.handsToSettle = new Stack<>();
     }
 
-    public void stand() {
+    public void stand() throws IllegalStateException {
         if (!handsToPlay.isEmpty()) {
             handsToSettle.add(currentHand);
             currentHand = handsToPlay.pop();
         } else {
             while (score(dealerHand) < 16) {
-                addCardToDealerHand();
+                if (deck.isEmpty()) {
+                    throw new IllegalStateException("No more cards! Quitting...");
+                } else {
+                    dealerHand.add(deck.pop());
+                }
             }
             outcome = determineOutcome();
         }
@@ -56,18 +60,26 @@ public class Game {
         handsToPlay.add(pocketHand);
     }
 
-    public void hit() {
-        addCardToPlayerHand();
-        if (isBust(currentHand)) {
-            stand();
+    public void hit() throws IllegalStateException {
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("No more cards! Quitting...");
+        } else {
+            currentHand.add(deck.pop());
+            if (isBust(currentHand)) {
+                stand();
+            }
         }
     }
 
-    public void doubleDown() {
-        // TODO: Bug - this will double the bet for all unsettled hands;
-        bet *= 2;
-        addCardToPlayerHand();
-        stand();
+    // TODO: Bug - this will double the bet for all unsettled hands;
+    public void doubleDown() throws IllegalStateException {
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("No more cards! Quitting...");
+        } else {
+            bet *= 2;
+            currentHand.add(deck.pop());
+            stand();
+        }
     }
 
     public void rewind() {
@@ -110,21 +122,5 @@ public class Game {
         } else {
             return LOSE;
         }
-    }
-
-    private void addCardToDealerHand() {
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
-        }
-        dealerHand.add(deck.pop());
-    }
-
-    private void addCardToPlayerHand() {
-        if (deck.isEmpty()) {
-            System.out.println("No more cards! Quitting...");
-            System.exit(0);
-        }
-        currentHand.add(deck.pop());
     }
 }

@@ -46,28 +46,43 @@ public class Round implements ControlListener, NavListener {
         try {
             game.split();
             gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
-        } catch (EmptyStackException | NoSuchElementException ex) {
-            System.out.println("Not enough cards to split hand!");
+        } catch (NoSuchElementException | EmptyStackException ex) {
+            System.out.println(ex.getMessage());
             System.exit(1);
         }
     }
 
     @Override
     public void onHit() {
-        game.hit();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        try {
+            game.hit();
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        } catch (IllegalStateException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override
     public void onDouble() {
-        game.doubleDown();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        try {
+            game.doubleDown();
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        } catch (IllegalStateException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override
     public void onStand() {
-        game.stand();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        try {
+            game.stand();
+            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        } catch (IllegalStateException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override

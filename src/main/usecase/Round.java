@@ -21,6 +21,7 @@ public class Round implements ControlListener {
     @Override
     public void onStartNewRound(int bet) {
         game.setBet(bet);
+
         if (game.moreHandsToPlay()) {
             game.playNextHand();
         } else {
@@ -33,7 +34,6 @@ public class Round implements ControlListener {
     @Override
     public void onMoveToBettingTable() {
         game.settle(game.determineOutcome());
-        game.setBet(0);
 
         if (game.getSnapshot().getBalance() <= 0) {
             System.out.println("You are out of money! Please leave the casino...");

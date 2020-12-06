@@ -35,7 +35,6 @@ public class Game {
     public void dealOpeningHand() {
         try {
             Map<String, Stack<Card>> openingHand = openingHand(deck);
-            handsToPlay.removeAllElements();
             currentHand = openingHand.get("player");
             dealerHand = openingHand.get("dealer");
         } catch (IllegalArgumentException ex) {

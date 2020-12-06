@@ -6,23 +6,26 @@ import java.util.Stack;
 public class Snapshot {
     private final int balance;
     private final int bet;
+    private final boolean doubleDown;
     private final Outcome outcome;
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
     private final Collection<Card> playerHand;
     private final Stack<Collection<Card>> handsToPlay;
-    private final Stack<Collection<Card>> handsToSettle;
+    private final Stack<Snapshot> handsToSettle;
 
     public Snapshot(int balance,
                     int bet,
+                    boolean doubleDown,
                     Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
                     Collection<Card> playerHand,
                     Stack<Collection<Card>> handsToPlay,
-                    Stack<Collection<Card>> handsToSettle) {
+                    Stack<Snapshot> handsToSettle) {
         this.balance = balance;
         this.bet = bet;
+        this.doubleDown = doubleDown;
         this.deck = deck;
         this.outcome = outcome;
         this.dealerHand = dealerHand;
@@ -41,6 +44,10 @@ public class Snapshot {
 
     public int getDeckSize() {
         return deck.size();
+    }
+
+    public boolean getDoubleDown() {
+        return doubleDown;
     }
 
     public Outcome getOutcome() {

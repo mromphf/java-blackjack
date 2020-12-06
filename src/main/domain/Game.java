@@ -9,21 +9,23 @@ public class Game {
 
     private final Stack<Card> deck;
     private final Stack<Collection <Card>> handsToPlay;
-    private final Stack<Collection <Card>> handsToSettle;
+    private final Stack<Snapshot> handsToSettle;
     private final Collection<Card> dealerHand;
+    private final int bet;
 
     private Collection<Card> currentHand;
     private Outcome outcome;
     private int balance;
-    private int bet;
+    private boolean doubleDown;
 
     public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
         this.bet = bet;
         this.deck = deck;
-        this.outcome = UNRESOLVED;
         this.dealerHand = dealerHand;
         this.currentHand = playerHand;
+        this.doubleDown = false;
+        this.outcome = UNRESOLVED;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
     }
@@ -35,7 +37,8 @@ public class Game {
             }
             outcome = determineOutcome(currentHand, dealerHand);
         } else {
-            handsToSettle.add(currentHand);
+            handsToSettle.add(getSnapshot());
+            doubleDown = false;
             currentHand = handsToPlay.pop();
         }
     }
@@ -63,16 +66,17 @@ public class Game {
         }
     }
 
-    // TODO: Bug - this will double the bet for all unsettled hands;
     public void doubleDown() throws EmptyStackException{
         currentHand.add(deck.pop());
-        bet *= 2;
+        doubleDown = true;
         stand();
     }
 
     public void rewind() {
         if (!handsToSettle.isEmpty()) {
-            this.currentHand = handsToSettle.pop();
+            Snapshot previousState = handsToSettle.pop();
+            currentHand = previousState.getPlayerHand();
+            doubleDown = previousState.getDoubleDown();
         }
         outcome = determineOutcome(currentHand, dealerHand);
     }
@@ -80,11 +84,11 @@ public class Game {
     public void settle() {
         switch (determineOutcome(currentHand, dealerHand)) {
             case WIN:
-                balance += bet;
+                this.balance += doubleDown ? bet * 2 : bet;
                 break;
             case LOSE:
             case BUST:
-                balance -= bet;
+                this.balance -= doubleDown ? bet * 2 : bet;
                 break;
             default:
                 break;
@@ -92,6 +96,6 @@ public class Game {
     }
 
     public Snapshot getSnapshot() {
-        return new Snapshot(balance, bet, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
+        return new Snapshot(balance, bet, doubleDown, outcome, deck, dealerHand, currentHand, handsToPlay, handsToSettle);
     }
 }

@@ -6,7 +6,7 @@ import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
-public class Game {
+public class Round {
 
     private final Stack<Card> deck;
     private final Stack<Collection <Card>> handsToPlay;
@@ -20,7 +20,7 @@ public class Game {
     private boolean doubleDown = false;
     private int balance;
 
-    public Game(int balance, int bet, Stack<Card> deck) {
+    public Round(int balance, int bet, Stack<Card> deck) {
         this.balance = balance;
         this.bet = bet;
         this.deck = deck;
@@ -31,7 +31,7 @@ public class Game {
         this.actionsTaken = new Stack<>();
     }
 
-    public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
+    public Round(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.balance = balance;
         this.bet = bet;
         this.deck = deck;

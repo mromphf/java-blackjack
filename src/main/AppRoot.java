@@ -8,7 +8,7 @@ import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
-import main.usecase.Round;
+import main.usecase.Game;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class AppRoot {
             e.printStackTrace();
         }
 
-        Round round = new Round(shuffle(fresh()));
+        Game game = new Game(shuffle(fresh()));
 
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();
@@ -51,17 +51,17 @@ public class AppRoot {
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
 
-        round.registerGameStateListener(betController);
-        round.registerGameStateListener(blackjackController);
-        round.registerGameStateListener(homeController);
-        round.registerGameStateListener(layoutManager);
+        game.registerGameStateListener(betController);
+        game.registerGameStateListener(blackjackController);
+        game.registerGameStateListener(homeController);
+        game.registerGameStateListener(layoutManager);
 
-        homeController.registerControlListener(round);
-        homeController.registerNavListener(round);
-        betController.registerControlListener(round);
-        betController.registerNavListener(round);
-        blackjackController.registerControlListener(round);
-        blackjackController.registerNavListener(round);
+        homeController.registerControlListener(game);
+        homeController.registerNavListener(game);
+        betController.registerControlListener(game);
+        betController.registerNavListener(game);
+        blackjackController.registerControlListener(game);
+        blackjackController.registerNavListener(game);
 
         homeController.registerNavListener(layoutManager);
         betController.registerNavListener(layoutManager);

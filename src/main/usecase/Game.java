@@ -1,22 +1,22 @@
 package main.usecase;
 
 import main.domain.Card;
-import main.domain.Game;
+import main.domain.Round;
 
 import java.util.*;
 
 import static main.domain.Deck.openingHand;
 
-public class Round implements ControlListener, NavListener {
+public class Game implements ControlListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
-    private Game game;
+    private Round round;
 
-    public Round(Stack<Card> deck) {
+    public Game(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
-        game = new Game(200, 0, deck);
+        round = new Round(200, 0, deck);
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -29,10 +29,10 @@ public class Round implements ControlListener, NavListener {
             final Map<String, Stack<Card>> openingHand = openingHand(deck);
             final Stack<Card> dealerHand = openingHand.get("dealer");
             final Stack<Card> playerHand = openingHand.get("player");
-            final int currentBalance = game.getSnapshot().getBalance();
+            final int currentBalance = round.getSnapshot().getBalance();
 
-            game = new Game(currentBalance, bet, deck, dealerHand, playerHand);
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+            round = new Round(currentBalance, bet, deck, dealerHand, playerHand);
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(0);
@@ -42,8 +42,8 @@ public class Round implements ControlListener, NavListener {
     @Override
     public void onSplit() {
         try {
-            game.split();
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+            round.split();
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (NoSuchElementException | EmptyStackException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -53,8 +53,8 @@ public class Round implements ControlListener, NavListener {
     @Override
     public void onHit() {
         try {
-            game.hit();
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+            round.hit();
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (IllegalStateException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -64,8 +64,8 @@ public class Round implements ControlListener, NavListener {
     @Override
     public void onDouble() {
         try {
-            game.doubleDown();
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+            round.doubleDown();
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (EmptyStackException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -75,8 +75,8 @@ public class Round implements ControlListener, NavListener {
     @Override
     public void onStand() {
         try {
-            game.stand();
-            gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+            round.stand();
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (EmptyStackException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -85,21 +85,21 @@ public class Round implements ControlListener, NavListener {
 
     @Override
     public void onPurchaseInsurance() {
-        game.settleInsurance();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        round.settleInsurance();
+        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
     }
 
     @Override
     public void onSettleHand() {
-        game.settleBet();
-        game.rewind();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        round.settleBet();
+        round.rewind();
+        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        game.settleBet();
-        gameStateListeners.forEach(l -> l.onUpdate(game.getSnapshot()));
+        round.settleBet();
+        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
     }
 
     @Override

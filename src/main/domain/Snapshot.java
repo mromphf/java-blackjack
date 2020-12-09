@@ -9,34 +9,34 @@ public class Snapshot {
     private final int balance;
     private final int bet;
     private final boolean doubleDown;
-    private final boolean insuranceSettled;
     private final Outcome outcome;
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
     private final Collection<Card> playerHand;
     private final Stack<Collection<Card>> handsToPlay;
     private final Stack<Snapshot> handsToSettle;
+    private final Stack<Action> actionsTaken;
 
     public Snapshot(int balance,
                     int bet,
                     boolean doubleDown,
-                    boolean insuranceSettled,
                     Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
                     Collection<Card> playerHand,
                     Stack<Collection<Card>> handsToPlay,
-                    Stack<Snapshot> handsToSettle) {
+                    Stack<Snapshot> handsToSettle,
+                    Stack<Action> actionsTaken) {
         this.balance = balance;
         this.bet = bet;
         this.doubleDown = doubleDown;
-        this.insuranceSettled = insuranceSettled;
         this.deck = deck;
         this.outcome = outcome;
         this.dealerHand = dealerHand;
         this.playerHand = playerHand;
         this.handsToPlay = handsToPlay;
         this.handsToSettle = handsToSettle;
+        this.actionsTaken = actionsTaken;
     }
 
     public int getBalance() {
@@ -76,7 +76,9 @@ public class Snapshot {
     }
 
     public boolean isInsuranceAvailable() {
-        return insuranceAvailable(dealerHand) && balance >= bet && !insuranceSettled && !isResolved();
+        return insuranceAvailable(dealerHand) &&
+                balance >= bet &&
+                actionsTaken.isEmpty();
     }
 
     public Collection<Card> getDealerHand() {
@@ -89,5 +91,9 @@ public class Snapshot {
 
     public Stack<Collection<Card>> getHandsToPlay() {
         return handsToPlay;
+    }
+
+    public Stack<Action> getActionsTaken() {
+        return actionsTaken;
     }
 }

@@ -2,6 +2,7 @@ package main.domain;
 
 import java.util.*;
 
+import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
@@ -13,10 +14,10 @@ public class Game {
     private final Collection<Card> dealerHand;
     private final int bet;
 
+    private Stack<Action> actionsTaken;
     private Collection<Card> currentHand;
     private Outcome outcome = UNRESOLVED;
     private boolean doubleDown = false;
-    private boolean insuranceSettled = false;
     private int balance;
 
     public Game(int balance, int bet, Stack<Card> deck) {
@@ -27,6 +28,7 @@ public class Game {
         this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
+        this.actionsTaken = new Stack<>();
     }
 
     public Game(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
@@ -37,10 +39,10 @@ public class Game {
         this.currentHand = playerHand;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
+        this.actionsTaken = new Stack<>();
     }
 
     public void stand() throws EmptyStackException {
-        insuranceSettled = true;
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
@@ -51,6 +53,7 @@ public class Game {
             doubleDown = false;
             currentHand = handsToPlay.pop();
         }
+        actionsTaken.add(STAND);
     }
 
     public void split() throws NoSuchElementException, EmptyStackException {
@@ -67,10 +70,10 @@ public class Game {
         }};
 
         handsToPlay.add(pocketHand);
+        actionsTaken.add(SPLIT);
     }
 
     public void hit() throws EmptyStackException {
-        insuranceSettled = true;
         currentHand.add(deck.pop());
         if (isBust(currentHand)) {
             if (handsToPlay.isEmpty()) {
@@ -81,13 +84,25 @@ public class Game {
                 currentHand = handsToPlay.pop();
             }
         }
+        actionsTaken.add(HIT);
     }
 
     public void doubleDown() throws EmptyStackException{
-        insuranceSettled = true;
         currentHand.add(deck.pop());
         doubleDown = true;
-        stand();
+
+        if (handsToPlay.isEmpty()) {
+            while (score(dealerHand) < 16) {
+                dealerHand.add(deck.pop());
+            }
+            outcome = determineOutcome(currentHand, dealerHand);
+        } else {
+            handsToSettle.add(getSnapshot());
+            doubleDown = false;
+            currentHand = handsToPlay.pop();
+        }
+
+        actionsTaken.add(DOUBLE);
     }
 
     public void rewind() {
@@ -95,6 +110,7 @@ public class Game {
             Snapshot previousState = handsToSettle.pop();
             currentHand = previousState.getPlayerHand();
             doubleDown = previousState.getDoubleDown();
+            actionsTaken = previousState.getActionsTaken();
         }
         outcome = determineOutcome(currentHand, dealerHand);
     }
@@ -106,7 +122,7 @@ public class Game {
         } else {
             balance -= bet;
         }
-        insuranceSettled = true;
+        actionsTaken.add(BUY_INSURANCE);
     }
 
     public void settleBet() {
@@ -128,13 +144,13 @@ public class Game {
                 balance,
                 bet,
                 doubleDown,
-                insuranceSettled,
                 outcome,
                 deck,
                 dealerHand,
                 currentHand,
                 handsToPlay,
-                handsToSettle
+                handsToSettle,
+                actionsTaken
         );
     }
 }

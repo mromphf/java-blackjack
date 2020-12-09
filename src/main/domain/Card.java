@@ -1,6 +1,7 @@
 package main.domain;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Card {
     private final int faceValue;
@@ -28,6 +29,13 @@ public class Card {
 
     public Suit getSuit() {
         return suit;
+    }
+
+    public static Card random() {
+        Random r = new Random();
+        int v = r.nextInt(13) + 1;
+        int s = r.nextInt(4);
+        return new Card(v, Suit.values()[s]);
     }
 
     @Override

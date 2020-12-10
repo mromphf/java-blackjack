@@ -1,7 +1,9 @@
 package main.usecase;
 
+import main.domain.Action;
 import main.domain.Card;
 import main.domain.Round;
+import main.domain.Snapshot;
 
 import java.util.*;
 
@@ -41,65 +43,52 @@ public class Game implements ControlListener, NavListener {
     }
 
     @Override
-    public void onSplit() {
+    public void onActionTaken(Action action) {
         try {
-            round.split();
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+            switch (action) {
+                case HIT:
+                    round.hit();
+                    break;
+                case SPLIT:
+                    round.split();
+                    break;
+                case STAND:
+                    round.stand();
+                    break;
+                case DOUBLE:
+                    round.doubleDown();
+                    break;
+                case BUY_INSURANCE:
+                default:
+                    break;
+            }
         } catch (NoSuchElementException | EmptyStackException ex) {
             System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
         }
-    }
 
-    @Override
-    public void onHit() {
-        try {
-            round.hit();
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
-        } catch (EmptyStackException ex) {
-            System.out.println("Ran out of cards! Quitting...");
-            System.exit(1);
+        round.record(action);
+
+        final Snapshot snapshot = round.getSnapshot();
+
+        //TODO: Save history of snapshots?
+        if (snapshot.isResolved()) {
+            balance += settleBet(snapshot);
         }
-    }
 
-    @Override
-    public void onDouble() {
-        try {
-            round.doubleDown();
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
-        } catch (EmptyStackException ex) {
-            System.out.println("Ran out of cards! Quitting...");
-            System.exit(1);
-        }
-    }
-
-    @Override
-    public void onStand() {
-        try {
-            round.stand();
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
-        } catch (EmptyStackException ex) {
-            System.out.println("Ran out of cards! Quitting...");
-            System.exit(1);
-        }
-    }
-
-    @Override
-    public void onPurchaseInsurance() {
-        round.settleInsurance();
-        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }
 
     @Override
     public void onSettleHand() {
-        balance += settleBet(round.getSnapshot());
+        //TODO: Move this rewind business up into this class?
         round.rewind();
+        balance += settleBet(round.getSnapshot());
         gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        balance += settleBet(round.getSnapshot());
         gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 

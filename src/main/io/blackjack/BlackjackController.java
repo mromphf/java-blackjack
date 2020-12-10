@@ -16,6 +16,7 @@ import main.usecase.NavListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
@@ -88,7 +89,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     public void onSplit() {
-        controlListeners.forEach(ControlListener::onSplit);
+        controlListeners.forEach(l -> l.onActionTaken(SPLIT));
     }
 
     @FXML
@@ -99,7 +100,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onStand() {
-        controlListeners.forEach(ControlListener::onStand);
+        controlListeners.forEach(l -> l.onActionTaken(STAND));
     }
 
     @FXML
@@ -114,17 +115,17 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onHit() {
-        controlListeners.forEach(ControlListener::onHit);
+        controlListeners.forEach(l -> l.onActionTaken(HIT));
     }
 
     @FXML
     private void onDouble() {
-        controlListeners.forEach(ControlListener::onDouble);
+        controlListeners.forEach(l -> l.onActionTaken(DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        controlListeners.forEach(ControlListener::onPurchaseInsurance);
+        controlListeners.forEach(l -> l.onActionTaken(BUY_INSURANCE));
     }
 
     @FXML

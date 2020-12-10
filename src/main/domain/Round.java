@@ -2,7 +2,6 @@ package main.domain;
 
 import java.util.*;
 
-import static main.domain.Action.*;
 import static main.domain.Rules.*;
 
 public class Round {
@@ -36,6 +35,10 @@ public class Round {
         this.actionsTaken = new Stack<>();
     }
 
+    public void record(Action action) {
+        actionsTaken.add(action);
+    }
+
     public void stand() throws EmptyStackException {
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
@@ -45,7 +48,6 @@ public class Round {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
         }
-        actionsTaken.add(STAND);
     }
 
     public void split() throws NoSuchElementException, EmptyStackException {
@@ -62,12 +64,10 @@ public class Round {
         }};
 
         handsToPlay.add(pocketHand);
-        actionsTaken.add(SPLIT);
     }
 
     public void hit() throws EmptyStackException {
         currentHand.add(deck.pop());
-        actionsTaken.add(HIT);
         if (isBust(currentHand) && !handsToPlay.isEmpty()) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
@@ -85,8 +85,6 @@ public class Round {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
         }
-
-        actionsTaken.add(DOUBLE);
     }
 
     public void rewind() {
@@ -95,11 +93,6 @@ public class Round {
             currentHand = previousState.getPlayerHand();
             actionsTaken = previousState.getActionsTaken();
         }
-    }
-
-    // TODO: go back and check when insurance is supposed to pay out
-    public void settleInsurance() {
-        actionsTaken.add(BUY_INSURANCE);
     }
 
     public Snapshot getSnapshot() {

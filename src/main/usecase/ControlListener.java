@@ -1,10 +1,8 @@
 package main.usecase;
 
+import main.domain.Action;
+
 public interface ControlListener {
-    void onHit();
-    void onDouble();
-    void onStand();
+    void onActionTaken(Action action);
     void onSettleHand();
-    void onSplit();
-    void onPurchaseInsurance();
 }

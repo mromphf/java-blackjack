@@ -39,6 +39,14 @@ public class Round {
         actionsTaken.add(action);
     }
 
+    public void hit() throws EmptyStackException {
+        currentHand.add(deck.pop());
+        if (isBust(currentHand) && !handsToPlay.isEmpty()) {
+            handsToSettle.add(getSnapshot());
+            currentHand = handsToPlay.pop();
+        }
+    }
+
     public void doubleDown() throws EmptyStackException{
         currentHand.add(deck.pop());
         stand();
@@ -69,14 +77,6 @@ public class Round {
         }};
 
         handsToPlay.add(pocketHand);
-    }
-
-    public void hit() throws EmptyStackException {
-        currentHand.add(deck.pop());
-        if (isBust(currentHand) && !handsToPlay.isEmpty()) {
-            handsToSettle.add(getSnapshot());
-            currentHand = handsToPlay.pop();
-        }
     }
 
     public void rewind() {

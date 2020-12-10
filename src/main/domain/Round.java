@@ -3,7 +3,6 @@ package main.domain;
 import java.util.*;
 
 import static main.domain.Action.*;
-import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
 public class Round {
@@ -16,7 +15,6 @@ public class Round {
 
     private Stack<Action> actionsTaken;
     private Collection<Card> currentHand;
-    private Outcome outcome = UNRESOLVED;
     private boolean doubleDown = false;
     private int balance;
 
@@ -47,7 +45,6 @@ public class Round {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
             }
-            outcome = determineOutcome(currentHand, dealerHand);
         } else {
             handsToSettle.add(getSnapshot());
             doubleDown = false;
@@ -75,16 +72,12 @@ public class Round {
 
     public void hit() throws EmptyStackException {
         currentHand.add(deck.pop());
-        if (isBust(currentHand)) {
-            if (handsToPlay.isEmpty()) {
-                outcome = BUST;
-            } else {
-                handsToSettle.add(getSnapshot());
-                doubleDown = false;
-                currentHand = handsToPlay.pop();
-            }
-        }
         actionsTaken.add(HIT);
+        if (isBust(currentHand) && !handsToPlay.isEmpty()) {
+            handsToSettle.add(getSnapshot());
+            doubleDown = false;
+            currentHand = handsToPlay.pop();
+        }
     }
 
     public void doubleDown() throws EmptyStackException{
@@ -95,7 +88,6 @@ public class Round {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
             }
-            outcome = determineOutcome(currentHand, dealerHand);
         } else {
             handsToSettle.add(getSnapshot());
             doubleDown = false;
@@ -112,21 +104,20 @@ public class Round {
             doubleDown = previousState.getDoubleDown();
             actionsTaken = previousState.getActionsTaken();
         }
-        outcome = determineOutcome(currentHand, dealerHand);
     }
 
     // TODO: go back and check when insurance is supposed to pay out
     public void settleInsurance() {
-        if (isBlackjack(dealerHand)) {
-            outcome = WIN;
-        } else {
+        if (!isBlackjack(dealerHand)) {
             balance -= bet;
+        } else {
+            balance += bet;
         }
         actionsTaken.add(BUY_INSURANCE);
     }
 
     public void settleBet() {
-        switch (outcome) {
+        switch (determineOutcome(actionsTaken, currentHand, dealerHand)) {
             case WIN:
                 this.balance += doubleDown ? bet * 2 : bet;
                 break;
@@ -144,7 +135,7 @@ public class Round {
                 balance,
                 bet,
                 doubleDown,
-                outcome,
+                determineOutcome(actionsTaken, currentHand, dealerHand),
                 deck,
                 dealerHand,
                 currentHand,

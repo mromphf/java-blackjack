@@ -3,6 +3,8 @@ package main.domain;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static main.domain.Action.DOUBLE;
+import static main.domain.Action.STAND;
 import static main.domain.Outcome.*;
 
 public class Rules {
@@ -81,8 +83,13 @@ public class Rules {
         return false;
     }
 
-    public static Outcome determineOutcome(Collection<Card> playerHand, Collection<Card> dealerHand) {
-        if (playerWins(playerHand, dealerHand)) {
+    public static Outcome determineOutcome(Collection<Action> actionsTaken, Collection<Card> playerHand, Collection<Card> dealerHand) {
+        if (!isBust(playerHand) &&
+                (actionsTaken.isEmpty() ||
+                        (actionsTaken.stream().noneMatch(a -> a.equals(STAND)) &&
+                         actionsTaken.stream().noneMatch(a -> a.equals(DOUBLE))))) {
+            return UNRESOLVED;
+        } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
         } else if(isPush(playerHand, dealerHand)) {
             return PUSH;

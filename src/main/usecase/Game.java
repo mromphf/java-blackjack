@@ -34,7 +34,7 @@ public class Game implements ControlListener, NavListener {
             round = new Round(currentBalance, bet, deck, dealerHand, playerHand);
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
         }
     }
@@ -45,7 +45,7 @@ public class Game implements ControlListener, NavListener {
             round.split();
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (NoSuchElementException | EmptyStackException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
         }
     }
@@ -55,8 +55,8 @@ public class Game implements ControlListener, NavListener {
         try {
             round.hit();
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
-        } catch (IllegalStateException ex) {
-            System.out.println(ex.getMessage());
+        } catch (EmptyStackException ex) {
+            System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
         }
     }
@@ -67,7 +67,7 @@ public class Game implements ControlListener, NavListener {
             round.doubleDown();
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (EmptyStackException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
         }
     }
@@ -78,7 +78,7 @@ public class Game implements ControlListener, NavListener {
             round.stand();
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (EmptyStackException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
         }
     }

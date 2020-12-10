@@ -103,6 +103,7 @@ public class Rules {
     }
 
     public static int settleBet(Snapshot snapshot) {
+        // TODO: incorporate insurance payout/penalty
         int betMultiplier =  snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 

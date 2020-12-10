@@ -15,7 +15,6 @@ public class Round {
 
     private Stack<Action> actionsTaken;
     private Collection<Card> currentHand;
-    private boolean doubleDown = false;
     private int balance;
 
     public Round(int balance, int bet, Stack<Card> deck) {
@@ -47,7 +46,6 @@ public class Round {
             }
         } else {
             handsToSettle.add(getSnapshot());
-            doubleDown = false;
             currentHand = handsToPlay.pop();
         }
         actionsTaken.add(STAND);
@@ -75,14 +73,12 @@ public class Round {
         actionsTaken.add(HIT);
         if (isBust(currentHand) && !handsToPlay.isEmpty()) {
             handsToSettle.add(getSnapshot());
-            doubleDown = false;
             currentHand = handsToPlay.pop();
         }
     }
 
     public void doubleDown() throws EmptyStackException{
         currentHand.add(deck.pop());
-        doubleDown = true;
 
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
@@ -90,7 +86,6 @@ public class Round {
             }
         } else {
             handsToSettle.add(getSnapshot());
-            doubleDown = false;
             currentHand = handsToPlay.pop();
         }
 
@@ -101,7 +96,6 @@ public class Round {
         if (!handsToSettle.isEmpty()) {
             Snapshot previousState = handsToSettle.pop();
             currentHand = previousState.getPlayerHand();
-            doubleDown = previousState.getDoubleDown();
             actionsTaken = previousState.getActionsTaken();
         }
     }
@@ -124,7 +118,6 @@ public class Round {
         return new Snapshot(
                 balance,
                 bet,
-                doubleDown,
                 determineOutcome(actionsTaken, currentHand, dealerHand),
                 deck,
                 dealerHand,

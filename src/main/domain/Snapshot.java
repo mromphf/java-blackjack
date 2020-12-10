@@ -8,7 +8,6 @@ import static main.domain.Rules.insuranceAvailable;
 public class Snapshot {
     private final int balance;
     private final int bet;
-    private final boolean doubleDown;
     private final Outcome outcome;
     private final Stack<Card> deck;
     private final Collection<Card> dealerHand;
@@ -19,7 +18,6 @@ public class Snapshot {
 
     public Snapshot(int balance,
                     int bet,
-                    boolean doubleDown,
                     Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
@@ -29,7 +27,6 @@ public class Snapshot {
                     Stack<Action> actionsTaken) {
         this.balance = balance;
         this.bet = bet;
-        this.doubleDown = doubleDown;
         this.deck = deck;
         this.outcome = outcome;
         this.dealerHand = dealerHand;
@@ -49,10 +46,6 @@ public class Snapshot {
 
     public int getDeckSize() {
         return deck.size();
-    }
-
-    public boolean getDoubleDown() {
-        return doubleDown;
     }
 
     public Outcome getOutcome() {

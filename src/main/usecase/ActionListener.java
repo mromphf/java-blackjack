@@ -2,7 +2,7 @@ package main.usecase;
 
 import main.domain.Action;
 
-public interface ControlListener {
+public interface ActionListener {
     void onActionTaken(Action action);
     void onSettleHand();
 }

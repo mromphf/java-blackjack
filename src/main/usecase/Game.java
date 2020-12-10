@@ -10,7 +10,7 @@ import java.util.*;
 import static main.domain.Deck.openingHand;
 import static main.domain.Rules.*;
 
-public class Game implements ControlListener, NavListener {
+public class Game implements ActionListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;

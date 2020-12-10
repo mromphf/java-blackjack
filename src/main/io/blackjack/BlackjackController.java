@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 
 import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.ControlListener;
+import main.usecase.ActionListener;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
 
@@ -89,7 +89,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     public void onSplit() {
-        controlListeners.forEach(l -> l.onActionTaken(SPLIT));
+        actionListeners.forEach(l -> l.onActionTaken(SPLIT));
     }
 
     @FXML
@@ -100,12 +100,12 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onStand() {
-        controlListeners.forEach(l -> l.onActionTaken(STAND));
+        actionListeners.forEach(l -> l.onActionTaken(STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        controlListeners.forEach(ControlListener::onSettleHand);
+        actionListeners.forEach(ActionListener::onSettleHand);
     }
 
     @FXML
@@ -115,17 +115,17 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onHit() {
-        controlListeners.forEach(l -> l.onActionTaken(HIT));
+        actionListeners.forEach(l -> l.onActionTaken(HIT));
     }
 
     @FXML
     private void onDouble() {
-        controlListeners.forEach(l -> l.onActionTaken(DOUBLE));
+        actionListeners.forEach(l -> l.onActionTaken(DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        controlListeners.forEach(l -> l.onActionTaken(BUY_INSURANCE));
+        actionListeners.forEach(l -> l.onActionTaken(BUY_INSURANCE));
     }
 
     @FXML

@@ -72,6 +72,8 @@ public class Game implements ActionListener, NavListener {
         final Snapshot snapshot = round.getSnapshot();
 
         //TODO: Save history of snapshots?
+
+        //TODO: This ignores the remaining hands to settle
         if (snapshot.isResolved()) {
             balance += settleBet(snapshot);
         }

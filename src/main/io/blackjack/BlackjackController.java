@@ -66,7 +66,6 @@ public class BlackjackController extends RootController implements Initializable
         lblBalance.setText(String.format("Balance: $%s", balance));
 
         if (snapshot.isResolved()) {
-            //TODO: Don't expose the table if the player busts
             renderExposedTable(snapshot);
 
             switch (snapshot.getOutcome()) {

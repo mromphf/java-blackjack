@@ -14,12 +14,14 @@ public class Game implements ActionListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
+    private final Stack<Snapshot> history;
     private Round round;
     private int balance = 200;
 
     public Game(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
+        this.history = new Stack<>();
         round = new Round(0, deck);
     }
 
@@ -71,13 +73,12 @@ public class Game implements ActionListener, NavListener {
 
         final Snapshot snapshot = round.getSnapshot();
 
-        //TODO: Save history of snapshots?
-
         //TODO: This ignores the remaining hands to settle
         if (snapshot.isResolved()) {
             balance += settleBet(snapshot);
         }
 
+        history.add(snapshot);
         gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }
 
@@ -91,6 +92,7 @@ public class Game implements ActionListener, NavListener {
 
     @Override
     public void onMoveToBettingTable() {
+        history.clear();
         gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 

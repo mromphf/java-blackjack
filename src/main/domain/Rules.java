@@ -83,6 +83,10 @@ public class Rules {
         return false;
     }
 
+    public static Outcome determineOutcome(Snapshot snapshot) {
+        return determineOutcome(snapshot.getActionsTaken(), snapshot.getPlayerHand(), snapshot.getDealerHand());
+    }
+
     public static Outcome determineOutcome(Collection<Action> actionsTaken, Collection<Card> playerHand, Collection<Card> dealerHand) {
         if (!isBust(playerHand) &&
                 (actionsTaken.isEmpty() || (actionsTaken.stream().noneMatch(a -> a.equals(STAND) || a.equals(DOUBLE))))) {
@@ -99,9 +103,10 @@ public class Rules {
     }
 
     public static int settleBet(Snapshot snapshot) {
-        int betMultiplier =  snapshot.getActionsTaken().stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
+        int betMultiplier =  snapshot.getActionsTaken().stream()
+                .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
-        switch (determineOutcome(snapshot.getActionsTaken(), snapshot.getPlayerHand(), snapshot.getDealerHand())) {
+        switch (determineOutcome(snapshot)) {
             case WIN:
                 return snapshot.getBet() * betMultiplier;
             case LOSE:

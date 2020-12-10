@@ -85,9 +85,7 @@ public class Rules {
 
     public static Outcome determineOutcome(Collection<Action> actionsTaken, Collection<Card> playerHand, Collection<Card> dealerHand) {
         if (!isBust(playerHand) &&
-                (actionsTaken.isEmpty() ||
-                        (actionsTaken.stream().noneMatch(a -> a.equals(STAND)) &&
-                         actionsTaken.stream().noneMatch(a -> a.equals(DOUBLE))))) {
+                (actionsTaken.isEmpty() || (actionsTaken.stream().noneMatch(a -> a.equals(STAND) || a.equals(DOUBLE))))) {
             return UNRESOLVED;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;

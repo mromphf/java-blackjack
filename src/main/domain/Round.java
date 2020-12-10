@@ -117,17 +117,7 @@ public class Round {
     }
 
     public void settleBet() {
-        switch (determineOutcome(actionsTaken, currentHand, dealerHand)) {
-            case WIN:
-                this.balance += doubleDown ? bet * 2 : bet;
-                break;
-            case LOSE:
-            case BUST:
-                this.balance -= doubleDown ? bet * 2 : bet;
-                break;
-            default:
-                break;
-        }
+        balance += Rules.settleBet(getSnapshot());
     }
 
     public Snapshot getSnapshot() {

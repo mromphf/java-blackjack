@@ -8,13 +8,13 @@ import static main.domain.Rules.*;
 public class Round {
 
     private final Stack<Card> deck;
-    private final Stack<Collection <Card>> handsToPlay;
+    private final Stack<Stack <Card>> handsToPlay;
     private final Stack<Snapshot> handsToSettle;
-    private final Collection<Card> dealerHand;
+    private final Stack<Card> dealerHand;
     private final int bet;
 
     private Stack<Action> actionsTaken;
-    private Collection<Card> currentHand;
+    private Stack<Card> currentHand;
 
     public Round(int bet, Stack<Card> deck) {
         this.bet = bet;
@@ -26,7 +26,7 @@ public class Round {
         this.actionsTaken = new Stack<>();
     }
 
-    public Round(int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
+    public Round(int bet, Stack<Card> deck, Stack<Card> dealerHand, Stack<Card> playerHand) {
         this.bet = bet;
         this.deck = deck;
         this.dealerHand = dealerHand;

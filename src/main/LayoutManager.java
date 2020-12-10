@@ -19,8 +19,8 @@ public class LayoutManager implements NavListener, GameStateListener {
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
-        if (snapshot.getBalance() <= 0 ) {
+    public void onUpdate(int balance, Snapshot snapshot) {
+        if (balance <= 0 ) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);
         }

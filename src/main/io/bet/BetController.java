@@ -54,11 +54,11 @@ public class BetController extends RootController implements Initializable, Game
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
-        this.balance = snapshot.getBalance();
+    public void onUpdate(int balance, Snapshot snapshot) {
+        this.balance = balance;
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);
-        lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
+        lblBalance.setText(String.format("Balance: $%s", balance));
     }
 
     @FXML

@@ -31,7 +31,7 @@ public class HomeController extends RootController implements Initializable, Gam
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
-        lblBalance.setText(String.format("Balance: $%s", snapshot.getBalance()));
+    public void onUpdate(int balance, Snapshot snapshot) {
+        lblBalance.setText(String.format("Balance: $%s", balance));
     }
 }

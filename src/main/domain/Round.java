@@ -15,10 +15,8 @@ public class Round {
 
     private Stack<Action> actionsTaken;
     private Collection<Card> currentHand;
-    private int balance;
 
-    public Round(int balance, int bet, Stack<Card> deck) {
-        this.balance = balance;
+    public Round(int bet, Stack<Card> deck) {
         this.bet = bet;
         this.deck = deck;
         this.dealerHand = new Stack<>();
@@ -28,8 +26,7 @@ public class Round {
         this.actionsTaken = new Stack<>();
     }
 
-    public Round(int balance, int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
-        this.balance = balance;
+    public Round(int bet, Stack<Card> deck, Collection<Card> dealerHand, Stack<Card> playerHand) {
         this.bet = bet;
         this.deck = deck;
         this.dealerHand = dealerHand;
@@ -102,21 +99,11 @@ public class Round {
 
     // TODO: go back and check when insurance is supposed to pay out
     public void settleInsurance() {
-        if (!isBlackjack(dealerHand)) {
-            balance -= bet;
-        } else {
-            balance += bet;
-        }
         actionsTaken.add(BUY_INSURANCE);
-    }
-
-    public void settleBet() {
-        balance += Rules.settleBet(getSnapshot());
     }
 
     public Snapshot getSnapshot() {
         return new Snapshot(
-                balance,
                 bet,
                 determineOutcome(actionsTaken, currentHand, dealerHand),
                 deck,

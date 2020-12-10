@@ -6,7 +6,6 @@ import java.util.Stack;
 import static main.domain.Rules.insuranceAvailable;
 
 public class Snapshot {
-    private final int balance;
     private final int bet;
     private final Outcome outcome;
     private final Stack<Card> deck;
@@ -16,8 +15,7 @@ public class Snapshot {
     private final Stack<Snapshot> handsToSettle;
     private final Stack<Action> actionsTaken;
 
-    public Snapshot(int balance,
-                    int bet,
+    public Snapshot(int bet,
                     Outcome outcome,
                     Stack<Card> deck,
                     Collection<Card> dealerHand,
@@ -25,7 +23,6 @@ public class Snapshot {
                     Stack<Collection<Card>> handsToPlay,
                     Stack<Snapshot> handsToSettle,
                     Stack<Action> actionsTaken) {
-        this.balance = balance;
         this.bet = bet;
         this.deck = deck;
         this.outcome = outcome;
@@ -34,10 +31,6 @@ public class Snapshot {
         this.handsToPlay = handsToPlay;
         this.handsToSettle = handsToSettle;
         this.actionsTaken = actionsTaken;
-    }
-
-    public int getBalance() {
-        return balance;
     }
 
     public int getBet() {
@@ -69,9 +62,7 @@ public class Snapshot {
     }
 
     public boolean isInsuranceAvailable() {
-        return insuranceAvailable(dealerHand) &&
-                balance >= bet &&
-                actionsTaken.isEmpty();
+        return insuranceAvailable(dealerHand) && actionsTaken.isEmpty();
     }
 
     public Collection<Card> getDealerHand() {

@@ -6,17 +6,19 @@ import main.domain.Round;
 import java.util.*;
 
 import static main.domain.Deck.openingHand;
+import static main.domain.Rules.*;
 
 public class Game implements ControlListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
     private Round round;
+    private int balance = 200;
 
     public Game(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
-        round = new Round(200, 0, deck);
+        round = new Round(0, deck);
     }
 
     public void registerGameStateListener(GameStateListener gameStateListener) {
@@ -29,10 +31,9 @@ public class Game implements ControlListener, NavListener {
             final Map<String, Stack<Card>> openingHand = openingHand(deck);
             final Stack<Card> dealerHand = openingHand.get("dealer");
             final Stack<Card> playerHand = openingHand.get("player");
-            final int currentBalance = round.getSnapshot().getBalance();
 
-            round = new Round(currentBalance, bet, deck, dealerHand, playerHand);
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            round = new Round(bet, deck, dealerHand, playerHand);
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
@@ -43,7 +44,7 @@ public class Game implements ControlListener, NavListener {
     public void onSplit() {
         try {
             round.split();
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (NoSuchElementException | EmptyStackException ex) {
             System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
@@ -54,7 +55,7 @@ public class Game implements ControlListener, NavListener {
     public void onHit() {
         try {
             round.hit();
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (EmptyStackException ex) {
             System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
@@ -65,7 +66,7 @@ public class Game implements ControlListener, NavListener {
     public void onDouble() {
         try {
             round.doubleDown();
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (EmptyStackException ex) {
             System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
@@ -76,7 +77,7 @@ public class Game implements ControlListener, NavListener {
     public void onStand() {
         try {
             round.stand();
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (EmptyStackException ex) {
             System.out.println("Ran out of cards! Quitting...");
             System.exit(1);
@@ -86,22 +87,24 @@ public class Game implements ControlListener, NavListener {
     @Override
     public void onPurchaseInsurance() {
         round.settleInsurance();
-        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 
     @Override
     public void onSettleHand() {
-        round.settleBet();
+        balance += settleBet(round.getSnapshot());
         round.rewind();
-        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 
     @Override
     public void onMoveToBettingTable() {
-        round.settleBet();
-        gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+        balance += settleBet(round.getSnapshot());
+        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
     }
 
     @Override
-    public void onStopPlaying() {}
+    public void onStopPlaying() {
+        round = new Round(0, deck);
+    }
 }

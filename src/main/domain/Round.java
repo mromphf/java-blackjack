@@ -44,6 +44,7 @@ public class Round {
         if (isBust(currentHand) && !handsToPlay.isEmpty()) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
+            actionsTaken.clear();
         }
     }
 
@@ -60,6 +61,7 @@ public class Round {
         } else {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
+            actionsTaken.clear();
         }
     }
 

@@ -37,7 +37,10 @@ public class Game implements ActionListener, NavListener {
             final Stack<Card> playerHand = openingHand.get("player");
 
             round = new Round(bet, deck, dealerHand, playerHand);
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+
+            final Snapshot snapshot = round.getSnapshot();
+            history.add(snapshot);
+            gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
@@ -46,6 +49,8 @@ public class Game implements ActionListener, NavListener {
 
     @Override
     public void onActionTaken(Action action) {
+        round.record(action);
+
         try {
             switch (action) {
                 case HIT:
@@ -69,15 +74,13 @@ public class Game implements ActionListener, NavListener {
             System.exit(1);
         }
 
-        round.record(action);
-
         final Snapshot snapshot = round.getSnapshot();
 
-        //TODO: This ignores the remaining hands to settle
         if (snapshot.isResolved()) {
             balance += settleBet(snapshot);
         }
 
+        history.addAll(snapshot.getHandsToSettle());
         history.add(snapshot);
         gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }

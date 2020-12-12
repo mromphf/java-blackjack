@@ -90,14 +90,16 @@ public class Game implements ActionListener, NavListener {
     public void onSettleHand() {
         //TODO: Move this rewind business up into this class?
         round.rewind();
-        balance += settleBet(round.getSnapshot());
-        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+        final Snapshot snapshot = round.getSnapshot();
+        balance += settleBet(snapshot);
+        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }
 
     @Override
     public void onMoveToBettingTable() {
         history.clear();
-        gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+        final Snapshot snapshot = round.getSnapshot();
+        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }
 
     @Override

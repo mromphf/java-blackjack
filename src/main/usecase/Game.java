@@ -66,6 +66,7 @@ public class Game implements ActionListener, NavListener {
                     round.doubleDown();
                     break;
                 case BUY_INSURANCE:
+                case NO_INSURANCE:
                 default:
                     break;
             }

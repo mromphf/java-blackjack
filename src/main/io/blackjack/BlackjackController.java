@@ -130,8 +130,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onNoInsurance() {
-        insuranceControls.setVisible(false);
-        gameControls.setVisible(true);
+        actionListeners.forEach(l -> l.onActionTaken(NO_INSURANCE));
     }
 
     private void renderExposedTable(Snapshot snapshot) {

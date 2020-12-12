@@ -2,6 +2,7 @@ package main.domain;
 
 import java.util.*;
 
+import static main.domain.Action.*;
 import static main.domain.Rules.*;
 
 public class Round {
@@ -44,7 +45,7 @@ public class Round {
         if (isBust(currentHand) && !handsToPlay.isEmpty()) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
-            actionsTaken.clear();
+            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
         }
     }
 
@@ -61,7 +62,7 @@ public class Round {
         } else {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
-            actionsTaken.clear();
+            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
         }
     }
 

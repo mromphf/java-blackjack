@@ -80,8 +80,4 @@ public class Snapshot {
     public Stack<Action> getActionsTaken() {
         return actionsTaken;
     }
-
-    public Stack<Snapshot> getHandsToSettle() {
-        return handsToSettle;
-    }
 }

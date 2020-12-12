@@ -14,14 +14,12 @@ public class Game implements ActionListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
-    private final Stack<Snapshot> history;
     private Round round;
     private int balance = 200;
 
     public Game(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
-        this.history = new Stack<>();
         round = new Round(0, deck);
     }
 
@@ -37,10 +35,7 @@ public class Game implements ActionListener, NavListener {
             final Stack<Card> playerHand = openingHand.get("player");
 
             round = new Round(bet, deck, dealerHand, playerHand);
-
-            final Snapshot snapshot = round.getSnapshot();
-            history.add(snapshot);
-            gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
+            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
@@ -81,14 +76,11 @@ public class Game implements ActionListener, NavListener {
             balance += settleBet(snapshot);
         }
 
-        history.addAll(snapshot.getHandsToSettle());
-        history.add(snapshot);
         gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }
 
     @Override
     public void onSettleHand() {
-        //TODO: Move this rewind business up into this class?
         round.rewind();
         final Snapshot snapshot = round.getSnapshot();
         balance += settleBet(snapshot);
@@ -97,7 +89,6 @@ public class Game implements ActionListener, NavListener {
 
     @Override
     public void onMoveToBettingTable() {
-        history.clear();
         final Snapshot snapshot = round.getSnapshot();
         gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
     }

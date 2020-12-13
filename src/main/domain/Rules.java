@@ -107,14 +107,10 @@ public class Rules {
         int betMultiplier =  snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
-        switch (determineOutcome(snapshot)) {
-            case WIN:
-                return snapshot.getBet() * betMultiplier;
-            case LOSE:
-            case BUST:
-                return (snapshot.getBet() * betMultiplier) * -1;
-            default:
-                return 0;
+        if (determineOutcome(snapshot).equals(WIN)) {
+            return (snapshot.getBet() * 2) * betMultiplier;
+        } else {
+            return 0;
         }
     }
 }

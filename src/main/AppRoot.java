@@ -61,14 +61,17 @@ public class AppRoot {
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);
         homeController.registerNavListener(layoutManager);
+        homeController.registerNavListener(settlement);
 
         betController.registerControlListener(game);
         betController.registerNavListener(game);
         betController.registerNavListener(layoutManager);
+        betController.registerNavListener(settlement);
 
         blackjackController.registerControlListener(game);
         blackjackController.registerNavListener(game);
         blackjackController.registerNavListener(layoutManager);
+        blackjackController.registerNavListener(settlement);
 
         settlement.registerSettlementListener(homeController);
         settlement.registerSettlementListener(betController);

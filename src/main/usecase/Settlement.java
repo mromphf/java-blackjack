@@ -6,9 +6,10 @@ import main.domain.Snapshot;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 
-public class Settlement implements GameStateListener {
+public class Settlement implements NavListener, GameStateListener {
 
     private final Account account;
     private final Collection<SettlementListener> settlementListeners;
@@ -25,9 +26,26 @@ public class Settlement implements GameStateListener {
 
     @Override
     public void onUpdate(Snapshot snapshot) {
+        if (snapshot.getActionsTaken().stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
+            account.updateBalance(snapshot.getBet() * -1);
+        }
+
         if (snapshot.isResolved()) {
             account.updateBalance(settleBet(snapshot));
         }
+
         settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
     }
+
+    @Override
+    public void onStartNewRound(int bet) {
+        account.updateBalance(bet * -1);
+        settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+    }
+
+    @Override
+    public void onMoveToBettingTable() {}
+
+    @Override
+    public void onStopPlaying() {}
 }

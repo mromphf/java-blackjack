@@ -2,19 +2,15 @@ package main.io.home;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
 import javafx.scene.control.Label;
-import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.GameStateListener;
 import main.usecase.NavListener;
 import main.usecase.SettlementListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController extends RootController
-        implements Initializable, GameStateListener, SettlementListener {
+public class HomeController extends RootController implements Initializable, SettlementListener {
 
     @FXML
     private Label lblBalance;
@@ -36,7 +32,4 @@ public class HomeController extends RootController
     public void onBalanceChanged(int balance) {
         lblBalance.setText(String.format("Balance: $%s", balance));
     }
-
-    @Override
-    public void onUpdate(int balance, Snapshot snapshot) {}
 }

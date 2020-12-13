@@ -24,7 +24,7 @@ public class Settlement implements GameStateListener {
     }
 
     @Override
-    public void onUpdate(int balance, Snapshot snapshot) {
+    public void onUpdate(Snapshot snapshot) {
         if (snapshot.isResolved()) {
             account.updateBalance(settleBet(snapshot));
         }

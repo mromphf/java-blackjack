@@ -56,7 +56,6 @@ public class AppRoot {
         Settlement settlement = new Settlement(account);
 
         game.registerGameStateListener(blackjackController);
-        game.registerGameStateListener(homeController);
         game.registerGameStateListener(settlement);
 
         homeController.registerControlListener(game);

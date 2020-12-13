@@ -8,14 +8,12 @@ import main.domain.Snapshot;
 import java.util.*;
 
 import static main.domain.Deck.openingHand;
-import static main.domain.Rules.*;
 
 public class Game implements ActionListener, NavListener {
 
     private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
     private Round round;
-    private int balance = 200;
 
     public Game(Stack<Card> deck) {
         this.gameStateListeners = new ArrayList<>();
@@ -35,7 +33,7 @@ public class Game implements ActionListener, NavListener {
             final Stack<Card> playerHand = openingHand.get("player");
 
             round = new Round(bet, deck, dealerHand, playerHand);
-            gameStateListeners.forEach(l -> l.onUpdate(balance, round.getSnapshot()));
+            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
@@ -71,20 +69,14 @@ public class Game implements ActionListener, NavListener {
         }
 
         final Snapshot snapshot = round.getSnapshot();
-
-        if (snapshot.isResolved()) {
-            balance += settleBet(snapshot);
-        }
-
-        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
+        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
     }
 
     @Override
     public void onSettleHand() {
         round.rewind();
         final Snapshot snapshot = round.getSnapshot();
-        balance += settleBet(snapshot);
-        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
+        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
     }
 
     @Override

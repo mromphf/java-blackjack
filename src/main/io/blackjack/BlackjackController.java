@@ -63,7 +63,7 @@ public class BlackjackController extends RootController
     }
 
     @Override
-    public void onUpdate(int balance, Snapshot snapshot) {
+    public void onUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());

@@ -1,10 +1,11 @@
 package main.domain;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
 
-import static main.domain.Rules.determineOutcome;
-import static main.domain.Rules.insuranceAvailable;
+import static main.StringUtil.concat;
+import static main.domain.Rules.*;
 
 public class Snapshot {
     private final int bet;
@@ -79,5 +80,11 @@ public class Snapshot {
 
     public Stack<Action> getActionsTaken() {
         return actionsTaken;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{ %s: Bet: %s, Outcome: %s, Deck: %s, ActionsTaken: { %s }, PlayerScore: %s, DealerScore: %s }",
+                LocalTime.now(), bet, outcome, deck.size(), concat(actionsTaken, ','), score(playerHand), score(dealerHand));
     }
 }

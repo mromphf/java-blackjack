@@ -93,7 +93,6 @@ public class Round {
     public Snapshot getSnapshot() {
         return new Snapshot(
                 bet,
-                determineOutcome(actionsTaken, currentHand, dealerHand),
                 deck,
                 dealerHand,
                 currentHand,

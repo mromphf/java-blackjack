@@ -3,6 +3,7 @@ package main.domain;
 import java.util.Collection;
 import java.util.Stack;
 
+import static main.domain.Rules.determineOutcome;
 import static main.domain.Rules.insuranceAvailable;
 
 public class Snapshot {
@@ -16,7 +17,6 @@ public class Snapshot {
     private final Stack<Action> actionsTaken = new Stack<>();
 
     public Snapshot(int bet,
-                    Outcome outcome,
                     Stack<Card> deck,
                     Stack<Card> dealerHand,
                     Stack<Card> playerHand,
@@ -24,13 +24,13 @@ public class Snapshot {
                     Stack<Snapshot> handsToSettle,
                     Stack<Action> actionsTaken) {
         this.bet = bet;
-        this.outcome = outcome;
         this.deck.addAll(deck);
         this.dealerHand.addAll(dealerHand);
         this.playerHand.addAll(playerHand);
         this.handsToPlay.addAll(handsToPlay);
         this.handsToSettle.addAll(handsToSettle);
         this.actionsTaken.addAll(actionsTaken);
+        this.outcome = determineOutcome(actionsTaken, playerHand, dealerHand);
     }
 
     public int getBet() {

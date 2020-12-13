@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 
 import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.ActionListener;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
 import main.usecase.SettlementListener;
@@ -111,7 +110,7 @@ public class BlackjackController extends RootController
 
     @FXML
     private void onSettleNextHand() {
-        actionListeners.forEach(ActionListener::onSettleHand);
+        actionListeners.forEach(l -> l.onActionTaken(SETTLE));
     }
 
     @FXML

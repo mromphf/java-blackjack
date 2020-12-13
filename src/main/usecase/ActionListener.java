@@ -4,5 +4,4 @@ import main.domain.Action;
 
 public interface ActionListener {
     void onActionTaken(Action action);
-    void onSettleHand();
 }

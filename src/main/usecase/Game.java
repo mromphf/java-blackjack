@@ -55,6 +55,8 @@ public class Game implements ActionListener, NavListener {
                 case STAND:
                     round.stand();
                     break;
+                case SETTLE:
+                    round.rewind();
                 case DOUBLE:
                     round.doubleDown();
                     break;
@@ -73,17 +75,10 @@ public class Game implements ActionListener, NavListener {
     }
 
     @Override
-    public void onSettleHand() {
-        round.rewind();
-        final Snapshot snapshot = round.getSnapshot();
-        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
+    public void onStopPlaying() {
+        round = new Round(0, deck);
     }
 
     @Override
     public void onMoveToBettingTable() {}
-
-    @Override
-    public void onStopPlaying() {
-        round = new Round(0, deck);
-    }
 }

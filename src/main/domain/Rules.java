@@ -3,8 +3,7 @@ package main.domain;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static main.domain.Action.DOUBLE;
-import static main.domain.Action.STAND;
+import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 
 public class Rules {
@@ -103,15 +102,19 @@ public class Rules {
     }
 
     public static int settleBet(Snapshot snapshot) {
-        // TODO: incorporate insurance payout/penalty
+        int insurancePayout = (snapshot.getActionsTaken().stream()
+                .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack(snapshot.getDealerHand()))
+                    ? snapshot.getBet() * 2 : 0;
+
         int betMultiplier =  snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
         switch (determineOutcome(snapshot)) {
             case WIN:
-                return (snapshot.getBet() * 2) * betMultiplier;
+                //TODO: Incorporate Blackjack payout of 3:2
+                return ((snapshot.getBet() * 2) * betMultiplier) + insurancePayout;
             case PUSH:
-                return snapshot.getBet() * betMultiplier;
+                return (snapshot.getBet() * betMultiplier) + insurancePayout;
             default:
                 return 0;
         }

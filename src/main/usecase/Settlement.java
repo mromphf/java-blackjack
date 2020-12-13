@@ -1,10 +1,12 @@
 package main.usecase;
 
 import main.domain.Account;
+import main.domain.Action;
 import main.domain.Snapshot;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
@@ -26,7 +28,13 @@ public class Settlement implements NavListener, GameStateListener {
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        if (snapshot.getActionsTaken().stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
+        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
+
+        if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
+            account.updateBalance(snapshot.getBet() * -1);
+        }
+
+        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
             account.updateBalance(snapshot.getBet() * -1);
         }
 

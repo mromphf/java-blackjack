@@ -45,6 +45,7 @@ public class Round {
         if (isBust(currentHand) && !handsToPlay.isEmpty()) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
+            currentHand.add(deck.pop());
             actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
         }
     }
@@ -62,6 +63,7 @@ public class Round {
         } else {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
+            currentHand.add(deck.pop());
             actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
         }
     }
@@ -76,7 +78,6 @@ public class Round {
 
         Stack<Card> pocketHand = new Stack<Card>() {{
             add(iterator.next());
-            add(deck.pop());
         }};
 
         handsToPlay.add(pocketHand);

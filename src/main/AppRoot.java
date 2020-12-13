@@ -83,6 +83,7 @@ public class AppRoot {
         settlement.registerSettlementListener(betController);
         settlement.registerSettlementListener(blackjackController);
         settlement.registerSettlementListener(layoutManager);
+        settlement.registerSettlementListener(gameLogger);
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

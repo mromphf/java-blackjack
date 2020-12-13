@@ -84,7 +84,7 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("{ %s: Bet: %s, Outcome: %s, Deck: %s, ActionsTaken: { %s }, PlayerScore: %s, DealerScore: %s }",
+        return String.format("%s: Bet: %s, Outcome: %s, Deck: %s, ActionsTaken: { %s }, PlayerScore: %s, DealerScore: %s",
                 LocalTime.now(), bet, outcome, deck.size(), concat(actionsTaken, ','), score(playerHand), score(dealerHand));
     }
 }

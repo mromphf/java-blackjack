@@ -9,6 +9,8 @@ import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
+import main.io.log.GameLogger;
+import main.io.log.SystemLogHandler;
 import main.usecase.Game;
 import main.usecase.Settlement;
 
@@ -54,9 +56,13 @@ public class AppRoot {
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         Settlement settlement = new Settlement(account);
+        SystemLogHandler systemLogHandler = new SystemLogHandler();
+        GameLogger gameLogger = new GameLogger("Game Logger", null);
+        gameLogger.addHandler(systemLogHandler);
 
         game.registerGameStateListener(blackjackController);
         game.registerGameStateListener(settlement);
+        game.registerGameStateListener(gameLogger);
 
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);

@@ -8,7 +8,7 @@ import static main.domain.Rules.*;
 public class Round {
 
     private final Stack<Card> deck;
-    private final Stack<Stack <Card>> handsToPlay;
+    private final Stack<Stack<Card>> handsToPlay;
     private final Stack<Snapshot> handsToSettle;
     private final Stack<Card> dealerHand;
     private final int bet;
@@ -50,7 +50,7 @@ public class Round {
         }
     }
 
-    public void doubleDown() throws EmptyStackException{
+    public void doubleDown() throws EmptyStackException {
         currentHand.add(deck.pop());
         stand();
     }

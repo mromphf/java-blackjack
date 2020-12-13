@@ -109,10 +109,11 @@ public class Rules {
         int betMultiplier =  snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
+        float blackjackMultiplier = isBlackjack(snapshot.getPlayerHand()) ? 1.5f : 1.0f;
+
         switch (determineOutcome(snapshot)) {
             case WIN:
-                //TODO: Incorporate Blackjack payout of 3:2
-                return ((snapshot.getBet() * 2) * betMultiplier) + insurancePayout;
+                return (((int) (snapshot.getBet() * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;
             case PUSH:
                 return (snapshot.getBet() * betMultiplier) + insurancePayout;
             default:

@@ -44,31 +44,29 @@ public class Game implements ActionListener, NavListener {
     public void onActionTaken(Action action) {
         round.record(action);
 
-        try {
-            switch (action) {
-                case HIT:
-                    round.hit();
-                    break;
-                case SPLIT:
-                    round.split();
-                    break;
-                case STAND:
-                    round.stand();
-                    break;
-                case SETTLE:
-                    round.rewind();
-                case DOUBLE:
-                    round.doubleDown();
-                    break;
-                case BUY_INSURANCE:
-                case NO_INSURANCE:
-                default:
-                    break;
-            }
-        } catch (NoSuchElementException | EmptyStackException ex) {
-            System.out.println("Ran out of cards! Quitting...");
-            System.exit(1);
+        switch (action) {
+            case HIT:
+                round.hit();
+                break;
+            case SPLIT:
+                round.split();
+                break;
+            case STAND:
+                round.stand();
+                break;
+            case SETTLE:
+                round.rewind();
+            case DOUBLE:
+                round.doubleDown();
+                break;
+            case BUY_INSURANCE:
+            case NO_INSURANCE:
+            case REFILL:
+            default:
+                break;
         }
+
+        round.playNextHand();
 
         final Snapshot snapshot = round.getSnapshot();
         gameStateListeners.forEach(l -> l.onUpdate(snapshot));

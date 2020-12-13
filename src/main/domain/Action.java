@@ -5,6 +5,7 @@ public enum Action {
     DOUBLE,
     HIT,
     NO_INSURANCE,
+    REFILL,
     SETTLE,
     SPLIT,
     STAND

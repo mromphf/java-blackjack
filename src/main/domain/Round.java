@@ -3,6 +3,8 @@ package main.domain;
 import java.util.*;
 
 import static main.domain.Action.*;
+import static main.domain.Deck.fresh;
+import static main.domain.Deck.shuffle;
 import static main.domain.Rules.*;
 
 public class Round {
@@ -41,30 +43,52 @@ public class Round {
     }
 
     public void hit() throws EmptyStackException {
-        currentHand.add(deck.pop());
-        if (isBust(currentHand) && !handsToPlay.isEmpty()) {
-            handsToSettle.add(getSnapshot());
-            currentHand = handsToPlay.pop();
-            currentHand.add(deck.pop());
-            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
+        if (deck.isEmpty()) {
+            actionsTaken.add(REFILL);
+            deck.addAll(shuffle(fresh()));
         }
+
+        currentHand.add(deck.pop());
     }
 
     public void doubleDown() throws EmptyStackException {
+        if (deck.isEmpty()) {
+            actionsTaken.add(REFILL);
+            deck.addAll(shuffle(fresh()));
+        }
+
         currentHand.add(deck.pop());
         stand();
     }
 
     public void stand() throws EmptyStackException {
+        final int deckValue = deck.stream().mapToInt(Card::getBlackjackValue).sum();
+
+        if ((deckValue - score(dealerHand)) < 16 ) {
+            actionsTaken.add(REFILL);
+            deck.addAll(shuffle(fresh()));
+        }
+
         if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < 16) {
                 dealerHand.add(deck.pop());
             }
-        } else {
+        }
+    }
+
+    public void playNextHand() {
+        if (deck.isEmpty()) {
+            actionsTaken.add(REFILL);
+            deck.addAll(shuffle(fresh()));
+        }
+
+        if (!handsToPlay.isEmpty() &&
+                (isBust(currentHand) ||
+                        actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE)))) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
             currentHand.add(deck.pop());
-            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE)));
+            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE) || a.equals(REFILL)));
         }
     }
 

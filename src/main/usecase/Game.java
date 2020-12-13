@@ -88,10 +88,7 @@ public class Game implements ActionListener, NavListener {
     }
 
     @Override
-    public void onMoveToBettingTable() {
-        final Snapshot snapshot = round.getSnapshot();
-        gameStateListeners.forEach(l -> l.onUpdate(balance, snapshot));
-    }
+    public void onMoveToBettingTable() {}
 
     @Override
     public void onStopPlaying() {

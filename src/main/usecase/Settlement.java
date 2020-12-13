@@ -20,6 +20,7 @@ public class Settlement implements GameStateListener {
 
     public void registerSettlementListener(SettlementListener settlementListener) {
         settlementListeners.add(settlementListener);
+        settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
     }
 
     @Override

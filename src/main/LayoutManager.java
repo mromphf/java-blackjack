@@ -2,13 +2,12 @@ package main;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import main.domain.Snapshot;
-import main.usecase.GameStateListener;
 import main.usecase.NavListener;
+import main.usecase.SettlementListener;
 
 import java.util.Map;
 
-public class LayoutManager implements NavListener, GameStateListener {
+public class LayoutManager implements NavListener, SettlementListener {
 
     private final Scene scene;
     private final Map<Layout, Parent> layoutMap;
@@ -16,14 +15,6 @@ public class LayoutManager implements NavListener, GameStateListener {
     public LayoutManager(Scene scene, Map<Layout, Parent> layoutMap) {
         this.scene = scene;
         this.layoutMap = layoutMap;
-    }
-
-    @Override
-    public void onUpdate(int balance, Snapshot snapshot) {
-        if (balance <= 0 ) {
-            System.out.println("You are out of money! Please leave the casino...");
-            System.exit(0);
-        }
     }
 
     @Override
@@ -39,5 +30,13 @@ public class LayoutManager implements NavListener, GameStateListener {
     @Override
     public void onStopPlaying() {
         scene.setRoot(layoutMap.get(Layout.HOME));
+    }
+
+    @Override
+    public void onBalanceChanged(int balance) {
+        if (balance <= 0 ) {
+            System.out.println("You are out of money! Please leave the casino...");
+            System.exit(0);
+        }
     }
 }

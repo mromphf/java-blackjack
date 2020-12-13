@@ -4,15 +4,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.domain.Account;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
 import main.usecase.Game;
+import main.usecase.Settlement;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
@@ -37,8 +40,6 @@ public class AppRoot {
             e.printStackTrace();
         }
 
-        Game game = new Game(shuffle(fresh()));
-
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();
         BetController betController = betLoader.getController();
@@ -48,24 +49,32 @@ public class AppRoot {
         layoutMap.put(Layout.BET, betLoader.getRoot());
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
 
+        Account account = new Account(UUID.randomUUID(), "StickyJibs", 200);
+        Game game = new Game(shuffle(fresh()));
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
+        Settlement settlement = new Settlement(account);
 
-        game.registerGameStateListener(betController);
         game.registerGameStateListener(blackjackController);
         game.registerGameStateListener(homeController);
-        game.registerGameStateListener(layoutManager);
+        game.registerGameStateListener(settlement);
 
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);
+        homeController.registerNavListener(layoutManager);
+
         betController.registerControlListener(game);
         betController.registerNavListener(game);
+        betController.registerNavListener(layoutManager);
+
         blackjackController.registerControlListener(game);
         blackjackController.registerNavListener(game);
-
-        homeController.registerNavListener(layoutManager);
-        betController.registerNavListener(layoutManager);
         blackjackController.registerNavListener(layoutManager);
+
+        settlement.registerSettlementListener(homeController);
+        settlement.registerSettlementListener(betController);
+        settlement.registerSettlementListener(blackjackController);
+        settlement.registerSettlementListener(layoutManager);
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

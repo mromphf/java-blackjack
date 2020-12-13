@@ -6,15 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import main.domain.Snapshot;
 import main.io.RootController;
-import main.usecase.GameStateListener;
 import main.usecase.NavListener;
+import main.usecase.SettlementListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BetController extends RootController implements Initializable, GameStateListener {
+public class BetController extends RootController implements Initializable, SettlementListener {
 
     @FXML
     private Label lblBet;
@@ -53,14 +52,6 @@ public class BetController extends RootController implements Initializable, Game
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
     }
 
-    @Override
-    public void onUpdate(int balance, Snapshot snapshot) {
-        this.balance = balance;
-        btnDeal.setDisable(bet > balance || bet <= 0);
-        lblBet.setText("Bet: $" + bet);
-        lblBalance.setText(String.format("Balance: $%s", balance));
-    }
-
     @FXML
     private void onDeal() {
         navListeners.forEach(l -> l.onStartNewRound(bet));
@@ -69,6 +60,14 @@ public class BetController extends RootController implements Initializable, Game
 
     @FXML void onQuit() {
         navListeners.forEach(NavListener::onStopPlaying);
+    }
+
+    @Override
+    public void onBalanceChanged(int balance) {
+        this.balance = balance;
+        btnDeal.setDisable(bet > balance || bet <= 0);
+        lblBet.setText("Bet: $" + bet);
+        lblBalance.setText(String.format("Balance: $%s", balance));
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

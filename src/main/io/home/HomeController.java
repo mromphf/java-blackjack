@@ -8,11 +8,13 @@ import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
+import main.usecase.SettlementListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController extends RootController implements Initializable, GameStateListener {
+public class HomeController extends RootController
+        implements Initializable, GameStateListener, SettlementListener {
 
     @FXML
     private Label lblBalance;
@@ -31,7 +33,10 @@ public class HomeController extends RootController implements Initializable, Gam
     }
 
     @Override
-    public void onUpdate(int balance, Snapshot snapshot) {
+    public void onBalanceChanged(int balance) {
         lblBalance.setText(String.format("Balance: $%s", balance));
     }
+
+    @Override
+    public void onUpdate(int balance, Snapshot snapshot) {}
 }

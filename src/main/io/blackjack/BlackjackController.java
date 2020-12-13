@@ -12,6 +12,7 @@ import main.io.RootController;
 import main.usecase.ActionListener;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
+import main.usecase.SettlementListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,7 +21,8 @@ import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
-public class BlackjackController extends RootController implements Initializable, GameStateListener {
+public class BlackjackController extends RootController
+        implements Initializable, GameStateListener, SettlementListener {
 
     @FXML
     private Label lblBet;
@@ -56,6 +58,11 @@ public class BlackjackController extends RootController implements Initializable
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
+    public void onBalanceChanged(int balance) {
+        lblBalance.setText(String.format("Balance: $%s", balance));
+    }
+
+    @Override
     public void onUpdate(int balance, Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
@@ -63,7 +70,6 @@ public class BlackjackController extends RootController implements Initializable
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
         gameOverControls.setVisible(snapshot.isResolved() && snapshot.isRoundFinished());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
-        lblBalance.setText(String.format("Balance: $%s", balance));
 
         if (snapshot.isResolved()) {
             renderExposedTable(snapshot);

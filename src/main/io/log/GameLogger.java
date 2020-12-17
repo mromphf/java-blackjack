@@ -2,13 +2,13 @@ package main.io.log;
 
 import main.domain.Snapshot;
 import main.usecase.GameStateListener;
-import main.usecase.SettlementListener;
+import main.usecase.TransactionListener;
 
 import java.time.LocalTime;
 import java.util.logging.Logger;
 import static java.util.logging.Level.*;
 
-public class GameLogger extends Logger implements GameStateListener, SettlementListener {
+public class GameLogger extends Logger implements GameStateListener, TransactionListener {
 
     public GameLogger(String name, String resourceBundleName) {
         super(name, resourceBundleName);

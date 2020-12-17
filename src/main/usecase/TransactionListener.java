@@ -1,5 +1,5 @@
 package main.usecase;
 
-public interface SettlementListener {
+public interface TransactionListener {
     void onBalanceChanged(int balance);
 }

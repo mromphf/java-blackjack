@@ -11,7 +11,7 @@ import main.io.home.HomeController;
 import main.io.log.GameLogger;
 import main.io.log.SystemLogHandler;
 import main.usecase.Game;
-import main.usecase.Settlement;
+import main.usecase.Transactor;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -52,35 +52,35 @@ public class AppRoot {
         Game game = new Game(shuffle(fresh()));
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
-        Settlement settlement = new Settlement();
+        Transactor transactor = new Transactor();
         SystemLogHandler systemLogHandler = new SystemLogHandler();
         GameLogger gameLogger = new GameLogger("Game Logger", null);
         gameLogger.addHandler(systemLogHandler);
 
         game.registerGameStateListener(blackjackController);
-        game.registerGameStateListener(settlement);
+        game.registerGameStateListener(transactor);
         game.registerGameStateListener(gameLogger);
 
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);
         homeController.registerNavListener(layoutManager);
-        homeController.registerNavListener(settlement);
+        homeController.registerNavListener(transactor);
 
         betController.registerControlListener(game);
         betController.registerNavListener(game);
         betController.registerNavListener(layoutManager);
-        betController.registerNavListener(settlement);
+        betController.registerNavListener(transactor);
 
         blackjackController.registerControlListener(game);
         blackjackController.registerNavListener(game);
         blackjackController.registerNavListener(layoutManager);
-        blackjackController.registerNavListener(settlement);
+        blackjackController.registerNavListener(transactor);
 
-        settlement.registerSettlementListener(homeController);
-        settlement.registerSettlementListener(betController);
-        settlement.registerSettlementListener(blackjackController);
-        settlement.registerSettlementListener(layoutManager);
-        settlement.registerSettlementListener(gameLogger);
+        transactor.registerSettlementListener(homeController);
+        transactor.registerSettlementListener(betController);
+        transactor.registerSettlementListener(blackjackController);
+        transactor.registerSettlementListener(layoutManager);
+        transactor.registerSettlementListener(gameLogger);
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

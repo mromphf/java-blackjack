@@ -11,7 +11,7 @@ import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
-import main.usecase.SettlementListener;
+import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +21,7 @@ import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
 public class BlackjackController extends RootController
-        implements Initializable, GameStateListener, SettlementListener {
+        implements Initializable, GameStateListener, TransactionListener {
 
     @FXML
     private Label lblBet;

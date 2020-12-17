@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import main.domain.Account;
 import main.io.RootController;
-import main.usecase.SettlementListener;
+import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class HomeController extends RootController implements Initializable, SettlementListener {
+public class HomeController extends RootController implements Initializable, TransactionListener {
 
     @FXML
     private ListView<Account> lstAccounts;

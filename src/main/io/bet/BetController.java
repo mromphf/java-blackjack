@@ -8,12 +8,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.io.RootController;
 import main.usecase.NavListener;
-import main.usecase.SettlementListener;
+import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BetController extends RootController implements Initializable, SettlementListener {
+public class BetController extends RootController implements Initializable, TransactionListener {
 
     @FXML
     private Label lblBet;

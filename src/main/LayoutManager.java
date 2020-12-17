@@ -4,11 +4,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.domain.Account;
 import main.usecase.NavListener;
-import main.usecase.SettlementListener;
+import main.usecase.TransactionListener;
 
 import java.util.Map;
 
-public class LayoutManager implements NavListener, SettlementListener {
+public class LayoutManager implements NavListener, TransactionListener {
 
     private final Scene scene;
     private final Map<Layout, Parent> layoutMap;

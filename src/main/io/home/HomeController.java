@@ -59,6 +59,11 @@ public class HomeController extends RootController implements Initializable, Tra
 
     @Override
     public void onBalanceChanged(int balance) {
-        lblBalance.setText(String.format("Balance: $%s", balance));
+        lstAccounts.refresh();
+        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+        btnPlay.setDisable(selectedAccount == null);
+        if (selectedAccount != null ) {
+            lblBalance.setText(String.format("Balance: $%s", selectedAccount.getBalance()));
+        }
     }
 }

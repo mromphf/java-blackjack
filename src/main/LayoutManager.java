@@ -2,6 +2,7 @@ package main;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import main.domain.Account;
 import main.usecase.NavListener;
 import main.usecase.SettlementListener;
 
@@ -25,6 +26,11 @@ public class LayoutManager implements NavListener, SettlementListener {
     @Override
     public void onMoveToBettingTable() {
         scene.setRoot(layoutMap.get(Layout.BET));
+    }
+
+    @Override
+    public void onMoveToBettingTable(Account account) {
+        onMoveToBettingTable();
     }
 
     @Override

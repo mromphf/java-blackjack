@@ -3,11 +3,14 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ListView?>
 <GridPane fx:controller="main.io.home.HomeController"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
 
-    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="5">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
+    <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" onMouseClicked="#onClickList"/>
+
+    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="5">
+        <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
             Play
         </Button>
 
@@ -16,8 +19,8 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0">
-        <Label fx:id="lblBalance" text="Balance: $200" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="200" textAlignment="CENTER">
+    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0">
+        <Label fx:id="lblBalance" text="Balance: $0" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="200" textAlignment="CENTER">
             <font>
                 <Font name="Arial" size="30" />
             </font>

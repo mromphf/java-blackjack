@@ -4,26 +4,28 @@ import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 
 public class Settlement implements NavListener, GameStateListener {
 
-    private final Account account;
+    private final Queue<Account> accounts;
     private final Collection<SettlementListener> settlementListeners;
 
-    public Settlement(Account account) {
-        this.account = account;
+    public Settlement() {
+        this.accounts = new ArrayDeque<>();
         this.settlementListeners = new LinkedList<>();
     }
 
     public void registerSettlementListener(SettlementListener settlementListener) {
         settlementListeners.add(settlementListener);
-        settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+
+        if (!accounts.isEmpty()) {
+            int firstBalance = accounts.peek().getBalance();
+            settlementListeners.forEach(l -> l.onBalanceChanged(firstBalance));
+        }
     }
 
     @Override
@@ -31,29 +33,47 @@ public class Settlement implements NavListener, GameStateListener {
         final Stack<Action> actionsTaken = snapshot.getActionsTaken();
 
         if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
-            account.updateBalance(snapshot.getBet() * -1);
+            accounts.forEach(a -> a.updateBalance(snapshot.getBet() * -1));
         }
 
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
-            account.updateBalance(snapshot.getBet() * -1);
+            accounts.forEach(a -> a.updateBalance(snapshot.getBet() * -1));
         }
 
         if (snapshot.isResolved()) {
-            account.updateBalance(settleBet(snapshot));
+            accounts.forEach(a -> a.updateBalance(settleBet(snapshot)));
         }
 
-        settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+        if (!accounts.isEmpty()) {
+            int firstBalance = accounts.peek().getBalance();
+            settlementListeners.forEach(l -> l.onBalanceChanged(firstBalance));
+        }
     }
 
     @Override
     public void onStartNewRound(int bet) {
-        account.updateBalance(bet * -1);
-        settlementListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+        accounts.forEach(a -> a.updateBalance(bet * -1));
+
+        if (!accounts.isEmpty()) {
+            int firstBalance = accounts.peek().getBalance();
+            settlementListeners.forEach(l -> l.onBalanceChanged(firstBalance));
+        }
     }
 
     @Override
     public void onMoveToBettingTable() {}
 
     @Override
-    public void onStopPlaying() {}
+    public void onMoveToBettingTable(Account account) {
+        accounts.add(account);
+        if (!accounts.isEmpty()) {
+            int firstBalance = accounts.peek().getBalance();
+            settlementListeners.forEach(l -> l.onBalanceChanged(firstBalance));
+        }
+    }
+
+    @Override
+    public void onStopPlaying() {
+        accounts.clear();
+    }
 }

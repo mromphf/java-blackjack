@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.domain.Account;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
@@ -17,7 +16,6 @@ import main.usecase.Settlement;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
@@ -51,11 +49,10 @@ public class AppRoot {
         layoutMap.put(Layout.BET, betLoader.getRoot());
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
 
-        Account account = new Account(UUID.randomUUID(), "StickyJibs", 200);
         Game game = new Game(shuffle(fresh()));
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
-        Settlement settlement = new Settlement(account);
+        Settlement settlement = new Settlement();
         SystemLogHandler systemLogHandler = new SystemLogHandler();
         GameLogger gameLogger = new GameLogger("Game Logger", null);
         gameLogger.addHandler(systemLogHandler);

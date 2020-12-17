@@ -1,9 +1,6 @@
 package main.usecase;
 
-import main.domain.Action;
-import main.domain.Card;
-import main.domain.Round;
-import main.domain.Snapshot;
+import main.domain.*;
 
 import java.util.*;
 
@@ -79,4 +76,9 @@ public class Game implements ActionListener, NavListener {
 
     @Override
     public void onMoveToBettingTable() {}
+
+    @Override
+    public void onMoveToBettingTable(Account account) {
+        onMoveToBettingTable();
+    }
 }

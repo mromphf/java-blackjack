@@ -34,4 +34,9 @@ public class Account {
     public int hashCode() {
         return Objects.hash(key, name, balance);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s: \t$%s", name, balance);
+    }
 }

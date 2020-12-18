@@ -40,6 +40,7 @@ public class LayoutManager implements NavListener, TransactionListener {
 
     @Override
     public void onBalanceChanged(int balance) {
+        //TODO: This won't allow a player to bet the last of their money.
         if (balance <= 0 ) {
             System.out.println("You are out of money! Please leave the casino...");
             System.exit(0);

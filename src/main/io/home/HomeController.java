@@ -50,16 +50,16 @@ public class HomeController extends RootController implements Initializable, Tra
 
     @FXML
     public void onClickList() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        btnPlay.setDisable(selectedAccount == null);
-        if (selectedAccount != null ) {
-            lblBalance.setText(String.format("Balance: $%s", selectedAccount.getBalance()));
-        }
+        refreshBalanceLabel();
     }
 
     @Override
     public void onBalanceChanged(int balance) {
         lstAccounts.refresh();
+        refreshBalanceLabel();
+    }
+
+    private void refreshBalanceLabel() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
         btnPlay.setDisable(selectedAccount == null);
         if (selectedAccount != null ) {

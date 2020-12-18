@@ -8,13 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import main.domain.Account;
 import main.io.RootController;
+import main.io.storage.AccountStorage;
 import main.usecase.TransactionListener;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class HomeController extends RootController implements Initializable, TransactionListener {
 
@@ -29,12 +27,7 @@ public class HomeController extends RootController implements Initializable, Tra
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Account> list = new ArrayList<Account>() {{
-            add(new Account(UUID.randomUUID(), "StickyJibs", 200));
-            add(new Account(UUID.randomUUID(), "Fast Browns", 100));
-            add(new Account(UUID.randomUUID(), "Sum Uncles", 450));
-        }};
-        lstAccounts.setItems(FXCollections.observableList(list));
+        lstAccounts.setItems(FXCollections.observableList(AccountStorage.getAll()));
     }
 
     @FXML

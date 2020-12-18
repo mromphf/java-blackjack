@@ -20,13 +20,13 @@ public class ImageMap {
     public static void load() {
         for(Card c : fresh()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getFaceValue();
-            final String imagePath = String.format("/%s.jpg", imageName);
+            final String imagePath = String.format("/graphics/%s.jpg", imageName);
             final Image image = new Image(ImageMap.class.getResource(imagePath).toString());
             imageMap.put(imageName, image);
         }
 
-        final Image blueCardImage = new Image(ImageMap.class.getResource(String.format("/%s.jpg", BLUE_CARD)).toString());
-        final Image redCardImage = new Image(ImageMap.class.getResource(String.format("/%s.jpg", RED_CARD)).toString());
+        final Image blueCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.jpg", BLUE_CARD)).toString());
+        final Image redCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.jpg", RED_CARD)).toString());
         imageMap.put(BLUE_CARD, blueCardImage);
         imageMap.put(RED_CARD, redCardImage);
     }

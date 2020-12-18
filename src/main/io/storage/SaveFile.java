@@ -13,7 +13,7 @@ public class SaveFile {
         List<Account> accounts = new ArrayList<>();
 
         try {
-            Scanner sc = new Scanner(new File(SaveFile.class.getResource("/accounts.csv").toURI()));
+            Scanner sc = new Scanner(new File(SaveFile.class.getResource("/accounts/accounts.csv").toURI()));
             sc.useDelimiter("\n");
             sc.next();
 

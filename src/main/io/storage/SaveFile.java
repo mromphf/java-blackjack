@@ -62,6 +62,20 @@ public class SaveFile implements Memory {
     }
 
     @Override
+    public void saveTransaction(Transaction transaction) {
+        final URL url = SaveFile.class.getResource("/transactions/2020-12-19.csv");
+        final File transactionsFile = new File(url.getPath());
+
+        try {
+            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
+            writer.println(transaction.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void saveNewAccount(Account account) {
         final URL url = SaveFile.class.getResource("/accounts/");
         final File accountFile = new File(url.getPath() + account.getKey());

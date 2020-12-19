@@ -52,7 +52,7 @@ public class Transactor implements NavListener, GameStateListener {
             //account = account.updateBalance(settleBet(snapshot));
         }
 
-        transactionListeners.forEach(l -> l.onBalanceChanged(account.updateBalance(account.deriveBalance(transactions))));
+        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
     }
 
     @Override
@@ -61,13 +61,13 @@ public class Transactor implements NavListener, GameStateListener {
                 LocalDateTime.now(), account.getKey(), "Bet", (bet * -1));
         transactions.add(trans_bet);
         //account = account.updateBalance(bet * -1);
-        transactionListeners.forEach(l -> l.onBalanceChanged(account.updateBalance(account.deriveBalance(transactions))));
+        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
     }
 
     @Override
     public void onMoveToBettingTable(Account account) {
         this.account = account;
-        transactionListeners.forEach(l -> l.onBalanceChanged(account));
+        transactionListeners.forEach(l -> l.onAccountUpdated(account));
     }
 
     @Override

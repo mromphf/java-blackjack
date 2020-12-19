@@ -58,7 +58,7 @@ public class BlackjackController extends RootController
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onBalanceChanged(Account account) {
+    public void onAccountUpdated(Account account) {
         lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
     }
 

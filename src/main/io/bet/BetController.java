@@ -64,7 +64,7 @@ public class BetController extends RootController implements Initializable, Tran
     }
 
     @Override
-    public void onBalanceChanged(Account account) {
+    public void onAccountUpdated(Account account) {
         this.balance = account.getBalance();
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);

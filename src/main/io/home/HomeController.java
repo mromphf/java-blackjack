@@ -116,7 +116,7 @@ public class HomeController extends RootController implements Initializable, Tra
     }
 
     @Override
-    public void onBalanceChanged(Account account) {
+    public void onAccountUpdated(Account account) {
         accountMap.put(account.getKey(), account);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }

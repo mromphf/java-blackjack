@@ -21,7 +21,7 @@ public class GameLogger extends Logger implements GameStateListener, Transaction
     }
 
     @Override
-    public void onBalanceChanged(Account account) {
+    public void onAccountUpdated(Account account) {
         log(INFO, String.format("%s: Balance: %s", LocalTime.now(), account.getBalance()));
     }
 }

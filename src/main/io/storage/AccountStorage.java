@@ -38,5 +38,5 @@ public class AccountStorage implements AccountListener {
     }
 
     @Override
-    public void onBalanceChanged(Account account) {}
+    public void onAccountUpdated(Account account) {}
 }

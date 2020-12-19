@@ -1,34 +1,49 @@
 package main.io.storage;
 
+import com.oracle.javafx.jmx.json.JSONDocument;
+import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import main.domain.Account;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 public class SaveFile {
 
-    public List<Account> getAllAccounts() {
-        List<Account> accounts = new ArrayList<>();
+    public Set<Account> getAllAccounts() {
+        Set<Account> accounts = new HashSet<>();
 
         try {
-            Scanner sc = new Scanner(new File(SaveFile.class.getResource("/accounts/accounts.csv").toURI()));
-            sc.useDelimiter("\n");
-            sc.next();
-
-            while (sc.hasNext()) {
-                String[] line = sc.next().split(",");
-                accounts.add(new Account(UUID.fromString(line[0]), line[1], Integer.parseInt(line[2])));
+            final URL url = SaveFile.class.getResource("/accounts");
+            final File accountsDirectory = new File(url.getPath());
+            for (File file : Objects.requireNonNull(accountsDirectory.listFiles())) {
+                accounts.add(loadAccount(file));
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Could not load accounts file!");
             return accounts;
-        } catch ( NoSuchElementException | URISyntaxException e) {
+        } catch ( NoSuchElementException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
             System.exit(1);
         }
 
         return accounts;
+    }
+
+    public Account loadAccount(File file) throws IOException {
+        final FileReader fileReader = new FileReader(file);
+        final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
+        final JSONDocument document = jsonStreamReader.build();
+
+        fileReader.close();
+        jsonStreamReader.close();
+
+        return new Account(
+                UUID.fromString(document.getString("key")),
+                document.getString("name"),
+                document.getNumber("balance").intValue()
+        );
     }
 }

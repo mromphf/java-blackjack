@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class SaveFile implements Storage {
@@ -44,7 +45,8 @@ public class SaveFile implements Storage {
         return new Account(
                 UUID.fromString(document.getString("key")),
                 document.getString("name"),
-                document.getNumber("balance").intValue()
+                document.getNumber("balance").intValue(),
+                LocalDateTime.parse(document.getString("created"))
         );
     }
 }

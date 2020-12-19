@@ -1,5 +1,6 @@
 package main.domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -7,15 +8,17 @@ public class Account {
     private final UUID key;
     private final String name;
     private final int balance;
+    private final LocalDateTime created;
 
-    public Account(UUID key, String name, int balance) {
+    public Account(UUID key, String name, int balance, LocalDateTime created) {
         this.key = key;
         this.name = name;
         this.balance = balance;
+        this.created = created;
     }
 
     public Account updateBalance(int val) {
-        return new Account(key, name, balance + val);
+        return new Account(key, name, balance + val, created);
     }
 
     public UUID getKey() {
@@ -28,6 +31,10 @@ public class Account {
 
     public int getBalance() {
         return balance;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
     }
 
     @Override
@@ -45,6 +52,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return String.format("%s: \t$%s", name, balance);
+        return String.format("%s: \t$%s\tCreated: %s", name, balance, created);
     }
 }

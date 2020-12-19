@@ -4,6 +4,7 @@ import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
@@ -15,7 +16,7 @@ public class Transactor implements NavListener, GameStateListener {
     private Account account;
 
     public Transactor() {
-        this.account = new Account(UUID.randomUUID(), "Placeholder", 0);
+        this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactionListeners = new LinkedList<>();
     }
 

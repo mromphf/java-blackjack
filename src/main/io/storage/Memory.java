@@ -4,7 +4,7 @@ import main.domain.Account;
 
 import java.util.Set;
 
-public interface Storage {
+public interface Memory {
     Set<Account> loadAllAccounts();
     void saveNewAccount(Account account);
 }

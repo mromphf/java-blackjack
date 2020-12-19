@@ -8,11 +8,11 @@ import java.util.Queue;
 
 public class AccountStorage {
 
-    private final Storage storage;
+    private final Memory memory;
     private final Queue<TransactionListener> transactionListeners;
 
-    public AccountStorage(Storage storage) {
-        this.storage = storage;
+    public AccountStorage(Memory memory) {
+        this.memory = memory;
         this.transactionListeners = new ArrayDeque<>();
     }
 
@@ -21,7 +21,7 @@ public class AccountStorage {
     }
 
     public void loadAllAccounts() {
-        for(Account account: storage.loadAllAccounts()) {
+        for(Account account: memory.loadAllAccounts()) {
             transactionListeners.forEach(l -> l.onBalanceChanged(account));
         }
     }

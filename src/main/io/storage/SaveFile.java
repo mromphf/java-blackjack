@@ -12,7 +12,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class SaveFile implements Storage {
+public class SaveFile implements Memory {
 
     @Override
     public Set<Account> loadAllAccounts() {

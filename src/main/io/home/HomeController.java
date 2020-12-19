@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.RootController;
+import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 import main.usecase.TransactionListener;
 
@@ -37,6 +38,12 @@ public class HomeController extends RootController implements Initializable, Tra
     private Button btnPlay;
 
     private final Map<UUID, Account> accountMap = new HashMap<>();
+
+    private final Queue<AccountListener> accountListeners = new ArrayDeque<>();
+
+    public void registerAccountListener(AccountListener accountListener) {
+        accountListeners.add(accountListener);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -83,13 +90,16 @@ public class HomeController extends RootController implements Initializable, Tra
         final String name = txtName.getText();
         final int balance = 200;
         final LocalDateTime now = LocalDateTime.now();
+        final Account account = new Account(uuid, name, balance, now);
 
-        accountMap.put(uuid, new Account(uuid, name, balance, now));
+        accountMap.put(uuid, account);
 
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+
+        accountListeners.forEach(l -> l.onNewAccountOpened(account));
     }
 
     @Override

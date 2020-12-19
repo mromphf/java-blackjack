@@ -71,6 +71,7 @@ public class AppRoot {
         homeController.registerNavListener(game);
         homeController.registerNavListener(layoutManager);
         homeController.registerNavListener(transactor);
+        homeController.registerAccountListener(accountStorage);
 
         betController.registerControlListener(game);
         betController.registerNavListener(game);

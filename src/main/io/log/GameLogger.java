@@ -22,6 +22,6 @@ public class GameLogger extends Logger implements GameStateListener, Transaction
 
     @Override
     public void onAccountUpdated(Account account) {
-        log(INFO, String.format("%s: Balance: %s", LocalTime.now(), account.getBalance()));
+        log(INFO, String.format("%s: %s's Balance: %s", LocalTime.now(), account.getName(), account.getBalance()));
     }
 }

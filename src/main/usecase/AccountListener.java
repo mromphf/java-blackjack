@@ -4,4 +4,5 @@ import main.domain.Account;
 
 public interface AccountListener extends TransactionListener {
     void onNewAccountOpened(Account account);
+    void onAccountDeleted(Account account);
 }

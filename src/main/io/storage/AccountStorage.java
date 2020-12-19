@@ -33,5 +33,10 @@ public class AccountStorage implements AccountListener {
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        memory.deleteAccount(account);
+    }
+
+    @Override
     public void onBalanceChanged(Account account) {}
 }

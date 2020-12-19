@@ -19,7 +19,11 @@
                 Play
             </Button>
 
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onExit">
+            <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onDelete">
+                Delete
+            </Button>
+
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="3" minWidth="100" minHeight="50" onAction="#onExit">
                 Exit
             </Button>
         </GridPane>

@@ -10,6 +10,8 @@ import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
 import main.io.log.GameLogger;
 import main.io.log.ConsoleLogHandler;
+import main.io.storage.AccountStorage;
+import main.io.storage.SaveFile;
 import main.usecase.Game;
 import main.usecase.Transactor;
 
@@ -49,17 +51,21 @@ public class AppRoot {
         layoutMap.put(Layout.BET, betLoader.getRoot());
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
 
+        AccountStorage accountStorage = new AccountStorage(new SaveFile());
         Game game = new Game(shuffle(fresh()));
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         Transactor transactor = new Transactor();
         ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
+
         GameLogger gameLogger = new GameLogger("Game Logger", null);
         gameLogger.addHandler(consoleLogHandler);
 
         game.registerGameStateListener(blackjackController);
         game.registerGameStateListener(transactor);
         game.registerGameStateListener(gameLogger);
+
+        accountStorage.registerTransactionListener(homeController);
 
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);
@@ -81,6 +87,8 @@ public class AppRoot {
         transactor.registerSettlementListener(blackjackController);
         transactor.registerSettlementListener(layoutManager);
         transactor.registerSettlementListener(gameLogger);
+
+        accountStorage.loadAllAccounts();
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import main.domain.Account;
 import main.io.RootController;
-import main.io.storage.AccountStorage;
 import main.usecase.TransactionListener;
 
 import java.net.URL;
@@ -28,9 +27,7 @@ public class HomeController extends RootController implements Initializable, Tra
     private Button btnPlay;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        lstAccounts.setItems(FXCollections.observableList(AccountStorage.getAll()));
-    }
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
     public void onPlay() {

@@ -9,7 +9,7 @@ import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.home.HomeController;
 import main.io.log.GameLogger;
-import main.io.log.SystemLogHandler;
+import main.io.log.ConsoleLogHandler;
 import main.usecase.Game;
 import main.usecase.Transactor;
 
@@ -53,9 +53,9 @@ public class AppRoot {
         Scene scene = new Scene(layoutMap.get(Layout.HOME));
         LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         Transactor transactor = new Transactor();
-        SystemLogHandler systemLogHandler = new SystemLogHandler();
+        ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         GameLogger gameLogger = new GameLogger("Game Logger", null);
-        gameLogger.addHandler(systemLogHandler);
+        gameLogger.addHandler(consoleLogHandler);
 
         game.registerGameStateListener(blackjackController);
         game.registerGameStateListener(transactor);

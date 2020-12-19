@@ -3,7 +3,7 @@ package main.io.log;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class SystemLogHandler extends Handler {
+public class ConsoleLogHandler extends Handler {
 
     @Override
     public void publish(LogRecord record) {

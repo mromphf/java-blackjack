@@ -1,28 +1,28 @@
 package main.io.storage;
 
 import main.domain.Account;
-import main.usecase.TransactionListener;
+import main.usecase.MemoryListener;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Queue;
 
 public class AccountStorage {
 
     private final Memory memory;
-    private final Queue<TransactionListener> transactionListeners;
+    private final Queue<MemoryListener> memoryListeners;
 
     public AccountStorage(Memory memory) {
         this.memory = memory;
-        this.transactionListeners = new ArrayDeque<>();
+        this.memoryListeners = new ArrayDeque<>();
     }
 
-    public void registerTransactionListener(TransactionListener transactionListener) {
-        transactionListeners.add(transactionListener);
+    public void registerMemoryListener(MemoryListener memoryListener) {
+        memoryListeners.add(memoryListener);
     }
 
     public void loadAllAccounts() {
-        for(Account account: memory.loadAllAccounts()) {
-            transactionListeners.forEach(l -> l.onBalanceChanged(account));
-        }
+        final Collection<Account> accounts = memory.loadAllAccounts();
+        memoryListeners.forEach(l -> l.onAccountsLoaded(accounts));
     }
 }

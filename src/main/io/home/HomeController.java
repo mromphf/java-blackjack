@@ -9,13 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.RootController;
+import main.usecase.MemoryListener;
 import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class HomeController extends RootController implements Initializable, TransactionListener {
+public class HomeController extends RootController implements Initializable, TransactionListener, MemoryListener {
 
     @FXML
     public GridPane listControls;
@@ -94,6 +95,14 @@ public class HomeController extends RootController implements Initializable, Tra
     @Override
     public void onBalanceChanged(Account account) {
         accountMap.put(account.getKey(), account);
+        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+    }
+
+    @Override
+    public void onAccountsLoaded(Collection<Account> accounts) {
+        for (Account account : accounts) {
+            accountMap.put(account.getKey(), account);
+        }
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
 }

@@ -65,7 +65,7 @@ public class AppRoot {
         game.registerGameStateListener(transactor);
         game.registerGameStateListener(gameLogger);
 
-        accountStorage.registerTransactionListener(homeController);
+        accountStorage.registerMemoryListener(homeController);
 
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);

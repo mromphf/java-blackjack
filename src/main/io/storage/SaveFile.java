@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class SaveFile {
+public class SaveFile implements Storage {
 
+    @Override
     public Set<Account> getAllAccounts() {
         Set<Account> accounts = new HashSet<>();
 

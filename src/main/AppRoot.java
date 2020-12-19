@@ -83,11 +83,12 @@ public class AppRoot {
         blackjackController.registerNavListener(layoutManager);
         blackjackController.registerNavListener(transactor);
 
-        transactor.registerSettlementListener(homeController);
-        transactor.registerSettlementListener(betController);
-        transactor.registerSettlementListener(blackjackController);
-        transactor.registerSettlementListener(layoutManager);
-        transactor.registerSettlementListener(gameLogger);
+        transactor.registerTransactionListener(homeController);
+        transactor.registerTransactionListener(betController);
+        transactor.registerTransactionListener(blackjackController);
+        transactor.registerTransactionListener(layoutManager);
+        transactor.registerTransactionListener(gameLogger);
+        transactor.registerAccountListener(accountStorage);
 
         accountStorage.loadAllAccounts();
 

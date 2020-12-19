@@ -15,15 +15,21 @@ public class Transactor implements NavListener, GameStateListener {
 
     private final Set<Transaction> transactions;
     private final Collection<TransactionListener> transactionListeners;
+    private final Collection<AccountListener> accountListeners;
     private Account account;
 
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactionListeners = new LinkedList<>();
         this.transactions = new HashSet<>();
+        this.accountListeners = new HashSet<>();
     }
 
-    public void registerSettlementListener(TransactionListener transactionListener) {
+    public void registerAccountListener(AccountListener accountListener) {
+        accountListeners.add(accountListener);
+    }
+
+    public void registerTransactionListener(TransactionListener transactionListener) {
         transactionListeners.add(transactionListener);
     }
 
@@ -35,21 +41,21 @@ public class Transactor implements NavListener, GameStateListener {
             Transaction trans_buyInsurance = new Transaction(
                     LocalDateTime.now(), account.getKey(), BUY_INSURANCE.name(), snapshot.getBet() * -1);
             transactions.add(trans_buyInsurance);
-            //account = account.updateBalance(snapshot.getBet() * -1);
+            accountListeners.forEach(l -> l.onTransaction(trans_buyInsurance));
         }
 
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
             Transaction trans_doubleOrSplit = new Transaction(
                     LocalDateTime.now(), account.getKey(), "Double or Split", snapshot.getBet() * -1);
             transactions.add(trans_doubleOrSplit);
-            //account = account.updateBalance(snapshot.getBet() * -1);
+            accountListeners.forEach(l -> l.onTransaction(trans_doubleOrSplit));
         }
 
         if (snapshot.isResolved()) {
-            Transaction trans_doubleOrSplit = new Transaction(
+            Transaction trans_outcome = new Transaction(
                     LocalDateTime.now(), account.getKey(), snapshot.getOutcome().name(), settleBet(snapshot));
-            transactions.add(trans_doubleOrSplit);
-            //account = account.updateBalance(settleBet(snapshot));
+            transactions.add(trans_outcome);
+            accountListeners.forEach(l -> l.onTransaction(trans_outcome));
         }
 
         transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
@@ -60,7 +66,7 @@ public class Transactor implements NavListener, GameStateListener {
         Transaction trans_bet = new Transaction(
                 LocalDateTime.now(), account.getKey(), "Bet", (bet * -1));
         transactions.add(trans_bet);
-        //account = account.updateBalance(bet * -1);
+        accountListeners.forEach(l -> l.onTransaction(trans_bet));
         transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
     }
 

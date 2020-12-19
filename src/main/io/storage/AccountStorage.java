@@ -1,6 +1,7 @@
 package main.io.storage;
 
 import main.domain.Account;
+import main.domain.Transaction;
 import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 
@@ -35,6 +36,11 @@ public class AccountStorage implements AccountListener {
     @Override
     public void onAccountDeleted(Account account) {
         memory.deleteAccount(account);
+    }
+
+    @Override
+    public void onTransaction(Transaction transaction) {
+        memory.saveTransaction(transaction);
     }
 
     @Override

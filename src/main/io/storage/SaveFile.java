@@ -3,11 +3,9 @@ package main.io.storage;
 import com.oracle.javafx.jmx.json.JSONDocument;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import main.domain.Account;
+import main.domain.Transaction;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -33,6 +31,34 @@ public class SaveFile implements Memory {
         }
 
         return accounts;
+    }
+
+    @Override
+    public Set<Transaction> loadAllTransactions() {
+        Set<Transaction> transactions = new HashSet<>();
+
+        try {
+            final URL url = SaveFile.class.getResource("/transactions/2020-12-19.csv");
+            final File transactionsFile = new File(url.getPath());
+            final Scanner sc = new Scanner(transactionsFile);
+
+            // Assume header row
+            sc.nextLine();
+
+            while (sc.hasNextLine()) {
+                String[] row = sc.nextLine().split(",");
+                transactions.add(new Transaction(
+                    LocalDateTime.parse(row[0]),
+                    UUID.fromString(row[1]),
+                    row[2],
+                    Integer.parseInt(row[3])
+                ));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return transactions;
     }
 
     @Override
@@ -71,14 +97,15 @@ public class SaveFile implements Memory {
         final FileReader fileReader = new FileReader(file);
         final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
         final JSONDocument document = jsonStreamReader.build();
+        final UUID accountKey = UUID.fromString(document.getString("key"));
 
         fileReader.close();
         jsonStreamReader.close();
 
         return new Account(
-                UUID.fromString(document.getString("key")),
+                accountKey,
                 document.getString("name"),
-                document.getNumber("balance").intValue(),
+                Account.deriveBalance(accountKey, loadAllTransactions()),
                 LocalDateTime.parse(document.getString("created"))
         );
     }

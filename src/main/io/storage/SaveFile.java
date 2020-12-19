@@ -58,6 +58,15 @@ public class SaveFile implements Memory {
         }
     }
 
+    @Override
+    public void deleteAccount(Account account) {
+        final URL url = SaveFile.class.getResource("/accounts/");
+        final File accountFile = new File(url.getPath() + account.getKey());
+        if (accountFile.delete()) {
+            System.out.printf("Account no. %s has been closed.%n", account.getKey());
+        }
+    }
+
     public Account loadAccount(File file) throws IOException {
         final FileReader fileReader = new FileReader(file);
         final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);

@@ -7,4 +7,5 @@ import java.util.Set;
 public interface Memory {
     Set<Account> loadAllAccounts();
     void saveNewAccount(Account account);
+    void deleteAccount(Account account);
 }

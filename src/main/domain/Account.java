@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Account {
     private final UUID key;
     private final String name;
-    private int balance;
+    private final int balance;
 
     public Account(UUID key, String name, int balance) {
         this.key = key;
@@ -14,8 +14,16 @@ public class Account {
         this.balance = balance;
     }
 
-    public void updateBalance(int val) {
-        balance += val;
+    public Account updateBalance(int val) {
+        return new Account(key, name, balance + val);
+    }
+
+    public UUID getKey() {
+        return key;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getBalance() {

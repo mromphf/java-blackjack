@@ -5,5 +5,5 @@ import main.domain.Account;
 import java.util.Set;
 
 public interface Storage {
-    Set<Account> getAllAccounts();
+    Set<Account> loadAllAccounts();
 }

@@ -21,7 +21,7 @@ public class AccountStorage {
     }
 
     public void loadAllAccounts() {
-        for(Account account: storage.getAllAccounts()) {
+        for(Account account: storage.loadAllAccounts()) {
             transactionListeners.forEach(l -> l.onBalanceChanged(account));
         }
     }

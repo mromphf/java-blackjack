@@ -13,7 +13,7 @@ import java.util.*;
 public class SaveFile implements Storage {
 
     @Override
-    public Set<Account> getAllAccounts() {
+    public Set<Account> loadAllAccounts() {
         Set<Account> accounts = new HashSet<>();
 
         try {

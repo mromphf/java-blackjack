@@ -1,5 +1,7 @@
 package main.usecase;
 
+import main.domain.Account;
+
 public interface TransactionListener {
-    void onBalanceChanged(int balance);
+    void onBalanceChanged(Account account);
 }

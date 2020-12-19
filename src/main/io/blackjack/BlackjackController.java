@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import main.domain.Account;
 import main.domain.Snapshot;
 import main.io.RootController;
 import main.usecase.GameStateListener;
@@ -57,8 +58,8 @@ public class BlackjackController extends RootController
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onBalanceChanged(int balance) {
-        lblBalance.setText(String.format("Balance: $%s", balance));
+    public void onBalanceChanged(Account account) {
+        lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
     }
 
     @Override

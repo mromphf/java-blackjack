@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import main.domain.Account;
 import main.io.RootController;
 import main.usecase.NavListener;
 import main.usecase.TransactionListener;
@@ -63,8 +64,8 @@ public class BetController extends RootController implements Initializable, Tran
     }
 
     @Override
-    public void onBalanceChanged(int balance) {
-        this.balance = balance;
+    public void onBalanceChanged(Account account) {
+        this.balance = account.getBalance();
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);
         lblBalance.setText(String.format("Balance: $%s", balance));

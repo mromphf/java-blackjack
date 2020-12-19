@@ -1,5 +1,6 @@
 package main.io.log;
 
+import main.domain.Account;
 import main.domain.Snapshot;
 import main.usecase.GameStateListener;
 import main.usecase.TransactionListener;
@@ -20,7 +21,7 @@ public class GameLogger extends Logger implements GameStateListener, Transaction
     }
 
     @Override
-    public void onBalanceChanged(int balance) {
-        log(INFO, String.format("%s: Balance: %s", LocalTime.now(), balance));
+    public void onBalanceChanged(Account account) {
+        log(INFO, String.format("%s: Balance: %s", LocalTime.now(), account.getBalance()));
     }
 }

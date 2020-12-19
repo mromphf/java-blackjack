@@ -39,19 +39,19 @@ public class Transactor implements NavListener, GameStateListener {
             account = account.updateBalance(settleBet(snapshot));
         }
 
-        transactionListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+        transactionListeners.forEach(l -> l.onBalanceChanged(account));
     }
 
     @Override
     public void onStartNewRound(int bet) {
         account = account.updateBalance(bet * -1);
-        transactionListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+        transactionListeners.forEach(l -> l.onBalanceChanged(account));
     }
 
     @Override
     public void onMoveToBettingTable(Account account) {
         this.account = account;
-        transactionListeners.forEach(l -> l.onBalanceChanged(account.getBalance()));
+        transactionListeners.forEach(l -> l.onBalanceChanged(account));
     }
 
     @Override

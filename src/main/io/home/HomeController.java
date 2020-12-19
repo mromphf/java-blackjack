@@ -12,7 +12,9 @@ import main.io.storage.AccountStorage;
 import main.usecase.TransactionListener;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class HomeController extends RootController implements Initializable, TransactionListener {
 
@@ -47,8 +49,14 @@ public class HomeController extends RootController implements Initializable, Tra
     }
 
     @Override
-    public void onBalanceChanged(int balance) {
-        lstAccounts.refresh();
+    public void onBalanceChanged(Account account) {
+        final List<Account> newItems = lstAccounts.getItems().stream()
+                .filter(a -> !a.getKey().equals(account.getKey()))
+                .collect(Collectors.toList());
+
+        newItems.add(account);
+
+        lstAccounts.setItems(FXCollections.observableList(newItems));
         refreshBalanceLabel();
     }
 

@@ -7,7 +7,7 @@
 <GridPane fx:controller="main.io.home.HomeController"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
 
-    <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" onMouseClicked="#onClickList"/>
+    <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="400" maxWidth="500" onMouseClicked="#onClickList"/>
 
     <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="5">
         <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">

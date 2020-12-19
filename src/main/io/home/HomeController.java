@@ -11,9 +11,7 @@ import main.io.RootController;
 import main.usecase.TransactionListener;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class HomeController extends RootController implements Initializable, TransactionListener {
 
@@ -25,6 +23,8 @@ public class HomeController extends RootController implements Initializable, Tra
 
     @FXML
     private Button btnPlay;
+
+    private final Map<UUID, Account> accountMap = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -47,13 +47,8 @@ public class HomeController extends RootController implements Initializable, Tra
 
     @Override
     public void onBalanceChanged(Account account) {
-        final List<Account> newItems = lstAccounts.getItems().stream()
-                .filter(a -> !a.getKey().equals(account.getKey()))
-                .collect(Collectors.toList());
-
-        newItems.add(account);
-
-        lstAccounts.setItems(FXCollections.observableList(newItems));
+        accountMap.put(account.getKey(), account);
+        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         refreshBalanceLabel();
     }
 

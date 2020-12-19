@@ -45,6 +45,13 @@ public class Account {
                 .sum();
     }
 
+    public static int deriveBalance(UUID accountKey, Set<Transaction> transactions) {
+        return transactions.stream()
+                .filter(t -> t.getAccountKey().equals(accountKey))
+                .mapToInt(Transaction::getAmount)
+                .sum();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

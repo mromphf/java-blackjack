@@ -6,6 +6,7 @@ import main.domain.Account;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -32,6 +33,29 @@ public class SaveFile implements Storage {
         }
 
         return accounts;
+    }
+
+    @Override
+    public void saveNewAccount(Account account) {
+        final URL url = SaveFile.class.getResource("/accounts/");
+        final File accountFile = new File(url.getPath() + account.getKey());
+
+        try {
+            if (accountFile.createNewFile()) {
+                final FileWriter fileWriter = new FileWriter(accountFile);
+                final JSONDocument document = JSONDocument.createObject();
+
+                document.setString("key", account.getKey().toString());
+                document.setString("name", account.getName());
+                document.setString("created", account.getCreated().toString());
+                document.setNumber("balance", account.getBalance());
+
+                fileWriter.write(document.toString());
+                fileWriter.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Account loadAccount(File file) throws IOException {

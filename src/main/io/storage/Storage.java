@@ -6,4 +6,5 @@ import java.util.Set;
 
 public interface Storage {
     Set<Account> loadAllAccounts();
+    void saveNewAccount(Account account);
 }

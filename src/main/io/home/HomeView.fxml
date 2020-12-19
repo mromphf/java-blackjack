@@ -1,19 +1,54 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 
-<GridPane fx:controller="main.io.home.HomeController"
-          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
+<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
 
-    <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="400" maxWidth="500" onMouseClicked="#onClickList"/>
+    <GridPane fx:id="listControls" vgap="15">
+        <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="400" maxWidth="500" onMouseClicked="#onClickList"/>
 
-    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="5">
-        <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
-            Play
-        </Button>
+        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="20">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
+                New
+            </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
-            Exit
-        </Button>
+            <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onPlay">
+                Play
+            </Button>
+
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onExit">
+                Exit
+            </Button>
+        </GridPane>
+    </GridPane>
+
+    <GridPane fx:id="accountCreationControls" visible="false" vgap="20" hgap="20">
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0">
+            <Label>
+                <font>
+                    <Font name="Arial" size="20"/>
+                </font>
+                Your Name:
+            </Label>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1">
+            <TextField fx:id="txtName" minWidth="100" minHeight="50" onKeyTyped="#onKeyTyped" />
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <Button fx:id="btnOk" minWidth="100" minHeight="50" onAction="#onCreate">
+                OK
+            </Button>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="1">
+            <Button onAction="#onCancel" minWidth="100" minHeight="50">
+                Cancel
+            </Button>
+        </GridPane>
     </GridPane>
 </GridPane>

@@ -2,6 +2,7 @@ package main.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class Account {
@@ -35,6 +36,13 @@ public class Account {
 
     public LocalDateTime getCreated() {
         return created;
+    }
+
+    public int deriveBalance(Set<Transaction> transactions) {
+        return transactions.stream()
+                .filter(t -> t.getAccountKey().equals(key))
+                .mapToInt(Transaction::getAmount)
+                .sum();
     }
 
     @Override

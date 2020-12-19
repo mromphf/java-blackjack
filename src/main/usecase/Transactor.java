@@ -3,6 +3,7 @@ package main.usecase;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
+import main.domain.Transaction;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,12 +13,14 @@ import static main.domain.Rules.settleBet;
 
 public class Transactor implements NavListener, GameStateListener {
 
+    private final Set<Transaction> transactions;
     private final Collection<TransactionListener> transactionListeners;
     private Account account;
 
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactionListeners = new LinkedList<>();
+        this.transactions = new HashSet<>();
     }
 
     public void registerSettlementListener(TransactionListener transactionListener) {
@@ -29,24 +32,36 @@ public class Transactor implements NavListener, GameStateListener {
         final Stack<Action> actionsTaken = snapshot.getActionsTaken();
 
         if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
-            account = account.updateBalance(snapshot.getBet() * -1);
+            Transaction trans_buyInsurance = new Transaction(
+                    LocalDateTime.now(), account.getKey(), BUY_INSURANCE.name(), snapshot.getBet() * -1);
+            transactions.add(trans_buyInsurance);
+            //account = account.updateBalance(snapshot.getBet() * -1);
         }
 
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
-            account = account.updateBalance(snapshot.getBet() * -1);
+            Transaction trans_doubleOrSplit = new Transaction(
+                    LocalDateTime.now(), account.getKey(), "Double or Split", snapshot.getBet() * -1);
+            transactions.add(trans_doubleOrSplit);
+            //account = account.updateBalance(snapshot.getBet() * -1);
         }
 
         if (snapshot.isResolved()) {
-            account = account.updateBalance(settleBet(snapshot));
+            Transaction trans_doubleOrSplit = new Transaction(
+                    LocalDateTime.now(), account.getKey(), snapshot.getOutcome().name(), settleBet(snapshot));
+            transactions.add(trans_doubleOrSplit);
+            //account = account.updateBalance(settleBet(snapshot));
         }
 
-        transactionListeners.forEach(l -> l.onBalanceChanged(account));
+        transactionListeners.forEach(l -> l.onBalanceChanged(account.updateBalance(account.deriveBalance(transactions))));
     }
 
     @Override
     public void onStartNewRound(int bet) {
-        account = account.updateBalance(bet * -1);
-        transactionListeners.forEach(l -> l.onBalanceChanged(account));
+        Transaction trans_bet = new Transaction(
+                LocalDateTime.now(), account.getKey(), "Bet", (bet * -1));
+        transactions.add(trans_bet);
+        //account = account.updateBalance(bet * -1);
+        transactionListeners.forEach(l -> l.onBalanceChanged(account.updateBalance(account.deriveBalance(transactions))));
     }
 
     @Override

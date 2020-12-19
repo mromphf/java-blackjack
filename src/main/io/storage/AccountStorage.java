@@ -5,6 +5,7 @@ import main.domain.Transaction;
 import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Queue;
@@ -29,8 +30,16 @@ public class AccountStorage implements AccountListener {
     }
 
     @Override
-    public void onNewAccountOpened(Account account) {
+    public void onNewAccountOpened(Account account, int signingBonus) {
+        final Transaction t = new Transaction(
+                LocalDateTime.now(),
+                account.getKey(),
+                "Signing Bonus",
+                signingBonus
+        );
+
         memory.saveNewAccount(account);
+        memory.saveTransaction(t);
     }
 
     @Override

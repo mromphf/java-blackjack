@@ -103,7 +103,7 @@ public class HomeController extends RootController implements Initializable, Tra
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        accountListeners.forEach(l -> l.onNewAccountOpened(account));
+        accountListeners.forEach(l -> l.onNewAccountOpened(account, balance));
     }
 
     @FXML

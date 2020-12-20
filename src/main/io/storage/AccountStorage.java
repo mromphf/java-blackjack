@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Queue;
+import java.util.Set;
 
 public class AccountStorage implements AccountListener {
 
@@ -51,6 +52,11 @@ public class AccountStorage implements AccountListener {
     public void onTransaction(Transaction transaction) {
         memory.saveTransaction(transaction);
     }
+
+    @Override
+    public void onTransactions(Set<Transaction> transactions) {
+        memory.saveTransactions(transactions);
+    };
 
     @Override
     public void onAccountUpdated(Account account) {}

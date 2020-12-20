@@ -61,6 +61,11 @@ public class SaveFile implements Memory {
     }
 
     @Override
+    public void saveTransactions(Set<Transaction> transactions) {
+        transactions.forEach(this::saveTransaction);
+    }
+
+    @Override
     public void saveTransaction(Transaction transaction) {
         final URL url = SaveFile.class.getResource("/transactions");
         final String pathToTransactionsDir = new File(url.getPath()).getPath() + "/";

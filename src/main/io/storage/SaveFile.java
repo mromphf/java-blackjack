@@ -64,10 +64,16 @@ public class SaveFile implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final URL url = SaveFile.class.getResource("/transactions/2020-12-19.csv");
-        final File transactionsFile = new File(url.getPath());
+        final URL url = SaveFile.class.getResource("/transactions/");
+        final String pathToTransactionsDir = new File(url.getPath()).getPath() + "/";
+        final String transactionFilename = pathToTransactionsDir + fileName(transaction.getTime());
+        final File transactionsFile = new File(transactionFilename);
 
         try {
+            if (transactionsFile.createNewFile()) {
+                System.out.printf("Created new file: %s", transactionFilename);
+            }
+
             final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
             writer.println(transaction.toString());
             writer.close();
@@ -111,5 +117,9 @@ public class SaveFile implements Memory {
         jsonStreamReader.close();
 
         return JsonUtil.accountFromJson(document).updateBalance(Account.deriveBalance(accountKey, loadAllTransactions()));
+    }
+
+    public String fileName(LocalDateTime t) {
+        return String.format("%s-%s-%s.csv", t.getYear(), t.getMonthValue(), t.getDayOfMonth());
     }
 }

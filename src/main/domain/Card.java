@@ -34,6 +34,7 @@ public class Card {
 
     public String name() {
         return new HashMap<Integer, String>() {{
+            put(1, "Ace");
             put(11, "Jack");
             put(12, "Queen");
             put(13, "King");

@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
 
-import static main.StringUtil.concat;
+import static main.io.util.StringUtil.concat;
 import static main.domain.Rules.*;
 
 public class Snapshot {

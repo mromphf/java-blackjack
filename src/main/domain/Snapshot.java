@@ -1,11 +1,13 @@
 package main.domain;
 
+
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
 
 import static main.io.util.StringUtil.concat;
 import static main.domain.Rules.*;
+import static main.io.util.StringUtil.playerString;
 
 public class Snapshot {
     private final int bet;
@@ -84,7 +86,7 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("%s: Bet: %s, Outcome: %s, Deck: %s, ActionsTaken: [ %s ], PlayerScore: %s, DealerScore: %s",
-                LocalTime.now(), bet, outcome, deck.size(), concat(actionsTaken, ','), score(playerHand), score(dealerHand));
+        return String.format("%s: %s Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, Deck: %s, Hands to Play: %s, Hands to Settle: %s",
+                LocalTime.now(), outcome, bet, concat(actionsTaken, ','), playerString(playerHand), playerString(dealerHand), deck.size(), handsToPlay.size(), handsToSettle.size());
     }
 }

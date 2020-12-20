@@ -18,15 +18,13 @@ public class SaveFile implements Memory {
         Set<Account> accounts = new HashSet<>();
 
         try {
-            final URL url = SaveFile.class.getResource("/accounts");
-            final File accountsDirectory = new File(url.getPath());
-            for (File file : Objects.requireNonNull(accountsDirectory.listFiles())) {
+            for (File file : allFilesInDir("/accounts")) {
                 accounts.add(loadAccount(file));
             }
         } catch (IOException e) {
             System.out.println("Could not load accounts file!");
             return accounts;
-        } catch ( NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
             System.exit(1);
         }
@@ -39,21 +37,21 @@ public class SaveFile implements Memory {
         Set<Transaction> transactions = new HashSet<>();
 
         try {
-            final URL url = SaveFile.class.getResource("/transactions/2020-12-19.csv");
-            final File transactionsFile = new File(url.getPath());
-            final Scanner sc = new Scanner(transactionsFile);
+            for (File file : allFilesInDir("/transactions")) {
+                final Scanner sc = new Scanner(file);
 
-            // Assume header row
-            sc.nextLine();
+                // Assume header row
+                sc.nextLine();
 
-            while (sc.hasNextLine()) {
-                String[] row = sc.nextLine().split(",");
-                transactions.add(new Transaction(
-                    LocalDateTime.parse(row[0]),
-                    UUID.fromString(row[1]),
-                    row[2],
-                    Integer.parseInt(row[3])
-                ));
+                while (sc.hasNextLine()) {
+                    String[] row = sc.nextLine().split(",");
+                    transactions.add(new Transaction(
+                            LocalDateTime.parse(row[0]),
+                            UUID.fromString(row[1]),
+                            row[2],
+                            Integer.parseInt(row[3])
+                    ));
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -64,17 +62,18 @@ public class SaveFile implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final URL url = SaveFile.class.getResource("/transactions/");
+        final URL url = SaveFile.class.getResource("/transactions");
         final String pathToTransactionsDir = new File(url.getPath()).getPath() + "/";
         final String transactionFilename = pathToTransactionsDir + fileName(transaction.getTime());
         final File transactionsFile = new File(transactionFilename);
 
         try {
-            if (transactionsFile.createNewFile()) {
-                System.out.printf("Created new file: %s", transactionFilename);
+            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
+
+            if (transactionsFile.length() == 0) {
+                writer.println("time,accountKey,description,amount");
             }
 
-            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
             writer.println(transaction.toString());
             writer.close();
         } catch (IOException e) {
@@ -88,11 +87,9 @@ public class SaveFile implements Memory {
         final File accountFile = new File(url.getPath() + account.getKey());
 
         try {
-            if (accountFile.createNewFile()) {
-                final FileWriter fileWriter = new FileWriter(accountFile);
-                fileWriter.write(JsonUtil.toJson(account));
-                fileWriter.close();
-            }
+            final FileWriter fileWriter = new FileWriter(accountFile);
+            fileWriter.write(JsonUtil.toJson(account));
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,5 +118,11 @@ public class SaveFile implements Memory {
 
     public String fileName(LocalDateTime t) {
         return String.format("%s-%s-%s.csv", t.getYear(), t.getMonthValue(), t.getDayOfMonth());
+    }
+
+    public File[] allFilesInDir(String dir) {
+        final URL url = SaveFile.class.getResource(dir);
+        final File directory = new File(url.getPath());
+        return Objects.requireNonNull(directory.listFiles());
     }
 }

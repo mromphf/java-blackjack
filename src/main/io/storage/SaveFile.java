@@ -4,6 +4,7 @@ import com.oracle.javafx.jmx.json.JSONDocument;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import main.domain.Account;
 import main.domain.Transaction;
+import main.io.util.JsonUtil;
 
 import java.io.*;
 import java.net.URL;
@@ -83,14 +84,7 @@ public class SaveFile implements Memory {
         try {
             if (accountFile.createNewFile()) {
                 final FileWriter fileWriter = new FileWriter(accountFile);
-                final JSONDocument document = JSONDocument.createObject();
-
-                document.setString("key", account.getKey().toString());
-                document.setString("name", account.getName());
-                document.setString("created", account.getCreated().toString());
-                document.setNumber("balance", account.getBalance());
-
-                fileWriter.write(document.toString());
+                fileWriter.write(JsonUtil.toJson(account));
                 fileWriter.close();
             }
         } catch (IOException e) {
@@ -116,11 +110,6 @@ public class SaveFile implements Memory {
         fileReader.close();
         jsonStreamReader.close();
 
-        return new Account(
-                accountKey,
-                document.getString("name"),
-                Account.deriveBalance(accountKey, loadAllTransactions()),
-                LocalDateTime.parse(document.getString("created"))
-        );
+        return JsonUtil.accountFromJson(document).updateBalance(Account.deriveBalance(accountKey, loadAllTransactions()));
     }
 }

@@ -59,8 +59,7 @@ public class Transactor implements NavListener, GameStateListener {
             }
 
             transactions.addAll(workingTransactions);
-            account = account.updateBalance(transactions);
-            transactionListeners.forEach(l -> l.onAccountUpdated(account));
+            transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(transactions)));
         }
     }
 

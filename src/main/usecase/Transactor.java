@@ -36,29 +36,32 @@ public class Transactor implements NavListener, GameStateListener {
     @Override
     public void onUpdate(Snapshot snapshot) {
         final Stack<Action> actionsTaken = snapshot.getActionsTaken();
+        final Set<Transaction> workingTransactions = new HashSet<>();
 
         if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
-            Transaction trans_buyInsurance = new Transaction(
-                    LocalDateTime.now(), account.getKey(), BUY_INSURANCE.name(), snapshot.getBet() * -1);
-            transactions.add(trans_buyInsurance);
-            accountListeners.forEach(l -> l.onTransaction(trans_buyInsurance));
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), account.getKey(), BUY_INSURANCE.name(), snapshot.getBet() * -1));
         }
 
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
-            Transaction trans_doubleOrSplit = new Transaction(
-                    LocalDateTime.now(), account.getKey(), "Double or Split", snapshot.getBet() * -1);
-            transactions.add(trans_doubleOrSplit);
-            accountListeners.forEach(l -> l.onTransaction(trans_doubleOrSplit));
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), account.getKey(), "Double or Split", snapshot.getBet() * -1));
         }
 
         if (snapshot.isResolved()) {
-            Transaction trans_outcome = new Transaction(
-                    LocalDateTime.now(), account.getKey(), snapshot.getOutcome().name(), settleBet(snapshot));
-            transactions.add(trans_outcome);
-            accountListeners.forEach(l -> l.onTransaction(trans_outcome));
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), account.getKey(), snapshot.getOutcome().name(), settleBet(snapshot)));
         }
 
-        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
+        if (workingTransactions.size() > 0) {
+            for (Transaction t : workingTransactions) {
+                accountListeners.forEach(l -> l.onTransaction(t));
+            }
+
+            transactions.addAll(workingTransactions);
+            account = account.updateBalance(transactions);
+            transactionListeners.forEach(l -> l.onAccountUpdated(account));
+        }
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Transactor implements NavListener, GameStateListener {
                 LocalDateTime.now(), account.getKey(), "Bet", (bet * -1));
         transactions.add(trans_bet);
         accountListeners.forEach(l -> l.onTransaction(trans_bet));
-        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(account.deriveBalance(transactions))));
+        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(transactions)));
     }
 
     @Override

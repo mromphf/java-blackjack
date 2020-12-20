@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.RootController;
@@ -63,10 +64,14 @@ public class HomeController extends RootController implements Initializable, Tra
     }
 
     @FXML
-    public void onClickList() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        btnPlay.setDisable(selectedAccount == null);
-        btnDelete.setDisable(selectedAccount == null);
+    public void onClickList(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            onPlay();
+        } else {
+            final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+            btnPlay.setDisable(selectedAccount == null);
+            btnDelete.setDisable(selectedAccount == null);
+        }
     }
 
     @FXML

@@ -22,6 +22,10 @@ public class Account {
         return new Account(key, name, balance + val, created);
     }
 
+    public Account updateBalance(Set<Transaction> transactions) {
+        return updateBalance(deriveBalance(transactions));
+    }
+
     public UUID getKey() {
         return key;
     }

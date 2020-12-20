@@ -34,7 +34,7 @@ public class AccountStorage implements AccountListener {
         final Transaction t = new Transaction(
                 LocalDateTime.now(),
                 account.getKey(),
-                "Signing Bonus",
+                "SIGNING BONUS",
                 signingBonus
         );
 

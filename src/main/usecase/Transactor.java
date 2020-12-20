@@ -45,7 +45,7 @@ public class Transactor implements NavListener, GameStateListener {
 
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
             workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), account.getKey(), "Double or Split", snapshot.getBet() * -1));
+                    LocalDateTime.now(), account.getKey(), "DOUBLE OR SPLIT", snapshot.getBet() * -1));
         }
 
         if (snapshot.isResolved()) {
@@ -67,7 +67,7 @@ public class Transactor implements NavListener, GameStateListener {
     @Override
     public void onStartNewRound(int bet) {
         Transaction trans_bet = new Transaction(
-                LocalDateTime.now(), account.getKey(), "Bet", (bet * -1));
+                LocalDateTime.now(), account.getKey(), "BET", (bet * -1));
         transactions.add(trans_bet);
         accountListeners.forEach(l -> l.onTransaction(trans_bet));
         transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(transactions)));

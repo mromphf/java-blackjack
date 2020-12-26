@@ -1,19 +1,21 @@
 package main.io.history;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
+import main.io.util.ChartUtil;
 import main.usecase.MemoryListener;
 import main.usecase.NavListener;
 
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener {
@@ -24,6 +26,9 @@ public class HistoryController extends RootController implements Initializable, 
     @FXML
     public Label lblTrans;
 
+    @FXML
+    public GridPane chartHousing;
+
     private Set<Transaction> allTransactions = new HashSet<>();
 
     @FXML
@@ -33,10 +38,26 @@ public class HistoryController extends RootController implements Initializable, 
 
     @Override
     public void onViewHistory(Account account) {
-        lblAccount.setText(account.getName());
-        Set<Transaction> accountTransactions = allTransactions.stream()
+        final Set<Transaction> accountTransactions = allTransactions.stream()
                 .filter(t -> t.getAccountKey().equals(account.getKey()))
                 .collect(Collectors.toSet());
+
+        final List<String> dates = accountTransactions.stream()
+                .map(a -> a.getTime().toString())
+                .distinct()
+                .collect(Collectors.toList());
+
+        Axis<String> xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));
+        NumberAxis yAxis = new NumberAxis(-500, 500, 50);
+
+        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setPrefWidth(1000);
+        chart.setPrefHeight(800);
+
+        chart.getData().add(ChartUtil.transactionsToSeries(accountTransactions));
+
+        chartHousing.add(chart, 0, 0);
+        lblAccount.setText(account.getName());
         lblTrans.setText(String.format("Transactions: %s", accountTransactions.size()));
     }
 

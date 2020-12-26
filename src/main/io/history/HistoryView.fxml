@@ -8,7 +8,9 @@
     <Label GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="lblAccount"/>
     <Label GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="lblTrans"/>
 
-    <Button GridPane.rowIndex="1" minWidth="100" minHeight="50" onAction="#onHome">
+    <GridPane fx:id="chartHousing" GridPane.rowIndex="1"/>
+
+    <Button GridPane.rowIndex="2" minWidth="100" minHeight="50" onAction="#onHome">
         Home
     </Button>
 </GridPane>

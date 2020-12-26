@@ -72,6 +72,7 @@ public class AppRoot {
         game.registerGameStateListener(gameLogger);
 
         accountStorage.registerMemoryListener(homeController);
+        accountStorage.registerMemoryListener(historyController);
 
         historyController.registerNavListener(layoutManager);
 
@@ -100,6 +101,7 @@ public class AppRoot {
         transactor.registerAccountListener(accountStorage);
 
         accountStorage.loadAllAccounts();
+        accountStorage.loadAllTransactions();
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

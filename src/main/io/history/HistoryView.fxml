@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.GridPane?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.io.history.HistoryController" alignment="CENTER">
-    <Label GridPane.rowIndex="0" fx:id="lblAccount"/>
+    <Label GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="lblAccount"/>
+    <Label GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="lblTrans"/>
 
     <Button GridPane.rowIndex="1" minWidth="100" minHeight="50" onAction="#onHome">
         Home

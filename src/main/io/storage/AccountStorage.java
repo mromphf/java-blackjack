@@ -30,6 +30,11 @@ public class AccountStorage implements AccountListener {
         memoryListeners.forEach(l -> l.onAccountsLoaded(accounts));
     }
 
+    public void loadAllTransactions() {
+        final Set<Transaction> transactions = memory.loadAllTransactions();
+        memoryListeners.forEach(l -> l.onTransactionsLoaded(transactions));
+    }
+
     @Override
     public void onNewAccountOpened(Account account, int signingBonus) {
         final Transaction t = new Transaction(

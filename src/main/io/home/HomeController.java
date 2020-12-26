@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
+import main.domain.Transaction;
 import main.io.RootController;
 import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
@@ -143,4 +144,7 @@ public class HomeController extends RootController implements Initializable, Tra
         }
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
+
+    @Override
+    public void onTransactionsLoaded(Set<Transaction> transactions) {}
 }

@@ -23,7 +23,11 @@
                 Delete
             </Button>
 
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="3" minWidth="100" minHeight="50" onAction="#onExit">
+            <Button fx:id="btnHistory" GridPane.rowIndex="0" disable="true" GridPane.columnIndex="3" minWidth="100" minHeight="50" onAction="#onRequestHistory">
+                History
+            </Button>
+
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="100" minHeight="50" onAction="#onExit">
                 Exit
             </Button>
         </GridPane>

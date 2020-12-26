@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
+import main.io.history.HistoryController;
 import main.io.home.HomeController;
 import main.io.log.GameLogger;
 import main.io.log.ConsoleLogHandler;
@@ -27,16 +28,19 @@ public class AppRoot {
     private final static String MAIN_FXML = "io/home/HomeView.fxml";
     private final static String BLACKJACK_FXML = "io/blackjack/BlackjackView.fxml";
     private final static String BET_FXML = "io/bet/BetView.fxml";
+    private final static String HISTORY_FXML = "io/history/HistoryView.fxml";
 
     public AppRoot(Stage stage) {
         FXMLLoader homeLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
         FXMLLoader betLoader = new FXMLLoader(getClass().getResource(BET_FXML));
         FXMLLoader blackjackLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
+        FXMLLoader historyLoader = new FXMLLoader(getClass().getResource(HISTORY_FXML));
 
         try {
             homeLoader.load();
             betLoader.load();
             blackjackLoader.load();
+            historyLoader.load();
             ImageMap.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,11 +49,13 @@ public class AppRoot {
         HomeController homeController = homeLoader.getController();
         BlackjackController blackjackController = blackjackLoader.getController();
         BetController betController = betLoader.getController();
+        HistoryController historyController = historyLoader.getController();
 
         Map<Layout, Parent> layoutMap = new HashMap<>();
         layoutMap.put(Layout.HOME, homeLoader.getRoot());
         layoutMap.put(Layout.BET, betLoader.getRoot());
         layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
+        layoutMap.put(Layout.HISTORY, historyLoader.getRoot());
 
         AccountStorage accountStorage = new AccountStorage(new SaveFile());
         Game game = new Game(shuffle(fresh()));
@@ -67,10 +73,13 @@ public class AppRoot {
 
         accountStorage.registerMemoryListener(homeController);
 
+        historyController.registerNavListener(layoutManager);
+
         homeController.registerControlListener(game);
         homeController.registerNavListener(game);
         homeController.registerNavListener(layoutManager);
         homeController.registerNavListener(transactor);
+        homeController.registerNavListener(historyController);
         homeController.registerAccountListener(accountStorage);
 
         betController.registerControlListener(game);

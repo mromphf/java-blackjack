@@ -41,6 +41,9 @@ public class HomeController extends RootController implements Initializable, Tra
     @FXML
     private Button btnDelete;
 
+    @FXML
+    private Button btnHistory;
+
     private final Map<UUID, Account> accountMap = new HashMap<>();
 
     private final Queue<AccountListener> accountListeners = new ArrayDeque<>();
@@ -71,6 +74,7 @@ public class HomeController extends RootController implements Initializable, Tra
             final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
             btnPlay.setDisable(selectedAccount == null);
             btnDelete.setDisable(selectedAccount == null);
+            btnHistory.setDisable(selectedAccount == null);
         }
     }
 
@@ -118,6 +122,12 @@ public class HomeController extends RootController implements Initializable, Tra
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         accountListeners.forEach(l -> l.onAccountDeleted(selectedAccount));
+    }
+
+    @FXML
+    public void onRequestHistory() {
+        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+        navListeners.forEach(l -> l.onViewHistory(selectedAccount));
     }
 
     @Override

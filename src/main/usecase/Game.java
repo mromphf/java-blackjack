@@ -76,6 +76,9 @@ public class Game implements ActionListener, NavListener {
     }
 
     @Override
+    public void onViewHistory(Account account) {}
+
+    @Override
     public void onMoveToBettingTable() {}
 
     @Override

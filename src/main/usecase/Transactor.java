@@ -80,4 +80,7 @@ public class Transactor implements NavListener, GameStateListener {
 
     @Override
     public void onStopPlaying() {}
+
+    @Override
+    public void onViewHistory(Account account) {}
 }

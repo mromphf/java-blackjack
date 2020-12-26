@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
 <?import javafx.scene.control.Button?>
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.io.history.HistoryController" prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
 
-    <Button minWidth="100" minHeight="50" onAction="#onHome">
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.io.history.HistoryController" alignment="CENTER">
+    <Label GridPane.rowIndex="0" fx:id="lblAccount"/>
+
+    <Button GridPane.rowIndex="1" minWidth="100" minHeight="50" onAction="#onHome">
         Home
     </Button>
-</AnchorPane>
+</GridPane>

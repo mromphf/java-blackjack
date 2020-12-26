@@ -7,4 +7,5 @@ public interface NavListener {
     void onMoveToBettingTable();
     void onMoveToBettingTable(Account account);
     void onStopPlaying();
+    void onViewHistory(Account account);
 }

@@ -39,6 +39,11 @@ public class LayoutManager implements NavListener, TransactionListener {
     }
 
     @Override
+    public void onViewHistory(Account account) {
+        scene.setRoot(layoutMap.get(Layout.HISTORY));
+    }
+
+    @Override
     public void onAccountUpdated(Account account) {
         //TODO: This won't allow a player to bet the last of their money.
         if (account.getBalance() <= 0 ) {

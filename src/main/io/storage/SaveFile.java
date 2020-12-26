@@ -16,10 +16,11 @@ public class SaveFile implements Memory {
     @Override
     public Set<Account> loadAllAccounts() {
         Set<Account> accounts = new HashSet<>();
+        final Set<Transaction> transactions = loadAllTransactions();
 
         try {
             for (File file : allFilesInDir("/accounts")) {
-                accounts.add(loadAccount(file));
+                accounts.add(loadAccount(file).updateBalance(transactions));
             }
         } catch (IOException e) {
             System.out.println("Could not load accounts file!");
@@ -113,12 +114,11 @@ public class SaveFile implements Memory {
         final FileReader fileReader = new FileReader(file);
         final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
         final JSONDocument document = jsonStreamReader.build();
-        final UUID accountKey = UUID.fromString(document.getString("key"));
 
         fileReader.close();
         jsonStreamReader.close();
 
-        return JsonUtil.accountFromJson(document).updateBalance(Account.deriveBalance(accountKey, loadAllTransactions()));
+        return JsonUtil.accountFromJson(document);
     }
 
     public String fileName(LocalDateTime t) {

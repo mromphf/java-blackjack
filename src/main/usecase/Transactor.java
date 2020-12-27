@@ -13,7 +13,7 @@ import static main.domain.Rules.settleBet;
 
 public class Transactor implements NavListener, GameStateListener {
 
-    private final Set<Transaction> transactions;
+    private final List<Transaction> transactions;
     private final Collection<TransactionListener> transactionListeners;
     private final Collection<AccountListener> accountListeners;
     private Account account;
@@ -21,7 +21,7 @@ public class Transactor implements NavListener, GameStateListener {
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactionListeners = new LinkedList<>();
-        this.transactions = new HashSet<>();
+        this.transactions = new LinkedList<>();
         this.accountListeners = new HashSet<>();
     }
 
@@ -36,7 +36,7 @@ public class Transactor implements NavListener, GameStateListener {
     @Override
     public void onUpdate(Snapshot snapshot) {
         final Stack<Action> actionsTaken = snapshot.getActionsTaken();
-        final Set<Transaction> workingTransactions = new HashSet<>();
+        final List<Transaction> workingTransactions = new LinkedList<>();
 
         if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
             workingTransactions.add(new Transaction(

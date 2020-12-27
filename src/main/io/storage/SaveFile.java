@@ -16,7 +16,7 @@ public class SaveFile implements Memory {
     @Override
     public Set<Account> loadAllAccounts() {
         Set<Account> accounts = new HashSet<>();
-        final Set<Transaction> transactions = loadAllTransactions();
+        final List<Transaction> transactions = loadAllTransactions();
 
         try {
             for (File file : allFilesInDir("/accounts")) {
@@ -34,8 +34,8 @@ public class SaveFile implements Memory {
     }
 
     @Override
-    public Set<Transaction> loadAllTransactions() {
-        Set<Transaction> transactions = new HashSet<>();
+    public List<Transaction> loadAllTransactions() {
+        List<Transaction> transactions = new LinkedList<>();
 
         try {
             for (File file : allFilesInDir("/transactions")) {
@@ -62,7 +62,7 @@ public class SaveFile implements Memory {
     }
 
     @Override
-    public void saveTransactions(Set<Transaction> transactions) {
+    public void saveTransactions(List<Transaction> transactions) {
         transactions.forEach(this::saveTransaction);
     }
 

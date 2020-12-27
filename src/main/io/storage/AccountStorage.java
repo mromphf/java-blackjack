@@ -6,10 +6,7 @@ import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class AccountStorage implements AccountListener {
 
@@ -31,7 +28,7 @@ public class AccountStorage implements AccountListener {
     }
 
     public void loadAllTransactions() {
-        final Set<Transaction> transactions = memory.loadAllTransactions();
+        final List<Transaction> transactions = memory.loadAllTransactions();
         memoryListeners.forEach(l -> l.onTransactionsLoaded(transactions));
     }
 
@@ -59,7 +56,7 @@ public class AccountStorage implements AccountListener {
     }
 
     @Override
-    public void onTransactions(Set<Transaction> transactions) {
+    public void onTransactions(List<Transaction> transactions) {
         memory.saveTransactions(transactions);
     };
 

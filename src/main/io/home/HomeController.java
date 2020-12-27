@@ -146,5 +146,5 @@ public class HomeController extends RootController implements Initializable, Tra
     }
 
     @Override
-    public void onTransactionsLoaded(Set<Transaction> transactions) {}
+    public void onTransactionsLoaded(List<Transaction> transactions) {}
 }

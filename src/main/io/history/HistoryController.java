@@ -14,7 +14,6 @@ import main.usecase.MemoryListener;
 import main.usecase.NavListener;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class HistoryController extends RootController implements Initializable, 
     @FXML
     public GridPane chartHousing;
 
-    private Set<Transaction> allTransactions = new HashSet<>();
+    private List<Transaction> allTransactions = new LinkedList<>();
 
     @FXML
     public void onHome() {
@@ -62,7 +61,7 @@ public class HistoryController extends RootController implements Initializable, 
     }
 
     @Override
-    public void onTransactionsLoaded(Set<Transaction> transactions) {
+    public void onTransactionsLoaded(List<Transaction> transactions) {
         allTransactions = transactions;
     }
 

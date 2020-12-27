@@ -1,6 +1,5 @@
 package main.io.history;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
@@ -37,23 +36,16 @@ public class HistoryController extends RootController implements Initializable, 
 
     @Override
     public void onViewHistory(Account account) {
-        final Set<Transaction> accountTransactions = allTransactions.stream()
+        final List<Transaction> accountTransactions = allTransactions.stream()
                 .filter(t -> t.getAccountKey().equals(account.getKey()))
-                .collect(Collectors.toSet());
-
-        final List<String> dates = accountTransactions.stream()
-                .map(a -> a.getTime().toString())
-                .distinct()
                 .collect(Collectors.toList());
+        final Axis<String> xAxis = ChartUtil.dateAxis(accountTransactions);
+        final NumberAxis yAxis = new NumberAxis(0, 500, 50);
+        final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
 
-        Axis<String> xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));
-        NumberAxis yAxis = new NumberAxis(-500, 500, 50);
-
-        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
         chart.setPrefWidth(1000);
         chart.setPrefHeight(800);
-
-        chart.getData().add(ChartUtil.transactionsToSeries(accountTransactions));
+        chart.getData().add(ChartUtil.balanceSeries(accountTransactions));
 
         chartHousing.add(chart, 0, 0);
         lblAccount.setText(account.getName());

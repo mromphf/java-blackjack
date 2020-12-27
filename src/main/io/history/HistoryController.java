@@ -2,18 +2,25 @@ package main.io.history;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
-import main.io.util.ChartUtil;
 import main.usecase.MemoryListener;
 import main.usecase.NavListener;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static main.io.util.ChartUtil.balanceSeries;
+import static main.io.util.ChartUtil.dateAxis;
 
 public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener {
 
@@ -30,19 +37,20 @@ public class HistoryController extends RootController implements Initializable, 
 
     @FXML
     public void onHome() {
+        chartHousing.getChildren().clear();
         navListeners.forEach(NavListener::onStopPlaying);
     }
 
     @Override
     public void onViewHistory(Account account) {
         final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
-        final Axis<String> xAxis = ChartUtil.dateAxis(accountTransactions);
-        final NumberAxis yAxis = new NumberAxis(0, 500, 50);
+        final Axis<String> xAxis = dateAxis(accountTransactions);
+        final NumberAxis yAxis = new NumberAxis();
         final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
 
         chart.setPrefWidth(1000);
         chart.setPrefHeight(800);
-        chart.getData().add(ChartUtil.balanceSeries(accountTransactions));
+        chart.getData().add(balanceSeries(accountTransactions));
 
         chartHousing.add(chart, 0, 0);
         lblAccount.setText(account.getName());

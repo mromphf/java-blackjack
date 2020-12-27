@@ -1,8 +1,10 @@
 package main.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Transaction implements Comparable<Transaction> {
 
@@ -32,6 +34,12 @@ public class Transaction implements Comparable<Transaction> {
 
     public int getAmount() {
         return amount;
+    }
+
+    public static List<Transaction> listForAccount(UUID accountKey, List<Transaction> transactions) {
+        return transactions.stream()
+                .filter(t -> t.getAccountKey().equals(accountKey))
+                .collect(Collectors.toList());
     }
 
     @Override

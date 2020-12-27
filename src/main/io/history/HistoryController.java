@@ -14,7 +14,6 @@ import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener {
 
@@ -36,9 +35,7 @@ public class HistoryController extends RootController implements Initializable, 
 
     @Override
     public void onViewHistory(Account account) {
-        final List<Transaction> accountTransactions = allTransactions.stream()
-                .filter(t -> t.getAccountKey().equals(account.getKey()))
-                .collect(Collectors.toList());
+        final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
         final Axis<String> xAxis = ChartUtil.dateAxis(accountTransactions);
         final NumberAxis yAxis = new NumberAxis(0, 500, 50);
         final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);

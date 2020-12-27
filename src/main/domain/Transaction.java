@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 
     private final LocalDateTime time;
     private final UUID accountKey;
@@ -53,5 +53,16 @@ public class Transaction {
     @Override
     public String toString() {
         return String.format("%s,%s,%s,%s", time, accountKey, description, amount);
+    }
+
+    @Override
+    public int compareTo(Transaction target) {
+        if (time.isAfter(target.getTime())) {
+            return 1;
+        } else if (time.isEqual(target.getTime())) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

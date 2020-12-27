@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
+import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 import main.usecase.NavListener;
 
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 
-public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener {
+public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener, AccountListener {
 
     @FXML
     public Label lblAccount;
@@ -63,6 +64,16 @@ public class HistoryController extends RootController implements Initializable, 
     }
 
     @Override
+    public void onTransaction(Transaction transaction) {
+        allTransactions.add(transaction);
+    }
+
+    @Override
+    public void onTransactions(List<Transaction> transactions) {
+        allTransactions.addAll(transactions);
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
@@ -79,4 +90,13 @@ public class HistoryController extends RootController implements Initializable, 
 
     @Override
     public void onAccountsLoaded(Collection<Account> accounts) {}
+
+    @Override
+    public void onNewAccountOpened(Account account, int signingBonus) {}
+
+    @Override
+    public void onAccountDeleted(Account account) {}
+
+    @Override
+    public void onAccountUpdated(Account account) {}
 }

@@ -99,6 +99,7 @@ public class AppRoot {
         transactor.registerTransactionListener(layoutManager);
         transactor.registerTransactionListener(gameLogger);
         transactor.registerAccountListener(accountStorage);
+        transactor.registerAccountListener(historyController);
 
         accountStorage.loadAllAccounts();
         accountStorage.loadAllTransactions();

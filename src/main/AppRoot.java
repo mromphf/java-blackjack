@@ -93,13 +93,13 @@ public class AppRoot {
         blackjackController.registerNavListener(layoutManager);
         blackjackController.registerNavListener(transactor);
 
-        transactor.registerTransactionListener(homeController);
-        transactor.registerTransactionListener(betController);
-        transactor.registerTransactionListener(blackjackController);
-        transactor.registerTransactionListener(layoutManager);
-        transactor.registerTransactionListener(gameLogger);
-        transactor.registerAccountListener(accountStorage);
-        transactor.registerAccountListener(historyController);
+        transactor.registerBalanceListener(homeController);
+        transactor.registerBalanceListener(betController);
+        transactor.registerBalanceListener(blackjackController);
+        transactor.registerBalanceListener(layoutManager);
+        transactor.registerBalanceListener(gameLogger);
+        transactor.registerTransactionListener(historyController);
+        transactor.registerTransactionListener(accountStorage);
 
         accountStorage.loadAllAccounts();
         accountStorage.loadAllTransactions();

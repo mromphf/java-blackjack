@@ -4,11 +4,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.domain.Account;
 import main.usecase.NavListener;
-import main.usecase.TransactionListener;
+import main.usecase.BalanceListener;
 
 import java.util.Map;
 
-public class LayoutManager implements NavListener, TransactionListener {
+public class LayoutManager implements NavListener, BalanceListener {
 
     private final Scene scene;
     private final Map<Layout, Parent> layoutMap;
@@ -44,7 +44,7 @@ public class LayoutManager implements NavListener, TransactionListener {
     }
 
     @Override
-    public void onAccountUpdated(Account account) {
+    public void onBalanceUpdated(Account account) {
         //TODO: This won't allow a player to bet the last of their money.
         if (account.getBalance() <= 0 ) {
             System.out.println("You are out of money! Please leave the casino...");

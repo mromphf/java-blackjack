@@ -10,9 +10,9 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
-import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
 import main.usecase.NavListener;
+import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.util.Collection;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 
-public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener, AccountListener {
+public class HistoryController extends RootController implements Initializable, NavListener, MemoryListener, TransactionListener {
 
     @FXML
     public Label lblAccount;
@@ -41,6 +41,9 @@ public class HistoryController extends RootController implements Initializable, 
         chartHousing.getChildren().clear();
         navListeners.forEach(NavListener::onStopPlaying);
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
     public void onViewHistory(Account account) {
@@ -74,7 +77,7 @@ public class HistoryController extends RootController implements Initializable, 
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void onAccountsLoaded(Collection<Account> accounts) {}
 
     @Override
     public void onStartNewRound(int bet) {}
@@ -87,16 +90,4 @@ public class HistoryController extends RootController implements Initializable, 
 
     @Override
     public void onStopPlaying() {}
-
-    @Override
-    public void onAccountsLoaded(Collection<Account> accounts) {}
-
-    @Override
-    public void onNewAccountOpened(Account account, int signingBonus) {}
-
-    @Override
-    public void onAccountDeleted(Account account) {}
-
-    @Override
-    public void onAccountUpdated(Account account) {}
 }

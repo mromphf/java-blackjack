@@ -1,7 +1,10 @@
 package main.usecase;
 
-import main.domain.Account;
+import main.domain.Transaction;
+
+import java.util.List;
 
 public interface TransactionListener {
-    void onAccountUpdated(Account account);
+    void onTransaction(Transaction transaction);
+    void onTransactions(List<Transaction> transactions);
 }

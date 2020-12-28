@@ -13,13 +13,13 @@ import main.domain.Transaction;
 import main.io.RootController;
 import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
-import main.usecase.TransactionListener;
+import main.usecase.BalanceListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class HomeController extends RootController implements Initializable, TransactionListener, MemoryListener {
+public class HomeController extends RootController implements Initializable, BalanceListener, MemoryListener {
 
     @FXML
     public GridPane listControls;
@@ -132,7 +132,7 @@ public class HomeController extends RootController implements Initializable, Tra
     }
 
     @Override
-    public void onAccountUpdated(Account account) {
+    public void onBalanceUpdated(Account account) {
         accountMap.put(account.getKey(), account);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }

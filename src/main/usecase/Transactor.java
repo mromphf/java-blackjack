@@ -14,19 +14,19 @@ import static main.domain.Rules.settleBet;
 public class Transactor implements NavListener, GameStateListener {
 
     private final List<Transaction> transactions;
+    private final Collection<BalanceListener> balanceListeners;
     private final Collection<TransactionListener> transactionListeners;
-    private final Collection<AccountListener> accountListeners;
     private Account account;
 
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
-        this.transactionListeners = new LinkedList<>();
+        this.balanceListeners = new LinkedList<>();
         this.transactions = new LinkedList<>();
-        this.accountListeners = new HashSet<>();
+        this.transactionListeners = new LinkedList<>();
     }
 
-    public void registerAccountListener(AccountListener accountListener) {
-        accountListeners.add(accountListener);
+    public void registerBalanceListener(BalanceListener balanceListener) {
+        balanceListeners.add(balanceListener);
     }
 
     public void registerTransactionListener(TransactionListener transactionListener) {
@@ -54,9 +54,9 @@ public class Transactor implements NavListener, GameStateListener {
         }
 
         if (workingTransactions.size() > 0) {
-            accountListeners.forEach(l -> l.onTransactions(workingTransactions));
             transactions.addAll(workingTransactions);
-            transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(transactions)));
+            transactionListeners.forEach(l -> l.onTransactions(workingTransactions));
+            balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
         }
     }
 
@@ -65,14 +65,14 @@ public class Transactor implements NavListener, GameStateListener {
         Transaction trans_bet = new Transaction(
                 LocalDateTime.now(), account.getKey(), "BET", (bet * -1));
         transactions.add(trans_bet);
-        accountListeners.forEach(l -> l.onTransaction(trans_bet));
-        transactionListeners.forEach(l -> l.onAccountUpdated(account.updateBalance(transactions)));
+        transactionListeners.forEach(l -> l.onTransaction(trans_bet));
+        balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
     public void onMoveToBettingTable(Account account) {
         this.account = account;
-        transactionListeners.forEach(l -> l.onAccountUpdated(account));
+        balanceListeners.forEach(l -> l.onBalanceUpdated(account));
     }
 
     @Override

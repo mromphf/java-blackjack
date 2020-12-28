@@ -9,12 +9,12 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.io.RootController;
 import main.usecase.NavListener;
-import main.usecase.TransactionListener;
+import main.usecase.BalanceListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BetController extends RootController implements Initializable, TransactionListener {
+public class BetController extends RootController implements Initializable, BalanceListener {
 
     @FXML
     private Label lblBet;
@@ -64,7 +64,7 @@ public class BetController extends RootController implements Initializable, Tran
     }
 
     @Override
-    public void onAccountUpdated(Account account) {
+    public void onBalanceUpdated(Account account) {
         this.balance = account.getBalance();
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("Bet: $" + bet);

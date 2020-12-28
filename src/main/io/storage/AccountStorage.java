@@ -4,11 +4,12 @@ import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.AccountListener;
 import main.usecase.MemoryListener;
+import main.usecase.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AccountStorage implements AccountListener {
+public class AccountStorage implements AccountListener, TransactionListener {
 
     private final Memory memory;
     private final Queue<MemoryListener> memoryListeners;
@@ -58,8 +59,5 @@ public class AccountStorage implements AccountListener {
     @Override
     public void onTransactions(List<Transaction> transactions) {
         memory.saveTransactions(transactions);
-    };
-
-    @Override
-    public void onAccountUpdated(Account account) {}
+    }
 }

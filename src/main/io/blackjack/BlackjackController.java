@@ -9,20 +9,21 @@ import javafx.scene.paint.Color;
 
 import main.domain.Account;
 import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.io.RootController;
 import main.usecase.GameStateListener;
 import main.usecase.NavListener;
-import main.usecase.TransactionListener;
+import main.usecase.BalanceListener;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static main.domain.Action.*;
 import static main.domain.Outcome.*;
 import static main.domain.Rules.*;
 
-public class BlackjackController extends RootController
-        implements Initializable, GameStateListener, TransactionListener {
+public class BlackjackController extends RootController implements Initializable, GameStateListener, BalanceListener {
 
     @FXML
     private Label lblBet;
@@ -58,7 +59,7 @@ public class BlackjackController extends RootController
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onAccountUpdated(Account account) {
+    public void onBalanceUpdated(Account account) {
         lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
     }
 

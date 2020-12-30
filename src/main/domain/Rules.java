@@ -1,7 +1,7 @@
 package main.domain;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static main.domain.Action.*;
 import static main.domain.Outcome.*;
@@ -119,5 +119,27 @@ public class Rules {
             default:
                 return 0;
         }
+    }
+
+    public static Collection<Transaction> compileTransactions(UUID accountKey, Snapshot snapshot) {
+        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
+        final List<Transaction> workingTransactions = new LinkedList<>();
+
+        if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), accountKey, BUY_INSURANCE.name(), snapshot.getBet() * -1));
+        }
+
+        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), accountKey, "DOUBLE OR SPLIT", snapshot.getBet() * -1));
+        }
+
+        if (snapshot.isResolved()) {
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), accountKey, snapshot.getOutcome().name(), settleBet(snapshot)));
+        }
+
+        return workingTransactions;
     }
 }

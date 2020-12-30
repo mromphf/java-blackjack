@@ -1,5 +1,6 @@
 package main.usecase;
 
+import main.Layout;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
@@ -8,10 +9,11 @@ import main.domain.Transaction;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static main.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 
-public class Transactor implements NavListener, GameStateListener {
+public class Transactor implements NavListener, GameStateListener, ActionListener {
 
     private final List<Transaction> transactions;
     private final Collection<BalanceListener> balanceListeners;
@@ -61,26 +63,25 @@ public class Transactor implements NavListener, GameStateListener {
     }
 
     @Override
-    public void onStartNewRound(int bet) {
+    public void onBetPlaced(int amount) {
         Transaction trans_bet = new Transaction(
-                LocalDateTime.now(), account.getKey(), "BET", (bet * -1));
+                LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
         transactions.add(trans_bet);
         transactionListeners.forEach(l -> l.onTransaction(trans_bet));
         balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
-    public void onMoveToBettingTable(Account account) {
-        this.account = account;
-        balanceListeners.forEach(l -> l.onBalanceUpdated(account));
+    public void onChangeLayout(Layout layout, Account account) {
+        if (layout == BET) {
+            this.account = account;
+            balanceListeners.forEach(l -> l.onBalanceUpdated(account));
+        }
     }
 
     @Override
-    public void onMoveToBettingTable() {}
+    public void onChangeLayout(Layout layout) {}
 
     @Override
-    public void onStopPlaying() {}
-
-    @Override
-    public void onViewHistory(Account account) {}
+    public void onActionTaken(Action action) {}
 }

@@ -1,10 +1,11 @@
 package main.usecase;
 
+import main.Layout;
 import main.domain.*;
-import main.io.blackjack.BlackjackController;
 
 import java.util.*;
 
+import static main.Layout.HOME;
 import static main.domain.Deck.openingHand;
 
 public class Game implements ActionListener, NavListener {
@@ -24,13 +25,13 @@ public class Game implements ActionListener, NavListener {
     }
 
     @Override
-    public void onStartNewRound(int bet) {
+    public void onBetPlaced(int amount) {
         try {
             final Map<String, Stack<Card>> openingHand = openingHand(deck);
             final Stack<Card> dealerHand = openingHand.get("dealer");
             final Stack<Card> playerHand = openingHand.get("player");
 
-            round = new Round(bet, deck, dealerHand, playerHand);
+            round = new Round(amount, deck, dealerHand, playerHand);
             gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
@@ -71,18 +72,14 @@ public class Game implements ActionListener, NavListener {
     }
 
     @Override
-    public void onStopPlaying() {
-        round = new Round(0, deck);
+    public void onChangeLayout(Layout layout) {
+        if (layout == HOME) {
+            round = new Round(0, deck);
+        }
     }
 
     @Override
-    public void onViewHistory(Account account) {}
-
-    @Override
-    public void onMoveToBettingTable() {}
-
-    @Override
-    public void onMoveToBettingTable(Account account) {
-        onMoveToBettingTable();
+    public void onChangeLayout(Layout layout, Account account) {
+        onChangeLayout(layout);
     }
 }

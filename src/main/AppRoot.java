@@ -53,19 +53,18 @@ public class AppRoot {
 
         historyController.registerNavListener(layoutManager);
 
-        homeController.registerControlListener(game);
         homeController.registerNavListener(game);
         homeController.registerNavListener(layoutManager);
         homeController.registerNavListener(transactor);
         homeController.registerNavListener(historyController);
         homeController.registerAccountListener(accountStorage);
 
-        betController.registerControlListener(game);
+        betController.registerActionListener(game);
+        betController.registerActionListener(transactor);
         betController.registerNavListener(game);
         betController.registerNavListener(layoutManager);
-        betController.registerNavListener(transactor);
 
-        blackjackController.registerControlListener(game);
+        blackjackController.registerActionListener(game);
         blackjackController.registerNavListener(game);
         blackjackController.registerNavListener(layoutManager);
         blackjackController.registerNavListener(transactor);

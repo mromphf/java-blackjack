@@ -16,11 +16,11 @@ public abstract class RootController {
         navListeners = new LinkedList<>();
     }
 
-    public void registerControlListener(ActionListener actionListener) {
-        this.actionListeners.add(actionListener);
+    public void registerActionListener(ActionListener actionListener) {
+        actionListeners.add(actionListener);
     }
 
     public void registerNavListener(NavListener navListener) {
-        this.navListeners.add(navListener);
+        navListeners.add(navListener);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import main.Layout;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static main.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 
@@ -39,26 +41,28 @@ public class HistoryController extends RootController implements Initializable, 
     @FXML
     public void onHome() {
         chartHousing.getChildren().clear();
-        navListeners.forEach(NavListener::onStopPlaying);
+        navListeners.forEach(l -> l.onChangeLayout(HOME));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onViewHistory(Account account) {
-        final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
-        final Axis<String> xAxis = dateAxis(accountTransactions);
-        final NumberAxis yAxis = new NumberAxis();
-        final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+    public void onChangeLayout(Layout layout, Account account) {
+        if (layout == HISTORY) {
+            final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
+            final Axis<String> xAxis = dateAxis(accountTransactions);
+            final NumberAxis yAxis = new NumberAxis();
+            final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
 
-        chart.setPrefWidth(1000);
-        chart.setPrefHeight(800);
-        chart.getData().add(balanceSeries(accountTransactions));
+            chart.setPrefWidth(1000);
+            chart.setPrefHeight(800);
+            chart.getData().add(balanceSeries(accountTransactions));
 
-        chartHousing.add(chart, 0, 0);
-        lblAccount.setText(account.getName());
-        lblTrans.setText(String.format("Transactions: %s", accountTransactions.size()));
+            chartHousing.add(chart, 0, 0);
+            lblAccount.setText(account.getName());
+            lblTrans.setText(String.format("Transactions: %s", accountTransactions.size()));
+        }
     }
 
     @Override
@@ -77,17 +81,8 @@ public class HistoryController extends RootController implements Initializable, 
     }
 
     @Override
+    public void onChangeLayout(Layout layout) {}
+
+    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {}
-
-    @Override
-    public void onStartNewRound(int bet) {}
-
-    @Override
-    public void onMoveToBettingTable() {}
-
-    @Override
-    public void onMoveToBettingTable(Account account) {}
-
-    @Override
-    public void onStopPlaying() {}
 }

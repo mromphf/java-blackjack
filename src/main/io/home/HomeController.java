@@ -19,6 +19,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static main.Layout.BET;
+import static main.Layout.HISTORY;
+
 public class HomeController extends RootController implements Initializable, BalanceListener, MemoryListener {
 
     @FXML
@@ -59,7 +62,7 @@ public class HomeController extends RootController implements Initializable, Bal
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        navListeners.forEach(l -> l.onMoveToBettingTable(selectedAccount));
+        navListeners.forEach(l -> l.onChangeLayout(BET, selectedAccount));
     }
 
     @FXML
@@ -128,7 +131,7 @@ public class HomeController extends RootController implements Initializable, Bal
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        navListeners.forEach(l -> l.onViewHistory(selectedAccount));
+        navListeners.forEach(l -> l.onChangeLayout(HISTORY, selectedAccount));
     }
 
     @Override

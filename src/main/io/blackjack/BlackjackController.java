@@ -6,21 +6,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-
 import main.domain.Account;
 import main.domain.Snapshot;
-import main.domain.Transaction;
 import main.io.RootController;
-import main.usecase.GameStateListener;
-import main.usecase.NavListener;
 import main.usecase.BalanceListener;
+import main.usecase.GameStateListener;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
+import static main.Layout.BET;
 import static main.domain.Action.*;
-import static main.domain.Outcome.*;
+import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
 public class BlackjackController extends RootController implements Initializable, GameStateListener, BalanceListener {
@@ -117,7 +114,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onDone() {
-        navListeners.forEach(NavListener::onMoveToBettingTable);
+        navListeners.forEach(l -> l.onChangeLayout(BET));
     }
 
     @FXML

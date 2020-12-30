@@ -19,28 +19,13 @@ public class LayoutManager implements NavListener, BalanceListener {
     }
 
     @Override
-    public void onStartNewRound(int bet) {
-        scene.setRoot(layoutMap.get(Layout.GAME));
+    public void onChangeLayout(Layout layout) {
+        scene.setRoot(layoutMap.get(layout));
     }
 
     @Override
-    public void onMoveToBettingTable() {
-        scene.setRoot(layoutMap.get(Layout.BET));
-    }
-
-    @Override
-    public void onMoveToBettingTable(Account account) {
-        onMoveToBettingTable();
-    }
-
-    @Override
-    public void onStopPlaying() {
-        scene.setRoot(layoutMap.get(Layout.HOME));
-    }
-
-    @Override
-    public void onViewHistory(Account account) {
-        scene.setRoot(layoutMap.get(Layout.HISTORY));
+    public void onChangeLayout(Layout layout, Account account) {
+        scene.setRoot(layoutMap.get(layout));
     }
 
     @Override

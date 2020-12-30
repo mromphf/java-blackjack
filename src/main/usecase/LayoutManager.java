@@ -1,11 +1,8 @@
-package main;
+package main.usecase;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.domain.Account;
-import main.usecase.Layout;
-import main.usecase.NavListener;
-import main.usecase.BalanceListener;
 
 import java.util.Map;
 

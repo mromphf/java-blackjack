@@ -7,11 +7,26 @@ import main.domain.Transaction;
 import main.io.util.JsonUtil;
 
 import java.io.*;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class SaveFile implements Memory {
+
+    public final File accountsDir;
+    public final File transactionsDir;
+
+    public SaveFile() {
+        accountsDir = new File("./accounts/");
+        transactionsDir = new File("./transactions/");
+
+        if (accountsDir.mkdir()) {
+            System.out.printf("Created new directory: %s\n", accountsDir.getPath());
+        }
+
+        if (transactionsDir.mkdir()) {
+            System.out.printf("Created new directory: %s\n", transactionsDir.getPath());
+        }
+    }
 
     @Override
     public Set<Account> loadAllAccounts() {
@@ -19,7 +34,7 @@ public class SaveFile implements Memory {
         final List<Transaction> transactions = loadAllTransactions();
 
         try {
-            for (File file : allFilesInDir("/accounts")) {
+            for (File file : allFilesInDir(accountsDir)) {
                 accounts.add(loadAccount(file).updateBalance(transactions));
             }
         } catch (IOException e) {
@@ -38,7 +53,7 @@ public class SaveFile implements Memory {
         List<Transaction> transactions = new LinkedList<>();
 
         try {
-            for (File file : allFilesInDir("/transactions")) {
+            for (File file : allFilesInDir(transactionsDir)) {
                 final Scanner sc = new Scanner(file);
 
                 // Assume header row
@@ -68,9 +83,7 @@ public class SaveFile implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final URL url = SaveFile.class.getResource("/transactions");
-        final String pathToTransactionsDir = new File(url.getPath()).getPath() + "/";
-        final String transactionFilename = pathToTransactionsDir + fileName(transaction.getTime());
+        final String transactionFilename = transactionsDir.getPath() + "/" + fileName(transaction.getTime());
         final File transactionsFile = new File(transactionFilename);
 
         try {
@@ -89,8 +102,7 @@ public class SaveFile implements Memory {
 
     @Override
     public void saveNewAccount(Account account) {
-        final URL url = SaveFile.class.getResource("/accounts/");
-        final File accountFile = new File(url.getPath() + account.getKey());
+        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey());
 
         try {
             final FileWriter fileWriter = new FileWriter(accountFile);
@@ -103,8 +115,8 @@ public class SaveFile implements Memory {
 
     @Override
     public void deleteAccount(Account account) {
-        final URL url = SaveFile.class.getResource("/accounts/");
-        final File accountFile = new File(url.getPath() + account.getKey());
+        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey());
+
         if (accountFile.delete()) {
             System.out.printf("Account no. %s has been closed.%n", account.getKey());
         }
@@ -125,9 +137,7 @@ public class SaveFile implements Memory {
         return String.format("%s-%s-%s.csv", t.getYear(), t.getMonthValue(), t.getDayOfMonth());
     }
 
-    public File[] allFilesInDir(String dir) {
-        final URL url = SaveFile.class.getResource(dir);
-        final File directory = new File(url.getPath());
+    public File[] allFilesInDir(File directory) {
         return Objects.requireNonNull(directory.listFiles());
     }
 }

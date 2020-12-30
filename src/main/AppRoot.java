@@ -1,70 +1,47 @@
 package main;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
-import main.io.log.GameLogger;
 import main.io.log.ConsoleLogHandler;
+import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
 import main.io.storage.SaveFile;
 import main.usecase.Game;
 import main.usecase.Transactor;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
+import static main.Layout.*;
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
 
 public class AppRoot {
 
-    private final static String MAIN_FXML = "io/home/HomeView.fxml";
-    private final static String BLACKJACK_FXML = "io/blackjack/BlackjackView.fxml";
-    private final static String BET_FXML = "io/bet/BetView.fxml";
-    private final static String HISTORY_FXML = "io/history/HistoryView.fxml";
-
     public AppRoot(Stage stage) {
-        FXMLLoader homeLoader = new FXMLLoader(getClass().getResource(MAIN_FXML));
-        FXMLLoader betLoader = new FXMLLoader(getClass().getResource(BET_FXML));
-        FXMLLoader blackjackLoader = new FXMLLoader(getClass().getResource(BLACKJACK_FXML));
-        FXMLLoader historyLoader = new FXMLLoader(getClass().getResource(HISTORY_FXML));
+        final ResourceLoader loader = new ResourceLoader();
+        final SaveFile saveFile = new SaveFile();
+        final Transactor transactor = new Transactor();
+        final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
+        final GameLogger gameLogger = new GameLogger("Game Logger", null);
+        final Game game = new Game(shuffle(fresh()));
 
-        try {
-            homeLoader.load();
-            betLoader.load();
-            blackjackLoader.load();
-            historyLoader.load();
-            ImageMap.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
+        final AccountStorage accountStorage = new AccountStorage(saveFile);
+        final Scene scene = new Scene(layoutMap.get(HOME));
+        final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
 
-        HomeController homeController = homeLoader.getController();
-        BlackjackController blackjackController = blackjackLoader.getController();
-        BetController betController = betLoader.getController();
-        HistoryController historyController = historyLoader.getController();
+        final HomeController homeController = (HomeController) loader.loadController(HOME);
+        final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
+        final BetController betController = (BetController) loader.loadController(BET);
+        final HistoryController historyController = (HistoryController) loader.loadController(HISTORY);
 
-        Map<Layout, Parent> layoutMap = new HashMap<>();
-        layoutMap.put(Layout.HOME, homeLoader.getRoot());
-        layoutMap.put(Layout.BET, betLoader.getRoot());
-        layoutMap.put(Layout.GAME, blackjackLoader.getRoot());
-        layoutMap.put(Layout.HISTORY, historyLoader.getRoot());
-
-        AccountStorage accountStorage = new AccountStorage(new SaveFile());
-        Game game = new Game(shuffle(fresh()));
-        Scene scene = new Scene(layoutMap.get(Layout.HOME));
-        LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
-        Transactor transactor = new Transactor();
-        ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
-
-        GameLogger gameLogger = new GameLogger("Game Logger", null);
         gameLogger.addHandler(consoleLogHandler);
 
         game.registerGameStateListener(blackjackController);
@@ -103,6 +80,7 @@ public class AppRoot {
 
         accountStorage.loadAllAccounts();
         accountStorage.loadAllTransactions();
+        ImageMap.load();
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

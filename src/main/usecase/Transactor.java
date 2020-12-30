@@ -63,10 +63,9 @@ public class Transactor implements NavListener, GameStateListener, ActionListene
 
     @Override
     public void onBetPlaced(int amount) {
-        Transaction trans_bet = new Transaction(
-                LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
-        transactions.add(trans_bet);
-        transactionListeners.forEach(l -> l.onTransaction(trans_bet));
+        Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
+        transactions.add(t);
+        transactionListeners.forEach(l -> l.onTransaction(t));
         balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
     }
 

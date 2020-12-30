@@ -62,7 +62,8 @@ public class BetController extends RootController implements Initializable, Bala
         bet = 0;
     }
 
-    @FXML void onQuit() {
+    @FXML
+    public void onQuit() {
         navListeners.forEach(l -> l.onChangeLayout(HOME));
     }
 

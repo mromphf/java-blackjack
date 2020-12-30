@@ -15,7 +15,7 @@ import main.usecase.GameStateListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static main.Layout.BET;
+import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;

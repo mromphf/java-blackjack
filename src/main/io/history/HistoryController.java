@@ -7,7 +7,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import main.Layout;
+import main.usecase.Layout;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.RootController;
@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static main.Layout.*;
+import static main.usecase.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 

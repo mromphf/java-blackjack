@@ -2,14 +2,14 @@ package main.io;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import main.Layout;
+import main.usecase.Layout;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static main.Layout.*;
+import static main.usecase.Layout.*;
 
 public class ResourceLoader {
 

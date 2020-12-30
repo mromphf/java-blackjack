@@ -1,6 +1,5 @@
 package main.usecase;
 
-import main.Layout;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
@@ -9,7 +8,7 @@ import main.domain.Transaction;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.Layout.BET;
+import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 

@@ -19,8 +19,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.Layout.BET;
-import static main.Layout.HISTORY;
+import static main.usecase.Layout.BET;
+import static main.usecase.Layout.HISTORY;
 
 public class HomeController extends RootController implements Initializable, BalanceListener, MemoryListener {
 

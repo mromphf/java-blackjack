@@ -13,8 +13,8 @@ import main.usecase.BalanceListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static main.Layout.GAME;
-import static main.Layout.HOME;
+import static main.usecase.Layout.GAME;
+import static main.usecase.Layout.HOME;
 
 public class BetController extends RootController implements Initializable, BalanceListener {
 

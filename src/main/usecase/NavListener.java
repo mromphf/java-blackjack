@@ -1,6 +1,5 @@
 package main.usecase;
 
-import main.Layout;
 import main.domain.Account;
 
 public interface NavListener {

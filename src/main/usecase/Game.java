@@ -1,11 +1,10 @@
 package main.usecase;
 
-import main.Layout;
 import main.domain.*;
 
 import java.util.*;
 
-import static main.Layout.HOME;
+import static main.usecase.Layout.HOME;
 import static main.domain.Deck.openingHand;
 
 public class Game implements ActionListener, NavListener {

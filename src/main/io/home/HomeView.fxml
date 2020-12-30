@@ -8,13 +8,19 @@
 <GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
 
     <GridPane fx:id="listControls" vgap="15">
-        <ListView fx:id="lstAccounts" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="400" maxWidth="500" onMouseClicked="#onClickList"/>
-
-        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="20">
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="5">
             <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
                 New
             </Button>
 
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="100" minHeight="50" onAction="#onExit">
+                Exit
+            </Button>
+        </GridPane>
+
+        <ListView fx:id="lstAccounts" GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="400" maxWidth="500" onMouseClicked="#onClickList"/>
+
+        <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="20">
             <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onPlay">
                 Play
             </Button>
@@ -25,10 +31,6 @@
 
             <Button fx:id="btnHistory" GridPane.rowIndex="0" disable="true" GridPane.columnIndex="3" minWidth="100" minHeight="50" onAction="#onRequestHistory">
                 History
-            </Button>
-
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="100" minHeight="50" onAction="#onExit">
-                Exit
             </Button>
         </GridPane>
     </GridPane>

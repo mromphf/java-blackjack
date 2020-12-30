@@ -1,16 +1,12 @@
 package main.usecase;
 
-import main.domain.Account;
-import main.domain.Action;
-import main.domain.Snapshot;
-import main.domain.Transaction;
+import main.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static main.domain.Rules.compileTransactions;
 import static main.usecase.Layout.BET;
-import static main.domain.Action.*;
-import static main.domain.Rules.settleBet;
 
 public class Transactor implements NavListener, GameStateListener, ActionListener {
 
@@ -36,29 +32,10 @@ public class Transactor implements NavListener, GameStateListener, ActionListene
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
-        final List<Transaction> workingTransactions = new LinkedList<>();
-
-        if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), account.getKey(), BUY_INSURANCE.name(), snapshot.getBet() * -1));
-        }
-
-        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), account.getKey(), "DOUBLE OR SPLIT", snapshot.getBet() * -1));
-        }
-
-        if (snapshot.isResolved()) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), account.getKey(), snapshot.getOutcome().name(), settleBet(snapshot)));
-        }
-
-        if (workingTransactions.size() > 0) {
-            transactions.addAll(workingTransactions);
-            transactionListeners.forEach(l -> l.onTransactions(workingTransactions));
-            balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
-        }
+        Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
+        transactions.addAll(workingTransactions);
+        transactionListeners.forEach(l -> l.onTransactions(new ArrayList<>(workingTransactions)));
+        balanceListeners.forEach(l -> l.onBalanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override

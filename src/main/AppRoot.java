@@ -28,6 +28,7 @@ import static main.domain.Deck.shuffle;
 public class AppRoot {
 
     public AppRoot(Stage stage) {
+
         /*
          * These are not event listeners
          */
@@ -35,8 +36,6 @@ public class AppRoot {
         final SaveFile saveFile = new SaveFile();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
-        final GameLogger gameLogger = new GameLogger("Game Logger", null);
-        final EventNetwork eventNetwork = new EventNetwork();
         final Scene scene = new Scene(layoutMap.get(HOME));
 
         /*
@@ -44,13 +43,13 @@ public class AppRoot {
          */
         final Transactor transactor = new Transactor();
         final Game game = new Game(shuffle(fresh()));
+        final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(saveFile);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
         final BetController betController = (BetController) loader.loadController(BET);
         final HistoryController historyController = (HistoryController) loader.loadController(HISTORY);
-
 
         /*
          * Wire everything up
@@ -67,56 +66,13 @@ public class AppRoot {
             add(transactor);
         }};
 
-        final Collection<GameStateListener> gameStateListeners = new LinkedList<GameStateListener>() {{
-            add(blackjackController);
-            add(transactor);
-            add(gameLogger);
-        }};
+        final EventNetwork eventNetwork = new EventNetwork(eventListeners);
 
-        final Collection<AccountListener> accountListeners = new LinkedList<AccountListener>() {{
-            add(accountStorage);
-        }};
-
-        final Collection<BalanceListener> balanceListeners = new LinkedList<BalanceListener>() {{
-            add(homeController);
-            add(betController);
-            add(blackjackController);
-            add(layoutManager);
-            add(gameLogger);
-        }};
-
-        final Collection<ActionListener> actionListeners = new LinkedList<ActionListener>() {{
-            add(game);
-            add(transactor);
-        }};
-
-        final Collection<MemoryListener> memoryListeners = new LinkedList<MemoryListener>() {{
-            add(homeController);
-            add(historyController);
-        }};
-
-        final Collection<NavListener> navListeners = new LinkedList<NavListener>() {{
-            add(game);
-            add(layoutManager);
-            add(transactor);
-            add(historyController);
-        }};
-
-        final Collection<TransactionListener> transactionListeners = new LinkedList<TransactionListener>() {{
-            add(accountStorage);
-            add(historyController);
-        }};
+        eventNetwork.registerGameStateListener(gameLogger);
+        eventNetwork.registerBalanceListener(gameLogger);
 
         // If this doesn't happen, prepare for NullPointerExceptions (there must be a better way?)
-        eventListeners.forEach(lst -> lst.connectTo(eventNetwork));
-
-        gameStateListeners.forEach(eventNetwork::registerListener);
-        accountListeners.forEach(eventNetwork::registerListener);
-        actionListeners.forEach(eventNetwork::registerListener);
-        balanceListeners.forEach(eventNetwork::registerListener);
-        memoryListeners.forEach(eventNetwork::registerListener);
-        navListeners.forEach(eventNetwork::registerListener);
-        transactionListeners.forEach(eventNetwork::registerListener);
+        eventListeners.forEach( lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);
 

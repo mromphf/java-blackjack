@@ -4,6 +4,7 @@ import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
 import main.domain.Transaction;
+import main.io.EventListener;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -26,32 +27,44 @@ public class EventNetwork implements
     private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
 
-    public void registerListener(AccountListener listener) {
-        accountListeners.add(listener);
+    public EventNetwork(Collection<EventListener> listeners) {
+        for (EventListener listener : listeners) {
+            if (listener instanceof AccountListener) {
+                accountListeners.add((AccountListener) listener);
+            }
+
+            if (listener instanceof ActionListener) {
+                actionListeners.add((ActionListener) listener);
+            }
+
+            if (listener instanceof BalanceListener) {
+                balanceListeners.add((BalanceListener) listener);
+            }
+
+            if (listener instanceof GameStateListener) {
+                gameStateListeners.add((GameStateListener) listener);
+            }
+
+            if (listener instanceof MemoryListener) {
+                memoryListeners.add((MemoryListener) listener);
+            }
+
+            if (listener instanceof NavListener) {
+                navListeners.add((NavListener) listener);
+            }
+
+            if (listener instanceof TransactionListener) {
+                transactionListeners.add((TransactionListener) listener);
+            }
+        }
     }
 
-    public void registerListener(BalanceListener listener) {
-        balanceListeners.add(listener);
-    }
-
-    public void registerListener(ActionListener listener) {
-        actionListeners.add(listener);
-    }
-
-    public void registerListener(GameStateListener listener) {
+    public void registerGameStateListener(GameStateListener listener) {
         gameStateListeners.add(listener);
     }
 
-    public void registerListener(MemoryListener listener) {
-        memoryListeners.add(listener);
-    }
-
-    public void registerListener(NavListener listener) {
-        navListeners.add(listener);
-    }
-
-    public void registerListener(TransactionListener listener) {
-        transactionListeners.add(listener);
+    public void registerBalanceListener(BalanceListener listener) {
+        balanceListeners.add(listener);
     }
 
     @Override

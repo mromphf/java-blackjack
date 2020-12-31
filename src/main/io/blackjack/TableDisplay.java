@@ -39,13 +39,8 @@ public class TableDisplay extends Canvas {
 
     public void reset() {
         context.clearRect(0, 0, getWidth(), getHeight());
-
         context.setFill(Color.valueOf("#228b22"));
         context.fillRect(0, 0, getWidth(), getHeight());
-
-        context.setFill(Color.BLACK);
-        context.rect(0, 0, getWidth(), getHeight());
-        context.stroke();
     }
 
     public void drawScores(int dealerScore, int playerScore) {
@@ -74,6 +69,7 @@ public class TableDisplay extends Canvas {
     private void drawLabel(String label, int y) {
         final Font f = new Font("Arial", 30);
         context.setFont(f);
+        context.setFill(Color.WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
     }
 

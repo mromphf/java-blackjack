@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
+<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20" style="-fx-background-color:#228b22">
 
     <GridPane fx:id="listControls" vgap="15">
         <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="5">

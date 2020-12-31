@@ -4,17 +4,17 @@
 <?import javafx.scene.text.Font?>
 
 <GridPane fx:controller="main.io.bet.BetController"
-          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50">
+          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50" style="-fx-background-color:#228b22">
 
     <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" vgap="20">
-        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER" style="-fx-text-fill:white">
             Bet: $0
             <font>
                 <Font name="Arial" size="50" />
             </font>
         </Label>
 
-        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="100" alignment="BASELINE_CENTER" textAlignment="CENTER">
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="100" alignment="BASELINE_CENTER" textAlignment="CENTER" style="-fx-text-fill:white">
             Right-click to decrease.
         </Label>
     </GridPane>
@@ -51,7 +51,7 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER" style="-fx-text-fill:white">
             Balance: $0
             <font>
                 <Font name="Arial" size="30" />

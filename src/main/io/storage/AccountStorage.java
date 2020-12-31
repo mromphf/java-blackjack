@@ -2,35 +2,29 @@ package main.io.storage;
 
 import main.domain.Account;
 import main.domain.Transaction;
+import main.io.EventListener;
 import main.usecase.AccountListener;
-import main.usecase.MemoryListener;
 import main.usecase.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AccountStorage implements AccountListener, TransactionListener {
+public class AccountStorage extends EventListener implements AccountListener, TransactionListener {
 
     private final Memory memory;
-    private final Queue<MemoryListener> memoryListeners;
 
     public AccountStorage(Memory memory) {
         this.memory = memory;
-        this.memoryListeners = new ArrayDeque<>();
-    }
-
-    public void registerMemoryListener(MemoryListener memoryListener) {
-        memoryListeners.add(memoryListener);
     }
 
     public void loadAllAccounts() {
         final Collection<Account> accounts = memory.loadAllAccounts();
-        memoryListeners.forEach(l -> l.onAccountsLoaded(accounts));
+        eventNetwork.onAccountsLoaded(accounts);
     }
 
     public void loadAllTransactions() {
         final List<Transaction> transactions = memory.loadAllTransactions();
-        memoryListeners.forEach(l -> l.onTransactionsLoaded(transactions));
+        eventNetwork.onTransactionsLoaded(transactions);
     }
 
     @Override

@@ -3,6 +3,7 @@ package main;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.io.EventListener;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
@@ -13,11 +14,11 @@ import main.io.log.ConsoleLogHandler;
 import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
 import main.io.storage.SaveFile;
-import main.usecase.Game;
-import main.usecase.Layout;
+import main.usecase.*;
 import main.usecase.LayoutManager;
-import main.usecase.Transactor;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static main.usecase.Layout.*;
@@ -27,61 +28,109 @@ import static main.domain.Deck.shuffle;
 public class AppRoot {
 
     public AppRoot(Stage stage) {
+        /*
+         * These are not event listeners
+         */
         final ResourceLoader loader = new ResourceLoader();
         final SaveFile saveFile = new SaveFile();
-        final Transactor transactor = new Transactor();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
-        final GameLogger gameLogger = new GameLogger("Game Logger", null);
-        final Game game = new Game(shuffle(fresh()));
-
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
-        final AccountStorage accountStorage = new AccountStorage(saveFile);
+        final GameLogger gameLogger = new GameLogger("Game Logger", null);
+        final EventNetwork eventNetwork = new EventNetwork();
         final Scene scene = new Scene(layoutMap.get(HOME));
-        final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
 
+        /*
+         * These are event listeners
+         */
+        final Transactor transactor = new Transactor();
+        final Game game = new Game(shuffle(fresh()));
+        final AccountStorage accountStorage = new AccountStorage(saveFile);
+        final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
         final BetController betController = (BetController) loader.loadController(BET);
         final HistoryController historyController = (HistoryController) loader.loadController(HISTORY);
 
+
+        /*
+         * Wire everything up
+         */
+
+        final Collection<EventListener> eventListeners = new LinkedList<EventListener>() {{
+            add(homeController);
+            add(historyController);
+            add(blackjackController);
+            add(betController);
+            add(layoutManager);
+            add(accountStorage);
+            add(game);
+            add(transactor);
+        }};
+
+        final Collection<GameStateListener> gameStateListeners = new LinkedList<GameStateListener>() {{
+            add(blackjackController);
+            add(transactor);
+            add(gameLogger);
+        }};
+
+        final Collection<AccountListener> accountListeners = new LinkedList<AccountListener>() {{
+            add(accountStorage);
+        }};
+
+        final Collection<BalanceListener> balanceListeners = new LinkedList<BalanceListener>() {{
+            add(homeController);
+            add(betController);
+            add(blackjackController);
+            add(layoutManager);
+            add(gameLogger);
+        }};
+
+        final Collection<ActionListener> actionListeners = new LinkedList<ActionListener>() {{
+            add(game);
+            add(transactor);
+        }};
+
+        final Collection<MemoryListener> memoryListeners = new LinkedList<MemoryListener>() {{
+            add(homeController);
+            add(historyController);
+        }};
+
+        final Collection<NavListener> navListeners = new LinkedList<NavListener>() {{
+            add(game);
+            add(layoutManager);
+            add(transactor);
+            add(historyController);
+        }};
+
+        final Collection<TransactionListener> transactionListeners = new LinkedList<TransactionListener>() {{
+            add(accountStorage);
+            add(historyController);
+        }};
+
+        // If this doesn't happen, prepare for NullPointerExceptions (there must be a better way?)
+        eventListeners.forEach(lst -> lst.connectTo(eventNetwork));
+
+        gameStateListeners.forEach(eventNetwork::registerListener);
+        accountListeners.forEach(eventNetwork::registerListener);
+        actionListeners.forEach(eventNetwork::registerListener);
+        balanceListeners.forEach(eventNetwork::registerListener);
+        memoryListeners.forEach(eventNetwork::registerListener);
+        navListeners.forEach(eventNetwork::registerListener);
+        transactionListeners.forEach(eventNetwork::registerListener);
+
         gameLogger.addHandler(consoleLogHandler);
 
-        game.registerGameStateListener(blackjackController);
-        game.registerGameStateListener(transactor);
-        game.registerGameStateListener(gameLogger);
-
-        accountStorage.registerMemoryListener(homeController);
-        accountStorage.registerMemoryListener(historyController);
-
-        historyController.registerNavListener(layoutManager);
-
-        homeController.registerNavListener(game);
-        homeController.registerNavListener(layoutManager);
-        homeController.registerNavListener(transactor);
-        homeController.registerNavListener(historyController);
-        homeController.registerAccountListener(accountStorage);
-
-        betController.registerActionListener(game);
-        betController.registerActionListener(transactor);
-        betController.registerNavListener(game);
-        betController.registerNavListener(layoutManager);
-
-        blackjackController.registerActionListener(game);
-        blackjackController.registerNavListener(game);
-        blackjackController.registerNavListener(layoutManager);
-        blackjackController.registerNavListener(transactor);
-
-        transactor.registerBalanceListener(homeController);
-        transactor.registerBalanceListener(betController);
-        transactor.registerBalanceListener(blackjackController);
-        transactor.registerBalanceListener(layoutManager);
-        transactor.registerBalanceListener(gameLogger);
-        transactor.registerTransactionListener(historyController);
-        transactor.registerTransactionListener(accountStorage);
+        /*
+         * Load from disk
+         */
 
         accountStorage.loadAllAccounts();
         accountStorage.loadAllTransactions();
         ImageMap.load();
+
+        /*
+         * Initialize JavaFX Stage
+         */
 
         stage.setScene(scene);
         stage.setTitle("Blackjack");

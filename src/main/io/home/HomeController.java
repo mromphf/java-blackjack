@@ -10,10 +10,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.RootController;
-import main.usecase.AccountListener;
-import main.usecase.MemoryListener;
+import main.io.EventListener;
 import main.usecase.BalanceListener;
+import main.usecase.MemoryListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -22,7 +21,7 @@ import java.util.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 
-public class HomeController extends RootController implements Initializable, BalanceListener, MemoryListener {
+public class HomeController extends EventListener implements Initializable, BalanceListener, MemoryListener {
 
     @FXML
     public GridPane listControls;
@@ -50,19 +49,13 @@ public class HomeController extends RootController implements Initializable, Bal
 
     private final Map<UUID, Account> accountMap = new HashMap<>();
 
-    private final Queue<AccountListener> accountListeners = new ArrayDeque<>();
-
-    public void registerAccountListener(AccountListener accountListener) {
-        accountListeners.add(accountListener);
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        navListeners.forEach(l -> l.onChangeLayout(BET, selectedAccount));
+        eventNetwork.onChangeLayout(BET, selectedAccount);
     }
 
     @FXML
@@ -116,7 +109,7 @@ public class HomeController extends RootController implements Initializable, Bal
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        accountListeners.forEach(l -> l.onNewAccountOpened(account, balance));
+        eventNetwork.onNewAccountOpened(account, balance);
     }
 
     @FXML
@@ -125,13 +118,13 @@ public class HomeController extends RootController implements Initializable, Bal
 
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-        accountListeners.forEach(l -> l.onAccountDeleted(selectedAccount));
+        eventNetwork.onAccountDeleted(selectedAccount);
     }
 
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        navListeners.forEach(l -> l.onChangeLayout(HISTORY, selectedAccount));
+        eventNetwork.onChangeLayout(HISTORY, selectedAccount);
     }
 
     @Override

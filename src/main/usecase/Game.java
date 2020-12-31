@@ -1,26 +1,21 @@
 package main.usecase;
 
 import main.domain.*;
+import main.io.EventListener;
 
 import java.util.*;
 
 import static main.usecase.Layout.HOME;
 import static main.domain.Deck.openingHand;
 
-public class Game implements ActionListener, NavListener {
+public class Game extends EventListener implements ActionListener, NavListener {
 
-    private final Collection<GameStateListener> gameStateListeners;
     private final Stack<Card> deck;
     private Round round;
 
     public Game(Stack<Card> deck) {
-        this.gameStateListeners = new ArrayList<>();
         this.deck = deck;
         round = new Round(0, deck);
-    }
-
-    public void registerGameStateListener(GameStateListener gameStateListener) {
-        gameStateListeners.add(gameStateListener);
     }
 
     @Override
@@ -31,7 +26,7 @@ public class Game implements ActionListener, NavListener {
             final Stack<Card> playerHand = openingHand.get("player");
 
             round = new Round(amount, deck, dealerHand, playerHand);
-            gameStateListeners.forEach(l -> l.onUpdate(round.getSnapshot()));
+            eventNetwork.onUpdate(round.getSnapshot());
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
             System.exit(0);
@@ -66,8 +61,7 @@ public class Game implements ActionListener, NavListener {
 
         round.playNextHand();
 
-        final Snapshot snapshot = round.getSnapshot();
-        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
+        eventNetwork.onUpdate(round.getSnapshot());
     }
 
     @Override

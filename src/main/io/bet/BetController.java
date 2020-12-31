@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
-import main.io.RootController;
+import main.io.EventListener;
 import main.usecase.BalanceListener;
 
 import java.net.URL;
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.GAME;
 import static main.usecase.Layout.HOME;
 
-public class BetController extends RootController implements Initializable, BalanceListener {
+public class BetController extends EventListener implements Initializable, BalanceListener {
 
     @FXML
     private Label lblBet;
@@ -57,14 +57,14 @@ public class BetController extends RootController implements Initializable, Bala
 
     @FXML
     private void onDeal() {
-        actionListeners.forEach(l -> l.onBetPlaced(bet));
-        navListeners.forEach(l -> l.onChangeLayout(GAME));
+        eventNetwork.onBetPlaced(bet);
+        eventNetwork.onChangeLayout(GAME);
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        navListeners.forEach(l -> l.onChangeLayout(HOME));
+        eventNetwork.onChangeLayout(HOME);
         bet = 0;
     }
 

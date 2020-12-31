@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
-import main.io.RootController;
+import main.io.EventListener;
 import main.usecase.BalanceListener;
 import main.usecase.GameStateListener;
 
@@ -21,7 +21,7 @@ import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
-public class BlackjackController extends RootController implements Initializable, GameStateListener, BalanceListener {
+public class BlackjackController extends EventListener implements Initializable, GameStateListener, BalanceListener {
 
     @FXML
     private Label lblBet;
@@ -95,7 +95,7 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     public void onSplit() {
-        actionListeners.forEach(l -> l.onActionTaken(SPLIT));
+        eventNetwork.onActionTaken(SPLIT);
     }
 
     @FXML
@@ -106,37 +106,37 @@ public class BlackjackController extends RootController implements Initializable
 
     @FXML
     private void onStand() {
-        actionListeners.forEach(l -> l.onActionTaken(STAND));
+        eventNetwork.onActionTaken(STAND);
     }
 
     @FXML
     private void onSettleNextHand() {
-        actionListeners.forEach(l -> l.onActionTaken(SETTLE));
+        eventNetwork.onActionTaken(SETTLE);
     }
 
     @FXML
     private void onDone() {
-        navListeners.forEach(l -> l.onChangeLayout(BET));
+        eventNetwork.onChangeLayout(BET);
     }
 
     @FXML
     private void onHit() {
-        actionListeners.forEach(l -> l.onActionTaken(HIT));
+        eventNetwork.onActionTaken(HIT);
     }
 
     @FXML
     private void onDouble() {
-        actionListeners.forEach(l -> l.onActionTaken(DOUBLE));
+        eventNetwork.onActionTaken(DOUBLE);
     }
 
     @FXML
     private void onTakeInsurance() {
-        actionListeners.forEach(l -> l.onActionTaken(BUY_INSURANCE));
+        eventNetwork.onActionTaken(BUY_INSURANCE);
     }
 
     @FXML
     private void onNoInsurance() {
-        actionListeners.forEach(l -> l.onActionTaken(NO_INSURANCE));
+        eventNetwork.onActionTaken(NO_INSURANCE);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
@@ -29,9 +30,6 @@ public class BlackjackController extends RootController implements Initializable
     private Label lblBalance;
 
     @FXML
-    private Label lblCards;
-
-    @FXML
     private TableDisplay tableDisplay;
 
     @FXML
@@ -52,6 +50,9 @@ public class BlackjackController extends RootController implements Initializable
     @FXML
     private Button btnDouble;
 
+    @FXML
+    private ProgressBar prgDeck;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -68,6 +69,7 @@ public class BlackjackController extends RootController implements Initializable
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
         gameOverControls.setVisible(snapshot.isResolved() && snapshot.isRoundFinished());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
+        prgDeck.setProgress((double) snapshot.getDeckSize() / 52.0); // TODO: Don't hardcode 52
 
         if (snapshot.isResolved()) {
             renderExposedTable(snapshot);
@@ -139,7 +141,6 @@ public class BlackjackController extends RootController implements Initializable
 
     private void renderExposedTable(Snapshot snapshot) {
         lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
-        lblCards.setText(String.format("Cards Remaining: %s", snapshot.getDeckSize()));
         tableDisplay.reset();
         tableDisplay.drawScores(score(snapshot.getDealerHand()), score(snapshot.getPlayerHand()));
         tableDisplay.drawCards(ImageMap.of(snapshot.getDealerHand(), snapshot.getPlayerHand()));
@@ -148,7 +149,6 @@ public class BlackjackController extends RootController implements Initializable
 
     private void renderConcealedTable(Snapshot snapshot) {
         lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
-        lblCards.setText(String.format("Cards Remaining: %s", snapshot.getDeckSize()));
         tableDisplay.reset();
         tableDisplay.drawScores(concealedScore(snapshot.getDealerHand()), score(snapshot.getPlayerHand()));
         tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.getDealerHand(), snapshot.getPlayerHand()));

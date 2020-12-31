@@ -130,6 +130,7 @@ public class Rules {
                     LocalDateTime.now(), accountKey, BUY_INSURANCE.name(), snapshot.getBet() * -1));
         }
 
+        // TODO: possible bug. this could add multiple transactions for one 'double' or 'split' action
         if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
             workingTransactions.add(new Transaction(
                     LocalDateTime.now(), accountKey, "DOUBLE OR SPLIT", snapshot.getBet() * -1));

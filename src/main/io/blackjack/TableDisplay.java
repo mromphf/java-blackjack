@@ -31,7 +31,7 @@ public class TableDisplay extends Canvas {
         setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;
-        CARD_HEIGHT = (int) (screen.getHeight() * 0.15);
+        CARD_HEIGHT = (int) (screen.getHeight() * 0.175);
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
         GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
         BOTTOM = (int) getHeight();
@@ -40,7 +40,7 @@ public class TableDisplay extends Canvas {
     public void reset() {
         context.clearRect(0, 0, getWidth(), getHeight());
 
-        context.setFill(Color.WHITE);
+        context.setFill(Color.valueOf("#228b22"));
         context.fillRect(0, 0, getWidth(), getHeight());
 
         context.setFill(Color.BLACK);
@@ -50,12 +50,12 @@ public class TableDisplay extends Canvas {
 
     public void drawScores(int dealerScore, int playerScore) {
         drawLabel(String.format("Dealer: %s", dealerScore), 100);
-        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 50);
+        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 110);
     }
 
     public void drawCards(Map<ImageKey, List<Image>> imageMap) {
         drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 50);
+        drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 110);
     }
 
     public void drawHandsToPlay(List<List<Image>> cards) {
@@ -65,10 +65,10 @@ public class TableDisplay extends Canvas {
     }
 
     public void drawResults(String text, Color color) {
-        final Font f = new Font("Arial", 150);
+        final Font f = new Font("Arial", 50);
         context.setFont(f);
         context.setFill(color);
-        context.fillText(text, 100, VER_CENTER);
+        context.fillText(text, HOR_CENTER - 50, VER_CENTER + 5);
     }
 
     private void drawLabel(String label, int y) {

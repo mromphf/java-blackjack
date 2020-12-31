@@ -74,7 +74,7 @@ public class BlackjackController extends RootController implements Initializable
 
             switch (snapshot.getOutcome()) {
                 case WIN:
-                    tableDisplay.drawResults("Win", Color.GREEN);
+                    tableDisplay.drawResults("Win", Color.WHITE);
                     break;
                 case LOSE:
                     tableDisplay.drawResults("Lose", Color.RED);

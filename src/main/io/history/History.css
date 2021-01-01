@@ -1,3 +1,7 @@
+.background {
+    -fx-background-color: #228b22;
+}
+
 .button {
     -fx-font-size: 1.1em;
     -fx-background-color: white;

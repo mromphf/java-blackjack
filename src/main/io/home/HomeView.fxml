@@ -7,7 +7,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.effect.DropShadow?>
 
-<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
+<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20" styleClass="background">
     <stylesheets>
        <URL value="@Home.css"/>
     </stylesheets>

@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import java.net.URL?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.io.history.HistoryController" alignment="CENTER" vgap="10">
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.io.history.HistoryController" alignment="CENTER" vgap="10" styleClass="background">
     <stylesheets>
         <URL value="@History.css"/>
     </stylesheets>

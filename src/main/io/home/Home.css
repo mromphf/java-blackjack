@@ -1,6 +1,37 @@
+.button {
+    -fx-font-size: 1.1em;
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+}
+
+.button:hover {
+    -fx-background-color: #efefef;
+}
+
 .btn-del {
     -fx-text-fill: white;
     -fx-background-color: #a73d14;
     -fx-border-color: red;
     -fx-border-width: 2px;
+}
+
+.btn-del:hover {
+    -fx-background-color: #b84e25;
+}
+
+.list-cell {
+    -fx-text-fill: black;
+    -fx-font-size: 1.5em;
+    -fx-height: 20px;
+    -fx-background-color: white;
+}
+
+.list-cell:selected {
+    -fx-text-fill: #00f;
+}
+
+.list-cell:hover {
+    -fx-background-color: #eee;
 }

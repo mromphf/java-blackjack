@@ -1,0 +1,6 @@
+.btn-del {
+    -fx-text-fill: white;
+    -fx-background-color: #a73d14;
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+}

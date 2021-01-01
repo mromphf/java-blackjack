@@ -4,8 +4,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 
 <GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20">
+    <stylesheets>
+       <URL value="@Home.css"/>
+    </stylesheets>
 
     <GridPane fx:id="listControls" vgap="15">
         <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="10">
@@ -29,7 +33,7 @@
                 History
             </Button>
 
-            <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onDelete" style="-fx-text-fill: white; -fx-background-color: #a73d14; -fx-border-color: red; -fx-border-width: 2px">
+            <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onDelete" styleClass="btn-del">
                 Delete
             </Button>
         </GridPane>

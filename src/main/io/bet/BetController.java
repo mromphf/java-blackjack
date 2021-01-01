@@ -72,7 +72,7 @@ public class BetController extends EventListener implements Initializable, Balan
     public void onBalanceUpdated(Account account) {
         this.balance = account.getBalance();
         btnDeal.setDisable(bet > balance || bet <= 0);
-        lblBet.setText("Bet: $" + bet);
+        lblBet.setText("$" + bet);
         lblBalance.setText(String.format("Balance: $%s", balance));
     }
 
@@ -83,6 +83,6 @@ public class BetController extends EventListener implements Initializable, Balan
             this.bet = Math.max(0, this.bet - amount);
         }
         btnDeal.setDisable(bet > balance || bet <= 0);
-        lblBet.setText("Bet: $" + bet);
+        lblBet.setText("$" + bet);
     }
 }

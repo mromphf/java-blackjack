@@ -3,47 +3,52 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <GridPane fx:controller="main.io.bet.BetController"
-          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50" style="-fx-background-color:#228b22">
+          xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50" styleClass="background">
 
-    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" vgap="20">
-        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER" style="-fx-text-fill:white">
-            Bet: $0
+    <stylesheets>
+        <URL value="@Bet.css"/>
+    </stylesheets>
+
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="300" alignment="BASELINE_CENTER">
+            $0
             <font>
                 <Font name="Arial" size="50" />
             </font>
         </Label>
 
-        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="100" alignment="BASELINE_CENTER" textAlignment="CENTER" style="-fx-text-fill:white">
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="300" alignment="BASELINE_CENTER" textAlignment="CENTER">
             Right-click to decrease.
         </Label>
     </GridPane>
 
     <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">
-        <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="50" minHeight="50">
+        <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="80" minHeight="80" styleClass="btn-chip,btn-grey">
             1
         </Button>
 
-        <Button fx:id="btnBet5" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="50" minHeight="50">
+        <Button fx:id="btnBet5" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="80" minHeight="80" styleClass="btn-chip,btn-blue">
             5
         </Button>
 
-        <Button fx:id="btnBet10" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="50" minHeight="50">
+        <Button fx:id="btnBet10" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="80" minHeight="80" styleClass="btn-chip,btn-green">
             10
         </Button>
 
-        <Button fx:id="btnBet25" GridPane.rowIndex="0" GridPane.columnIndex="3" minWidth="50" minHeight="50">
+        <Button fx:id="btnBet25" GridPane.rowIndex="0" GridPane.columnIndex="3" minWidth="80" minHeight="80" styleClass="btn-chip,btn-red">
             25
         </Button>
 
-        <Button fx:id="btnBet100" GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="50" minHeight="50">
+        <Button fx:id="btnBet100" GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="80" minHeight="80" styleClass="btn-chip,btn-black">
             100
         </Button>
     </GridPane>
 
     <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
         <Button fx:id="btnDeal" GridPane.rowIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
-            Deal
+            Bet
         </Button>
         <Button GridPane.rowIndex="1" minWidth="250" minHeight="50" onAction="#onQuit">
             Quit
@@ -51,7 +56,7 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER" style="-fx-text-fill:white">
+        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
             Balance: $0
             <font>
                 <Font name="Arial" size="30" />

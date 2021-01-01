@@ -1,0 +1,48 @@
+.button {
+    -fx-font-size: 1.1em;
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+}
+
+.button:hover {
+    -fx-background-color: #efefef;
+}
+
+.btn-chip {
+    -fx-font-size: 1.5em;
+    -fx-border-width: 10px;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+
+.btn-grey {
+    -fx-border-color: grey;
+}
+
+.btn-blue {
+    -fx-border-color: blue;
+}
+
+.btn-black {
+    -fx-border-color: black;
+}
+
+.btn-red {
+    -fx-border-color: red;
+}
+
+.btn-green {
+    -fx-border-color: green;
+}
+
+.label {
+    -fx-padding: 10px;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(100, 100, 100, 0.3);
+}
+
+.background {
+    -fx-background-color: #228b22;
+}

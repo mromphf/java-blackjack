@@ -5,7 +5,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import main.usecase.Layout;
 import main.domain.Account;
@@ -26,12 +25,6 @@ import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 
 public class HistoryController extends EventListener implements Initializable, NavListener, MemoryListener, TransactionListener {
-
-    @FXML
-    public Label lblAccount;
-
-    @FXML
-    public Label lblTrans;
 
     @FXML
     public GridPane chartHousing;
@@ -55,13 +48,12 @@ public class HistoryController extends EventListener implements Initializable, N
             final NumberAxis yAxis = new NumberAxis();
             final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
 
-            chart.setPrefWidth(1000);
+            chart.setPrefWidth(1200);
             chart.setPrefHeight(800);
+            chart.setTitle(String.format("%s Transactions: %s", account.getName(), accountTransactions.size()));
             chart.getData().add(balanceSeries(accountTransactions));
 
             chartHousing.add(chart, 0, 0);
-            lblAccount.setText(account.getName());
-            lblTrans.setText(String.format("Transactions: %s", accountTransactions.size()));
         }
     }
 

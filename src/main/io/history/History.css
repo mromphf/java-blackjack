@@ -1,0 +1,27 @@
+.button {
+    -fx-font-size: 1.1em;
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+}
+
+.button:hover {
+    -fx-background-color: #efefef;
+}
+
+.label {
+    -fx-font-size: 1.1em;
+}
+
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}

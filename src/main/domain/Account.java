@@ -64,6 +64,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return String.format("%s: \t$%s\tCreated: %s", name, balance, created);
+        return String.format("%s: \t$%s\tCreated: %s-%s-%s", name, balance, created.getYear(), created.getMonthValue(), created.getDayOfMonth());
     }
 }

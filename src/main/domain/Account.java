@@ -3,7 +3,6 @@ package main.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class Account {
@@ -46,13 +45,6 @@ public class Account {
     public int deriveBalance(List<Transaction> transactions) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(key))
-                .mapToInt(Transaction::getAmount)
-                .sum();
-    }
-
-    public static int deriveBalance(UUID accountKey, Set<Transaction> transactions) {
-        return transactions.stream()
-                .filter(t -> t.getAccountKey().equals(accountKey))
                 .mapToInt(Transaction::getAmount)
                 .sum();
     }

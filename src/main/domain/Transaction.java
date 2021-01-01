@@ -28,10 +28,6 @@ public class Transaction implements Comparable<Transaction> {
         return accountKey;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public int getAmount() {
         return amount;
     }

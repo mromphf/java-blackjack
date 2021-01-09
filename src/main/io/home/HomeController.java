@@ -17,8 +17,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.usecase.Event.accountDeleted;
-import static main.usecase.Event.layoutChanged;
+import static main.usecase.Event.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.Predicate.ACCOUNTS_LOADED;
@@ -58,7 +57,8 @@ public class HomeController extends EventConnection implements EventListener, In
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(layoutChanged(BET, selectedAccount));
+        eventNetwork.post(accountSelected(selectedAccount));
+        eventNetwork.post(layoutChanged(BET));
     }
 
     @FXML
@@ -127,7 +127,8 @@ public class HomeController extends EventConnection implements EventListener, In
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(layoutChanged(HISTORY, selectedAccount));
+        eventNetwork.post(accountSelected(selectedAccount));
+        eventNetwork.post(layoutChanged(HISTORY));
     }
 
     @Override

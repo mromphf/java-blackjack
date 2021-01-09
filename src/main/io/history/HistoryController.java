@@ -41,7 +41,7 @@ public class HistoryController extends EventConnection implements EventListener,
 
     @Override
     public void listen(Event e) {
-        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HISTORY)) {
+        if (e.is(ACCOUNT_SELECTED)) {
             final Account account = (Account) e.getData(ACCOUNT);
             drawChart(account);
         } else if (e.is(TRANSACTIONS_LOADED)) {

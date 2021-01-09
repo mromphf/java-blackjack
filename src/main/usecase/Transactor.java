@@ -8,7 +8,6 @@ import java.util.*;
 import static main.domain.Rules.compileTransactions;
 import static main.usecase.DataKey.*;
 import static main.usecase.Event.*;
-import static main.usecase.Layout.BET;
 import static main.usecase.Predicate.*;
 
 public class Transactor extends EventConnection implements EventListener {
@@ -23,7 +22,7 @@ public class Transactor extends EventConnection implements EventListener {
 
     @Override
     public void listen(Event e) {
-        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(BET) && e.hasData(ACCOUNT)) {
+        if (e.is(ACCOUNT_SELECTED)) {
             this.account = (Account) e.getData(ACCOUNT);
             eventNetwork.post(balanceUpdated(account));
         } else if (e.is(GAME_STATE_CHANGED)) {

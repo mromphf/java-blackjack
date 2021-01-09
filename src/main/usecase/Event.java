@@ -35,9 +35,8 @@ public class Event {
         }});
     }
 
-    public static Event layoutChanged(Layout layout, Account account) {
-        return new Event(LAYOUT_CHANGED, new HashMap<DataKey, Object>() {{
-            put(LAYOUT, layout);
+    public static Event accountSelected(Account account) {
+        return new Event(ACCOUNT_SELECTED, new HashMap<DataKey, Object>() {{
             put(ACCOUNT, account);
         }});
     }
@@ -118,9 +117,5 @@ public class Event {
 
     public Collection<Account> getAccounts() {
         return (Collection<Account>) data.get(ACCOUNTS);
-    }
-
-    public boolean hasData(DataKey k) {
-        return data.containsKey(k);
     }
 }

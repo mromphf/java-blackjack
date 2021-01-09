@@ -32,6 +32,7 @@ public class AppRoot {
          */
         final ResourceLoader loader = new ResourceLoader();
         final SaveFile saveFile = new SaveFile();
+        final Config config = saveFile.loadConfig();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
@@ -40,7 +41,7 @@ public class AppRoot {
          * These are event listeners
          */
         final Transactor transactor = new Transactor();
-        final Game game = new Game(shuffle(fresh(4)));
+        final Game game = new Game(shuffle(fresh(config.decks)));
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(saveFile);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);

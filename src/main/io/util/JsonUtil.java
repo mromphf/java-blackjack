@@ -1,6 +1,7 @@
 package main.io.util;
 
 import com.oracle.javafx.jmx.json.JSONDocument;
+import main.Config;
 import main.domain.Account;
 
 import java.time.LocalDateTime;
@@ -19,13 +20,17 @@ public class JsonUtil {
     }
 
     public static Account accountFromJson(JSONDocument jsonDocument) {
-        final UUID accountKey = UUID.fromString(jsonDocument.getString("key"));
-
         return new Account(
-                accountKey,
+                UUID.fromString(jsonDocument.getString("key")),
                 jsonDocument.getString("name"),
                 0,
                 LocalDateTime.parse(jsonDocument.getString("created"))
+        );
+    }
+
+    public static Config configFromJSON(JSONDocument jsonDocument) {
+        return new Config(
+                jsonDocument.getNumber("decks").intValue()
         );
     }
 }

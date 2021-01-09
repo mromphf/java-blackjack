@@ -17,12 +17,10 @@ import main.io.storage.SaveFile;
 import main.usecase.*;
 import main.usecase.LayoutManager;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
-import static main.usecase.Layout.*;
 import static main.domain.Deck.fresh;
+import static main.usecase.Layout.*;
 import static main.domain.Deck.shuffle;
 
 public class AppRoot {
@@ -42,7 +40,7 @@ public class AppRoot {
          * These are event listeners
          */
         final Transactor transactor = new Transactor();
-        final Game game = new Game(shuffle(fresh()));
+        final Game game = new Game(shuffle(fresh(4)));
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(saveFile);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);

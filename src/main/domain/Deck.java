@@ -15,6 +15,14 @@ public class Deck {
         return result;
     }
 
+    public static Stack<Card> fresh(int howManyDecks) {
+        Stack<Card> result = new Stack<>();
+        for (int i = 0; i < howManyDecks; i++) {
+            result.addAll(fresh());
+        }
+        return result;
+    }
+
     public static Stack<Card> shuffle(List<Card> deck) {
         Stack<Card> stack = new Stack<>();
         while(!deck.isEmpty()) {

@@ -17,7 +17,7 @@ public class Event {
         this.data = data;
     }
 
-    public static Event balanceUpdatedEvent(Account account) {
+    public static Event balanceUpdated(Account account) {
         return new Event(BALANCE_UPDATED, new HashMap<DataKey, Object>() {{
             put(ACCOUNT, account);
         }});

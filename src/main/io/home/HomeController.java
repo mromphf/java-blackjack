@@ -11,17 +11,19 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.BalanceListener;
-import main.usecase.MemoryListener;
+import main.usecase.*;
+import main.usecase.EventListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static main.usecase.DataKey.ACCOUNT;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
+import static main.usecase.Predicate.BALANCE_UPDATED;
 
-public class HomeController extends EventConnection implements Initializable, BalanceListener, MemoryListener {
+public class HomeController extends EventConnection implements EventListener, Initializable, MemoryListener {
 
     @FXML
     public GridPane listControls;
@@ -128,9 +130,12 @@ public class HomeController extends EventConnection implements Initializable, Ba
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        accountMap.put(account.getKey(), account);
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+    public void listen(Event e) {
+        if (e.is(BALANCE_UPDATED)) {
+            final Account account = (Account) e.getData(ACCOUNT);
+            accountMap.put(account.getKey(), account);
+            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+        }
     }
 
     @Override

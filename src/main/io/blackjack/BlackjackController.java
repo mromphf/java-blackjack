@@ -10,18 +10,19 @@ import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.io.EventConnection;
-import main.usecase.BalanceListener;
-import main.usecase.GameStateListener;
+import main.usecase.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static main.usecase.DataKey.ACCOUNT;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
+import static main.usecase.Predicate.BALANCE_UPDATED;
 
-public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
+public class BlackjackController extends EventConnection implements Initializable, GameStateListener, EventListener {
 
     @FXML
     private Label lblBet;
@@ -57,8 +58,11 @@ public class BlackjackController extends EventConnection implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+    public void listen(Event e) {
+        if (e.is(BALANCE_UPDATED)) {
+            final Account account = (Account) e.getData(ACCOUNT);
+            lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+        }
     }
 
     @Override

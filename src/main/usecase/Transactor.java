@@ -2,11 +2,11 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Rules.compileTransactions;
+import static main.usecase.Event.balanceUpdated;
 import static main.usecase.Layout.BET;
 
 public class Transactor extends EventConnection implements NavListener, GameStateListener, ActionListener {
@@ -24,7 +24,7 @@ public class Transactor extends EventConnection implements NavListener, GameStat
         Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
         transactions.addAll(workingTransactions);
         eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
-        eventNetwork.onBalanceUpdated(account.updateBalance(transactions));
+        eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
@@ -32,14 +32,14 @@ public class Transactor extends EventConnection implements NavListener, GameStat
         Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
         transactions.add(t);
         eventNetwork.onTransaction(t);
-        eventNetwork.onBalanceUpdated(account.updateBalance(transactions));
+        eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
     public void onChangeLayout(Layout layout, Account account) {
         if (layout == BET) {
             this.account = account;
-            eventNetwork.onBalanceUpdated(account);
+            eventNetwork.post(balanceUpdated(account));
         }
     }
 

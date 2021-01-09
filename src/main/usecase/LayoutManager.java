@@ -7,7 +7,9 @@ import main.io.EventConnection;
 
 import java.util.Map;
 
-public class LayoutManager extends EventConnection implements NavListener, BalanceListener {
+import static main.usecase.DataKey.ACCOUNT;
+
+public class LayoutManager extends EventConnection implements NavListener, EventListener {
 
     private final Scene scene;
     private final Map<Layout, Parent> layoutMap;
@@ -28,11 +30,14 @@ public class LayoutManager extends EventConnection implements NavListener, Balan
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
+    public void listen(Event e) {
         //TODO: This won't allow a player to bet the last of their money.
-        if (account.getBalance() <= 0 ) {
-            System.out.println("You are out of money! Please leave the casino...");
-            System.exit(0);
+        if (e.is(Predicate.BALANCE_UPDATED)) {
+            final Account account = (Account) e.getData(ACCOUNT);
+            if (account.getBalance() <= 0 ) {
+                System.out.println("You are out of money! Please leave the casino...");
+                System.exit(0);
+            }
         }
     }
 }

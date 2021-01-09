@@ -13,7 +13,6 @@ import java.util.List;
 public class EventNetwork implements
         AccountListener,
         ActionListener,
-        BalanceListener,
         GameStateListener,
         MemoryListener,
         NavListener,
@@ -21,11 +20,11 @@ public class EventNetwork implements
 
     private final Collection<AccountListener> accountListeners = new LinkedList<>();
     private final Collection<ActionListener> actionListeners = new LinkedList<>();
-    private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<MemoryListener> memoryListeners = new LinkedList<>();
     private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
+    private final Collection<EventListener> eventListeners = new LinkedList<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -35,10 +34,6 @@ public class EventNetwork implements
 
             if (connection instanceof ActionListener) {
                 actionListeners.add((ActionListener) connection);
-            }
-
-            if (connection instanceof BalanceListener) {
-                balanceListeners.add((BalanceListener) connection);
             }
 
             if (connection instanceof GameStateListener) {
@@ -56,6 +51,10 @@ public class EventNetwork implements
             if (connection instanceof TransactionListener) {
                 transactionListeners.add((TransactionListener) connection);
             }
+
+            if (connection instanceof EventListener) {
+                eventListeners.add((EventListener) connection);
+            }
         }
     }
 
@@ -63,8 +62,12 @@ public class EventNetwork implements
         gameStateListeners.add(listener);
     }
 
-    public void registerBalanceListener(BalanceListener listener) {
-        balanceListeners.add(listener);
+    public void registerEventListener(EventListener eventListener) {
+        eventListeners.add(eventListener);
+    }
+
+    public void post(Event e) {
+        eventListeners.forEach(l -> l.listen(e));
     }
 
     @Override
@@ -85,11 +88,6 @@ public class EventNetwork implements
     @Override
     public void onBetPlaced(int amount) {
         actionListeners.forEach(l -> l.onBetPlaced(amount));
-    }
-
-    @Override
-    public void onBalanceUpdated(Account account) {
-        balanceListeners.forEach(l -> l.onBalanceUpdated(account));
     }
 
     @Override

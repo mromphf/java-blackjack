@@ -2,7 +2,6 @@ package main.io.storage;
 
 import com.oracle.javafx.jmx.json.JSONDocument;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
-import main.Config;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.util.JsonUtil;
@@ -30,7 +29,7 @@ public class SaveFile implements Memory {
     }
 
     @Override
-    public Config loadConfig() {
+    public Map<String, Object> loadConfig() {
         try {
             final File configFile = new File(SaveFile.class.getResource("/config/config.json").getPath());
             final FileReader fileReader = new FileReader(configFile);

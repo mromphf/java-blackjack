@@ -13,6 +13,7 @@ import main.usecase.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.GAME;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Predicate.BALANCE_UPDATED;
@@ -60,13 +61,13 @@ public class BetController extends EventConnection implements Initializable, Eve
     @FXML
     private void onDeal() {
         eventNetwork.onBetPlaced(bet);
-        eventNetwork.onChangeLayout(GAME);
+        eventNetwork.post(layoutChanged(GAME));
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        eventNetwork.onChangeLayout(HOME);
+        eventNetwork.post(layoutChanged(HOME));
         bet = 0;
     }
 

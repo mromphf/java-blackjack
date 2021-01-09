@@ -1,5 +1,6 @@
 package main.usecase;
 
 public enum Predicate {
-    BALANCE_UPDATED
+    BALANCE_UPDATED,
+    LAYOUT_CHANGED
 }

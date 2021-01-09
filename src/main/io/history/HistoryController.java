@@ -6,13 +6,10 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.GridPane;
-import main.usecase.Layout;
+import main.usecase.*;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.MemoryListener;
-import main.usecase.NavListener;
-import main.usecase.TransactionListener;
 
 import java.net.URL;
 import java.util.Collection;
@@ -20,11 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static main.usecase.DataKey.ACCOUNT;
+import static main.usecase.DataKey.LAYOUT;
+import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
+import static main.usecase.Predicate.LAYOUT_CHANGED;
 
-public class HistoryController extends EventConnection implements Initializable, NavListener, MemoryListener, TransactionListener {
+public class HistoryController extends EventConnection implements EventListener, Initializable, MemoryListener, TransactionListener {
 
     @FXML
     public GridPane chartHousing;
@@ -34,15 +35,16 @@ public class HistoryController extends EventConnection implements Initializable,
     @FXML
     public void onHome() {
         chartHousing.getChildren().clear();
-        eventNetwork.onChangeLayout(HOME);
+        eventNetwork.post(layoutChanged(HOME));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        if (layout == HISTORY) {
+    public void listen(Event e) {
+        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HISTORY)) {
+            final Account account = (Account) e.getData(ACCOUNT);
             final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
             final Axis<String> xAxis = dateAxis(accountTransactions);
             final NumberAxis yAxis = new NumberAxis();
@@ -71,9 +73,6 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onTransactions(List<Transaction> transactions) {
         allTransactions.addAll(transactions);
     }
-
-    @Override
-    public void onChangeLayout(Layout layout) {}
 
     @Override
     public void onAccountsLoaded(Collection<Account> accounts) {}

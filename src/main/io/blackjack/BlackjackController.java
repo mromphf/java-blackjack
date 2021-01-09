@@ -120,7 +120,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onDone() {
-        eventNetwork.onChangeLayout(BET);
+        eventNetwork.post(Event.layoutChanged(BET));
     }
 
     @FXML

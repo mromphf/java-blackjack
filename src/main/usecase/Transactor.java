@@ -6,10 +6,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Rules.compileTransactions;
+import static main.usecase.DataKey.*;
 import static main.usecase.Event.balanceUpdated;
 import static main.usecase.Layout.BET;
+import static main.usecase.Predicate.*;
 
-public class Transactor extends EventConnection implements NavListener, GameStateListener, ActionListener {
+public class Transactor extends EventConnection implements EventListener, GameStateListener, ActionListener {
 
     private final List<Transaction> transactions;
     private Account account;
@@ -36,15 +38,12 @@ public class Transactor extends EventConnection implements NavListener, GameStat
     }
 
     @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        if (layout == BET) {
-            this.account = account;
+    public void listen(Event e) {
+        if(e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(BET) && e.hasData(ACCOUNT)) {
+            this.account = (Account) e.getData(ACCOUNT);
             eventNetwork.post(balanceUpdated(account));
         }
     }
-
-    @Override
-    public void onChangeLayout(Layout layout) {}
 
     @Override
     public void onActionTaken(Action action) {}

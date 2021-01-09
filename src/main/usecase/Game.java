@@ -4,9 +4,11 @@ import main.domain.*;
 import main.io.EventConnection;
 import java.util.*;
 
+import static main.usecase.DataKey.LAYOUT;
 import static main.usecase.Layout.HOME;
+import static main.usecase.Predicate.LAYOUT_CHANGED;
 
-public class Game extends EventConnection implements ActionListener, NavListener {
+public class Game extends EventConnection implements ActionListener, EventListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -58,14 +60,9 @@ public class Game extends EventConnection implements ActionListener, NavListener
     }
 
     @Override
-    public void onChangeLayout(Layout layout) {
-        if (layout == HOME) {
+    public void listen(Event e) {
+        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HOME)) {
             round = new Round(0, deck, maxCards, numDecks);
         }
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        onChangeLayout(layout);
     }
 }

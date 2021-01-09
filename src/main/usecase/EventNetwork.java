@@ -15,14 +15,12 @@ public class EventNetwork implements
         ActionListener,
         GameStateListener,
         MemoryListener,
-        NavListener,
         TransactionListener {
 
     private final Collection<AccountListener> accountListeners = new LinkedList<>();
     private final Collection<ActionListener> actionListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<MemoryListener> memoryListeners = new LinkedList<>();
-    private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
     private final Collection<EventListener> eventListeners = new LinkedList<>();
 
@@ -42,10 +40,6 @@ public class EventNetwork implements
 
             if (connection instanceof MemoryListener) {
                 memoryListeners.add((MemoryListener) connection);
-            }
-
-            if (connection instanceof NavListener) {
-                navListeners.add((NavListener) connection);
             }
 
             if (connection instanceof TransactionListener) {
@@ -103,16 +97,6 @@ public class EventNetwork implements
     @Override
     public void onTransactionsLoaded(List<Transaction> transactions) {
         memoryListeners.forEach(l -> l.onTransactionsLoaded(transactions));
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout) {
-        navListeners.forEach(l -> l.onChangeLayout(layout));
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        navListeners.forEach(l -> l.onChangeLayout(layout, account));
     }
 
     @Override

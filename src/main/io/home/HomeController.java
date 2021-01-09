@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.usecase.DataKey.ACCOUNT;
+import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.Predicate.BALANCE_UPDATED;
@@ -57,7 +58,7 @@ public class HomeController extends EventConnection implements EventListener, In
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.onChangeLayout(BET, selectedAccount);
+        eventNetwork.post(layoutChanged(BET, selectedAccount));
     }
 
     @FXML
@@ -126,7 +127,7 @@ public class HomeController extends EventConnection implements EventListener, In
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.onChangeLayout(HISTORY, selectedAccount);
+        eventNetwork.post(layoutChanged(HISTORY, selectedAccount));
     }
 
     @Override

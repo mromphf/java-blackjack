@@ -22,12 +22,12 @@ public class AccountStorage extends EventConnection implements EventListener, Tr
 
     public void loadAllAccounts() {
         final Collection<Account> accounts = memory.loadAllAccounts();
-        eventNetwork.onAccountsLoaded(accounts);
+        eventNetwork.post(Event.accountsLoaded(accounts));
     }
 
     public void loadAllTransactions() {
         final List<Transaction> transactions = memory.loadAllTransactions();
-        eventNetwork.onTransactionsLoaded(transactions);
+        eventNetwork.post(Event.transactionsLoaded(transactions));
     }
 
     @Override

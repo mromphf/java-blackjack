@@ -12,20 +12,18 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static main.usecase.DataKey.ACCOUNT;
-import static main.usecase.DataKey.LAYOUT;
+import static main.usecase.DataKey.*;
 import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
-import static main.usecase.Predicate.LAYOUT_CHANGED;
+import static main.usecase.Predicate.*;
 
-public class HistoryController extends EventConnection implements EventListener, Initializable, MemoryListener, TransactionListener {
+public class HistoryController extends EventConnection implements EventListener, Initializable, TransactionListener {
 
     @FXML
     public GridPane chartHousing;
@@ -56,12 +54,9 @@ public class HistoryController extends EventConnection implements EventListener,
             chart.getData().add(balanceSeries(accountTransactions));
 
             chartHousing.add(chart, 0, 0);
+        } else if (e.is(TRANSACTIONS_LOADED)) {
+            allTransactions = e.getTransactions();
         }
-    }
-
-    @Override
-    public void onTransactionsLoaded(List<Transaction> transactions) {
-        allTransactions = transactions;
     }
 
     @Override
@@ -73,7 +68,4 @@ public class HistoryController extends EventConnection implements EventListener,
     public void onTransactions(List<Transaction> transactions) {
         allTransactions.addAll(transactions);
     }
-
-    @Override
-    public void onAccountsLoaded(Collection<Account> accounts) {}
 }

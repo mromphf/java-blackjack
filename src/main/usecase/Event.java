@@ -3,8 +3,11 @@ package main.usecase;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
+import main.domain.Transaction;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static main.usecase.DataKey.*;
@@ -68,12 +71,36 @@ public class Event {
         }});
     }
 
+    public static Event accountsLoaded(Collection<Account> accounts) {
+        return new Event(ACCOUNTS_LOADED, new HashMap<DataKey, Object>() {{
+            put(ACCOUNTS, accounts);
+        }});
+    }
+
+    public static Event transactionsLoaded(Collection<Transaction> transactions) {
+        return new Event(TRANSACTIONS_LOADED, new HashMap<DataKey, Object>() {{
+            put(TRANSACTIONS, transactions);
+        }});
+    }
+
     public boolean is(Predicate p) {
         return predicate.equals(p);
     }
 
     public Object getData(DataKey k) {
         return data.get(k);
+    }
+
+    public Account getAccount() {
+        return (Account) data.get(ACCOUNT);
+    }
+
+    public List<Transaction> getTransactions() {
+        return (List<Transaction>) data.get(TRANSACTIONS);
+    }
+
+    public Collection<Account> getAccounts() {
+        return (Collection<Account>) data.get(ACCOUNTS);
     }
 
     public boolean hasData(DataKey k) {

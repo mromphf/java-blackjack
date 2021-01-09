@@ -2,8 +2,11 @@ package main.usecase;
 
 public enum DataKey {
     ACCOUNT,
+    ACCOUNTS,
     ACTION,
     LAYOUT,
     INT,
-    SNAPSHOT
+    SNAPSHOT,
+    TRANSACTION,
+    TRANSACTIONS
 }

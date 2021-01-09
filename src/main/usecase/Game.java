@@ -11,11 +11,13 @@ import static main.domain.Deck.openingHand;
 public class Game extends EventListener implements ActionListener, NavListener {
 
     private final Stack<Card> deck;
+    private final int maxCards;
     private Round round;
 
     public Game(Stack<Card> deck) {
         this.deck = deck;
-        round = new Round(0, deck);
+        this.maxCards = deck.size();
+        round = new Round(0, deck, maxCards);
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Game extends EventListener implements ActionListener, NavListener {
             final Stack<Card> dealerHand = openingHand.get("dealer");
             final Stack<Card> playerHand = openingHand.get("player");
 
-            round = new Round(amount, deck, dealerHand, playerHand);
+            round = new Round(amount, deck, dealerHand, playerHand, maxCards);
             eventNetwork.onUpdate(round.getSnapshot());
         } catch (IllegalArgumentException ex) {
             System.out.println("Not enough cards to deal new hand! Quitting...");
@@ -67,7 +69,7 @@ public class Game extends EventListener implements ActionListener, NavListener {
     @Override
     public void onChangeLayout(Layout layout) {
         if (layout == HOME) {
-            round = new Round(0, deck);
+            round = new Round(0, deck, maxCards);
         }
     }
 

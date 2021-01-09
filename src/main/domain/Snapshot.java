@@ -11,6 +11,7 @@ import static main.io.util.StringUtil.playerString;
 
 public class Snapshot {
     private final int bet;
+    private final int maxCards;
     private final Outcome outcome;
     private final Stack<Card> deck = new Stack<>();
     private final Stack<Card> dealerHand = new Stack<>();
@@ -20,6 +21,7 @@ public class Snapshot {
     private final Stack<Action> actionsTaken = new Stack<>();
 
     public Snapshot(int bet,
+                    int maxCards,
                     Stack<Card> deck,
                     Stack<Card> dealerHand,
                     Stack<Card> playerHand,
@@ -27,6 +29,7 @@ public class Snapshot {
                     Stack<Snapshot> handsToSettle,
                     Stack<Action> actionsTaken) {
         this.bet = bet;
+        this.maxCards = maxCards;
         this.deck.addAll(deck);
         this.dealerHand.addAll(dealerHand);
         this.playerHand.addAll(playerHand);
@@ -42,6 +45,10 @@ public class Snapshot {
 
     public int getDeckSize() {
         return deck.size();
+    }
+
+    public int getMaxCards() {
+        return maxCards;
     }
 
     public Outcome getOutcome() {

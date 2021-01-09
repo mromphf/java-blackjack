@@ -14,13 +14,15 @@ public class Round {
     private final Stack<Snapshot> handsToSettle;
     private final Stack<Card> dealerHand;
     private final int bet;
+    private final int maxCards;
 
     private Stack<Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(int bet, Stack<Card> deck) {
+    public Round(int bet, Stack<Card> deck, int maxCards) {
         this.bet = bet;
         this.deck = deck;
+        this.maxCards = maxCards;
         this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
@@ -28,9 +30,10 @@ public class Round {
         this.actionsTaken = new Stack<>();
     }
 
-    public Round(int bet, Stack<Card> deck, Stack<Card> dealerHand, Stack<Card> playerHand) {
+    public Round(int bet, Stack<Card> deck, Stack<Card> dealerHand, Stack<Card> playerHand, int maxCards) {
         this.bet = bet;
         this.deck = deck;
+        this.maxCards = maxCards;
         this.dealerHand = dealerHand;
         this.currentHand = playerHand;
         this.handsToPlay = new Stack<>();
@@ -118,6 +121,7 @@ public class Round {
     public Snapshot getSnapshot() {
         return new Snapshot(
                 bet,
+                maxCards,
                 deck,
                 dealerHand,
                 currentHand,

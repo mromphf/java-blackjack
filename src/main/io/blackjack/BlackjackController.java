@@ -69,7 +69,7 @@ public class BlackjackController extends EventListener implements Initializable,
         settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
         gameOverControls.setVisible(snapshot.isResolved() && snapshot.isRoundFinished());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
-        prgDeck.setProgress((double) snapshot.getDeckSize() / 52.0); // TODO: Don't hardcode 52
+        prgDeck.setProgress((double) snapshot.getDeckSize() / snapshot.getMaxCards());
 
         if (snapshot.isResolved()) {
             renderExposedTable(snapshot);

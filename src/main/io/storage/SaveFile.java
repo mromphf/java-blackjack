@@ -31,14 +31,7 @@ public class SaveFile implements Memory {
     public Map<String, Object> loadConfig() {
         try {
             final File configFile = new File(SaveFile.class.getResource("/config/config.json").getPath());
-            final FileReader fileReader = new FileReader(configFile);
-            final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
-            final JSONDocument document = jsonStreamReader.build();
-
-            fileReader.close();
-            jsonStreamReader.close();
-
-            return JsonUtil.configFromJSON(document);
+            return JsonUtil.configFromJson(fileToJsonDocument(configFile));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -141,14 +134,7 @@ public class SaveFile implements Memory {
     }
 
     public Account loadAccount(File file) throws IOException {
-        final FileReader fileReader = new FileReader(file);
-        final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
-        final JSONDocument document = jsonStreamReader.build();
-
-        fileReader.close();
-        jsonStreamReader.close();
-
-        return JsonUtil.accountFromJson(document);
+        return JsonUtil.accountFromJson(fileToJsonDocument(file));
     }
 
     public String fileName(LocalDateTime t) {
@@ -157,5 +143,16 @@ public class SaveFile implements Memory {
 
     public File[] allFilesInDir(File directory) {
         return Objects.requireNonNull(directory.listFiles());
+    }
+
+    public JSONDocument fileToJsonDocument(File f) throws IOException {
+        final FileReader fileReader = new FileReader(f);
+        final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
+        final JSONDocument document = jsonStreamReader.build();
+
+        fileReader.close();
+        jsonStreamReader.close();
+
+        return document;
     }
 }

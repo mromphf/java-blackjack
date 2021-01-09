@@ -29,7 +29,7 @@ public class JsonUtil {
         );
     }
 
-    public static Map<String, Object> configFromJSON(JSONDocument jsonDocument) {
+    public static Map<String, Object> configFromJson(JSONDocument jsonDocument) {
         return new HashMap<String, Object>() {{
             put("decks", jsonDocument.getNumber("decks").intValue());
         }};

@@ -2,6 +2,7 @@ package main.io.storage;
 
 import com.oracle.javafx.jmx.json.JSONDocument;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
+import main.Config;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.util.JsonUtil;
@@ -25,6 +26,25 @@ public class SaveFile implements Memory {
 
         if (transactionsDir.mkdir()) {
             System.out.printf("Created new directory: %s\n", transactionsDir.getPath());
+        }
+    }
+
+    @Override
+    public Config loadConfig() {
+        try {
+            final File configFile = new File(SaveFile.class.getResource("/config/config.json").getPath());
+            final FileReader fileReader = new FileReader(configFile);
+            final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
+            final JSONDocument document = jsonStreamReader.build();
+
+            fileReader.close();
+            jsonStreamReader.close();
+
+            return JsonUtil.configFromJSON(document);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
         }
     }
 

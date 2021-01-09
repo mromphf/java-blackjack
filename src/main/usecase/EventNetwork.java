@@ -4,7 +4,7 @@ import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.io.EventListener;
+import main.io.EventConnection;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -27,34 +27,34 @@ public class EventNetwork implements
     private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
 
-    public EventNetwork(Collection<EventListener> listeners) {
-        for (EventListener listener : listeners) {
-            if (listener instanceof AccountListener) {
-                accountListeners.add((AccountListener) listener);
+    public EventNetwork(Collection<EventConnection> connections) {
+        for (EventConnection connection : connections) {
+            if (connection instanceof AccountListener) {
+                accountListeners.add((AccountListener) connection);
             }
 
-            if (listener instanceof ActionListener) {
-                actionListeners.add((ActionListener) listener);
+            if (connection instanceof ActionListener) {
+                actionListeners.add((ActionListener) connection);
             }
 
-            if (listener instanceof BalanceListener) {
-                balanceListeners.add((BalanceListener) listener);
+            if (connection instanceof BalanceListener) {
+                balanceListeners.add((BalanceListener) connection);
             }
 
-            if (listener instanceof GameStateListener) {
-                gameStateListeners.add((GameStateListener) listener);
+            if (connection instanceof GameStateListener) {
+                gameStateListeners.add((GameStateListener) connection);
             }
 
-            if (listener instanceof MemoryListener) {
-                memoryListeners.add((MemoryListener) listener);
+            if (connection instanceof MemoryListener) {
+                memoryListeners.add((MemoryListener) connection);
             }
 
-            if (listener instanceof NavListener) {
-                navListeners.add((NavListener) listener);
+            if (connection instanceof NavListener) {
+                navListeners.add((NavListener) connection);
             }
 
-            if (listener instanceof TransactionListener) {
-                transactionListeners.add((TransactionListener) listener);
+            if (connection instanceof TransactionListener) {
+                transactionListeners.add((TransactionListener) connection);
             }
         }
     }

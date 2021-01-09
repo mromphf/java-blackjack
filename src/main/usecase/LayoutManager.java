@@ -3,11 +3,11 @@ package main.usecase;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.domain.Account;
-import main.io.EventListener;
+import main.io.EventConnection;
 
 import java.util.Map;
 
-public class LayoutManager extends EventListener implements NavListener, BalanceListener {
+public class LayoutManager extends EventConnection implements NavListener, BalanceListener {
 
     private final Scene scene;
     private final Map<Layout, Parent> layoutMap;

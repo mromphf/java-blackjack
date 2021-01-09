@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.EventListener;
+import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.MemoryListener;
 
@@ -21,7 +21,7 @@ import java.util.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 
-public class HomeController extends EventListener implements Initializable, BalanceListener, MemoryListener {
+public class HomeController extends EventConnection implements Initializable, BalanceListener, MemoryListener {
 
     @FXML
     public GridPane listControls;

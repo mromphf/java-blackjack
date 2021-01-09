@@ -1,7 +1,7 @@
 package main.usecase;
 
 import main.domain.*;
-import main.io.EventListener;
+import main.io.EventConnection;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -9,7 +9,7 @@ import java.util.*;
 import static main.domain.Rules.compileTransactions;
 import static main.usecase.Layout.BET;
 
-public class Transactor extends EventListener implements NavListener, GameStateListener, ActionListener {
+public class Transactor extends EventConnection implements NavListener, GameStateListener, ActionListener {
 
     private final List<Transaction> transactions;
     private Account account;

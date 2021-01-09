@@ -1,12 +1,12 @@
 package main.usecase;
 
 import main.domain.*;
-import main.io.EventListener;
+import main.io.EventConnection;
 import java.util.*;
 
 import static main.usecase.Layout.HOME;
 
-public class Game extends EventListener implements ActionListener, NavListener {
+public class Game extends EventConnection implements ActionListener, NavListener {
 
     private final Stack<Card> deck;
     private final int maxCards;

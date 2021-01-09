@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
-import main.io.EventListener;
+import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.GameStateListener;
 
@@ -21,7 +21,7 @@ import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
-public class BlackjackController extends EventListener implements Initializable, GameStateListener, BalanceListener {
+public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
 
     @FXML
     private Label lblBet;

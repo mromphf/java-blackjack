@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
-import main.io.EventListener;
+import main.io.EventConnection;
 import main.usecase.BalanceListener;
 
 import java.net.URL;
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.GAME;
 import static main.usecase.Layout.HOME;
 
-public class BetController extends EventListener implements Initializable, BalanceListener {
+public class BetController extends EventConnection implements Initializable, BalanceListener {
 
     @FXML
     private Label lblBet;

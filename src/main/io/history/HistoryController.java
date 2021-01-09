@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import main.usecase.Layout;
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.EventListener;
+import main.io.EventConnection;
 import main.usecase.MemoryListener;
 import main.usecase.NavListener;
 import main.usecase.TransactionListener;
@@ -24,7 +24,7 @@ import static main.usecase.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 
-public class HistoryController extends EventListener implements Initializable, NavListener, MemoryListener, TransactionListener {
+public class HistoryController extends EventConnection implements Initializable, NavListener, MemoryListener, TransactionListener {
 
     @FXML
     public GridPane chartHousing;

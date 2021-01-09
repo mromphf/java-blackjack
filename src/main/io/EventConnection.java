@@ -2,7 +2,7 @@ package main.io;
 
 import main.usecase.EventNetwork;
 
-public abstract class EventListener {
+public abstract class EventConnection {
 
     protected EventNetwork eventNetwork;
 

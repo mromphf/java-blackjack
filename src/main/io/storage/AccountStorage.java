@@ -2,14 +2,14 @@ package main.io.storage;
 
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.EventListener;
+import main.io.EventConnection;
 import main.usecase.AccountListener;
 import main.usecase.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AccountStorage extends EventListener implements AccountListener, TransactionListener {
+public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
     private final Memory memory;
 

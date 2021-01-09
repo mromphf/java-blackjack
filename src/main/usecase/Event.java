@@ -1,6 +1,7 @@
 package main.usecase;
 
 import main.domain.Account;
+import main.domain.Action;
 import main.domain.Snapshot;
 
 import java.util.HashMap;
@@ -52,6 +53,18 @@ public class Event {
     public static Event accountDeleted(Account account) {
         return new Event(ACCOUNT_DELETED, new HashMap<DataKey, Object>() {{
             put(ACCOUNT, account);
+        }});
+    }
+
+    public static Event actionTaken(Action action) {
+        return new Event(ACTION_TAKEN, new HashMap<DataKey, Object>() {{
+            put(ACTION, action);
+        }});
+    }
+
+    public static Event betPlaced(int amount) {
+        return new Event(BET_PLACED, new HashMap<DataKey, Object>() {{
+            put(INT, amount);
         }});
     }
 

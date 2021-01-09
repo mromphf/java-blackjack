@@ -13,6 +13,7 @@ import main.usecase.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static main.usecase.Event.betPlaced;
 import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.GAME;
 import static main.usecase.Layout.HOME;
@@ -60,7 +61,7 @@ public class BetController extends EventConnection implements Initializable, Eve
 
     @FXML
     private void onDeal() {
-        eventNetwork.onBetPlaced(bet);
+        eventNetwork.post(betPlaced(bet));
         eventNetwork.post(layoutChanged(GAME));
         bet = 0;
     }

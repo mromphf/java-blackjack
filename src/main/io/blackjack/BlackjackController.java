@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 import static main.usecase.DataKey.ACCOUNT;
 import static main.usecase.DataKey.SNAPSHOT;
+import static main.usecase.Event.actionTaken;
 import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
@@ -103,7 +104,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.onActionTaken(SPLIT);
+        eventNetwork.post(actionTaken(SPLIT));
     }
 
     @FXML
@@ -114,12 +115,12 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.onActionTaken(STAND);
+        eventNetwork.post(actionTaken(STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.onActionTaken(SETTLE);
+        eventNetwork.post(actionTaken(SETTLE));
     }
 
     @FXML
@@ -129,22 +130,22 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onHit() {
-        eventNetwork.onActionTaken(HIT);
+        eventNetwork.post(actionTaken(HIT));
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.onActionTaken(DOUBLE);
+        eventNetwork.post(actionTaken(DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.onActionTaken(BUY_INSURANCE);
+        eventNetwork.post(actionTaken(BUY_INSURANCE));
     }
 
     @FXML
     private void onNoInsurance() {
-        eventNetwork.onActionTaken(NO_INSURANCE);
+        eventNetwork.post(actionTaken(NO_INSURANCE));
     }
 
     private void renderExposedTable(Snapshot snapshot) {

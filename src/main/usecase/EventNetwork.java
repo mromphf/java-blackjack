@@ -1,7 +1,6 @@
 package main.usecase;
 
 import main.domain.Account;
-import main.domain.Action;
 import main.domain.Transaction;
 import main.io.EventConnection;
 
@@ -10,21 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EventNetwork implements
-        ActionListener,
         MemoryListener,
         TransactionListener {
 
-    private final Collection<ActionListener> actionListeners = new LinkedList<>();
     private final Collection<MemoryListener> memoryListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
     private final Collection<EventListener> eventListeners = new LinkedList<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
-            if (connection instanceof ActionListener) {
-                actionListeners.add((ActionListener) connection);
-            }
-
             if (connection instanceof MemoryListener) {
                 memoryListeners.add((MemoryListener) connection);
             }
@@ -45,16 +38,6 @@ public class EventNetwork implements
 
     public void post(Event e) {
         eventListeners.forEach(l -> l.listen(e));
-    }
-
-    @Override
-    public void onActionTaken(Action action) {
-        actionListeners.forEach(l -> l.onActionTaken(action));
-    }
-
-    @Override
-    public void onBetPlaced(int amount) {
-        actionListeners.forEach(l -> l.onBetPlaced(amount));
     }
 
     @Override

@@ -4,12 +4,12 @@ import main.domain.*;
 import main.io.EventConnection;
 import java.util.*;
 
-import static main.usecase.DataKey.LAYOUT;
+import static main.usecase.DataKey.*;
 import static main.usecase.Event.gameStateUpdated;
 import static main.usecase.Layout.HOME;
-import static main.usecase.Predicate.LAYOUT_CHANGED;
+import static main.usecase.Predicate.*;
 
-public class Game extends EventConnection implements ActionListener, EventListener {
+public class Game extends EventConnection implements EventListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -24,12 +24,18 @@ public class Game extends EventConnection implements ActionListener, EventListen
     }
 
     @Override
-    public void onBetPlaced(int amount) {
-        round = new Round(amount, deck, maxCards, numDecks);
-        eventNetwork.post(gameStateUpdated(round.getSnapshot()));
+    public void listen(Event e) {
+        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HOME)) {
+            round = new Round(0, deck, maxCards, numDecks);
+        } else if (e.is(ACTION_TAKEN)) {
+            onActionTaken((Action) e.getData(ACTION));
+        } else if (e.is(BET_PLACED)) {
+            final int amount = (int) e.getData(INT);
+            round = new Round(amount, deck, maxCards, numDecks);
+            eventNetwork.post(gameStateUpdated(round.getSnapshot()));
+        }
     }
 
-    @Override
     public void onActionTaken(Action action) {
         round.record(action);
 
@@ -58,12 +64,5 @@ public class Game extends EventConnection implements ActionListener, EventListen
         round.playNextHand();
 
         eventNetwork.post(gameStateUpdated(round.getSnapshot()));
-    }
-
-    @Override
-    public void listen(Event e) {
-        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HOME)) {
-            round = new Round(0, deck, maxCards, numDecks);
-        }
     }
 }

@@ -11,7 +11,7 @@ import static main.usecase.Event.balanceUpdated;
 import static main.usecase.Layout.BET;
 import static main.usecase.Predicate.*;
 
-public class Transactor extends EventConnection implements EventListener, ActionListener {
+public class Transactor extends EventConnection implements EventListener {
 
     private final List<Transaction> transactions;
     private Account account;
@@ -19,14 +19,6 @@ public class Transactor extends EventConnection implements EventListener, Action
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactions = new LinkedList<>();
-    }
-
-    @Override
-    public void onBetPlaced(int amount) {
-        Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
-        transactions.add(t);
-        eventNetwork.onTransaction(t);
-        eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
@@ -40,9 +32,12 @@ public class Transactor extends EventConnection implements EventListener, Action
             transactions.addAll(workingTransactions);
             eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
             eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
+        } else if (e.is(BET_PLACED)) {
+            final int amount = (int) e.getData(INT);
+            Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
+            transactions.add(t);
+            eventNetwork.onTransaction(t);
+            eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
         }
     }
-
-    @Override
-    public void onActionTaken(Action action) {}
 }

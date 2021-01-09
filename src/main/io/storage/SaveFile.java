@@ -28,7 +28,6 @@ public class SaveFile implements Memory {
         }
     }
 
-    @Override
     public Map<String, Object> loadConfig() {
         try {
             final File configFile = new File(SaveFile.class.getResource("/config/config.json").getPath());

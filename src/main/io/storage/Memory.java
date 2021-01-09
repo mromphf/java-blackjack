@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 public interface Memory {
-    Map<String, Object> loadConfig();
     Set<Account> loadAllAccounts();
     List<Transaction> loadAllTransactions();
     void saveTransaction(Transaction transaction);

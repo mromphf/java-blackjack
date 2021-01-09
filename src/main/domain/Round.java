@@ -3,8 +3,7 @@ package main.domain;
 import java.util.*;
 
 import static main.domain.Action.*;
-import static main.domain.Deck.fresh;
-import static main.domain.Deck.shuffle;
+import static main.domain.Deck.*;
 import static main.domain.Rules.*;
 
 public class Round {
@@ -15,30 +14,30 @@ public class Round {
     private final Stack<Card> dealerHand;
     private final int bet;
     private final int maxCards;
+    private final int numDecks;
 
     private Stack<Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(int bet, Stack<Card> deck, int maxCards) {
+    public Round(int bet, Stack<Card> deck, int maxCards, int numDecks) {
         this.bet = bet;
         this.deck = deck;
+        this.numDecks = numDecks;
         this.maxCards = maxCards;
         this.dealerHand = new Stack<>();
         this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
         this.actionsTaken = new Stack<>();
-    }
 
-    public Round(int bet, Stack<Card> deck, Stack<Card> dealerHand, Stack<Card> playerHand, int maxCards) {
-        this.bet = bet;
-        this.deck = deck;
-        this.maxCards = maxCards;
-        this.dealerHand = dealerHand;
-        this.currentHand = playerHand;
-        this.handsToPlay = new Stack<>();
-        this.handsToSettle = new Stack<>();
-        this.actionsTaken = new Stack<>();
+        if (deck.size() < 4) {
+            refillDeck();
+        }
+
+        final Map<String, Stack<Card>> openingHands = openingHand(deck);
+
+        dealerHand.addAll(openingHands.get("dealer"));
+        currentHand.addAll(openingHands.get("player"));
     }
 
     public void record(Action action) {
@@ -47,8 +46,7 @@ public class Round {
 
     public void hit() throws EmptyStackException {
         if (deck.isEmpty()) {
-            actionsTaken.add(REFILL);
-            deck.addAll(shuffle(fresh()));
+            refillDeck();
         }
 
         currentHand.add(deck.pop());
@@ -56,8 +54,7 @@ public class Round {
 
     public void doubleDown() throws EmptyStackException {
         if (deck.isEmpty()) {
-            actionsTaken.add(REFILL);
-            deck.addAll(shuffle(fresh()));
+            refillDeck();
         }
 
         currentHand.add(deck.pop());
@@ -68,8 +65,7 @@ public class Round {
         final int deckValue = deck.stream().mapToInt(Card::getBlackjackValue).sum();
 
         if ((deckValue - score(dealerHand)) < 16 ) {
-            actionsTaken.add(REFILL);
-            deck.addAll(shuffle(fresh()));
+            refillDeck();
         }
 
         if (handsToPlay.isEmpty()) {
@@ -81,13 +77,11 @@ public class Round {
 
     public void playNextHand() {
         if (deck.isEmpty()) {
-            actionsTaken.add(REFILL);
-            deck.addAll(shuffle(fresh()));
+            refillDeck();
         }
 
         if (!handsToPlay.isEmpty() &&
-                (isBust(currentHand) ||
-                        actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE)))) {
+                (isBust(currentHand) || actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE)))) {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
             currentHand.add(deck.pop());
@@ -116,6 +110,11 @@ public class Round {
             currentHand = previousState.getPlayerHand();
             actionsTaken = previousState.getActionsTaken();
         }
+    }
+
+    public void refillDeck() {
+        actionsTaken.add(REFILL);
+        deck.addAll(shuffle(fresh(numDecks)));
     }
 
     public Snapshot getSnapshot() {

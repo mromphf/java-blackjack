@@ -2,37 +2,27 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventListener;
-
 import java.util.*;
 
-import static main.domain.Action.*;
-import static main.domain.Deck.*;
 import static main.usecase.Layout.HOME;
 
 public class Game extends EventListener implements ActionListener, NavListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
+    private final int numDecks;
     private Round round;
 
-    public Game(Stack<Card> deck) {
+    public Game(Stack<Card> deck, int numDecks) {
         this.deck = deck;
         this.maxCards = deck.size();
-        round = new Round(0, deck, maxCards);
+        this.numDecks = numDecks;
+        round = new Round(0, deck, maxCards, numDecks);
     }
 
     @Override
     public void onBetPlaced(int amount) {
-        if (deck.size() < 4) {
-            round.record(REFILL);
-            deck.addAll(shuffle(fresh(4)));
-        }
-
-        final Map<String, Stack<Card>> openingHand = openingHand(deck);
-        final Stack<Card> dealerHand = openingHand.get("dealer");
-        final Stack<Card> playerHand = openingHand.get("player");
-
-        round = new Round(amount, deck, dealerHand, playerHand, maxCards);
+        round = new Round(amount, deck, maxCards, numDecks);
         eventNetwork.onUpdate(round.getSnapshot());
     }
 
@@ -70,7 +60,7 @@ public class Game extends EventListener implements ActionListener, NavListener {
     @Override
     public void onChangeLayout(Layout layout) {
         if (layout == HOME) {
-            round = new Round(0, deck, maxCards);
+            round = new Round(0, deck, maxCards, numDecks);
         }
     }
 

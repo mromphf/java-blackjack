@@ -3,6 +3,7 @@ package main;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.domain.Card;
 import main.io.EventListener;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
@@ -28,7 +29,8 @@ public class AppRoot {
     public AppRoot(Stage stage) {
 
         /*
-         * These are not event listeners
+         * These are not event listeners.
+         * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
         final SaveFile saveFile = new SaveFile();
@@ -36,12 +38,14 @@ public class AppRoot {
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
+        final int numDecks = (int) config.get("decks");
+        final Stack<Card> deck = shuffle(fresh(numDecks));
 
         /*
          * These are event listeners
          */
         final Transactor transactor = new Transactor();
-        final Game game = new Game(shuffle(fresh((int) config.get("decks"))));
+        final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(saveFile);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
@@ -76,7 +80,7 @@ public class AppRoot {
         gameLogger.addHandler(consoleLogHandler);
 
         /*
-         * Load from disk
+         * Load from accounts, transactions and images from disk
          */
 
         accountStorage.loadAllAccounts();

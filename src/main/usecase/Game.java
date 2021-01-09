@@ -5,8 +5,9 @@ import main.io.EventListener;
 
 import java.util.*;
 
+import static main.domain.Action.*;
+import static main.domain.Deck.*;
 import static main.usecase.Layout.HOME;
-import static main.domain.Deck.openingHand;
 
 public class Game extends EventListener implements ActionListener, NavListener {
 
@@ -22,17 +23,17 @@ public class Game extends EventListener implements ActionListener, NavListener {
 
     @Override
     public void onBetPlaced(int amount) {
-        try {
-            final Map<String, Stack<Card>> openingHand = openingHand(deck);
-            final Stack<Card> dealerHand = openingHand.get("dealer");
-            final Stack<Card> playerHand = openingHand.get("player");
-
-            round = new Round(amount, deck, dealerHand, playerHand, maxCards);
-            eventNetwork.onUpdate(round.getSnapshot());
-        } catch (IllegalArgumentException ex) {
-            System.out.println("Not enough cards to deal new hand! Quitting...");
-            System.exit(0);
+        if (deck.size() < 4) {
+            round.record(REFILL);
+            deck.addAll(shuffle(fresh(4)));
         }
+
+        final Map<String, Stack<Card>> openingHand = openingHand(deck);
+        final Stack<Card> dealerHand = openingHand.get("dealer");
+        final Stack<Card> playerHand = openingHand.get("player");
+
+        round = new Round(amount, deck, dealerHand, playerHand, maxCards);
+        eventNetwork.onUpdate(round.getSnapshot());
     }
 
     @Override

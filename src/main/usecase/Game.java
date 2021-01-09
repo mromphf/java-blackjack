@@ -5,6 +5,7 @@ import main.io.EventConnection;
 import java.util.*;
 
 import static main.usecase.DataKey.LAYOUT;
+import static main.usecase.Event.gameStateUpdated;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Predicate.LAYOUT_CHANGED;
 
@@ -25,7 +26,7 @@ public class Game extends EventConnection implements ActionListener, EventListen
     @Override
     public void onBetPlaced(int amount) {
         round = new Round(amount, deck, maxCards, numDecks);
-        eventNetwork.onUpdate(round.getSnapshot());
+        eventNetwork.post(gameStateUpdated(round.getSnapshot()));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class Game extends EventConnection implements ActionListener, EventListen
 
         round.playNextHand();
 
-        eventNetwork.onUpdate(round.getSnapshot());
+        eventNetwork.post(gameStateUpdated(round.getSnapshot()));
     }
 
     @Override

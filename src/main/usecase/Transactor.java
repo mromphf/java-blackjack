@@ -11,7 +11,7 @@ import static main.usecase.Event.balanceUpdated;
 import static main.usecase.Layout.BET;
 import static main.usecase.Predicate.*;
 
-public class Transactor extends EventConnection implements EventListener, GameStateListener, ActionListener {
+public class Transactor extends EventConnection implements EventListener, ActionListener {
 
     private final List<Transaction> transactions;
     private Account account;
@@ -19,14 +19,6 @@ public class Transactor extends EventConnection implements EventListener, GameSt
     public Transactor() {
         this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
         this.transactions = new LinkedList<>();
-    }
-
-    @Override
-    public void onUpdate(Snapshot snapshot) {
-        Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
-        transactions.addAll(workingTransactions);
-        eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
-        eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
     }
 
     @Override
@@ -39,9 +31,15 @@ public class Transactor extends EventConnection implements EventListener, GameSt
 
     @Override
     public void listen(Event e) {
-        if(e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(BET) && e.hasData(ACCOUNT)) {
+        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(BET) && e.hasData(ACCOUNT)) {
             this.account = (Account) e.getData(ACCOUNT);
             eventNetwork.post(balanceUpdated(account));
+        } else if (e.is(GAME_STATE_CHANGED)) {
+            final Snapshot snapshot = (Snapshot) e.getData(SNAPSHOT);
+            Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
+            transactions.addAll(workingTransactions);
+            eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
+            eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
         }
     }
 

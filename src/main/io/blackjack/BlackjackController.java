@@ -16,13 +16,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static main.usecase.DataKey.ACCOUNT;
+import static main.usecase.DataKey.SNAPSHOT;
+import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 import static main.usecase.Predicate.BALANCE_UPDATED;
+import static main.usecase.Predicate.GAME_STATE_CHANGED;
 
-public class BlackjackController extends EventConnection implements Initializable, GameStateListener, EventListener {
+public class BlackjackController extends EventConnection implements Initializable, EventListener {
 
     @FXML
     private Label lblBet;
@@ -62,10 +65,11 @@ public class BlackjackController extends EventConnection implements Initializabl
         if (e.is(BALANCE_UPDATED)) {
             final Account account = (Account) e.getData(ACCOUNT);
             lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+        } else if (e.is(GAME_STATE_CHANGED)) {
+            onUpdate((Snapshot) e.getData(SNAPSHOT));
         }
     }
 
-    @Override
     public void onUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
@@ -120,7 +124,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onDone() {
-        eventNetwork.post(Event.layoutChanged(BET));
+        eventNetwork.post(layoutChanged(BET));
     }
 
     @FXML

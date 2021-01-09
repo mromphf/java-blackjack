@@ -2,7 +2,6 @@ package main.usecase;
 
 import main.domain.Account;
 import main.domain.Action;
-import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.io.EventConnection;
 
@@ -13,13 +12,11 @@ import java.util.List;
 public class EventNetwork implements
         AccountListener,
         ActionListener,
-        GameStateListener,
         MemoryListener,
         TransactionListener {
 
     private final Collection<AccountListener> accountListeners = new LinkedList<>();
     private final Collection<ActionListener> actionListeners = new LinkedList<>();
-    private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<MemoryListener> memoryListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
     private final Collection<EventListener> eventListeners = new LinkedList<>();
@@ -34,10 +31,6 @@ public class EventNetwork implements
                 actionListeners.add((ActionListener) connection);
             }
 
-            if (connection instanceof GameStateListener) {
-                gameStateListeners.add((GameStateListener) connection);
-            }
-
             if (connection instanceof MemoryListener) {
                 memoryListeners.add((MemoryListener) connection);
             }
@@ -50,10 +43,6 @@ public class EventNetwork implements
                 eventListeners.add((EventListener) connection);
             }
         }
-    }
-
-    public void registerGameStateListener(GameStateListener listener) {
-        gameStateListeners.add(listener);
     }
 
     public void registerEventListener(EventListener eventListener) {
@@ -82,11 +71,6 @@ public class EventNetwork implements
     @Override
     public void onBetPlaced(int amount) {
         actionListeners.forEach(l -> l.onBetPlaced(amount));
-    }
-
-    @Override
-    public void onUpdate(Snapshot snapshot) {
-        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
     }
 
     @Override

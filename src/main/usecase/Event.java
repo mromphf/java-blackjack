@@ -1,13 +1,13 @@
 package main.usecase;
 
 import main.domain.Account;
+import main.domain.Snapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static main.usecase.DataKey.*;
-import static main.usecase.Predicate.BALANCE_UPDATED;
-import static main.usecase.Predicate.LAYOUT_CHANGED;
+import static main.usecase.Predicate.*;
 
 public class Event {
     public final Predicate predicate;
@@ -34,6 +34,12 @@ public class Event {
         return new Event(LAYOUT_CHANGED, new HashMap<DataKey, Object>() {{
             put(LAYOUT, layout);
             put(ACCOUNT, account);
+        }});
+    }
+
+    public static Event gameStateUpdated(Snapshot snapshot) {
+        return new Event(GAME_STATE_CHANGED, new HashMap<DataKey, Object>() {{
+            put(SNAPSHOT, snapshot);
         }});
     }
 

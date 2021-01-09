@@ -70,7 +70,6 @@ public class AppRoot {
         }};
 
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
-        eventNetwork.registerGameStateListener(gameLogger);
         eventNetwork.registerEventListener(gameLogger);
 
         // If this doesn't happen, prepare for NullPointerExceptions (there must be a better way?)

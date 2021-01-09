@@ -43,6 +43,18 @@ public class Event {
         }});
     }
 
+    public static Event accountOpened(Account account) {
+        return new Event(ACCOUNT_OPENED, new HashMap<DataKey, Object>() {{
+            put(ACCOUNT, account);
+        }});
+    }
+
+    public static Event accountDeleted(Account account) {
+        return new Event(ACCOUNT_DELETED, new HashMap<DataKey, Object>() {{
+            put(ACCOUNT, account);
+        }});
+    }
+
     public boolean is(Predicate p) {
         return predicate.equals(p);
     }

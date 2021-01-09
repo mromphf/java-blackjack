@@ -3,13 +3,16 @@ package main.io.storage;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.AccountListener;
-import main.usecase.TransactionListener;
+import main.usecase.*;
+import main.usecase.EventListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
+import static main.usecase.DataKey.ACCOUNT;
+import static main.usecase.Predicate.*;
+
+public class AccountStorage extends EventConnection implements EventListener, TransactionListener {
 
     private final Memory memory;
 
@@ -28,21 +31,22 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     @Override
-    public void onNewAccountOpened(Account account, int signingBonus) {
-        final Transaction t = new Transaction(
-                LocalDateTime.now(),
-                account.getKey(),
-                "SIGNING BONUS",
-                signingBonus
-        );
+    public void listen(Event e) {
+        if (e.is(ACCOUNT_OPENED)) {
+            final Account account = (Account) e.getData(ACCOUNT);
+            final Transaction t = new Transaction(
+                    LocalDateTime.now(),
+                    account.getKey(),
+                    "SIGNING BONUS",
+                    200
+            );
 
-        memory.saveNewAccount(account);
-        memory.saveTransaction(t);
-    }
-
-    @Override
-    public void onAccountDeleted(Account account) {
-        memory.deleteAccount(account);
+            memory.saveNewAccount(account);
+            memory.saveTransaction(t);
+        } else if (e.is(ACCOUNT_DELETED)) {
+            final Account account = (Account) e.getData(ACCOUNT);
+            memory.deleteAccount(account);
+        }
     }
 
     @Override

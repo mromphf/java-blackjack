@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.usecase.DataKey.ACCOUNT;
+import static main.usecase.Event.accountDeleted;
 import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
@@ -112,7 +113,7 @@ public class HomeController extends EventConnection implements EventListener, In
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        eventNetwork.onNewAccountOpened(account, balance);
+        eventNetwork.post(Event.accountOpened(account));
     }
 
     @FXML
@@ -121,7 +122,7 @@ public class HomeController extends EventConnection implements EventListener, In
 
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-        eventNetwork.onAccountDeleted(selectedAccount);
+        eventNetwork.post(accountDeleted(selectedAccount));
     }
 
     @FXML

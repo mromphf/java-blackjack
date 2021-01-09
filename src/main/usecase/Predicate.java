@@ -9,5 +9,7 @@ public enum Predicate {
     BET_PLACED,
     GAME_STATE_CHANGED,
     LAYOUT_CHANGED,
+    TRANSACTION,
+    TRANSACTIONS,
     TRANSACTIONS_LOADED
 }

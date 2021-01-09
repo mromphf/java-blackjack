@@ -23,7 +23,7 @@ import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 import static main.usecase.Predicate.*;
 
-public class HistoryController extends EventConnection implements EventListener, Initializable, TransactionListener {
+public class HistoryController extends EventConnection implements EventListener, Initializable {
 
     @FXML
     public GridPane chartHousing;
@@ -43,29 +43,27 @@ public class HistoryController extends EventConnection implements EventListener,
     public void listen(Event e) {
         if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HISTORY)) {
             final Account account = (Account) e.getData(ACCOUNT);
-            final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
-            final Axis<String> xAxis = dateAxis(accountTransactions);
-            final NumberAxis yAxis = new NumberAxis();
-            final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
-
-            chart.setPrefWidth(1200);
-            chart.setPrefHeight(800);
-            chart.setTitle(String.format("%s Transactions: %s", account.getName(), accountTransactions.size()));
-            chart.getData().add(balanceSeries(accountTransactions));
-
-            chartHousing.add(chart, 0, 0);
+            drawChart(account);
         } else if (e.is(TRANSACTIONS_LOADED)) {
             allTransactions = e.getTransactions();
+        } else if (e.is(Predicate.TRANSACTION)) {
+            allTransactions.add(e.getTransaction());
+        } else if (e.is(Predicate.TRANSACTIONS)) {
+            allTransactions.addAll(e.getTransactions());
         }
     }
 
-    @Override
-    public void onTransaction(Transaction transaction) {
-        allTransactions.add(transaction);
-    }
+    public void drawChart(Account account) {
+        final List<Transaction> accountTransactions = Transaction.listForAccount(account.getKey(), allTransactions);
+        final Axis<String> xAxis = dateAxis(accountTransactions);
+        final NumberAxis yAxis = new NumberAxis();
+        final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
 
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
-        allTransactions.addAll(transactions);
+        chart.setPrefWidth(1200);
+        chart.setPrefHeight(800);
+        chart.setTitle(String.format("%s Transactions: %s", account.getName(), accountTransactions.size()));
+        chart.getData().add(balanceSeries(accountTransactions));
+
+        chartHousing.add(chart, 0, 0);
     }
 }

@@ -7,7 +7,7 @@ import java.util.*;
 
 import static main.domain.Rules.compileTransactions;
 import static main.usecase.DataKey.*;
-import static main.usecase.Event.balanceUpdated;
+import static main.usecase.Event.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Predicate.*;
 
@@ -30,13 +30,13 @@ public class Transactor extends EventConnection implements EventListener {
             final Snapshot snapshot = (Snapshot) e.getData(SNAPSHOT);
             Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
             transactions.addAll(workingTransactions);
-            eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
+            eventNetwork.post(onTransactions(new ArrayList<>(workingTransactions)));
             eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
         } else if (e.is(BET_PLACED)) {
             final int amount = (int) e.getData(INT);
             Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
             transactions.add(t);
-            eventNetwork.onTransaction(t);
+            eventNetwork.post(onTransaction(t));
             eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
         }
     }

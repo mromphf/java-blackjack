@@ -12,7 +12,7 @@ import java.util.*;
 import static main.usecase.DataKey.ACCOUNT;
 import static main.usecase.Predicate.*;
 
-public class AccountStorage extends EventConnection implements EventListener, TransactionListener {
+public class AccountStorage extends EventConnection implements EventListener {
 
     private final Memory memory;
 
@@ -46,16 +46,10 @@ public class AccountStorage extends EventConnection implements EventListener, Tr
         } else if (e.is(ACCOUNT_DELETED)) {
             final Account account = (Account) e.getData(ACCOUNT);
             memory.deleteAccount(account);
+        } else if (e.is(TRANSACTION)) {
+            memory.saveTransaction(e.getTransaction());
+        } else if (e.is(TRANSACTIONS)) {
+            memory.saveTransactions(e.getTransactions());
         }
-    }
-
-    @Override
-    public void onTransaction(Transaction transaction) {
-        memory.saveTransaction(transaction);
-    }
-
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
-        memory.saveTransactions(transactions);
     }
 }

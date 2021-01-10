@@ -54,9 +54,21 @@ public class HomeController extends EventConnection implements EventListener, In
 
     @FXML
     public void onPlay() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount()));
         eventNetwork.post(new Event(LAYOUT_CHANGED, BET));
+    }
+
+    @FXML
+    public void onRequestHistory() {
+        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount()));
+        eventNetwork.post(new Event(LAYOUT_CHANGED, HISTORY));
+    }
+
+    @FXML
+    public void onDelete() {
+        accountMap.remove(selectedAccount().getKey());
+        populateAccountList();
+        eventNetwork.post(new Event(ACCOUNT_DELETED, selectedAccount()));
     }
 
     @FXML
@@ -69,10 +81,9 @@ public class HomeController extends EventConnection implements EventListener, In
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else {
-            final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-            btnPlay.setDisable(selectedAccount == null);
-            btnDelete.setDisable(selectedAccount == null);
-            btnHistory.setDisable(selectedAccount == null);
+            btnPlay.setDisable(selectedAccount() == null);
+            btnDelete.setDisable(selectedAccount() == null);
+            btnHistory.setDisable(selectedAccount() == null);
         }
     }
 
@@ -108,24 +119,9 @@ public class HomeController extends EventConnection implements EventListener, In
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+        populateAccountList();
 
         eventNetwork.post(new Event(ACCOUNT_OPENED, account));
-    }
-
-    @FXML
-    public void onDelete() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        accountMap.remove(selectedAccount.getKey());
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-        eventNetwork.post(new Event(ACCOUNT_DELETED, selectedAccount));
-    }
-
-    @FXML
-    public void onRequestHistory() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.post(new Event(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override
@@ -133,10 +129,18 @@ public class HomeController extends EventConnection implements EventListener, In
         if (e.is(BALANCE_UPDATED)) {
             final Account account = e.getAccount();
             accountMap.put(account.getKey(), account);
-            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+            populateAccountList();
         } else if (e.is(ACCOUNTS_LOADED)) {
             e.getAccounts().forEach(a -> accountMap.put(a.getKey(), a));
-            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+            populateAccountList();
         }
+    }
+
+    public Account selectedAccount() {
+        return lstAccounts.getSelectionModel().getSelectedItem();
+    }
+
+    public void populateAccountList() {
+        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
 }

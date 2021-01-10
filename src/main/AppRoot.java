@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.domain.Card;
-import main.io.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
@@ -16,6 +15,7 @@ import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
 import main.io.storage.SaveFile;
 import main.usecase.*;
+import main.usecase.EventListener;
 import main.usecase.LayoutManager;
 
 import java.util.*;
@@ -58,7 +58,7 @@ public class AppRoot {
          * Wire everything up
          */
 
-        final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
+        final Collection<EventListener> eventListeners = new LinkedList<EventListener>() {{
             add(homeController);
             add(historyController);
             add(blackjackController);
@@ -67,13 +67,13 @@ public class AppRoot {
             add(accountStorage);
             add(game);
             add(transactor);
+            add(gameLogger);
         }};
 
-        final EventNetwork eventNetwork = new EventNetwork(eventConnections);
-        eventNetwork.registerEventListener(gameLogger);
+        final EventNetwork eventNetwork = new EventNetwork(eventListeners);
 
         // If this doesn't happen, prepare for NullPointerExceptions (there must be a better way?)
-        eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
+        eventListeners.forEach(lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);
 

@@ -1,17 +1,13 @@
 package main.io;
 
-import main.usecase.Event;
+import main.usecase.EventListener;
 import main.usecase.EventNetwork;
 
-public abstract class EventConnection {
+public abstract class EventConnection implements EventListener {
 
     protected EventNetwork eventNetwork;
 
     public void connectTo(EventNetwork eventNetwork) {
         this.eventNetwork = eventNetwork;
-    }
-
-    public void post(Event e) {
-        eventNetwork.post(e);
     }
 }

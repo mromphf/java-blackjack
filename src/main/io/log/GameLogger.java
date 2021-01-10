@@ -3,6 +3,7 @@ package main.io.log;
 import main.domain.Account;
 import main.usecase.Event;
 import main.usecase.EventListener;
+import main.usecase.EventNetwork;
 
 import java.time.LocalTime;
 import java.util.logging.Logger;
@@ -26,4 +27,7 @@ public class GameLogger extends Logger implements EventListener {
             log(INFO, e.getSnapshot().toString());
         }
     }
+
+    @Override
+    public void connectTo(EventNetwork eventNetwork) {}
 }

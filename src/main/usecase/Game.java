@@ -4,8 +4,6 @@ import main.domain.*;
 import main.io.EventConnection;
 import java.util.*;
 
-import static main.usecase.DataKey.*;
-import static main.usecase.Event.gameStateUpdated;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Predicate.*;
 
@@ -25,14 +23,13 @@ public class Game extends EventConnection implements EventListener {
 
     @Override
     public void listen(Event e) {
-        if (e.is(LAYOUT_CHANGED) && e.getData(LAYOUT).equals(HOME)) {
+        if (e.is(LAYOUT_CHANGED) && e.getLayout().equals(HOME)) {
             round = new Round(0, deck, maxCards, numDecks);
         } else if (e.is(ACTION_TAKEN)) {
-            onActionTaken((Action) e.getData(ACTION));
+            onActionTaken(e.getAction());
         } else if (e.is(BET_PLACED)) {
-            final int amount = (int) e.getData(INT);
-            round = new Round(amount, deck, maxCards, numDecks);
-            eventNetwork.post(gameStateUpdated(round.getSnapshot()));
+            round = new Round(e.getInt(), deck, maxCards, numDecks);
+            eventNetwork.post(new Event(GAME_STATE_CHANGED, round.getSnapshot()));
         }
     }
 
@@ -63,6 +60,6 @@ public class Game extends EventConnection implements EventListener {
 
         round.playNextHand();
 
-        eventNetwork.post(gameStateUpdated(round.getSnapshot()));
+        eventNetwork.post(new Event(GAME_STATE_CHANGED, round.getSnapshot()));
     }
 }

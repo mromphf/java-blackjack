@@ -16,8 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static main.usecase.DataKey.*;
-import static main.usecase.Event.layoutChanged;
 import static main.usecase.Layout.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
@@ -33,7 +31,7 @@ public class HistoryController extends EventConnection implements EventListener,
     @FXML
     public void onHome() {
         chartHousing.getChildren().clear();
-        eventNetwork.post(layoutChanged(HOME));
+        eventNetwork.post(new Event(LAYOUT_CHANGED, HOME));
     }
 
     @Override
@@ -42,8 +40,7 @@ public class HistoryController extends EventConnection implements EventListener,
     @Override
     public void listen(Event e) {
         if (e.is(ACCOUNT_SELECTED)) {
-            final Account account = (Account) e.getData(ACCOUNT);
-            drawChart(account);
+            drawChart(e.getAccount());
         } else if (e.is(TRANSACTIONS_LOADED)) {
             allTransactions = e.getTransactions();
         } else if (e.is(Predicate.TRANSACTION)) {

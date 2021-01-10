@@ -20,8 +20,7 @@ import java.util.*;
 import static main.usecase.Event.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.Predicate.ACCOUNTS_LOADED;
-import static main.usecase.Predicate.BALANCE_UPDATED;
+import static main.usecase.Predicate.*;
 
 public class HomeController extends EventConnection implements EventListener, Initializable {
 
@@ -57,8 +56,8 @@ public class HomeController extends EventConnection implements EventListener, In
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(accountSelected(selectedAccount));
-        eventNetwork.post(layoutChanged(BET));
+        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.post(new Event(LAYOUT_CHANGED, BET));
     }
 
     @FXML
@@ -105,6 +104,7 @@ public class HomeController extends EventConnection implements EventListener, In
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, balance, now);
 
+
         accountMap.put(uuid, account);
 
         txtName.setText("");
@@ -112,23 +112,22 @@ public class HomeController extends EventConnection implements EventListener, In
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        eventNetwork.post(Event.accountOpened(account));
+        eventNetwork.post(new Event(ACCOUNT_OPENED, account));
     }
 
     @FXML
     public void onDelete() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-        eventNetwork.post(accountDeleted(selectedAccount));
+        eventNetwork.post(new Event(ACCOUNT_DELETED, selectedAccount));
     }
 
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.post(accountSelected(selectedAccount));
-        eventNetwork.post(layoutChanged(HISTORY));
+        eventNetwork.post(new Event(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.post(new Event(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

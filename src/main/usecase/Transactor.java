@@ -1,13 +1,13 @@
 package main.usecase;
 
-import main.domain.*;
+import main.domain.Account;
+import main.domain.Transaction;
 import main.io.EventConnection;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Rules.compileTransactions;
-import static main.usecase.DataKey.*;
-import static main.usecase.Event.*;
 import static main.usecase.Predicate.*;
 
 public class Transactor extends EventConnection implements EventListener {
@@ -23,20 +23,19 @@ public class Transactor extends EventConnection implements EventListener {
     @Override
     public void listen(Event e) {
         if (e.is(ACCOUNT_SELECTED)) {
-            this.account = (Account) e.getData(ACCOUNT);
-            eventNetwork.post(balanceUpdated(account));
+            account = e.getAccount();
+            eventNetwork.post(new Event(BALANCE_UPDATED, account));
         } else if (e.is(GAME_STATE_CHANGED)) {
-            final Snapshot snapshot = (Snapshot) e.getData(SNAPSHOT);
-            Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
+            Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), e.getSnapshot());
             transactions.addAll(workingTransactions);
-            eventNetwork.post(onTransactions(new ArrayList<>(workingTransactions)));
-            eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
+            eventNetwork.post(new Event(TRANSACTIONS, new ArrayList<>(workingTransactions)));
+            eventNetwork.post(new Event(BALANCE_UPDATED, account.updateBalance(transactions)));
         } else if (e.is(BET_PLACED)) {
-            final int amount = (int) e.getData(INT);
+            final int amount = e.getInt();
             Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
             transactions.add(t);
-            eventNetwork.post(onTransaction(t));
-            eventNetwork.post(balanceUpdated(account.updateBalance(transactions)));
+            eventNetwork.post(new Event(TRANSACTION, t));
+            eventNetwork.post(new Event(BALANCE_UPDATED, account.updateBalance(transactions)));
         }
     }
 }

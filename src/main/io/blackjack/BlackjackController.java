@@ -7,24 +7,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import main.domain.Account;
 import main.domain.Snapshot;
 import main.io.EventConnection;
-import main.usecase.*;
+import main.usecase.Event;
+import main.usecase.EventListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static main.usecase.DataKey.ACCOUNT;
-import static main.usecase.DataKey.SNAPSHOT;
-import static main.usecase.Event.actionTaken;
-import static main.usecase.Event.layoutChanged;
-import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
-import static main.usecase.Predicate.BALANCE_UPDATED;
-import static main.usecase.Predicate.GAME_STATE_CHANGED;
+import static main.usecase.Layout.BET;
+import static main.usecase.Predicate.*;
 
 public class BlackjackController extends EventConnection implements Initializable, EventListener {
 
@@ -64,10 +59,9 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void listen(Event e) {
         if (e.is(BALANCE_UPDATED)) {
-            final Account account = (Account) e.getData(ACCOUNT);
-            lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+            lblBalance.setText(String.format("Balance: $%s", e.getAccount().getBalance()));
         } else if (e.is(GAME_STATE_CHANGED)) {
-            onUpdate((Snapshot) e.getData(SNAPSHOT));
+            onUpdate(e.getSnapshot());
         }
     }
 
@@ -104,7 +98,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.post(actionTaken(SPLIT));
+        eventNetwork.post(new Event(ACTION_TAKEN, SPLIT));
     }
 
     @FXML
@@ -115,37 +109,37 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.post(actionTaken(STAND));
+        eventNetwork.post(new Event(ACTION_TAKEN, STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.post(actionTaken(SETTLE));
+        eventNetwork.post(new Event(ACTION_TAKEN, SETTLE));
     }
 
     @FXML
     private void onDone() {
-        eventNetwork.post(layoutChanged(BET));
+        eventNetwork.post(new Event(LAYOUT_CHANGED, BET));
     }
 
     @FXML
     private void onHit() {
-        eventNetwork.post(actionTaken(HIT));
+        eventNetwork.post(new Event(ACTION_TAKEN, HIT));
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.post(actionTaken(DOUBLE));
+        eventNetwork.post(new Event(ACTION_TAKEN, DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.post(actionTaken(BUY_INSURANCE));
+        eventNetwork.post(new Event(ACTION_TAKEN, BUY_INSURANCE));
     }
 
     @FXML
     private void onNoInsurance() {
-        eventNetwork.post(actionTaken(NO_INSURANCE));
+        eventNetwork.post(new Event(ACTION_TAKEN, NO_INSURANCE));
     }
 
     private void renderExposedTable(Snapshot snapshot) {

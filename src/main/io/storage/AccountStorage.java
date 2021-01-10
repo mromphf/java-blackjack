@@ -43,7 +43,7 @@ public class AccountStorage extends EventConnection implements EventListener {
             memory.deleteAccount(e.getAccount());
         } else if (e.is(TRANSACTION)) {
             memory.saveTransaction(e.getTransaction());
-        } else if (e.is(TRANSACTIONS)) {
+        } else if (e.is(TRANSACTION_BATCH)) {
             memory.saveTransactions(e.getTransactions());
         }
     }

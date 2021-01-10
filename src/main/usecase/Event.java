@@ -21,6 +21,10 @@ public class Event {
         return predicate.equals(p);
     }
 
+    public Predicate getPredicate() {
+        return predicate;
+    }
+
     public int getInt() {
         return (int) data;
     }

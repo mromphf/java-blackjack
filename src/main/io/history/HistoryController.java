@@ -39,14 +39,20 @@ public class HistoryController extends EventConnection implements EventListener,
 
     @Override
     public void listen(Event e) {
-        if (e.is(ACCOUNT_SELECTED)) {
-            drawChart(e.getAccount());
-        } else if (e.is(TRANSACTIONS_LOADED)) {
-            allTransactions = e.getTransactions();
-        } else if (e.is(Predicate.TRANSACTION)) {
-            allTransactions.add(e.getTransaction());
-        } else if (e.is(Predicate.TRANSACTIONS)) {
-            allTransactions.addAll(e.getTransactions());
+        switch (e.getPredicate()) {
+            case ACCOUNT_SELECTED:
+                drawChart(e.getAccount());
+                break;
+            case TRANSACTIONS_LOADED:
+                allTransactions = e.getTransactions();
+                break;
+            case TRANSACTION:
+                allTransactions.add(e.getTransaction());
+                break;
+            case TRANSACTION_BATCH:
+                allTransactions.addAll(e.getTransactions());
+            default:
+                break;
         }
     }
 

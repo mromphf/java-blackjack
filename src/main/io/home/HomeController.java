@@ -17,7 +17,6 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.usecase.Event.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.Predicate.*;
@@ -104,7 +103,6 @@ public class HomeController extends EventConnection implements EventListener, In
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, balance, now);
 
-
         accountMap.put(uuid, account);
 
         txtName.setText("");
@@ -137,9 +135,7 @@ public class HomeController extends EventConnection implements EventListener, In
             accountMap.put(account.getKey(), account);
             lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         } else if (e.is(ACCOUNTS_LOADED)) {
-            for (Account account : e.getAccounts()) {
-                accountMap.put(account.getKey(), account);
-            }
+            e.getAccounts().forEach(a -> accountMap.put(a.getKey(), a));
             lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         }
     }

@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import main.domain.Account;
 import main.io.EventConnection;
 import main.usecase.Event;
 import main.usecase.EventListener;
@@ -73,8 +72,7 @@ public class BetController extends EventConnection implements Initializable, Eve
     @Override
     public void listen(Event e) {
         if (e.is(BALANCE_UPDATED)) {
-            final Account account = e.getAccount();
-            this.balance = account.getBalance();
+            this.balance = e.getAccount().getBalance();
             btnDeal.setDisable(bet > balance || bet <= 0);
             lblBet.setText("$" + bet);
             lblBalance.setText(String.format("Balance: $%s", balance));

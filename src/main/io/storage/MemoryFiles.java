@@ -8,7 +8,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.io.storage.SystemFile.*;
+import static main.io.storage.FileSystem.*;
 
 public class MemoryFiles implements Memory {
 

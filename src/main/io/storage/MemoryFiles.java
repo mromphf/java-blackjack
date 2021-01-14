@@ -15,9 +15,9 @@ public class MemoryFiles implements Memory {
     public final File accountsDir;
     public final File transactionsDir;
 
-    public MemoryFiles() {
-        accountsDir = new File("./accounts/");
-        transactionsDir = new File("./transactions/");
+    public MemoryFiles(String accountsPath, String transactionsPath) {
+        this.accountsDir = new File(accountsPath);
+        this.transactionsDir = new File(transactionsPath);
 
         if (accountsDir.mkdir()) {
             System.out.printf("Created new directory: %s\n", accountsDir.getPath());

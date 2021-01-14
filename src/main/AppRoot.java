@@ -33,7 +33,7 @@ public class AppRoot {
          * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
-        final MemoryFiles memory = new MemoryFiles();
+        final MemoryFiles memory = new MemoryFiles("./accounts/", "./transactions/");
         final Map<String, Object> config = memory.loadConfig();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();

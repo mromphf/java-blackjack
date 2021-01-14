@@ -65,13 +65,8 @@ public class MemoryFiles implements Memory {
 
         try {
             for (File file : allFilesInDir(transactionsDir)) {
-                final Scanner sc = new Scanner(file);
-
-                // Assume header row
-                sc.nextLine();
-
-                while (sc.hasNextLine()) {
-                    String[] row = sc.nextLine().split(",");
+                for (String line : readCsvLines(file)) {
+                    String[] row = line.split(",");
                     transactions.add(new Transaction(
                             LocalDateTime.parse(row[0]),
                             UUID.fromString(row[1]),

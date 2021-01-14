@@ -129,7 +129,7 @@ public class MemoryFiles implements Memory {
         final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey());
 
         if (accountFile.delete()) {
-            System.out.printf("Account no. %s has been closed.%n", account.getKey());
+            System.out.printf("Account no. %s has been closed.\n", account.getKey());
         }
     }
 

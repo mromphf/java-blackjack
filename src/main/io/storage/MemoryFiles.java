@@ -1,7 +1,5 @@
 package main.io.storage;
 
-import com.oracle.javafx.jmx.json.JSONDocument;
-import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.util.JsonUtil;
@@ -9,6 +7,8 @@ import main.io.util.JsonUtil;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static main.io.storage.SystemFile.*;
 
 public class MemoryFiles implements Memory {
 
@@ -94,7 +94,7 @@ public class MemoryFiles implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String transactionFilename = transactionsDir.getPath() + "/" + fileName(transaction.getTime());
+        final String transactionFilename = transactionsDir.getPath() + "/" + dateBasedFileName(transaction.getTime());
         final File transactionsFile = new File(transactionFilename);
 
         try {
@@ -135,24 +135,5 @@ public class MemoryFiles implements Memory {
 
     public Account loadAccount(File file) throws IOException {
         return JsonUtil.accountFromJson(fileToJsonDocument(file));
-    }
-
-    public String fileName(LocalDateTime t) {
-        return String.format("%s-%s-%s.csv", t.getYear(), t.getMonthValue(), t.getDayOfMonth());
-    }
-
-    public File[] allFilesInDir(File directory) {
-        return Objects.requireNonNull(directory.listFiles());
-    }
-
-    public JSONDocument fileToJsonDocument(File f) throws IOException {
-        final FileReader fileReader = new FileReader(f);
-        final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
-        final JSONDocument document = jsonStreamReader.build();
-
-        fileReader.close();
-        jsonStreamReader.close();
-
-        return document;
     }
 }

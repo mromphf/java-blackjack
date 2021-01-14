@@ -101,6 +101,7 @@ public class HomeController extends EventConnection implements Initializable, Ba
         final int balance = 200;
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, balance, now);
+        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "SIGNING BONUS", balance);
 
         accountMap.put(uuid, account);
 
@@ -109,7 +110,8 @@ public class HomeController extends EventConnection implements Initializable, Ba
         listControls.setVisible(true);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        eventNetwork.onNewAccountOpened(account, balance);
+        eventNetwork.onNewAccountOpened(account);
+        eventNetwork.onTransaction(t);
     }
 
     @FXML

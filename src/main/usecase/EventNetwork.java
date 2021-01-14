@@ -68,8 +68,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onNewAccountOpened(Account account, int signingBonus) {
-        accountListeners.forEach(l -> l.onNewAccountOpened(account, signingBonus));
+    public void onNewAccountOpened(Account account) {
+        accountListeners.forEach(l -> l.onNewAccountOpened(account));
     }
 
     @Override

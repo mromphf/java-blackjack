@@ -4,6 +4,6 @@ import main.domain.Account;
 
 
 public interface AccountListener {
-    void onNewAccountOpened(Account account, int signingBonus);
+    void onNewAccountOpened(Account account);
     void onAccountDeleted(Account account);
 }

@@ -28,16 +28,8 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     @Override
-    public void onNewAccountOpened(Account account, int signingBonus) {
-        final Transaction t = new Transaction(
-                LocalDateTime.now(),
-                account.getKey(),
-                "SIGNING BONUS",
-                signingBonus
-        );
-
+    public void onNewAccountOpened(Account account) {
         memory.saveNewAccount(account);
-        memory.saveTransaction(t);
     }
 
     @Override

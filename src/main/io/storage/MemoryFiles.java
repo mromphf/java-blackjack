@@ -10,12 +10,12 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class SaveFile implements Memory {
+public class MemoryFiles implements Memory {
 
     public final File accountsDir;
     public final File transactionsDir;
 
-    public SaveFile() {
+    public MemoryFiles() {
         accountsDir = new File("./accounts/");
         transactionsDir = new File("./transactions/");
 
@@ -30,7 +30,7 @@ public class SaveFile implements Memory {
 
     public Map<String, Object> loadConfig() {
         try {
-            final File configFile = new File(SaveFile.class.getResource("/config/config.json").getPath());
+            final File configFile = new File(MemoryFiles.class.getResource("/config/config.json").getPath());
             return JsonUtil.configFromJson(fileToJsonDocument(configFile));
         } catch (IOException e) {
             e.printStackTrace();

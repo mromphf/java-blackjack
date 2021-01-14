@@ -14,7 +14,7 @@ import main.io.home.HomeController;
 import main.io.log.ConsoleLogHandler;
 import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
-import main.io.storage.SaveFile;
+import main.io.storage.MemoryFiles;
 import main.usecase.*;
 import main.usecase.LayoutManager;
 
@@ -33,8 +33,8 @@ public class AppRoot {
          * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
-        final SaveFile saveFile = new SaveFile();
-        final Map<String, Object> config = saveFile.loadConfig();
+        final MemoryFiles memory = new MemoryFiles();
+        final Map<String, Object> config = memory.loadConfig();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
@@ -47,7 +47,7 @@ public class AppRoot {
         final Transactor transactor = new Transactor();
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(saveFile);
+        final AccountStorage accountStorage = new AccountStorage(memory);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);

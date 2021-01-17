@@ -1,5 +1,6 @@
 package main.io.history;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Axis;
@@ -35,6 +36,11 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onHome() {
         chartHousing.getChildren().clear();
         eventNetwork.onChangeLayout(HOME);
+    }
+
+    @FXML
+    public void onDateSelected(ActionEvent event) {
+        // TODO: how to get the date?
     }
 
     @Override

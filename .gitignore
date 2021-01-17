@@ -1,5 +1,6 @@
 /accounts
 /transactions
+/decks
 *.class
 *.iml
 .idea

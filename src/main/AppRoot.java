@@ -33,7 +33,7 @@ public class AppRoot {
          * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
-        final MemoryFiles memory = new MemoryFiles("./accounts/", "./transactions/");
+        final MemoryFiles memory = new MemoryFiles("./accounts/", "./transactions/", "./decks/");
         final Map<String, Object> config = memory.loadConfig();
         final String deckName = (String) config.get("deck");
         final int numDecks = (int) config.get("decks");

@@ -16,10 +16,12 @@ public class MemoryFiles implements Memory {
 
     public final File accountsDir;
     public final File transactionsDir;
+    public final File decksDir;
 
-    public MemoryFiles(String accountsPath, String transactionsPath) {
+    public MemoryFiles(String accountsPath, String transactionsPath, String decksPath) {
         this.accountsDir = new File(accountsPath);
         this.transactionsDir = new File(transactionsPath);
+        this.decksDir = new File(decksPath);
 
         if (accountsDir.mkdir()) {
             System.out.printf("Created new directory: %s\n", accountsDir.getPath());
@@ -27,6 +29,10 @@ public class MemoryFiles implements Memory {
 
         if (transactionsDir.mkdir()) {
             System.out.printf("Created new directory: %s\n", transactionsDir.getPath());
+        }
+
+        if (decksDir.mkdir()) {
+            System.out.printf("Created new directory: %s\n", decksDir.getPath());
         }
     }
 
@@ -44,7 +50,7 @@ public class MemoryFiles implements Memory {
     @Override
     public Stack<Card> loadDeck(String name) {
         try {
-            final File deckFile = new File(String.format("./decks/%s.json", name));
+            final File deckFile = new File(String.format("%s/%s.json", decksDir, name));
             return deckFromJson(fileToJsonDocument(deckFile));
         } catch (IOException e) {
             e.printStackTrace();

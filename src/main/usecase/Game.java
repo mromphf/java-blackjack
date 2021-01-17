@@ -17,7 +17,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
-        round = new Round(0, deck, maxCards, numDecks);
+        round = new Round(0, new Stack<>(), maxCards, numDecks);
     }
 
     @Override

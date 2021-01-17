@@ -1,6 +1,7 @@
 package main.io.storage;
 
 import main.domain.Account;
+import main.domain.Card;
 import main.domain.Transaction;
 import main.io.util.JsonUtil;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.io.storage.FileSystem.*;
+import static main.io.util.JsonUtil.*;
 
 public class MemoryFiles implements Memory {
 
@@ -31,7 +33,19 @@ public class MemoryFiles implements Memory {
     public Map<String, Object> loadConfig() {
         try {
             final File configFile = new File(MemoryFiles.class.getResource("/config/config.json").getPath());
-            return JsonUtil.configFromJson(fileToJsonDocument(configFile));
+            return configFromJson(fileToJsonDocument(configFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
+    }
+
+    @Override
+    public Stack<Card> loadDeck(String name) {
+        try {
+            final File deckFile = new File(String.format("./decks/%s.json", name));
+            return deckFromJson(fileToJsonDocument(deckFile));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -41,7 +55,7 @@ public class MemoryFiles implements Memory {
 
     @Override
     public Set<Account> loadAllAccounts() {
-        Set<Account> accounts = new HashSet<>();
+        final Set<Account> accounts = new HashSet<>();
         final List<Transaction> transactions = loadAllTransactions();
 
         try {
@@ -112,7 +126,7 @@ public class MemoryFiles implements Memory {
 
         try {
             final FileWriter fileWriter = new FileWriter(accountFile);
-            fileWriter.write(JsonUtil.toJson(account));
+            fileWriter.write(toJson(account));
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,6 +143,6 @@ public class MemoryFiles implements Memory {
     }
 
     public Account loadAccount(File file) throws IOException {
-        return JsonUtil.accountFromJson(fileToJsonDocument(file));
+        return accountFromJson(fileToJsonDocument(file));
     }
 }

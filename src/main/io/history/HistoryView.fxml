@@ -13,7 +13,11 @@
         Home
     </Button>
 
-    <DatePicker onAction="#onDateSelected" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <DatePicker fx:id="datePicker" onAction="#onDateSelected" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Button onAction="#clearFilter" GridPane.rowIndex="0" GridPane.columnIndex="2">
+        Clear
+    </Button>
 
     <GridPane fx:id="chartHousing" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 </GridPane>

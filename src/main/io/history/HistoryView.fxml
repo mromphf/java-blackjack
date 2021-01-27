@@ -9,15 +9,17 @@
         <URL value="@History.css"/>
     </stylesheets>
 
-    <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onHome">
-        Home
-    </Button>
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="30">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onHome">
+            Home
+        </Button>
 
-    <DatePicker fx:id="datePicker" onAction="#onDateSelected" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <DatePicker fx:id="datePicker" onAction="#onDateSelected" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-    <Button onAction="#clearFilter" GridPane.rowIndex="0" GridPane.columnIndex="2">
-        Clear
-    </Button>
+        <Button onAction="#clearFilter" GridPane.rowIndex="0" GridPane.columnIndex="2">
+            Clear
+        </Button>
+    </GridPane>
 
     <GridPane fx:id="chartHousing" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 </GridPane>

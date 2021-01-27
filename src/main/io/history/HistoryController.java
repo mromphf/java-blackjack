@@ -42,6 +42,7 @@ public class HistoryController extends EventConnection implements Initializable,
     @FXML
     public void onHome() {
         chartHousing.getChildren().clear();
+        datePicker.setValue(null);
         eventNetwork.onChangeLayout(HOME);
     }
 
@@ -49,29 +50,26 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onDateSelected() {
         final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);
         final LocalDate date = datePicker.getValue();
+        final NumberAxis yAxis = new NumberAxis();
+        final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
+        final XYChart.Series<String, Number> balanceSeries =
+                date == null ? balanceSeries(accountTransactions) : balanceSeries(accountTransactions, date);
 
         chartHousing.getChildren().clear();
 
-        if (date != null) {
-            drawChart(
-                    account,
-                    dateAxis(listForAccount(account.getKey(), allTransactions), date),
-                    new NumberAxis(),
-                    balanceSeries(accountTransactions, date)
-            );
-        }
+        drawChart(account, xAxis, yAxis, balanceSeries);
     }
 
     @FXML
     public void clearFilter() {
         final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);
+        final NumberAxis yAxis = new NumberAxis();
+        final Axis<String> xAxis = dateAxis(accountTransactions);
+        final XYChart.Series<String, Number> balanceSeries = balanceSeries(accountTransactions);
+
         datePicker.setValue(null);
-        drawChart(
-                account,
-                dateAxis(listForAccount(account.getKey(), allTransactions)),
-                new NumberAxis(),
-                balanceSeries(accountTransactions)
-        );
+
+        drawChart(account, xAxis, yAxis, balanceSeries);
     }
 
     @Override

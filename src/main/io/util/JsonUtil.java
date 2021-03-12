@@ -1,52 +1,27 @@
 package main.io.util;
 
-import com.oracle.javafx.jmx.json.JSONDocument;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import main.Config;
 import main.domain.Account;
 import main.domain.Card;
-import main.domain.Suit;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
-import java.util.UUID;
 
 public class JsonUtil {
 
-    public static String toJson(Account account) {
-        final JSONDocument document = JSONDocument.createObject();
-
-        document.setString("key", account.getKey().toString());
-        document.setString("name", account.getName());
-        document.setString("created", account.getCreated().toString());
-
-        return document.toString();
+    public static Account accountFromJson(String jsonDocument) {
+        return new Gson().fromJson(jsonDocument, Account.class);
     }
 
-    public static Account accountFromJson(JSONDocument jsonDocument) {
-        return new Account(
-                UUID.fromString(jsonDocument.getString("key")),
-                jsonDocument.getString("name"),
-                0,
-                LocalDateTime.parse(jsonDocument.getString("created"))
-        );
+    public static Config configFromJson(String jsonDocument) {
+        return new Gson().fromJson(jsonDocument, Config.class);
     }
 
-    public static Map<String, Object> configFromJson(JSONDocument jsonDocument) {
-        return new HashMap<String, Object>() {{
-            put("decks", jsonDocument.getNumber("decks").intValue());
-            put("deck", jsonDocument.getString("deck"));
-        }};
-    }
-
-    public static Stack<Card> deckFromJson(JSONDocument jsonDocument) {
+    public static Stack<Card> deckFromJson(String jsonDocument) {
         final Stack<Card> result = new Stack<>();
-        for (JSONDocument cardJson : jsonDocument) {
-            result.add(new Card(
-                    cardJson.getNumber("value").intValue(),
-                    Suit.valueOf(cardJson.getString("suit").toUpperCase())
-            ));
-        }
+        final Gson gson = new Gson();
+        final JsonObject json = gson.toJsonTree(jsonDocument).getAsJsonObject();
         return result;
     }
 }

@@ -1,14 +1,13 @@
 package main.io.storage;
 
-import com.oracle.javafx.jmx.json.JSONDocument;
-import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class FileSystem {
     public static String dateBasedFileName(LocalDateTime t) {
@@ -19,15 +18,26 @@ public class FileSystem {
         return Objects.requireNonNull(directory.listFiles());
     }
 
-    public static JSONDocument fileToJsonDocument(File f) throws IOException {
+    public static String fileToJson(File f) throws IOException {
+        final Scanner sc = new Scanner(f);
+        final StringBuilder sb = new StringBuilder();
+
+        while (sc.hasNextLine()) {
+            sb.append(sc.nextLine());
+        }
+
+        return sb.toString();
+
+        /*
         final FileReader fileReader = new FileReader(f);
-        final JSONStreamReaderImpl jsonStreamReader = new JSONStreamReaderImpl(fileReader);
-        final JSONDocument document = jsonStreamReader.build();
+        final BufferedReader bufferedReader = new BufferedReader(fileReader);
+        bufferedReader.readLine();
 
         fileReader.close();
         jsonStreamReader.close();
 
         return document;
+         */
     }
 
     public static Collection<String> readCsvLines(File csvFile) throws FileNotFoundException {

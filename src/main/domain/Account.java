@@ -1,6 +1,7 @@
 package main.domain;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,19 +12,28 @@ public class Account {
     private final int balance;
     private final LocalDateTime created;
 
-    public Account(UUID key, String name, int balance, LocalDateTime created) {
+    public Account(UUID key, String name, LocalDateTime created) {
+        this.key = key;
+        this.name = name;
+        this.balance = 0;
+        this.created = created;
+    }
+
+    private Account(UUID key, String name, int balance, LocalDateTime created) {
         this.key = key;
         this.name = name;
         this.balance = balance;
         this.created = created;
     }
 
-    public Account updateBalance(int val) {
-        return new Account(key, name, balance + val, created);
+    public Account updateBalance(Transaction transaction) {
+        final List<Transaction> transactions = new LinkedList<>();
+        transactions.add(transaction);
+        return updateBalance(transactions);
     }
 
     public Account updateBalance(List<Transaction> transactions) {
-        return updateBalance(deriveBalance(transactions));
+        return new Account(key, name, balance + deriveBalance(transactions), created);
     }
 
     public UUID getKey() {
@@ -38,11 +48,7 @@ public class Account {
         return balance;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public int deriveBalance(List<Transaction> transactions) {
+    private int deriveBalance(List<Transaction> transactions) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(key))
                 .mapToInt(Transaction::getAmount)

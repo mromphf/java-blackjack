@@ -98,12 +98,12 @@ public class HomeController extends EventConnection implements Initializable, Ba
     public void onCreate() {
         final UUID uuid = UUID.randomUUID();
         final String name = txtName.getText();
-        final int balance = 200;
+        final int signingBonus = 200;
         final LocalDateTime now = LocalDateTime.now();
-        final Account account = new Account(uuid, name, balance, now);
-        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "SIGNING BONUS", balance);
+        final Account account = new Account(uuid, name, now);
+        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "SIGNING BONUS", signingBonus);
 
-        accountMap.put(uuid, account);
+        accountMap.put(uuid, account.updateBalance(t));
 
         txtName.setText("");
         accountCreationControls.setVisible(false);

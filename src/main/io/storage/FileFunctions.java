@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class FileSystem {
+public class FileFunctions {
     public static String dateBasedFileName(LocalDateTime t) {
         return String.format("%s-%s-%s.csv", t.getYear(), t.getMonthValue(), t.getDayOfMonth());
     }

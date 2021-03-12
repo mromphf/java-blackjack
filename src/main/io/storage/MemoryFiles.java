@@ -10,7 +10,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.io.storage.FileSystem.*;
+import static main.io.storage.FileFunctions.*;
 import static main.io.util.JsonUtil.*;
 
 public class MemoryFiles implements Memory {

@@ -27,17 +27,6 @@ public class FileSystem {
         }
 
         return sb.toString();
-
-        /*
-        final FileReader fileReader = new FileReader(f);
-        final BufferedReader bufferedReader = new BufferedReader(fileReader);
-        bufferedReader.readLine();
-
-        fileReader.close();
-        jsonStreamReader.close();
-
-        return document;
-         */
     }
 
     public static Collection<String> readCsvLines(File csvFile) throws FileNotFoundException {

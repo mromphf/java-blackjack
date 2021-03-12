@@ -40,7 +40,7 @@ public class MemoryFiles implements Memory {
     public Config loadConfig() {
         try {
             final File configFile = new File(MemoryFiles.class.getResource("/config/config.json").getPath());
-            return configFromJson(fileToJson(configFile));
+            return new Gson().fromJson(fileToJson(configFile), Config.class);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -150,6 +150,6 @@ public class MemoryFiles implements Memory {
     }
 
     private Account loadAccount(File file) throws IOException {
-        return accountFromJson(fileToJson(file));
+        return new Gson().fromJson(fileToJson(file), Account.class);
     }
 }

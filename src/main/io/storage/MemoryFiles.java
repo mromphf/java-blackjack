@@ -1,9 +1,10 @@
 package main.io.storage;
 
+import com.google.gson.Gson;
+import main.Config;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
-import main.io.util.JsonUtil;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -36,10 +37,10 @@ public class MemoryFiles implements Memory {
         }
     }
 
-    public Map<String, Object> loadConfig() {
+    public Config loadConfig() {
         try {
             final File configFile = new File(MemoryFiles.class.getResource("/config/config.json").getPath());
-            return configFromJson(fileToJsonDocument(configFile));
+            return configFromJson(fileToJson(configFile));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -51,7 +52,7 @@ public class MemoryFiles implements Memory {
     public Stack<Card> loadDeck(String name) {
         try {
             final File deckFile = new File(String.format("%s/%s.json", decksDir, name));
-            return deckFromJson(fileToJsonDocument(deckFile));
+            return deckFromJson(fileToJson(deckFile));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -132,7 +133,7 @@ public class MemoryFiles implements Memory {
 
         try {
             final FileWriter fileWriter = new FileWriter(accountFile);
-            fileWriter.write(toJson(account));
+            fileWriter.write(new Gson().toJson(account));
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,6 +150,6 @@ public class MemoryFiles implements Memory {
     }
 
     public Account loadAccount(File file) throws IOException {
-        return accountFromJson(fileToJsonDocument(file));
+        return accountFromJson(fileToJson(file));
     }
 }

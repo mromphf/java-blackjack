@@ -15,9 +15,9 @@ import static main.io.util.JsonUtil.*;
 
 public class MemoryFiles implements Memory {
 
-    public final File accountsDir;
-    public final File transactionsDir;
-    public final File decksDir;
+    private final File accountsDir;
+    private final File transactionsDir;
+    private final File decksDir;
 
     public MemoryFiles(String accountsPath, String transactionsPath, String decksPath) {
         this.accountsDir = new File(accountsPath);
@@ -149,7 +149,7 @@ public class MemoryFiles implements Memory {
         }
     }
 
-    public Account loadAccount(File file) throws IOException {
+    private Account loadAccount(File file) throws IOException {
         return accountFromJson(fileToJson(file));
     }
 }

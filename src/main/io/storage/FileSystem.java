@@ -13,13 +13,13 @@ import java.util.*;
 import static main.io.storage.FileFunctions.*;
 import static main.io.util.JsonUtil.*;
 
-public class MemoryFiles implements Memory {
+public class FileSystem implements Memory {
 
     private final File accountsDir;
     private final File transactionsDir;
     private final File decksDir;
 
-    public MemoryFiles(String accountsPath, String transactionsPath, String decksPath) {
+    public FileSystem(String accountsPath, String transactionsPath, String decksPath) {
         this.accountsDir = new File(accountsPath);
         this.transactionsDir = new File(transactionsPath);
         this.decksDir = new File(decksPath);
@@ -39,7 +39,7 @@ public class MemoryFiles implements Memory {
 
     public Config loadConfig() {
         try {
-            final File configFile = new File(MemoryFiles.class.getResource("/config/config.json").getPath());
+            final File configFile = new File(FileSystem.class.getResource("/config/config.json").getPath());
             return new Gson().fromJson(fileToJson(configFile), Config.class);
         } catch (IOException e) {
             e.printStackTrace();

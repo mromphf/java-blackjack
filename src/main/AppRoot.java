@@ -14,7 +14,7 @@ import main.io.home.HomeController;
 import main.io.log.ConsoleLogHandler;
 import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
-import main.io.storage.MemoryFiles;
+import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.LayoutManager;
 
@@ -33,7 +33,7 @@ public class AppRoot {
          * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
-        final MemoryFiles memory = new MemoryFiles("./accounts/", "./transactions/", "./decks/");
+        final FileSystem memory = new FileSystem("./accounts/", "./transactions/", "./decks/");
         final Config config = memory.loadConfig();
         final String deckName = config.deck;
         final int numDecks = config.decks;

@@ -15,7 +15,7 @@ public class Transactor extends EventConnection implements NavListener, GameStat
     private Account account;
 
     public Transactor() {
-        this.account = new Account(UUID.randomUUID(), "Placeholder", 0, LocalDateTime.now());
+        this.account = new Account(UUID.randomUUID(), "Placeholder", LocalDateTime.now());
         this.transactions = new LinkedList<>();
     }
 

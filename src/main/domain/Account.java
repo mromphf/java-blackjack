@@ -26,6 +26,10 @@ public class Account {
         this.created = created;
     }
 
+    public static Account placeholder() {
+        return new Account(UUID.randomUUID(), "Placeholder", LocalDateTime.now());
+    }
+
     public Account updateBalance(Transaction transaction) {
         final List<Transaction> transactions = new LinkedList<>();
         transactions.add(transaction);

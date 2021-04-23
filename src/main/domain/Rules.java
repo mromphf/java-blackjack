@@ -127,13 +127,19 @@ public class Rules {
 
         if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
             workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, BUY_INSURANCE.name(), snapshot.getBet() * -1));
+                    LocalDateTime.now(), accountKey, BUY_INSURANCE.name(), snapshot.getNegativeBet()));
         }
 
-        // TODO: possible bug. this could add multiple transactions for one 'double' or 'split' action
-        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE) || a.equals(SPLIT))) {
+        // TODO: possible bug. this could add multiple transactions for one 'double'action
+        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE))) {
             workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, "DOUBLE OR SPLIT", snapshot.getBet() * -1));
+                    LocalDateTime.now(), accountKey, "DOUBLE", snapshot.getNegativeBet()));
+        }
+
+        // TODO: possible bug. this could add multiple transactions for one 'split' action
+        if (actionsTaken.stream().anyMatch(a -> a.equals(SPLIT))) {
+            workingTransactions.add(new Transaction(
+                    LocalDateTime.now(), accountKey, "SPLIT", snapshot.getNegativeBet()));
         }
 
         if (snapshot.isResolved()) {

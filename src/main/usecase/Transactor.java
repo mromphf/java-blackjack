@@ -1,27 +1,35 @@
 package main.usecase;
 
 import main.domain.*;
+import main.domain.evaluators.SnapshotEvaluator;
 import main.io.EventConnection;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static main.domain.Rules.compileTransactions;
 import static main.usecase.Layout.BET;
 
 public class Transactor extends EventConnection implements NavListener, GameStateListener, ActionListener {
 
+    private final Collection<SnapshotEvaluator> evaluators;
     private final List<Transaction> transactions;
     private Account account;
 
-    public Transactor() {
+    public Transactor(Collection<SnapshotEvaluator> evaluators) {
+        this.evaluators = evaluators;
         this.account = Account.placeholder();
         this.transactions = new LinkedList<>();
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        Collection<Transaction> workingTransactions = compileTransactions(account.getKey(), snapshot);
+        Collection<Transaction> workingTransactions = evaluators.stream()
+            .map(e -> e.evaluate(account.getKey(), snapshot))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
+
         transactions.addAll(workingTransactions);
         eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
         eventNetwork.onBalanceUpdated(account.updateBalance(transactions));

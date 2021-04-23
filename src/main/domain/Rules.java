@@ -120,33 +120,4 @@ public class Rules {
                 return 0;
         }
     }
-
-    public static Collection<Transaction> compileTransactions(UUID accountKey, Snapshot snapshot) {
-        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
-        final List<Transaction> workingTransactions = new LinkedList<>();
-
-        if (actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE)) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, BUY_INSURANCE.name(), snapshot.getNegativeBet()));
-        }
-
-        // TODO: possible bug. this could add multiple transactions for one 'double'action
-        if (actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE))) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, "DOUBLE", snapshot.getNegativeBet()));
-        }
-
-        // TODO: possible bug. this could add multiple transactions for one 'split' action
-        if (actionsTaken.stream().anyMatch(a -> a.equals(SPLIT))) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, "SPLIT", snapshot.getNegativeBet()));
-        }
-
-        if (snapshot.isResolved()) {
-            workingTransactions.add(new Transaction(
-                    LocalDateTime.now(), accountKey, snapshot.getOutcome().name(), settleBet(snapshot)));
-        }
-
-        return workingTransactions;
-    }
 }

@@ -43,6 +43,10 @@ public class Snapshot {
         return bet;
     }
 
+    public int getNegativeBet() {
+        return Math.negateExact(bet);
+    }
+
     public int getDeckSize() {
         return deck.size();
     }

@@ -3,7 +3,8 @@ package main;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.domain.Card;
+import main.domain.*;
+import main.domain.evaluators.*;
 import main.io.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
@@ -45,7 +46,12 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor();
+        final Collection<SnapshotEvaluator> evaluators = new HashSet<>();
+        evaluators.add(new DoubleDownEvaluator());
+        evaluators.add(new OutcomeEvaluator());
+        evaluators.add(new InsuranceEvaluator());
+        evaluators.add(new SplitEvaluator());
+        final Transactor transactor = new Transactor(evaluators);
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);

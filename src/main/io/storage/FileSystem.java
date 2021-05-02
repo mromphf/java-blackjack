@@ -129,7 +129,7 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveNewAccount(Account account) {
-        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey());
+        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey() + ".json");
 
         try {
             final FileWriter fileWriter = new FileWriter(accountFile);

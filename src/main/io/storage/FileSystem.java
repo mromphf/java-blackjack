@@ -120,7 +120,7 @@ public class FileSystem implements Memory {
                 writer.println("time,accountKey,description,amount");
             }
 
-            writer.println(transaction.toString());
+            writer.println(transaction);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

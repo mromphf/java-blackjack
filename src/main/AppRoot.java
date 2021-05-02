@@ -35,8 +35,8 @@ public class AppRoot {
         final ResourceLoader loader = new ResourceLoader();
         final FileSystem memory = new FileSystem("./accounts/", "./transactions/", "./decks/");
         final Config config = memory.loadConfig();
-        final String deckName = config.deck;
-        final int numDecks = config.decks;
+        final String deckName = config.deckName;
+        final int numDecks = config.numDecks;
         final Stack<Card> deck = deckName.equals("default") ? shuffle(fresh(numDecks)) : memory.loadDeck(deckName);
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();

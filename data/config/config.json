@@ -1,4 +1,4 @@
 {
-    "decks": 4,
-    "deck": "default"
+    "numDecks": 4,
+    "deckName": "default"
 }

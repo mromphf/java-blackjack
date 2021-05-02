@@ -41,7 +41,7 @@ public class FileSystem implements Memory {
         try {
             final File configFile = new File(FileSystem.class.getResource("/config/config.json").getPath());
             return new Gson().fromJson(fileToJson(configFile), Config.class);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             System.exit(1);
             return null;
@@ -129,7 +129,7 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveNewAccount(Account account) {
-        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey() + ".json");
+        final File accountFile = accountFileFromKey(account.getKey());
 
         try {
             final FileWriter fileWriter = new FileWriter(accountFile);
@@ -142,7 +142,7 @@ public class FileSystem implements Memory {
 
     @Override
     public void deleteAccount(Account account) {
-        final File accountFile = new File(accountsDir.getPath() + "/" + account.getKey());
+        final File accountFile = accountFileFromKey(account.getKey());
 
         if (accountFile.delete()) {
             System.out.printf("Account no. %s has been closed.\n", account.getKey());
@@ -151,5 +151,9 @@ public class FileSystem implements Memory {
 
     private Account loadAccount(File file) throws IOException {
         return new Gson().fromJson(fileToJson(file), Account.class);
+    }
+
+    private File accountFileFromKey(UUID accountKey) {
+        return new File(accountsDir.getPath() + "/" + accountKey + ".json");
     }
 }

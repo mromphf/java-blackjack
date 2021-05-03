@@ -24,7 +24,7 @@ public class Transactor extends EventConnection implements NavListener, GameStat
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        Collection<Transaction> workingTransactions = evaluators.stream()
+        final Collection<Transaction> workingTransactions = evaluators.stream()
             .map(e -> e.evaluate(account.getKey(), snapshot))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -37,7 +37,7 @@ public class Transactor extends EventConnection implements NavListener, GameStat
 
     @Override
     public void onBetPlaced(int amount) {
-        Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
+        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
         transactions.add(t);
         eventNetwork.onTransaction(t);
         eventNetwork.onBalanceUpdated(account.updateBalance(transactions));

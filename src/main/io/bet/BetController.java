@@ -9,14 +9,16 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
+import main.usecase.Layout;
+import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static main.usecase.Layout.GAME;
-import static main.usecase.Layout.HOME;
+import static main.usecase.Layout.*;
 
-public class BetController extends EventConnection implements Initializable, BalanceListener {
+
+public class BetController extends EventConnection implements Initializable, BalanceListener, NavListener {
 
     @FXML
     private Label lblBet;
@@ -71,13 +73,23 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @Override
     public void onBalanceUpdated(Account account) {
-        this.account = account;
         this.balance = account.getBalance();
 
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(String.format("Balance: $%s", balance));
     }
+
+    @Override
+    public void onChangeLayout(Layout layout, Account account) {
+        if (layout == BET) {
+            this.account = account;
+            onBalanceUpdated(account);
+        }
+    }
+
+    @Override
+    public void onChangeLayout(Layout layout) {}
 
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {

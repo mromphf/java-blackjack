@@ -14,16 +14,15 @@ public class Transactor extends EventConnection implements NavListener, GameStat
 
     private final Collection<SnapshotEvaluator> evaluators;
     private final List<Transaction> transactions;
-    private Account account;
 
     public Transactor(Collection<SnapshotEvaluator> evaluators) {
         this.evaluators = evaluators;
-        this.account = Account.placeholder();
         this.transactions = new LinkedList<>();
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
+        final Account account = snapshot.getAccount();
         final Collection<Transaction> workingTransactions = evaluators.stream()
             .map(e -> e.evaluate(account.getKey(), snapshot))
             .filter(Optional::isPresent)
@@ -36,7 +35,7 @@ public class Transactor extends EventConnection implements NavListener, GameStat
     }
 
     @Override
-    public void onBetPlaced(int amount) {
+    public void onBetPlaced(Account account, int amount) {
         final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
         transactions.add(t);
         eventNetwork.onTransaction(t);
@@ -46,7 +45,6 @@ public class Transactor extends EventConnection implements NavListener, GameStat
     @Override
     public void onChangeLayout(Layout layout, Account account) {
         if (layout == BET) {
-            this.account = account;
             eventNetwork.onBalanceUpdated(account);
         }
     }

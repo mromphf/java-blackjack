@@ -83,8 +83,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onBetPlaced(int amount) {
-        actionListeners.forEach(l -> l.onBetPlaced(amount));
+    public void onBetPlaced(Account account, int amount) {
+        actionListeners.forEach(l -> l.onBetPlaced(account, amount));
     }
 
     @Override

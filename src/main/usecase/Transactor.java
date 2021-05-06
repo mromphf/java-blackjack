@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static main.usecase.Layout.BET;
-
-public class Transactor extends EventConnection implements NavListener, GameStateListener, ActionListener {
+public class Transactor extends EventConnection implements GameStateListener, ActionListener {
 
     private final Collection<SnapshotEvaluator> evaluators;
     private final List<Transaction> transactions;
@@ -41,16 +39,6 @@ public class Transactor extends EventConnection implements NavListener, GameStat
         eventNetwork.onTransaction(t);
         eventNetwork.onBalanceUpdated(account.updateBalance(transactions));
     }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        if (layout == BET) {
-            eventNetwork.onBalanceUpdated(account);
-        }
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout) {}
 
     @Override
     public void onActionTaken(Action action) {}

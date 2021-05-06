@@ -69,7 +69,7 @@
             Take Insurance
         </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onNoInsurance">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onWaiveInsurance">
             No Insurance
         </Button>
     </GridPane>

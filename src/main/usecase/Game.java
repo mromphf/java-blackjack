@@ -46,7 +46,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
                 round.doubleDown();
                 break;
             case BUY_INSURANCE:
-            case NO_INSURANCE:
+            case WAIVE_INSURANCE:
             case REFILL:
             default:
                 break;

@@ -87,7 +87,7 @@ public class Round {
             handsToSettle.add(getSnapshot());
             currentHand = handsToPlay.pop();
             currentHand.add(deck.pop());
-            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(NO_INSURANCE) || a.equals(REFILL)));
+            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(WAIVE_INSURANCE) || a.equals(REFILL)));
         }
     }
 

@@ -135,8 +135,8 @@ public class BlackjackController extends EventConnection implements Initializabl
     }
 
     @FXML
-    private void onNoInsurance() {
-        eventNetwork.onActionTaken(NO_INSURANCE);
+    private void onWaiveInsurance() {
+        eventNetwork.onActionTaken(WAIVE_INSURANCE);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

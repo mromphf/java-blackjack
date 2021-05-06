@@ -8,6 +8,7 @@ import static main.domain.Rules.*;
 
 public class Round {
 
+    private final Account account;
     private final Stack<Card> deck;
     private final Stack<Stack<Card>> handsToPlay;
     private final Stack<Snapshot> handsToSettle;
@@ -19,7 +20,8 @@ public class Round {
     private Stack<Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(int bet, Stack<Card> deck, int maxCards, int numDecks) {
+    public Round(Account account, int bet, Stack<Card> deck, int maxCards, int numDecks) {
+        this.account = account;
         this.bet = bet;
         this.deck = deck;
         this.numDecks = numDecks;
@@ -119,6 +121,7 @@ public class Round {
 
     public Snapshot getSnapshot() {
         return new Snapshot(
+                account,
                 bet,
                 maxCards,
                 deck,

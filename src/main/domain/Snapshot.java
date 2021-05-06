@@ -10,6 +10,7 @@ import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
 
 public class Snapshot {
+    private final Account account;
     private final int bet;
     private final int maxCards;
     private final Outcome outcome;
@@ -20,7 +21,8 @@ public class Snapshot {
     private final Stack<Snapshot> handsToSettle = new Stack<>();
     private final Stack<Action> actionsTaken = new Stack<>();
 
-    public Snapshot(int bet,
+    public Snapshot(Account account,
+                    int bet,
                     int maxCards,
                     Stack<Card> deck,
                     Stack<Card> dealerHand,
@@ -28,6 +30,7 @@ public class Snapshot {
                     Stack<Stack<Card>> handsToPlay,
                     Stack<Snapshot> handsToSettle,
                     Stack<Action> actionsTaken) {
+        this.account = account;
         this.bet = bet;
         this.maxCards = maxCards;
         this.deck.addAll(deck);
@@ -37,6 +40,10 @@ public class Snapshot {
         this.handsToSettle.addAll(handsToSettle);
         this.actionsTaken.addAll(actionsTaken);
         this.outcome = determineOutcome(actionsTaken, playerHand, dealerHand);
+    }
+
+    public Account getAccount() {
+        return account;
     }
 
     public int getBet() {

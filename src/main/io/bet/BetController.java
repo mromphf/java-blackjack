@@ -43,6 +43,7 @@ public class BetController extends EventConnection implements Initializable, Bal
     public Button btnBet100;
 
     private final static int MAX_BET = 500;
+    private Account account;
     private int bet = 0;
     private int balance = 0;
 
@@ -57,7 +58,7 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @FXML
     private void onDeal() {
-        eventNetwork.onBetPlaced(bet);
+        eventNetwork.onBetPlaced(this.account, bet);
         eventNetwork.onChangeLayout(GAME);
         bet = 0;
     }
@@ -70,7 +71,9 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @Override
     public void onBalanceUpdated(Account account) {
+        this.account = account;
         this.balance = account.getBalance();
+
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(String.format("Balance: $%s", balance));

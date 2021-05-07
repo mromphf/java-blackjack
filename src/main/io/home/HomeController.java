@@ -98,20 +98,14 @@ public class HomeController extends EventConnection implements Initializable, Ba
     public void onCreate() {
         final UUID uuid = UUID.randomUUID();
         final String name = txtName.getText();
-        final int signingBonus = 200;
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, now);
-        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "SIGNING BONUS", signingBonus);
-
-        accountMap.put(uuid, account.updateBalance(t));
 
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
         eventNetwork.onNewAccountOpened(account);
-        eventNetwork.onTransaction(t);
     }
 
     @FXML

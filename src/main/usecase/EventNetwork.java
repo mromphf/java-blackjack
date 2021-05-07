@@ -67,6 +67,10 @@ public class EventNetwork implements
         balanceListeners.add(listener);
     }
 
+    public void registerAccountListener(AccountListener listener) {
+        accountListeners.add(listener);
+    }
+
     @Override
     public void onNewAccountOpened(Account account) {
         accountListeners.forEach(l -> l.onNewAccountOpened(account));

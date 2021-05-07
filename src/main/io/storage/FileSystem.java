@@ -140,13 +140,11 @@ public class FileSystem implements Memory {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void deleteAccount(Account account) {
         final File accountFile = accountFileFromKey(account.getKey());
-
-        if (accountFile.delete()) {
-            System.out.printf("Account no. %s has been closed.\n", account.getKey());
-        }
+        accountFile.delete();
     }
 
     private Account loadAccount(File file) throws IOException {

@@ -80,6 +80,12 @@
         </Button>
     </GridPane>
 
+    <GridPane visible="false" fx:id="nextHandControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlayNextHand">
+            Play Next Hand
+        </Button>
+    </GridPane>
+
     <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
         <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onDone">
             Done

@@ -1,6 +1,5 @@
 package main.domain;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
@@ -62,8 +61,8 @@ public class Rules {
 
     public static int hardTotal(Collection<Card> cards) {
         return atLeastOneAce(cards)
-            ? softTotal(cards) + 10
-            : softTotal(cards);
+                ? softTotal(cards) + 10
+                : softTotal(cards);
     }
 
     public static int softTotal(Collection<Card> cards) {
@@ -83,16 +82,29 @@ public class Rules {
     }
 
     public static Outcome determineOutcome(Snapshot snapshot) {
-        return determineOutcome(snapshot.getActionsTaken(), snapshot.getPlayerHand(), snapshot.getDealerHand());
+        return determineOutcome(snapshot.getActionsTaken(),
+                snapshot.getPlayerHand(),
+                snapshot.getDealerHand(),
+                snapshot.getHandsToPlay());
     }
 
-    public static Outcome determineOutcome(Collection<Action> actionsTaken, Collection<Card> playerHand, Collection<Card> dealerHand) {
-        if (!isBust(playerHand) &&
-                (actionsTaken.isEmpty() || (actionsTaken.stream().noneMatch(a -> a.equals(STAND) || a.equals(DOUBLE))))) {
+    public static Outcome determineOutcome(Collection<Action> actionsTaken,
+                                           Collection<Card> playerHand,
+                                           Collection<Card> dealerHand,
+                                           Stack<Stack<Card>> handsToPlay) {
+
+        final boolean standOrDouble = actionsTaken.stream()
+                .anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE));
+
+        if ((isBust(playerHand) && !handsToPlay.isEmpty()) ||
+                (!isBust(playerHand) &&
+                        !handsToPlay.isEmpty() && standOrDouble) ||
+                (!isBust(playerHand) &&
+                        (actionsTaken.isEmpty() || !standOrDouble))) {
             return UNRESOLVED;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
-        } else if(isPush(playerHand, dealerHand)) {
+        } else if (isPush(playerHand, dealerHand)) {
             return PUSH;
         } else if (isBust(playerHand)) {
             return BUST;
@@ -104,9 +116,9 @@ public class Rules {
     public static int settleBet(Snapshot snapshot) {
         int insurancePayout = (snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack(snapshot.getDealerHand()))
-                    ? snapshot.getBet() * 2 : 0;
+                ? snapshot.getBet() * 2 : 0;
 
-        int betMultiplier =  snapshot.getActionsTaken().stream()
+        int betMultiplier = snapshot.getActionsTaken().stream()
                 .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
         float blackjackMultiplier = isBlackjack(snapshot.getPlayerHand()) ? 1.5f : 1.0f;

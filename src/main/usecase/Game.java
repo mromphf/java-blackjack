@@ -45,14 +45,15 @@ public class Game extends EventConnection implements ActionListener, NavListener
             case DOUBLE:
                 round.doubleDown();
                 break;
+            case PLAY_NEXT_HAND:
+                round.playNextHand();
+                break;
             case BUY_INSURANCE:
             case WAIVE_INSURANCE:
             case REFILL:
             default:
                 break;
         }
-
-        round.playNextHand();
 
         eventNetwork.onUpdate(round.getSnapshot());
     }

@@ -4,9 +4,10 @@ public enum Action {
     BUY_INSURANCE,
     DOUBLE,
     HIT,
-    WAIVE_INSURANCE,
+    PLAY_NEXT_HAND,
     REFILL,
     SETTLE,
     SPLIT,
-    STAND
+    STAND,
+    WAIVE_INSURANCE
 }

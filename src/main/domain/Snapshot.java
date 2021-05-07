@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
 
+import static main.domain.Action.DOUBLE;
+import static main.domain.Action.STAND;
+import static main.domain.Outcome.UNRESOLVED;
 import static main.io.util.StringUtil.concat;
 import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
@@ -39,7 +42,12 @@ public class Snapshot {
         this.handsToPlay.addAll(handsToPlay);
         this.handsToSettle.addAll(handsToSettle);
         this.actionsTaken.addAll(actionsTaken);
-        this.outcome = determineOutcome(actionsTaken, playerHand, dealerHand);
+        this.outcome = determineOutcome(
+                actionsTaken,
+                playerHand,
+                dealerHand,
+                handsToPlay
+        );
     }
 
     public Account getAccount() {
@@ -66,20 +74,33 @@ public class Snapshot {
         return outcome;
     }
 
+    public boolean readyToPlayNextHand() {
+        return (!handsToPlay.isEmpty() &&
+                (isBust(playerHand) || actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE))));
+    }
+
+    public boolean readyToSettleNextHand() {
+        return (!handsToSettle.isEmpty() && isHandResolved());
+    }
+
     public boolean is(Outcome outcome) {
         return this.outcome.equals(outcome);
     }
 
-    public boolean isResolved() {
-        return !outcome.equals(Outcome.UNRESOLVED);
+    public boolean isHandResolved() {
+        return !outcome.equals(UNRESOLVED);
+    }
+
+    public boolean isRoundResolved() {
+        return !outcome.equals(UNRESOLVED) && handsToPlay.isEmpty();
+    }
+
+    public boolean allBetsSettled() {
+        return !outcome.equals(UNRESOLVED) && handsToPlay.isEmpty() && handsToSettle.isEmpty();
     }
 
     public boolean isAtLeastOneCardDrawn() {
         return playerHand.size() > 2;
-    }
-
-    public boolean isRoundFinished() {
-        return handsToSettle.isEmpty();
     }
 
     public boolean isInsuranceAvailable() {
@@ -92,6 +113,10 @@ public class Snapshot {
 
     public Stack<Card> getPlayerHand() {
         return playerHand;
+    }
+
+    public Stack<Snapshot> getHandsToSettle() {
+        return handsToSettle;
     }
 
     public Stack<Stack<Card>> getHandsToPlay() {

@@ -13,7 +13,7 @@ public class OutcomeEvaluator implements SnapshotEvaluator {
 
     @Override
     public Optional<Transaction> evaluate(UUID accountKey, Snapshot snapshot) {
-        if (snapshot.isResolved()) {
+        if (snapshot.isHandResolved()) {
             return Optional.of(new Transaction(
                     LocalDateTime.now(), accountKey, snapshot.getOutcome().name(), settleBet(snapshot))
             );

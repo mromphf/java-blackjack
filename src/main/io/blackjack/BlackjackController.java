@@ -45,6 +45,9 @@ public class BlackjackController extends EventConnection implements Initializabl
     private GridPane insuranceControls;
 
     @FXML
+    private GridPane nextHandControls;
+
+    @FXML
     private GridPane splitControls;
 
     @FXML
@@ -64,14 +67,15 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
-        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
+        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable() && !snapshot.readyToPlayNextHand());
         splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
-        settleControls.setVisible(snapshot.isResolved() && !snapshot.isRoundFinished());
-        gameOverControls.setVisible(snapshot.isResolved() && snapshot.isRoundFinished());
+        settleControls.setVisible(snapshot.readyToSettleNextHand());
+        nextHandControls.setVisible(snapshot.is(UNRESOLVED) && snapshot.readyToPlayNextHand());
+        gameOverControls.setVisible(snapshot.allBetsSettled());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         prgDeck.setProgress((double) snapshot.getDeckSize() / snapshot.getMaxCards());
 
-        if (snapshot.isResolved()) {
+        if (snapshot.isRoundResolved()) {
             renderExposedTable(snapshot);
 
             switch (snapshot.getOutcome()) {
@@ -137,6 +141,10 @@ public class BlackjackController extends EventConnection implements Initializabl
     @FXML
     private void onWaiveInsurance() {
         eventNetwork.onActionTaken(WAIVE_INSURANCE);
+    }
+
+    @FXML void onPlayNextHand() {
+        eventNetwork.onActionTaken(PLAY_NEXT_HAND);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

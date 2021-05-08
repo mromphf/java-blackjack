@@ -99,6 +99,8 @@ public class AppRoot {
          * Initialize JavaFX Stage
          */
 
+        layoutManager.onChangeLayout(HOME);
+
         stage.setScene(scene);
         stage.setTitle("Blackjack");
         stage.setMaximized(true);

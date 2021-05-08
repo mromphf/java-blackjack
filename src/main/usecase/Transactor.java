@@ -8,19 +8,20 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Transactor extends EventConnection implements GameStateListener, ActionListener, AccountListener {
+public class Transactor extends EventConnection implements GameStateListener, ActionListener, AccountListener, NavListener {
 
     private final Collection<TransactionEvaluator> evaluators;
     private final List<Transaction> transactions;
+    private Account account;
 
     public Transactor(Collection<TransactionEvaluator> evaluators) {
         this.evaluators = evaluators;
         this.transactions = new LinkedList<>();
+        this.account = Account.placeholder();
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        final Account account = snapshot.getAccount();
         final Collection<Transaction> workingTransactions = evaluators.stream()
             .map(e -> e.evaluate(account.getKey(), snapshot))
             .filter(Optional::isPresent)
@@ -53,8 +54,16 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
     }
 
     @Override
+    public void onChangeLayout(Layout layout, Account account) {
+        this.account = account;
+    }
+
+    @Override
     public void onActionTaken(Action action) {}
 
     @Override
     public void onAccountDeleted(Account account) {}
+
+    @Override
+    public void onChangeLayout(Layout layout) {}
 }

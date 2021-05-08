@@ -114,20 +114,23 @@ public class Rules {
     }
 
     public static int settleBet(Snapshot snapshot) {
-        int insurancePayout = (snapshot.getActionsTaken().stream()
+        final Stack<Card> playerHand = snapshot.getPlayerHand();
+        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
+        final int bet = snapshot.getBet();
+
+        final int insurancePayout = (actionsTaken.stream()
                 .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack(snapshot.getDealerHand()))
-                ? snapshot.getBet() * 2 : 0;
+                ? (bet * 2) : 0;
 
-        int betMultiplier = snapshot.getActionsTaken().stream()
-                .anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
+        final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
-        float blackjackMultiplier = isBlackjack(snapshot.getPlayerHand()) ? 1.5f : 1.0f;
+        final float blackjackMultiplier = isBlackjack(playerHand) ? 1.5f : 1.0f;
 
         switch (determineOutcome(snapshot)) {
             case WIN:
-                return (((int) (snapshot.getBet() * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;
+                return (((int) (bet * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;
             case PUSH:
-                return (snapshot.getBet() * betMultiplier) + insurancePayout;
+                return (bet * betMultiplier) + insurancePayout;
             default:
                 return 0;
         }

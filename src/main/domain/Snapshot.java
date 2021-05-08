@@ -140,9 +140,8 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("%s: %s Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, " +
+        return String.format("Outcome: %s, Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, " +
                         "Deck: %s, Hands to Play: %s, Hands to Settle: %s, Account Key: %s",
-                LocalTime.now(),
                 outcome,
                 bet,
                 concat(actionsTaken, ','),

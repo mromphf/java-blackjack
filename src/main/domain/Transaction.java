@@ -32,6 +32,10 @@ public class Transaction implements Comparable<Transaction> {
         return amount;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public static List<Transaction> listForAccount(UUID accountKey, List<Transaction> transactions) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(accountKey))

@@ -68,7 +68,7 @@ public class BlackjackController extends EventConnection implements Initializabl
     public void onUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable() && !snapshot.readyToPlayNextHand());
-        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable());
+        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable() && !snapshot.readyToPlayNextHand());
         settleControls.setVisible(snapshot.readyToSettleNextHand());
         nextHandControls.setVisible(snapshot.is(UNRESOLVED) && snapshot.readyToPlayNextHand());
         gameOverControls.setVisible(snapshot.allBetsSettled());

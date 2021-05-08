@@ -75,13 +75,31 @@ public class Snapshot {
     }
 
     public boolean readyToPlayNextHand() {
-        return (!handsToPlay.isEmpty() &&
-                (isBust(playerHand) || actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE))));
+        return (outcome == UNRESOLVED &&
+                !handsToPlay.isEmpty() &&
+                (isBust(playerHand) ||
+                        actionsTaken.stream().anyMatch(
+                                a -> a.equals(STAND) || a.equals(DOUBLE))));
     }
 
     public boolean readyToSettleNextHand() {
         return (!handsToSettle.isEmpty() && isHandResolved());
     }
+
+    public boolean isSplitAvailable() {
+        return (canSplit(getPlayerHand()) &&
+                is(UNRESOLVED) &&
+                !isInsuranceAvailable() &&
+                !readyToPlayNextHand());
+    }
+
+    public boolean isGameInProgress() {
+        return (!canSplit(playerHand) &&
+                is(UNRESOLVED) &&
+                !isInsuranceAvailable() &&
+                !readyToPlayNextHand());
+    }
+
 
     public boolean is(Outcome outcome) {
         return this.outcome.equals(outcome);

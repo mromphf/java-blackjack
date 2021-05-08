@@ -66,7 +66,7 @@ public class Round {
     public void stand() throws EmptyStackException {
         final int deckValue = deck.stream().mapToInt(Card::getBlackjackValue).sum();
 
-        if ((deckValue - score(dealerHand)) < 16 ) {
+        if ((deckValue - score(dealerHand)) < 16) {
             refillDeck();
         }
 
@@ -82,13 +82,12 @@ public class Round {
             refillDeck();
         }
 
-        if (!handsToPlay.isEmpty() &&
-                (isBust(currentHand) || actionsTaken.stream().anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE)))) {
-            handsToSettle.add(getSnapshot());
-            currentHand = handsToPlay.pop();
-            currentHand.add(deck.pop());
-            actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) || a.equals(WAIVE_INSURANCE) || a.equals(REFILL)));
-        }
+        handsToSettle.add(getSnapshot());
+        currentHand = handsToPlay.pop();
+        currentHand.add(deck.pop());
+        actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) ||
+                a.equals(WAIVE_INSURANCE) ||
+                a.equals(REFILL)));
     }
 
     public void split() throws NoSuchElementException, EmptyStackException {

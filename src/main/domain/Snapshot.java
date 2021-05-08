@@ -115,10 +115,6 @@ public class Snapshot {
         return playerHand;
     }
 
-    public Stack<Snapshot> getHandsToSettle() {
-        return handsToSettle;
-    }
-
     public Stack<Stack<Card>> getHandsToPlay() {
         return handsToPlay;
     }

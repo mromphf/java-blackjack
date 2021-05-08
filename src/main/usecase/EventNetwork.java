@@ -71,6 +71,10 @@ public class EventNetwork implements
         accountListeners.add(listener);
     }
 
+    public void registerTransactionListener(TransactionListener listener) {
+        transactionListeners.add(listener);
+    }
+
     @Override
     public void onNewAccountOpened(Account account) {
         accountListeners.forEach(l -> l.onNewAccountOpened(account));

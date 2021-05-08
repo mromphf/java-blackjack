@@ -4,6 +4,7 @@ package main.domain;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
+import java.util.UUID;
 
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
@@ -13,7 +14,7 @@ import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
 
 public class Snapshot {
-    private final Account account;
+    private final UUID accountKey;
     private final int bet;
     private final int maxCards;
     private final Outcome outcome;
@@ -24,7 +25,7 @@ public class Snapshot {
     private final Stack<Snapshot> handsToSettle = new Stack<>();
     private final Stack<Action> actionsTaken = new Stack<>();
 
-    public Snapshot(Account account,
+    public Snapshot(UUID accountKey,
                     int bet,
                     int maxCards,
                     Stack<Card> deck,
@@ -33,7 +34,7 @@ public class Snapshot {
                     Stack<Stack<Card>> handsToPlay,
                     Stack<Snapshot> handsToSettle,
                     Stack<Action> actionsTaken) {
-        this.account = account;
+        this.accountKey = accountKey;
         this.bet = bet;
         this.maxCards = maxCards;
         this.deck.addAll(deck);
@@ -48,10 +49,6 @@ public class Snapshot {
                 dealerHand,
                 handsToPlay
         );
-    }
-
-    public Account getAccount() {
-        return account;
     }
 
     public int getBet() {
@@ -143,7 +140,17 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("%s: %s Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, Deck: %s, Hands to Play: %s, Hands to Settle: %s",
-                LocalTime.now(), outcome, bet, concat(actionsTaken, ','), playerString(playerHand), playerString(dealerHand), deck.size(), handsToPlay.size(), handsToSettle.size());
+        return String.format("%s: %s Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, " +
+                        "Deck: %s, Hands to Play: %s, Hands to Settle: %s, Account Key: %s",
+                LocalTime.now(),
+                outcome,
+                bet,
+                concat(actionsTaken, ','),
+                playerString(playerHand),
+                playerString(dealerHand),
+                deck.size(),
+                handsToPlay.size(),
+                handsToSettle.size(),
+                accountKey);
     }
 }

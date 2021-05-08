@@ -71,6 +71,11 @@ public class BetController extends EventConnection implements Initializable, Bal
         bet = 0;
     }
 
+    @FXML
+    public void onHistory() {
+        eventNetwork.onChangeLayout(HISTORY, account);
+    }
+
     @Override
     public void onBalanceUpdated(Account account) {
         this.balance = account.getBalance();

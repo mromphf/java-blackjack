@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static main.domain.Action.BUY_INSURANCE;
 
-public class InsuranceEvaluator implements SnapshotEvaluator {
+public class InsuranceEvaluator implements TransactionEvaluator {
 
     @Override
     public Optional<Transaction> evaluate(UUID accountKey, Snapshot snapshot) {

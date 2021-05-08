@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static main.domain.Rules.settleBet;
 
-public class OutcomeEvaluator implements SnapshotEvaluator {
+public class OutcomeEvaluator implements TransactionEvaluator {
 
     @Override
     public Optional<Transaction> evaluate(UUID accountKey, Snapshot snapshot) {

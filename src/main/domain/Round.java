@@ -26,8 +26,6 @@ public class Round {
         this.deck = deck;
         this.numDecks = numDecks;
         this.maxCards = maxCards;
-        this.dealerHand = new Stack<>();
-        this.currentHand = new Stack<>();
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
         this.actionsTaken = new Stack<>();
@@ -38,8 +36,8 @@ public class Round {
 
         final Map<String, Stack<Card>> openingHands = openingHand(deck);
 
-        dealerHand.addAll(openingHands.get("dealer"));
-        currentHand.addAll(openingHands.get("player"));
+        this.dealerHand = openingHands.get("dealer");
+        this.currentHand = openingHands.get("player");
     }
 
     public void record(Action action) {

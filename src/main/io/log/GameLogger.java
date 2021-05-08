@@ -21,12 +21,12 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        log(INFO, snapshot.toString());
+        log(INFO, String.format("%s: SNAPSHOT - %s", LocalTime.now(), snapshot.toString()));
     }
 
     @Override
     public void onBalanceUpdated(Account account) {
-        log(INFO, String.format("%s: %s's Balance: %s", LocalTime.now(), account.getName(), account.getBalance()));
+        log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now(), account.getName(), account.getBalance()));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
 
     @Override
     public void onTransaction(Transaction transaction) {
-        log(INFO, String.format("%s: %s (%s) Account Key: %s",
+        log(INFO, String.format("%s: TRANSACTION - %s ($%s) Account Key: %s",
                 transaction.getTime().toLocalTime(),
                 transaction.getDescription(),
                 transaction.getAmount(),

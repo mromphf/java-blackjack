@@ -40,10 +40,10 @@ public class HistoryController extends EventConnection implements Initializable,
     private Account account;
 
     @FXML
-    public void onHome() {
+    public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onChangeLayout(HOME);
+        eventNetwork.onChangeLayout(BACK);
     }
 
     @FXML

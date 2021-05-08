@@ -10,8 +10,8 @@
     </stylesheets>
 
     <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="30">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onHome">
-            Home
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onBack">
+            Back
         </Button>
 
         <DatePicker fx:id="datePicker" onAction="#onDateSelected" GridPane.rowIndex="0" GridPane.columnIndex="1"/>

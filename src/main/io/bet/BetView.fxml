@@ -53,6 +53,9 @@
         <Button GridPane.rowIndex="1" minWidth="250" minHeight="50" onAction="#onQuit">
             Quit
         </Button>
+        <Button GridPane.rowIndex="2" minWidth="250" minHeight="50" onAction="#onHistory">
+            History
+        </Button>
     </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">

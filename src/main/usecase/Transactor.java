@@ -1,7 +1,7 @@
 package main.usecase;
 
 import main.domain.*;
-import main.domain.evaluators.SnapshotEvaluator;
+import main.domain.evaluators.TransactionEvaluator;
 import main.io.EventConnection;
 
 import java.time.LocalDateTime;
@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 public class Transactor extends EventConnection implements GameStateListener, ActionListener, AccountListener {
 
-    private final Collection<SnapshotEvaluator> evaluators;
+    private final Collection<TransactionEvaluator> evaluators;
     private final List<Transaction> transactions;
 
-    public Transactor(Collection<SnapshotEvaluator> evaluators) {
+    public Transactor(Collection<TransactionEvaluator> evaluators) {
         this.evaluators = evaluators;
         this.transactions = new LinkedList<>();
     }

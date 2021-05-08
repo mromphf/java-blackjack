@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static main.domain.Action.DOUBLE;
 
-public class DoubleDownEvaluator implements SnapshotEvaluator {
+public class DoubleDownEvaluator implements TransactionEvaluator {
 
     @Override
     public Optional<Transaction> evaluate(UUID accountKey, Snapshot snapshot) {

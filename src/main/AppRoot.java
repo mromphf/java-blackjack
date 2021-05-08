@@ -46,7 +46,7 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Collection<SnapshotEvaluator> evaluators = new HashSet<>();
+        final Collection<TransactionEvaluator> evaluators = new HashSet<>();
         evaluators.add(new DoubleDownEvaluator());
         evaluators.add(new OutcomeEvaluator());
         evaluators.add(new InsuranceEvaluator());

@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
-import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
 
 public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
@@ -67,10 +66,10 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
-        gameControls.setVisible(!canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable() && !snapshot.readyToPlayNextHand());
-        splitControls.setVisible(canSplit(snapshot.getPlayerHand()) && snapshot.is(UNRESOLVED) && !snapshot.isInsuranceAvailable() && !snapshot.readyToPlayNextHand());
+        gameControls.setVisible(snapshot.isGameInProgress());
+        splitControls.setVisible(snapshot.isSplitAvailable());
         settleControls.setVisible(snapshot.readyToSettleNextHand());
-        nextHandControls.setVisible(snapshot.is(UNRESOLVED) && snapshot.readyToPlayNextHand());
+        nextHandControls.setVisible(snapshot.readyToPlayNextHand());
         gameOverControls.setVisible(snapshot.allBetsSettled());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
         prgDeck.setProgress((double) snapshot.getDeckSize() / snapshot.getMaxCards());

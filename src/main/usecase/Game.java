@@ -17,12 +17,12 @@ public class Game extends EventConnection implements ActionListener, NavListener
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
-        round = new Round(Account.placeholder(),0, new Stack<>(), maxCards, numDecks);
+        round = new Round(Account.placeholder().getKey(),0, new Stack<>(), maxCards, numDecks);
     }
 
     @Override
     public void onBetPlaced(Account account, int amount) {
-        round = new Round(account, amount, deck, maxCards, numDecks);
+        round = new Round(account.getKey(), amount, deck, maxCards, numDecks);
         eventNetwork.onUpdate(round.getSnapshot());
     }
 
@@ -62,7 +62,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
     @Override
     public void onChangeLayout(Layout layout) {
         if (layout == HOME) {
-            round = new Round(Account.placeholder(), 0, deck, maxCards, numDecks);
+            round = new Round(Account.placeholder().getKey(), 0, deck, maxCards, numDecks);
         }
     }
 

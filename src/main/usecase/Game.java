@@ -42,6 +42,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
                 break;
             case SETTLE:
                 round.rewind();
+                break;
             case DOUBLE:
                 round.doubleDown();
                 break;

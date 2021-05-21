@@ -89,7 +89,7 @@ public class AppRoot {
         gameLogger.addHandler(consoleLogHandler);
 
         /*
-         * Load from accounts, transactions and images from disk
+         * Load accounts, transactions and images from disk
          */
 
         accountStorage.loadAllAccounts();

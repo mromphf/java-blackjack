@@ -1,29 +1,29 @@
 package main.usecase;
 
 import main.domain.*;
-import main.domain.evaluators.TransactionEvaluator;
 import main.io.EventConnection;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Transactor extends EventConnection implements GameStateListener, ActionListener, AccountListener, NavListener {
 
-    private final Collection<TransactionEvaluator> evaluators;
+    private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
     private final List<Transaction> transactions;
     private Account account;
 
-    public Transactor(Collection<TransactionEvaluator> evaluators) {
-        this.evaluators = evaluators;
+    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+        this.evaluationFunctions = evaluators;
         this.transactions = new LinkedList<>();
         this.account = Account.placeholder();
     }
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        final Collection<Transaction> workingTransactions = evaluators.stream()
-            .map(e -> e.evaluate(account.getKey(), snapshot))
+        final Collection<Transaction> workingTransactions = evaluationFunctions.stream()
+            .map(f -> f.apply(snapshot))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());

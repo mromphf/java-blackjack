@@ -4,6 +4,7 @@ import main.domain.*;
 import main.io.EventConnection;
 import java.util.*;
 
+import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
 
 public class Game extends EventConnection implements ActionListener, NavListener {
@@ -11,13 +12,22 @@ public class Game extends EventConnection implements ActionListener, NavListener
     private final Stack<Card> deck;
     private final int maxCards;
     private final int numDecks;
+    private final Map<Action, Runnable> runnableMap;
     private Round round;
 
     public Game(Stack<Card> deck, int numDecks) {
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
+        runnableMap = new HashMap<>();
         round = new Round(Account.placeholder().getKey(),0, new Stack<>(), maxCards, numDecks);
+
+        runnableMap.put(HIT, () -> round.hit());
+        runnableMap.put(SPLIT, () -> round.split());
+        runnableMap.put(STAND, () -> round.stand());
+        runnableMap.put(SETTLE, () -> round.rewind());
+        runnableMap.put(DOUBLE, () -> round.doubleDown());
+        runnableMap.put(PLAY_NEXT_HAND, () -> round.playNextHand());
     }
 
     @Override
@@ -29,33 +39,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
     @Override
     public void onActionTaken(Action action) {
         round.record(action);
-
-        switch (action) {
-            case HIT:
-                round.hit();
-                break;
-            case SPLIT:
-                round.split();
-                break;
-            case STAND:
-                round.stand();
-                break;
-            case SETTLE:
-                round.rewind();
-                break;
-            case DOUBLE:
-                round.doubleDown();
-                break;
-            case PLAY_NEXT_HAND:
-                round.playNextHand();
-                break;
-            case BUY_INSURANCE:
-            case WAIVE_INSURANCE:
-            case REFILL:
-            default:
-                break;
-        }
-
+        runnableMap.getOrDefault(action, () -> {}).run();
         eventNetwork.onUpdate(round.getSnapshot());
     }
 

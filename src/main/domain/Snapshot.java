@@ -138,6 +138,10 @@ public class Snapshot {
         return actionsTaken;
     }
 
+    public UUID getAccountKey() {
+        return accountKey;
+    }
+
     @Override
     public String toString() {
         return String.format("Outcome: %s, Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, " +

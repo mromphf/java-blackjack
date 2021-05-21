@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.domain.*;
-import main.domain.evaluators.*;
 import main.io.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
@@ -20,6 +19,7 @@ import main.usecase.*;
 import main.usecase.LayoutManager;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static main.domain.Deck.fresh;
 import static main.usecase.Layout.*;
@@ -42,15 +42,15 @@ public class AppRoot {
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
+        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = new HashSet<>();
+        evaluators.add(Evaluate.doubleDownTransactions());
+        evaluators.add(Evaluate.insuranceTransactions());
+        evaluators.add(Evaluate.outcomeTransactions());
+        evaluators.add(Evaluate.splitTransactions());
 
         /*
          * These are event listeners
          */
-        final Collection<TransactionEvaluator> evaluators = new HashSet<>();
-        evaluators.add(new DoubleDownEvaluator());
-        evaluators.add(new OutcomeEvaluator());
-        evaluators.add(new InsuranceEvaluator());
-        evaluators.add(new SplitEvaluator());
         final Transactor transactor = new Transactor(evaluators);
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);

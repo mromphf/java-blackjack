@@ -2,6 +2,8 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
@@ -38,7 +40,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
 
     @Override
     public void onActionTaken(Action action) {
-        round.record(action);
+        round.record(LocalDateTime.now(), action);
         runnableMap.getOrDefault(action, () -> {}).run();
         eventNetwork.onUpdate(round.getSnapshot());
     }

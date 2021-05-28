@@ -1,13 +1,17 @@
 package main.domain;
 
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
+import static main.io.util.StringUtil.actionString;
 import static main.io.util.StringUtil.concat;
 import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
@@ -22,7 +26,7 @@ public class Snapshot {
     private final Stack<Card> playerHand = new Stack<>();
     private final Stack<Stack<Card>> handsToPlay = new Stack<>();
     private final Stack<Snapshot> handsToSettle = new Stack<>();
-    private final Stack<Action> actionsTaken = new Stack<>();
+    private final Map<LocalDateTime, Action> actionsTaken = new HashMap<>();
 
     public Snapshot(UUID accountKey,
                     int bet,
@@ -32,7 +36,7 @@ public class Snapshot {
                     Stack<Card> playerHand,
                     Stack<Stack<Card>> handsToPlay,
                     Stack<Snapshot> handsToSettle,
-                    Stack<Action> actionsTaken) {
+                    Map<LocalDateTime, Action> actionsTaken) {
         this.accountKey = accountKey;
         this.bet = bet;
         this.maxCards = maxCards;
@@ -41,9 +45,9 @@ public class Snapshot {
         this.playerHand.addAll(playerHand);
         this.handsToPlay.addAll(handsToPlay);
         this.handsToSettle.addAll(handsToSettle);
-        this.actionsTaken.addAll(actionsTaken);
+        this.actionsTaken.putAll(actionsTaken);
         this.outcome = determineOutcome(
-                actionsTaken,
+                getActionsTaken(),
                 playerHand,
                 dealerHand,
                 handsToPlay
@@ -74,7 +78,7 @@ public class Snapshot {
         return (outcome == UNRESOLVED &&
                 !handsToPlay.isEmpty() &&
                 (isBust(playerHand) ||
-                        actionsTaken.stream().anyMatch(
+                        actionsTaken.values().stream().anyMatch(
                                 a -> a.equals(STAND) || a.equals(DOUBLE))));
     }
 
@@ -129,7 +133,11 @@ public class Snapshot {
         return handsToPlay;
     }
 
-    public Stack<Action> getActionsTaken() {
+    public Collection<Action> getActionsTaken() {
+        return actionsTaken.values();
+    }
+
+    public Map<LocalDateTime, Action> getActionMap() {
         return actionsTaken;
     }
 
@@ -139,11 +147,11 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("Outcome: %s, Bet: %s, ActionsTaken: [ %s ], Player: %s, Dealer: %s, " +
+        return String.format("Outcome: %s, Bet: %s, ActionsTaken: {%s}, Player: %s, Dealer: %s, " +
                         "Deck: %s, Hands to Play: %s, Hands to Settle: %s, Account Key: %s",
                 outcome,
                 bet,
-                concat(actionsTaken, ','),
+                actionString(actionsTaken),
                 playerString(playerHand),
                 playerString(dealerHand),
                 deck.size(),

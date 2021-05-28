@@ -1,8 +1,12 @@
 package main.io.util;
 
+import main.domain.Action;
 import main.domain.Card;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import static main.domain.Rules.score;
@@ -12,6 +16,14 @@ public class StringUtil {
         return String.format("{Score: %s, Cards: [ %s ]}", score(hand), concat(hand.stream()
                 .map(Card::toString)
                 .collect(Collectors.toList()), ','));
+    }
+
+    public static String actionString(Map<LocalDateTime, Action> timestampedActions) {
+        final StringJoiner joiner = new StringJoiner(",");
+        timestampedActions.forEach((key, value) -> joiner.add(
+                String.format(" %s: %s ", key.toString(), value.toString())
+        ));
+        return joiner.toString();
     }
 
     public static String concat(Collection<?> c, char delimiter) {

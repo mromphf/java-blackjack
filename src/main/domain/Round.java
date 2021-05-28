@@ -1,5 +1,6 @@
 package main.domain;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
@@ -17,7 +18,7 @@ public class Round {
     private final int maxCards;
     private final int numDecks;
 
-    private Stack<Action> actionsTaken;
+    private Map<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
     public Round(UUID accountKey, int bet, Stack<Card> deck, int maxCards, int numDecks) {
@@ -28,7 +29,7 @@ public class Round {
         this.maxCards = maxCards;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
-        this.actionsTaken = new Stack<>();
+        this.actionsTaken = new HashMap<>();
 
         if (deck.size() < 4) {
             refillDeck();
@@ -40,8 +41,8 @@ public class Round {
         this.currentHand = openingHands.get("player");
     }
 
-    public void record(Action action) {
-        actionsTaken.add(action);
+    public void record(LocalDateTime timestamp, Action action) {
+        actionsTaken.put(timestamp, action);
     }
 
     public void hit() throws EmptyStackException {
@@ -83,7 +84,7 @@ public class Round {
         handsToSettle.add(getSnapshot());
         currentHand = handsToPlay.pop();
         currentHand.add(deck.pop());
-        actionsTaken.removeIf(a -> !(a.equals(BUY_INSURANCE) ||
+        actionsTaken.values().removeIf(a -> !(a.equals(BUY_INSURANCE) ||
                 a.equals(WAIVE_INSURANCE) ||
                 a.equals(REFILL)));
     }
@@ -111,12 +112,12 @@ public class Round {
         if (!handsToSettle.isEmpty()) {
             Snapshot previousState = handsToSettle.pop();
             currentHand = previousState.getPlayerHand();
-            actionsTaken = previousState.getActionsTaken();
+            actionsTaken = previousState.getActionMap();
         }
     }
 
     public void refillDeck() {
-        actionsTaken.add(REFILL);
+        record(LocalDateTime.now(), REFILL);
         deck.addAll(shuffle(fresh(numDecks)));
     }
 

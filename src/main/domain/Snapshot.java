@@ -1,7 +1,6 @@
 package main.domain;
 
 
-import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Stack;
 import java.util.UUID;
@@ -84,23 +83,19 @@ public class Snapshot {
     }
 
     public boolean isSplitAvailable() {
-        return (canSplit(getPlayerHand()) &&
-                is(UNRESOLVED) &&
+        return (canSplit(playerHand) &&
+                this.outcome.equals(UNRESOLVED) &&
                 !isInsuranceAvailable() &&
                 !readyToPlayNextHand());
     }
 
     public boolean isGameInProgress() {
         return (!canSplit(playerHand) &&
-                is(UNRESOLVED) &&
+                this.outcome.equals(UNRESOLVED) &&
                 !isInsuranceAvailable() &&
                 !readyToPlayNextHand());
     }
 
-
-    public boolean is(Outcome outcome) {
-        return this.outcome.equals(outcome);
-    }
 
     public boolean isHandResolved() {
         return !outcome.equals(UNRESOLVED);

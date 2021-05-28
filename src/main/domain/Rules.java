@@ -115,7 +115,7 @@ public class Rules {
 
     public static int settleBet(Snapshot snapshot) {
         final Stack<Card> playerHand = snapshot.getPlayerHand();
-        final Stack<Action> actionsTaken = snapshot.getActionsTaken();
+        final Collection<Action> actionsTaken = snapshot.getActionsTaken();
         final int bet = snapshot.getBet();
 
         final int insurancePayout = (actionsTaken.stream()

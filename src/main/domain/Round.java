@@ -12,7 +12,7 @@ public class Round {
     private final UUID accountKey;
     private final Stack<Card> deck;
     private final Stack<Stack<Card>> handsToPlay;
-    private final Stack<Snapshot> handsToSettle;
+    private final Stack<HandToSettle> handsToSettle;
     private final Stack<Card> dealerHand;
     private final int bet;
     private final int maxCards;
@@ -81,7 +81,7 @@ public class Round {
             refillDeck();
         }
 
-        handsToSettle.add(getSnapshot());
+        handsToSettle.add(new HandToSettle(currentHand, actionsTaken));
         currentHand = handsToPlay.pop();
         currentHand.add(deck.pop());
         actionsTaken.values().removeIf(a -> !(a.equals(BUY_INSURANCE) ||
@@ -110,9 +110,9 @@ public class Round {
 
     public void rewind() {
         if (!handsToSettle.isEmpty()) {
-            Snapshot previousState = handsToSettle.pop();
-            currentHand = previousState.getPlayerHand();
-            actionsTaken = previousState.getActionMap();
+            HandToSettle previousState = handsToSettle.pop();
+            currentHand = previousState.playerHand;
+            actionsTaken = previousState.actionsTaken;
         }
     }
 
@@ -130,8 +130,27 @@ public class Round {
                 dealerHand,
                 currentHand,
                 handsToPlay,
-                handsToSettle,
+                filterHands(handsToSettle),
                 actionsTaken
         );
+    }
+
+    private Stack<Stack<Card>> filterHands(Stack<HandToSettle> handsToSettle) {
+        Stack<Stack<Card>> result = new Stack<>();
+        for (HandToSettle hand : handsToSettle) {
+            result.add(hand.playerHand);
+        }
+        return result;
+    }
+
+
+    private static class HandToSettle {
+        public final Stack<Card> playerHand;
+        public final Map<LocalDateTime, Action> actionsTaken;
+
+        public HandToSettle(Stack<Card> playerHand, Map<LocalDateTime, Action> actionsTaken) {
+            this.playerHand = playerHand;
+            this.actionsTaken = actionsTaken;
+        }
     }
 }

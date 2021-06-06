@@ -24,7 +24,7 @@ public class Snapshot {
     private final Stack<Card> dealerHand = new Stack<>();
     private final Stack<Card> playerHand = new Stack<>();
     private final Stack<Stack<Card>> handsToPlay = new Stack<>();
-    private final Stack<Snapshot> handsToSettle = new Stack<>();
+    private final Stack<Stack<Card>> handsToSettle = new Stack<>();
     private final Map<LocalDateTime, Action> actionsTaken = new HashMap<>();
 
     public Snapshot(UUID accountKey,
@@ -34,7 +34,7 @@ public class Snapshot {
                     Stack<Card> dealerHand,
                     Stack<Card> playerHand,
                     Stack<Stack<Card>> handsToPlay,
-                    Stack<Snapshot> handsToSettle,
+                    Stack<Stack<Card>> handsToSettle,
                     Map<LocalDateTime, Action> actionsTaken) {
         this.accountKey = accountKey;
         this.bet = bet;

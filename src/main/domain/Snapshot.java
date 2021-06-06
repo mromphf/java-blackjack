@@ -12,7 +12,6 @@ import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.io.util.StringUtil.actionString;
-import static main.io.util.StringUtil.concat;
 import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
 
@@ -135,10 +134,6 @@ public class Snapshot {
 
     public Collection<Action> getActionsTaken() {
         return actionsTaken.values();
-    }
-
-    public Map<LocalDateTime, Action> getActionMap() {
-        return actionsTaken;
     }
 
     public UUID getAccountKey() {

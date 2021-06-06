@@ -21,7 +21,7 @@ public class Round {
     private Map<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(UUID accountKey, int bet, Stack<Card> deck, int maxCards, int numDecks) {
+    public Round(UUID accountKey, Stack<Card> deck, int bet, int maxCards, int numDecks) {
         this.accountKey = accountKey;
         this.bet = bet;
         this.deck = deck;

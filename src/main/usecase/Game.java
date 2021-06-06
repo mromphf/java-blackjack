@@ -22,7 +22,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
         this.maxCards = deck.size();
         this.numDecks = numDecks;
         runnableMap = new HashMap<>();
-        round = new Round(Account.placeholder().getKey(),0, new Stack<>(), maxCards, numDecks);
+        round = new Round(Account.placeholder().getKey(), new Stack<>(), 0, maxCards, numDecks);
 
         runnableMap.put(HIT, () -> round.hit());
         runnableMap.put(SPLIT, () -> round.split());
@@ -34,7 +34,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
 
     @Override
     public void onBetPlaced(Account account, int amount) {
-        round = new Round(account.getKey(), amount, deck, maxCards, numDecks);
+        round = new Round(account.getKey(), deck, amount, maxCards, numDecks);
         eventNetwork.onUpdate(round.getSnapshot());
     }
 
@@ -48,7 +48,7 @@ public class Game extends EventConnection implements ActionListener, NavListener
     @Override
     public void onChangeLayout(Layout layout) {
         if (layout == HOME) {
-            round = new Round(Account.placeholder().getKey(), 0, deck, maxCards, numDecks);
+            round = new Round(Account.placeholder().getKey(), deck, 0, maxCards, numDecks);
         }
     }
 

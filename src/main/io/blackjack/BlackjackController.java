@@ -72,7 +72,7 @@ public class BlackjackController extends EventConnection implements Initializabl
         nextHandControls.setVisible(snapshot.readyToPlayNextHand());
         gameOverControls.setVisible(snapshot.allBetsSettled());
         btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
-        prgDeck.setProgress((double) snapshot.getDeckSize() / snapshot.getMaxCards());
+        prgDeck.setProgress(snapshot.getDeckProgress());
 
         if (snapshot.isRoundResolved()) {
             renderExposedTable(snapshot);

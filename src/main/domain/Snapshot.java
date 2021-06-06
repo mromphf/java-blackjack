@@ -61,14 +61,6 @@ public class Snapshot {
         return Math.negateExact(bet);
     }
 
-    public int getDeckSize() {
-        return deck.size();
-    }
-
-    public int getMaxCards() {
-        return maxCards;
-    }
-
     public Outcome getOutcome() {
         return outcome;
     }
@@ -138,6 +130,10 @@ public class Snapshot {
 
     public UUID getAccountKey() {
         return accountKey;
+    }
+
+    public float getDeckProgress() {
+        return (float) deck.size() / maxCards;
     }
 
     @Override

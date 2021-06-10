@@ -21,7 +21,7 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        log(INFO, String.format("%s: SNAPSHOT - %s", LocalTime.now(), snapshot.toString()));
+        log(INFO, String.format("%s: SNAPSHOT - %s", snapshot.getTimestamp().toLocalTime(), snapshot));
     }
 
     @Override

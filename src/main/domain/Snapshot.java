@@ -16,6 +16,7 @@ import static main.domain.Rules.*;
 import static main.io.util.StringUtil.playerString;
 
 public class Snapshot {
+    private final LocalDateTime timestamp;
     private final UUID accountKey;
     private final int bet;
     private final int maxCards;
@@ -27,7 +28,8 @@ public class Snapshot {
     private final Stack<Stack<Card>> handsToSettle = new Stack<>();
     private final Map<LocalDateTime, Action> actionsTaken = new HashMap<>();
 
-    public Snapshot(UUID accountKey,
+    public Snapshot(LocalDateTime timestamp,
+                    UUID accountKey,
                     int bet,
                     int maxCards,
                     Stack<Card> deck,
@@ -36,6 +38,7 @@ public class Snapshot {
                     Stack<Stack<Card>> handsToPlay,
                     Stack<Stack<Card>> handsToSettle,
                     Map<LocalDateTime, Action> actionsTaken) {
+        this.timestamp = timestamp;
         this.accountKey = accountKey;
         this.bet = bet;
         this.maxCards = maxCards;
@@ -51,6 +54,10 @@ public class Snapshot {
                 dealerHand,
                 handsToPlay
         );
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
     public int getBet() {

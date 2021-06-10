@@ -121,8 +121,9 @@ public class Round {
         deck.addAll(shuffle(fresh(numDecks)));
     }
 
-    public Snapshot getSnapshot() {
+    public Snapshot getSnapshot(LocalDateTime timestamp) {
         return new Snapshot(
+                timestamp,
                 accountKey,
                 bet,
                 maxCards,

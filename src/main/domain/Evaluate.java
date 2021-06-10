@@ -5,10 +5,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static main.domain.Action.BUY_INSURANCE;
-import static main.domain.Action.DOUBLE;
-import static main.domain.Action.HIT;
-import static main.domain.Action.SPLIT;
+import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 
 public class Evaluate {
@@ -57,9 +54,11 @@ public class Evaluate {
     public static Function<Snapshot, Optional<Transaction>> splitTransactions() {
         return (snapshot) -> {
             final Collection<Action> actionsTaken = snapshot.getActionsTaken();
-            // TODO: This check will still charge multiple times
             final boolean chargeForSplit = (actionsTaken.stream().anyMatch(a -> a.equals(SPLIT)) &&
-                    actionsTaken.stream().noneMatch(a -> a.equals(HIT)));
+                    actionsTaken.stream().noneMatch(a ->
+                            a.equals(HIT) ||
+                            a.equals(DOUBLE) ||
+                            a.equals(STAND)));
             final Transaction transaction = new Transaction(
                     LocalDateTime.now(), snapshot.getAccountKey(), SPLIT.name(), snapshot.getNegativeBet());
 

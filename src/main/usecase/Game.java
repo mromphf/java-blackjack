@@ -35,14 +35,14 @@ public class Game extends EventConnection implements ActionListener, NavListener
     @Override
     public void onBetPlaced(Account account, int amount) {
         round = new Round(account.getKey(), deck, amount, maxCards, numDecks);
-        eventNetwork.onUpdate(round.getSnapshot());
+        eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
     }
 
     @Override
     public void onActionTaken(Action action) {
         round.record(LocalDateTime.now(), action);
         runnableMap.getOrDefault(action, () -> {}).run();
-        eventNetwork.onUpdate(round.getSnapshot());
+        eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
     }
 
     @Override

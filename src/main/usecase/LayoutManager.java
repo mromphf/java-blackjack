@@ -9,7 +9,7 @@ import java.util.*;
 
 import static main.usecase.Layout.BACK;
 
-public class LayoutManager extends EventConnection implements NavListener, BalanceListener {
+public class LayoutManager extends EventConnection implements NavListener {
 
     private final Stack<Layout> navHistory;
     private final Scene scene;
@@ -35,14 +35,5 @@ public class LayoutManager extends EventConnection implements NavListener, Balan
     @Override
     public void onChangeLayout(Layout layout, Account account) {
         onChangeLayout(layout);
-    }
-
-    @Override
-    public void onBalanceUpdated(Account account) {
-        //TODO: This won't allow a player to bet the last of their money.
-        if (account.getBalance() <= 0 ) {
-            System.out.println("You are out of money! Please leave the casino...");
-            System.exit(0);
-        }
     }
 }

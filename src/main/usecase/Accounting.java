@@ -3,7 +3,7 @@ package main.usecase;
 import main.domain.Account;
 import main.io.EventConnection;
 
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 public class Accounting extends EventConnection implements NavListener, Responder, EventListener {
 
@@ -35,7 +35,7 @@ public class Accounting extends EventConnection implements NavListener, Responde
     public void onChangeLayout(Layout layout) {}
 
     @Override
-    public Message fulfill(NetworkElement elm) {
+    public Message fulfill(Predicate elm) {
         return Message.of(elm, account);
     }
 }

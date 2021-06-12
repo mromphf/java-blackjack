@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 public class GameLogger extends Logger implements GameStateListener, BalanceListener, EventListener {
 

@@ -24,7 +24,7 @@ import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 public class HistoryController extends EventConnection implements Initializable, NavListener, EventListener {
 

@@ -1,5 +1,5 @@
 package main.usecase;
 
 public interface Responder {
-    Message fulfill(NetworkElement elm);
+    Message fulfill(Predicate elm);
 }

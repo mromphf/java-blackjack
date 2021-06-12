@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 public class Transactor extends EventConnection implements GameStateListener, ActionListener, EventListener {
 

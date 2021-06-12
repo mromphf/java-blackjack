@@ -5,13 +5,13 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.EventListener;
 import main.usecase.Message;
-import main.usecase.NetworkElement;
+import main.usecase.Predicate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 
 public class AccountStorage extends EventConnection implements EventListener {
@@ -34,7 +34,7 @@ public class AccountStorage extends EventConnection implements EventListener {
 
     @Override
     public void onEvent(Message message) {
-        final Map<NetworkElement, Runnable> runnableMap = new HashMap<>();
+        final Map<Predicate, Runnable> runnableMap = new HashMap<>();
 
         runnableMap.put(ACCOUNT_CREATED, () -> saveNewAccount(message.getAccount()));
         runnableMap.put(ACCOUNT_DELETED, () -> deleteAccount(message.getAccount()));

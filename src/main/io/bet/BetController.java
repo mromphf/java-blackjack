@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
-import static main.usecase.NetworkElement.CURRENT_BALANCE;
+import static main.usecase.Predicate.CURRENT_BALANCE;
 
 
 public class BetController extends EventConnection implements Initializable, BalanceListener, NavListener {

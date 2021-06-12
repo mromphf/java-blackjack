@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.*;
-import static main.usecase.NetworkElement.CURRENT_BALANCE;
+import static main.usecase.Predicate.CURRENT_BALANCE;
 
 public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
 

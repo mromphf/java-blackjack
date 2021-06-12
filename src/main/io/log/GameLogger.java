@@ -3,10 +3,7 @@ package main.io.log;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.AccountListener;
-import main.usecase.GameStateListener;
-import main.usecase.BalanceListener;
-import main.usecase.TransactionListener;
+import main.usecase.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -28,8 +25,10 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
+    public void onBalanceUpdated() {
+        final Account selectedAccount = Accounting.selectedAccount();
+        log(INFO, String.format("%s: BALANCE - %s ($%s)",
+                LocalTime.now().format(pattern), selectedAccount.getName(), selectedAccount.getBalance()));
     }
 
     @Override

@@ -8,6 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.io.EventConnection;
+import main.usecase.Accounting;
 import main.usecase.BalanceListener;
 import main.usecase.Layout;
 import main.usecase.NavListener;
@@ -77,8 +78,8 @@ public class BetController extends EventConnection implements Initializable, Bal
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        this.balance = account.getBalance();
+    public void onBalanceUpdated() {
+        this.balance = Accounting.currentBalance(Accounting.selectedAccountKey());
 
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
@@ -89,7 +90,7 @@ public class BetController extends EventConnection implements Initializable, Bal
     public void onChangeLayout(Layout layout, Account account) {
         if (layout == BET) {
             this.account = account;
-            onBalanceUpdated(account);
+            onBalanceUpdated();
         }
     }
 

@@ -7,9 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import main.domain.Account;
 import main.domain.Snapshot;
 import main.io.EventConnection;
+import main.usecase.Accounting;
 import main.usecase.BalanceListener;
 import main.usecase.GameStateListener;
 
@@ -59,8 +59,9 @@ public class BlackjackController extends EventConnection implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+    public void onBalanceUpdated() {
+        final int currentBalance = Accounting.currentBalance(Accounting.selectedAccountKey());
+        lblBalance.setText(String.format("Balance: $%s", currentBalance));
     }
 
     @Override

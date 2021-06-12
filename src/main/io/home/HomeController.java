@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
+import main.usecase.Accounting;
 import main.usecase.BalanceListener;
 import main.usecase.MemoryListener;
 
@@ -124,8 +125,8 @@ public class HomeController extends EventConnection implements Initializable, Ba
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        accountMap.put(account.getKey(), account);
+    public void onBalanceUpdated() {
+        accountMap.put(Accounting.selectedAccountKey(), Accounting.selectedAccount());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
 

@@ -10,16 +10,16 @@ import java.util.List;
 
 public class Message {
     private final int amount;
-    private final Predicate elm;
+    private final Predicate predicate;
     private final Account account;
     private final Transaction transaction;
     private final List<Transaction> transactions;
     private final Collection<Account> accounts;
     private final Action action;
 
-    private Message(Predicate elm, int amount, Account account, Transaction transaction, Action action, List<Transaction> transactions, Collection<Account> accounts) {
+    private Message(Predicate predicate, int amount, Account account, Transaction transaction, Action action, List<Transaction> transactions, Collection<Account> accounts) {
         this.amount = amount;
-        this.elm = elm;
+        this.predicate = predicate;
         this.account = account;
         this.transaction = transaction;
         this.action = action;
@@ -51,16 +51,16 @@ public class Message {
         return new Message(predicate, 0, Account.placeholder(), Transaction.placeholder(), action, new LinkedList<>(), new LinkedList<>());
     }
 
-    public boolean is(Predicate elm) {
-        return elm.equals(this.elm);
+    public boolean is(Predicate predicate) {
+        return predicate.equals(this.predicate);
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public Predicate getElm() {
-        return elm;
+    public Predicate getPredicate() {
+        return predicate;
     }
 
     public int getCurrentBalance() {

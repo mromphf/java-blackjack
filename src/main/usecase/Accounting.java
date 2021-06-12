@@ -1,31 +1,16 @@
 package main.usecase;
 
 import main.domain.Account;
-import main.domain.Transaction;
 import main.io.EventConnection;
 
-import java.util.List;
+import static main.usecase.NetworkElement.*;
 
-import static main.usecase.NetworkElement.ACCOUNT_CREATED;
-
-public class Accounting extends EventConnection implements TransactionListener, NavListener, Responder, EventListener {
+public class Accounting extends EventConnection implements NavListener, Responder, EventListener {
 
     private Account account;
 
     public Accounting() {
         this.account = Account.placeholder();
-    }
-
-    @Override
-    public void onTransaction(Transaction transaction) {
-        this.account = account.updateBalance(transaction);
-        eventNetwork.onBalanceUpdated();
-    }
-
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
-        this.account = account.updateBalance(transactions);
-        eventNetwork.onBalanceUpdated();
     }
 
     @Override
@@ -37,6 +22,12 @@ public class Accounting extends EventConnection implements TransactionListener, 
     public void onEvent(Message message) {
         if (message.is(ACCOUNT_CREATED)) {
             this.account = message.getAccount();
+        } else if (message.is(TRANSACTION)) {
+            this.account = account.updateBalance(message.getTransaction());
+            eventNetwork.onBalanceUpdated();
+        } else if (message.is(TRANSACTION_SERIES)) {
+            this.account = account.updateBalance(message.getTransactions());
+            eventNetwork.onBalanceUpdated();
         }
     }
 

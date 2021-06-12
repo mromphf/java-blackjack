@@ -3,7 +3,6 @@ package main.usecase;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Snapshot;
-import main.domain.Transaction;
 import main.io.EventConnection;
 
 import java.util.*;
@@ -13,7 +12,6 @@ public class EventNetwork implements
         BalanceListener,
         GameStateListener,
         NavListener,
-        TransactionListener,
         Responder,
         EventListener {
 
@@ -21,7 +19,6 @@ public class EventNetwork implements
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<NavListener> navListeners = new LinkedList<>();
-    private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
     private final Collection<EventListener> eventListeners = new LinkedList<>();
     private final Map<NetworkElement, Responder> responders = new HashMap<>();
 
@@ -43,10 +40,6 @@ public class EventNetwork implements
                 navListeners.add((NavListener) connection);
             }
 
-            if (connection instanceof TransactionListener) {
-                transactionListeners.add((TransactionListener) connection);
-            }
-
             if (connection instanceof EventListener) {
                 eventListeners.add((EventListener) connection);
             }
@@ -63,10 +56,6 @@ public class EventNetwork implements
 
     public void registerBalanceListener(BalanceListener listener) {
         balanceListeners.add(listener);
-    }
-
-    public void registerTransactionListener(TransactionListener listener) {
-        transactionListeners.add(listener);
     }
 
     public void registerEventListener(EventListener listener) {
@@ -106,16 +95,6 @@ public class EventNetwork implements
     @Override
     public void onChangeLayout(Layout layout, Account account) {
         navListeners.forEach(l -> l.onChangeLayout(layout, account));
-    }
-
-    @Override
-    public void onTransaction(Transaction transaction) {
-        transactionListeners.forEach(l -> l.onTransaction(transaction));
-    }
-
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
-        transactionListeners.forEach(l -> l.onTransactions(transactions));
     }
 
     @Override

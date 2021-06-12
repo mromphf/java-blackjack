@@ -41,7 +41,7 @@ public class AccountStorage extends EventConnection implements EventListener {
         runnableMap.put(TRANSACTION, () -> saveTransaction(message.getTransaction()));
         runnableMap.put(TRANSACTION_SERIES, () -> saveTransactions(message.getTransactions()));
 
-        runnableMap.getOrDefault(message.getElm(), () -> {}).run();
+        runnableMap.getOrDefault(message.getPredicate(), () -> {}).run();
     }
 
     private void saveNewAccount(Account account) {

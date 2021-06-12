@@ -11,11 +11,13 @@ import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.Layout;
 import main.usecase.NavListener;
+import main.usecase.NetworkElement;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
+import static main.usecase.NetworkElement.CURRENT_BALANCE;
 
 
 public class BetController extends EventConnection implements Initializable, BalanceListener, NavListener {
@@ -78,7 +80,7 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @Override
     public void onBalanceUpdated(Account account) {
-        this.balance = account.getBalance();
+        this.balance = eventNetwork.fulfill(CURRENT_BALANCE).getCurrentBalance();
 
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);

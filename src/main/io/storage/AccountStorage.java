@@ -1,15 +1,20 @@
 package main.io.storage;
 
+import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.*;
+import main.usecase.EventListener;
+import main.usecase.Message;
+import main.usecase.NetworkElement;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.usecase.NetworkElement.*;
 
 
-public class AccountStorage extends EventConnection implements TransactionListener, EventListener {
+public class AccountStorage extends EventConnection implements EventListener {
 
     private final Memory memory;
 
@@ -29,20 +34,29 @@ public class AccountStorage extends EventConnection implements TransactionListen
 
     @Override
     public void onEvent(Message message) {
-        if (message.is(ACCOUNT_CREATED)) {
-            memory.saveNewAccount(message.getAccount());
-        } else if (message.is(ACCOUNT_DELETED)){
-            memory.deleteAccount(message.getAccount());
-        }
+        final Map<NetworkElement, Runnable> runnableMap = new HashMap<>();
+
+        runnableMap.put(ACCOUNT_CREATED, () -> saveNewAccount(message.getAccount()));
+        runnableMap.put(ACCOUNT_DELETED, () -> deleteAccount(message.getAccount()));
+        runnableMap.put(TRANSACTION, () -> saveTransaction(message.getTransaction()));
+        runnableMap.put(TRANSACTION_SERIES, () -> saveTransactions(message.getTransactions()));
+
+        runnableMap.getOrDefault(message.getElm(), () -> {}).run();
     }
 
-    @Override
-    public void onTransaction(Transaction transaction) {
+    private void saveNewAccount(Account account) {
+        memory.saveNewAccount(account);
+    }
+
+    private void deleteAccount(Account account) {
+        memory.deleteAccount(account);
+    }
+
+    private void saveTransaction(Transaction transaction) {
         memory.saveTransaction(transaction);
     }
 
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
+    private void saveTransactions(List<Transaction> transactions) {
         memory.saveTransactions(transactions);
     }
 }

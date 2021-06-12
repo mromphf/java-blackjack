@@ -24,9 +24,9 @@ import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.NetworkElement.TRANSACTIONS_LOADED;
+import static main.usecase.NetworkElement.*;
 
-public class HistoryController extends EventConnection implements Initializable, NavListener, TransactionListener, EventListener {
+public class HistoryController extends EventConnection implements Initializable, NavListener, EventListener {
 
     @FXML
     public DatePicker datePicker;
@@ -34,7 +34,7 @@ public class HistoryController extends EventConnection implements Initializable,
     @FXML
     public GridPane chartHousing;
 
-    private List<Transaction> allTransactions = new LinkedList<>();
+    private final List<Transaction> allTransactions = new LinkedList<>();
     private Account account;
 
     @FXML
@@ -89,19 +89,11 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onEvent(Message message) {
-        if (message.is(TRANSACTIONS_LOADED)) {
-            allTransactions = message.getTransactions();
+        if (message.is(TRANSACTIONS_LOADED) || message.is(TRANSACTION_SERIES)) {
+            allTransactions.addAll(message.getTransactions());
+        } else if (message.is(TRANSACTION)) {
+            allTransactions.add(message.getTransaction());
         }
-    }
-
-    @Override
-    public void onTransaction(Transaction transaction) {
-        allTransactions.add(transaction);
-    }
-
-    @Override
-    public void onTransactions(List<Transaction> transactions) {
-        allTransactions.addAll(transactions);
     }
 
     @Override

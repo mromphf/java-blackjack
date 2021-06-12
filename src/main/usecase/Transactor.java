@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static main.usecase.NetworkElement.ACCOUNT_CREATED;
+import static main.usecase.NetworkElement.*;
 
 public class Transactor extends EventConnection implements GameStateListener, ActionListener, EventListener {
 
@@ -20,19 +20,22 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
 
     @Override
     public void onUpdate(Snapshot snapshot) {
-        final Collection<Transaction> workingTransactions = evaluationFunctions.stream()
+        final List<Transaction> workingTransactions = evaluationFunctions.stream()
             .map(f -> f.apply(snapshot))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        eventNetwork.onTransactions(new ArrayList<>(workingTransactions));
+        final Message message = Message.of(TRANSACTION_SERIES, workingTransactions);
+
+        eventNetwork.onEvent(message);
     }
 
     @Override
     public void onBetPlaced(Account account, int amount) {
         final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
-        eventNetwork.onTransaction(t);
+        final Message message = Message.of(TRANSACTION, t);
+        eventNetwork.onEvent(message);
     }
 
     @Override
@@ -43,10 +46,12 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
             final UUID accountKey = message.getAccount().getKey();
             final int signingBonus = 200;
             final Transaction t = new Transaction(timestamp, accountKey, description, signingBonus);
+            final Message m = Message.of(TRANSACTION, t);
 
-            eventNetwork.onTransaction(t);
+            eventNetwork.onEvent(m);
         }
     }
+
     @Override
     public void onActionTaken(Action action) {}
 }

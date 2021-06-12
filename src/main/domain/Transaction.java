@@ -42,6 +42,10 @@ public class Transaction implements Comparable<Transaction> {
                 .collect(Collectors.toList());
     }
 
+    public static Transaction placeholder() {
+        return new Transaction(LocalDateTime.now(), UUID.randomUUID(), "PLACEHOLDER", 0);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

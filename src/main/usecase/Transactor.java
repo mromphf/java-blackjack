@@ -8,7 +8,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Transactor extends EventConnection implements GameStateListener, ActionListener, AccountListener {
+import static main.usecase.NetworkElement.ACCOUNT_CREATED;
+
+public class Transactor extends EventConnection implements GameStateListener, ActionListener, EventListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -34,19 +36,17 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
     }
 
     @Override
-    public void onNewAccountOpened(Account account) {
-        final LocalDateTime timestamp = LocalDateTime.now();
-        final String description = "SIGNING BONUS";
-        final UUID accountKey = account.getKey();
-        final int signingBonus = 200;
-        final Transaction t = new Transaction(timestamp, accountKey, description, signingBonus);
+    public void onEvent(Message message) {
+        if (message.is(ACCOUNT_CREATED)) {
+            final LocalDateTime timestamp = LocalDateTime.now();
+            final String description = "SIGNING BONUS";
+            final UUID accountKey = message.getAccount().getKey();
+            final int signingBonus = 200;
+            final Transaction t = new Transaction(timestamp, accountKey, description, signingBonus);
 
-        eventNetwork.onTransaction(t);
+            eventNetwork.onTransaction(t);
+        }
     }
-
     @Override
     public void onActionTaken(Action action) {}
-
-    @Override
-    public void onAccountDeleted(Account account) {}
 }

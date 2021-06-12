@@ -10,9 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 import static java.util.logging.Level.*;
-import static main.usecase.NetworkElement.CURRENT_BALANCE;
+import static main.usecase.NetworkElement.*;
 
-public class GameLogger extends Logger implements GameStateListener, BalanceListener, AccountListener, TransactionListener {
+public class GameLogger extends Logger implements GameStateListener, BalanceListener, TransactionListener, EventListener {
 
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
     private EventNetwork eventNetwork;
@@ -35,20 +35,20 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
         if (eventNetwork == null) {
             log(WARNING, "No network connection! Could not poll account balance.");
         } else {
-            final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getSelectedAccount();
+            final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getAccount();
             log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
         }
     }
 
     @Override
-    public void onNewAccountOpened(Account account) {
-        log(INFO, String.format(
-                "%s: Account no. %s has been opened under the name %s.", LocalTime.now().format(pattern), account.getKey(), account.getName()));
-    }
-
-    @Override
-    public void onAccountDeleted(Account account) {
-        log(INFO, String.format("%s: Request issued to close account no. %s.", LocalTime.now().format(pattern), account.getKey()));
+    public void onEvent(Message message) {
+        if (message.is(ACCOUNT_CREATED)) {
+            final Account account = message.getAccount();
+            log(INFO, String.format(
+                    "%s: Account no. %s has been opened under the name %s.", LocalTime.now().format(pattern), account.getKey(), account.getName()));
+        } else if (message.is(ACCOUNT_DELETED)) {
+            log(INFO, String.format("%s: Request issued to close account no. %s.", LocalTime.now().format(pattern), message.getAccount().getKey()));
+        }
     }
 
     @Override

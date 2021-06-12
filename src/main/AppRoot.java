@@ -92,6 +92,7 @@ public class AppRoot {
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);
+        gameLogger.connectTo(eventNetwork);
 
         /*
          * Load accounts, transactions and images from disk

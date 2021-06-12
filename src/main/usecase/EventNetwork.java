@@ -100,8 +100,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        balanceListeners.forEach(l -> l.onBalanceUpdated(account));
+    public void onBalanceUpdated() {
+        balanceListeners.forEach(l -> l.onBalanceUpdated());
     }
 
     @Override

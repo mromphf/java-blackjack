@@ -3,23 +3,26 @@ package main.io.log;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.AccountListener;
-import main.usecase.GameStateListener;
-import main.usecase.BalanceListener;
-import main.usecase.TransactionListener;
+import main.usecase.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 import static java.util.logging.Level.*;
+import static main.usecase.NetworkElement.CURRENT_BALANCE;
 
 public class GameLogger extends Logger implements GameStateListener, BalanceListener, AccountListener, TransactionListener {
 
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
+    private EventNetwork eventNetwork;
 
     public GameLogger(String name, String resourceBundleName) {
         super(name, resourceBundleName);
+    }
+
+    public void connectTo(EventNetwork eventNetwork) {
+        this.eventNetwork = eventNetwork;
     }
 
     @Override
@@ -28,8 +31,13 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
-        log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
+    public void onBalanceUpdated() {
+        if (eventNetwork == null) {
+            log(WARNING, "No network connection! Could not poll account balance.");
+        } else {
+            final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getSelectedAccount();
+            log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
+        }
     }
 
     @Override

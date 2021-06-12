@@ -3,12 +3,16 @@ package main.io.storage;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.AccountListener;
-import main.usecase.TransactionListener;
+import main.usecase.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
-public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
+import static main.usecase.NetworkElement.ACCOUNT_CREATED;
+import static main.usecase.NetworkElement.ACCOUNT_DELETED;
+
+
+public class AccountStorage extends EventConnection implements TransactionListener, EventListener {
 
     private final Memory memory;
 
@@ -27,13 +31,12 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     @Override
-    public void onNewAccountOpened(Account account) {
-        memory.saveNewAccount(account);
-    }
-
-    @Override
-    public void onAccountDeleted(Account account) {
-        memory.deleteAccount(account);
+    public void onEvent(Message message) {
+        if (message.is(ACCOUNT_CREATED)) {
+            memory.saveNewAccount(message.getAccount());
+        } else if (message.is(ACCOUNT_DELETED)){
+            memory.deleteAccount(message.getAccount());
+        }
     }
 
     @Override

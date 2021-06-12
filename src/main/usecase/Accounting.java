@@ -6,7 +6,9 @@ import main.io.EventConnection;
 
 import java.util.List;
 
-public class Accounting extends EventConnection implements TransactionListener, NavListener, AccountListener, Responder {
+import static main.usecase.NetworkElement.ACCOUNT_CREATED;
+
+public class Accounting extends EventConnection implements TransactionListener, NavListener, Responder, EventListener {
 
     private Account account;
 
@@ -32,18 +34,17 @@ public class Accounting extends EventConnection implements TransactionListener, 
     }
 
     @Override
-    public void onNewAccountOpened(Account account) {
-        this.account = account;
+    public void onEvent(Message message) {
+        if (message.is(ACCOUNT_CREATED)) {
+            this.account = message.getAccount();
+        }
     }
 
     @Override
     public void onChangeLayout(Layout layout) {}
 
     @Override
-    public void onAccountDeleted(Account account) {}
-
-    @Override
-    public Response fulfill(NetworkElement elm) {
-        return Response.of(account);
+    public Message fulfill(NetworkElement elm) {
+        return Message.of(elm, account);
     }
 }

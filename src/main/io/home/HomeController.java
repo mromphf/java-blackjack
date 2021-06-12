@@ -13,6 +13,7 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.MemoryListener;
+import main.usecase.Message;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import java.util.*;
 
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.NetworkElement.CURRENT_BALANCE;
+import static main.usecase.NetworkElement.*;
 
 public class HomeController extends EventConnection implements Initializable, BalanceListener, MemoryListener {
 
@@ -101,21 +102,24 @@ public class HomeController extends EventConnection implements Initializable, Ba
         final String name = txtName.getText();
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, now);
+        final Message message = Message.of(ACCOUNT_CREATED, account);
 
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
 
-        eventNetwork.onNewAccountOpened(account);
+        eventNetwork.onEvent(message);
     }
 
     @FXML
     public void onDelete() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+        final Message message = Message.of(ACCOUNT_DELETED, selectedAccount);
 
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-        eventNetwork.onAccountDeleted(selectedAccount);
+
+        eventNetwork.onEvent(message);
     }
 
     @FXML
@@ -126,7 +130,7 @@ public class HomeController extends EventConnection implements Initializable, Ba
 
     @Override
     public void onBalanceUpdated() {
-        final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getSelectedAccount();
+        final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getAccount();
         accountMap.put(account.getKey(), account);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }

@@ -1,6 +1,7 @@
 package main.usecase;
 
 public enum NetworkElement {
-    CURRENT_BALANCE,
-    SELECTED_ACCOUNT
+    ACCOUNT_CREATED,
+    ACCOUNT_DELETED,
+    CURRENT_BALANCE
 }

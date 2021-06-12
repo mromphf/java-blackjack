@@ -17,13 +17,13 @@ public class Accounting extends EventConnection implements TransactionListener, 
     @Override
     public void onTransaction(Transaction transaction) {
         this.account = account.updateBalance(transaction);
-        eventNetwork.onBalanceUpdated(account);
+        eventNetwork.onBalanceUpdated();
     }
 
     @Override
     public void onTransactions(List<Transaction> transactions) {
         this.account = account.updateBalance(transactions);
-        eventNetwork.onBalanceUpdated(account);
+        eventNetwork.onBalanceUpdated();
     }
 
     @Override
@@ -44,6 +44,6 @@ public class Accounting extends EventConnection implements TransactionListener, 
 
     @Override
     public Response fulfill(NetworkElement elm) {
-        return Response.of(account.getBalance());
+        return Response.of(account);
     }
 }

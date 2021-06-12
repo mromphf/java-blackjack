@@ -1,17 +1,23 @@
 package main.usecase;
 
-public class Response {
-    private final int currentBalance;
+import main.domain.Account;
 
-    private Response(int currentBalance) {
-        this.currentBalance = currentBalance;
+public class Response {
+    private final Account selectedAccount;
+
+    private Response(Account account) {
+        this.selectedAccount = account;
     }
 
-    public static Response of(int currentBalance) {
-        return new Response(currentBalance);
+    public static Response of(Account account) {
+        return new Response(account);
     }
 
     public int getCurrentBalance() {
-        return currentBalance;
+        return selectedAccount.getBalance();
+    }
+
+    public Account getSelectedAccount() {
+        return selectedAccount;
     }
 }

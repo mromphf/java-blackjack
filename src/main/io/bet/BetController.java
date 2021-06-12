@@ -11,7 +11,6 @@ import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.Layout;
 import main.usecase.NavListener;
-import main.usecase.NetworkElement;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -79,7 +78,7 @@ public class BetController extends EventConnection implements Initializable, Bal
     }
 
     @Override
-    public void onBalanceUpdated(Account account) {
+    public void onBalanceUpdated() {
         this.balance = eventNetwork.fulfill(CURRENT_BALANCE).getCurrentBalance();
 
         btnDeal.setDisable(bet > balance || bet <= 0);
@@ -91,7 +90,7 @@ public class BetController extends EventConnection implements Initializable, Bal
     public void onChangeLayout(Layout layout, Account account) {
         if (layout == BET) {
             this.account = account;
-            onBalanceUpdated(account);
+            onBalanceUpdated();
         }
     }
 

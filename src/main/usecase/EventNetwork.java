@@ -6,9 +6,7 @@ import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.io.EventConnection;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class EventNetwork implements
         AccountListener,
@@ -17,7 +15,8 @@ public class EventNetwork implements
         GameStateListener,
         MemoryListener,
         NavListener,
-        TransactionListener {
+        TransactionListener,
+        Responder {
 
     private final Collection<AccountListener> accountListeners = new LinkedList<>();
     private final Collection<ActionListener> actionListeners = new LinkedList<>();
@@ -26,6 +25,7 @@ public class EventNetwork implements
     private final Collection<MemoryListener> memoryListeners = new LinkedList<>();
     private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<TransactionListener> transactionListeners = new LinkedList<>();
+    private final Map<NetworkElement, Responder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -57,6 +57,10 @@ public class EventNetwork implements
                 transactionListeners.add((TransactionListener) connection);
             }
         }
+    }
+
+    public void registerResponder(NetworkElement elm, Responder responder) {
+        responders.put(elm, responder);
     }
 
     public void registerGameStateListener(GameStateListener listener) {
@@ -133,5 +137,10 @@ public class EventNetwork implements
     @Override
     public void onTransactions(List<Transaction> transactions) {
         transactionListeners.forEach(l -> l.onTransactions(transactions));
+    }
+
+    @Override
+    public Response fulfill(NetworkElement elm) {
+        return responders.get(elm).fulfill(elm);
     }
 }

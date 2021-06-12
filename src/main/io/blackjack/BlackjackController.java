@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.*;
+import static main.usecase.NetworkElement.CURRENT_BALANCE;
 
 public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
 
@@ -60,7 +61,8 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @Override
     public void onBalanceUpdated(Account account) {
-        lblBalance.setText(String.format("Balance: $%s", account.getBalance()));
+        final int currentBalance = eventNetwork.fulfill(CURRENT_BALANCE).getCurrentBalance();
+        lblBalance.setText(String.format("Balance: $%s", currentBalance));
     }
 
     @Override

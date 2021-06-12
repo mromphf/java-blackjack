@@ -6,7 +6,7 @@ import main.io.EventConnection;
 
 import java.util.List;
 
-public class Accounting extends EventConnection implements TransactionListener, NavListener, AccountListener {
+public class Accounting extends EventConnection implements TransactionListener, NavListener, AccountListener, Responder {
 
     private Account account;
 
@@ -41,4 +41,9 @@ public class Accounting extends EventConnection implements TransactionListener, 
 
     @Override
     public void onAccountDeleted(Account account) {}
+
+    @Override
+    public Response fulfill(NetworkElement elm) {
+        return Response.of(account.getBalance());
+    }
 }

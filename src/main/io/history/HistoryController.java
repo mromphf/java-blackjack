@@ -8,27 +8,25 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
-import main.usecase.Layout;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.MemoryListener;
-import main.usecase.NavListener;
-import main.usecase.TransactionListener;
+import main.usecase.*;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static main.domain.Transaction.*;
-import static main.usecase.Layout.*;
+import static main.domain.Transaction.listForAccount;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
+import static main.usecase.Layout.BACK;
+import static main.usecase.Layout.HISTORY;
+import static main.usecase.NetworkElement.TRANSACTIONS_LOADED;
 
-public class HistoryController extends EventConnection implements Initializable, NavListener, MemoryListener, TransactionListener {
+public class HistoryController extends EventConnection implements Initializable, NavListener, TransactionListener, EventListener {
 
     @FXML
     public DatePicker datePicker;
@@ -90,8 +88,10 @@ public class HistoryController extends EventConnection implements Initializable,
     }
 
     @Override
-    public void onTransactionsLoaded(List<Transaction> transactions) {
-        allTransactions = transactions;
+    public void onEvent(Message message) {
+        if (message.is(TRANSACTIONS_LOADED)) {
+            allTransactions = message.getTransactions();
+        }
     }
 
     @Override
@@ -106,9 +106,6 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onChangeLayout(Layout layout) {}
-
-    @Override
-    public void onAccountsLoaded(Collection<Account> accounts) {}
 
     public void drawChart(Account account, Axis<String> xAxis, NumberAxis yAxis, XYChart.Series<String, Number> series) {
         final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);

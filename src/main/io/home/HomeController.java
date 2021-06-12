@@ -9,11 +9,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
-import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
-import main.usecase.MemoryListener;
 import main.usecase.Message;
+import main.usecase.EventListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.NetworkElement.*;
 
-public class HomeController extends EventConnection implements Initializable, BalanceListener, MemoryListener {
+public class HomeController extends EventConnection implements Initializable, BalanceListener, EventListener {
 
     @FXML
     public GridPane listControls;
@@ -136,13 +135,12 @@ public class HomeController extends EventConnection implements Initializable, Ba
     }
 
     @Override
-    public void onAccountsLoaded(Collection<Account> accounts) {
-        for (Account account : accounts) {
-            accountMap.put(account.getKey(), account);
+    public void onEvent(Message message) {
+        if (message.is(ACCOUNTS_LOADED)) {
+            for (Account account : message.getAccounts()) {
+                accountMap.put(account.getKey(), account);
+            }
+            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         }
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
-
-    @Override
-    public void onTransactionsLoaded(List<Transaction> transactions) {}
 }

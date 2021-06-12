@@ -1,15 +1,12 @@
 package main.io.storage;
 
-import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.*;
 
-import java.util.Collection;
 import java.util.List;
 
-import static main.usecase.NetworkElement.ACCOUNT_CREATED;
-import static main.usecase.NetworkElement.ACCOUNT_DELETED;
+import static main.usecase.NetworkElement.*;
 
 
 public class AccountStorage extends EventConnection implements TransactionListener, EventListener {
@@ -21,13 +18,13 @@ public class AccountStorage extends EventConnection implements TransactionListen
     }
 
     public void loadAllAccounts() {
-        final Collection<Account> accounts = memory.loadAllAccounts();
-        eventNetwork.onAccountsLoaded(accounts);
+        final Message message = Message.of(ACCOUNTS_LOADED, memory.loadAllAccounts());
+        eventNetwork.onEvent(message);
     }
 
     public void loadAllTransactions() {
-        final List<Transaction> transactions = memory.loadAllTransactions();
-        eventNetwork.onTransactionsLoaded(transactions);
+        final Message message = Message.of(TRANSACTIONS_LOADED, memory.loadAllTransactions());
+        eventNetwork.onEvent(message);
     }
 
     @Override

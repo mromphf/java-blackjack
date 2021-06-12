@@ -1,6 +1,6 @@
 package main.usecase;
 
-public enum NetworkElement {
+public enum Predicate {
     ACCOUNTS_LOADED,
     ACCOUNT_CREATED,
     ACCOUNT_DELETED,

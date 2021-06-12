@@ -24,7 +24,7 @@ import java.util.function.Function;
 import static main.domain.Deck.fresh;
 import static main.usecase.Layout.*;
 import static main.domain.Deck.shuffle;
-import static main.usecase.NetworkElement.CURRENT_BALANCE;
+import static main.usecase.Predicate.CURRENT_BALANCE;
 
 public class AppRoot {
 

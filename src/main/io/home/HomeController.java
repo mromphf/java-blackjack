@@ -20,7 +20,7 @@ import java.util.*;
 
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.NetworkElement.*;
+import static main.usecase.Predicate.*;
 
 public class HomeController extends EventConnection implements Initializable, BalanceListener, EventListener {
 

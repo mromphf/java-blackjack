@@ -20,7 +20,7 @@ public class EventNetwork implements
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<NavListener> navListeners = new LinkedList<>();
     private final Collection<EventListener> eventListeners = new LinkedList<>();
-    private final Map<NetworkElement, Responder> responders = new HashMap<>();
+    private final Map<Predicate, Responder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -46,7 +46,7 @@ public class EventNetwork implements
         }
     }
 
-    public void registerResponder(NetworkElement elm, Responder responder) {
+    public void registerResponder(Predicate elm, Responder responder) {
         responders.put(elm, responder);
     }
 
@@ -98,7 +98,7 @@ public class EventNetwork implements
     }
 
     @Override
-    public Message fulfill(NetworkElement elm) {
+    public Message fulfill(Predicate elm) {
         return responders.get(elm).fulfill(elm);
     }
 }

@@ -1,21 +1,18 @@
 package main.usecase;
 
 import main.domain.Account;
-import main.domain.Action;
 import main.domain.Snapshot;
 import main.io.EventConnection;
 
 import java.util.*;
 
 public class EventNetwork implements
-        ActionListener,
         BalanceListener,
         GameStateListener,
         NavListener,
         Responder,
         EventListener {
 
-    private final Collection<ActionListener> actionListeners = new LinkedList<>();
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<NavListener> navListeners = new LinkedList<>();
@@ -24,10 +21,6 @@ public class EventNetwork implements
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
-            if (connection instanceof ActionListener) {
-                actionListeners.add((ActionListener) connection);
-            }
-
             if (connection instanceof BalanceListener) {
                 balanceListeners.add((BalanceListener) connection);
             }
@@ -65,16 +58,6 @@ public class EventNetwork implements
     @Override
     public void onEvent(Message message) {
         eventListeners.forEach(l -> l.onEvent(message));
-    }
-
-    @Override
-    public void onActionTaken(Action action) {
-        actionListeners.forEach(l -> l.onActionTaken(action));
-    }
-
-    @Override
-    public void onBetPlaced(Account account, int amount) {
-        actionListeners.forEach(l -> l.onBetPlaced(account, amount));
     }
 
     @Override

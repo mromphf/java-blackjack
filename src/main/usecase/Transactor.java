@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import static main.usecase.Predicate.*;
 
-public class Transactor extends EventConnection implements GameStateListener, ActionListener, EventListener {
+public class Transactor extends EventConnection implements GameStateListener, EventListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -32,13 +32,6 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
     }
 
     @Override
-    public void onBetPlaced(Account account, int amount) {
-        final Transaction t = new Transaction(LocalDateTime.now(), account.getKey(), "BET", (amount * -1));
-        final Message message = Message.of(TRANSACTION, t);
-        eventNetwork.onEvent(message);
-    }
-
-    @Override
     public void onEvent(Message message) {
         if (message.is(ACCOUNT_CREATED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
@@ -49,9 +42,11 @@ public class Transactor extends EventConnection implements GameStateListener, Ac
             final Message m = Message.of(TRANSACTION, t);
 
             eventNetwork.onEvent(m);
+        } else if (message.is(BET_PLACED)) {
+            final Transaction t = new Transaction(LocalDateTime.now(), message.getAccount().getKey(), "BET", (message.getAmount() * -1));
+            final Message m = Message.of(TRANSACTION, t);
+
+            eventNetwork.onEvent(m);
         }
     }
-
-    @Override
-    public void onActionTaken(Action action) {}
 }

@@ -8,8 +8,10 @@ import java.util.*;
 
 import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
+import static main.usecase.Predicate.ACTION_TAKEN;
+import static main.usecase.Predicate.BET_PLACED;
 
-public class Game extends EventConnection implements ActionListener, NavListener {
+public class Game extends EventConnection implements NavListener, EventListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -33,16 +35,15 @@ public class Game extends EventConnection implements ActionListener, NavListener
     }
 
     @Override
-    public void onBetPlaced(Account account, int amount) {
-        round = new Round(account.getKey(), deck, amount, maxCards, numDecks);
-        eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
-    }
-
-    @Override
-    public void onActionTaken(Action action) {
-        round.record(LocalDateTime.now(), action);
-        runnableMap.getOrDefault(action, () -> {}).run();
-        eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+    public void onEvent(Message message) {
+        if (message.is(BET_PLACED)) {
+            round = new Round(message.getAccount().getKey(), deck, message.getAmount(), maxCards, numDecks);
+            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+        } else if (message.is(ACTION_TAKEN)) {
+            round.record(LocalDateTime.now(), message.getAction());
+            runnableMap.getOrDefault(message.getAction(), () -> {}).run();
+            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+        }
     }
 
     @Override

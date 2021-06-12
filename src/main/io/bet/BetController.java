@@ -10,12 +10,14 @@ import main.domain.Account;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.Layout;
+import main.usecase.Message;
 import main.usecase.NavListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
+import static main.usecase.Predicate.BET_PLACED;
 import static main.usecase.Predicate.CURRENT_BALANCE;
 
 
@@ -61,7 +63,8 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @FXML
     private void onDeal() {
-        eventNetwork.onBetPlaced(this.account, bet);
+        final Message message = Message.of(BET_PLACED, this.bet, this.account);
+        eventNetwork.onEvent(message);
         eventNetwork.onChangeLayout(GAME);
         bet = 0;
     }

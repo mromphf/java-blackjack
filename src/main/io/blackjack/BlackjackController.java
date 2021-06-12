@@ -11,6 +11,7 @@ import main.domain.Snapshot;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
 import main.usecase.GameStateListener;
+import main.usecase.Message;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.*;
+import static main.usecase.Predicate.ACTION_TAKEN;
 import static main.usecase.Predicate.CURRENT_BALANCE;
 
 public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
@@ -99,7 +101,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.onActionTaken(SPLIT);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, SPLIT));
     }
 
     @FXML
@@ -110,12 +112,12 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.onActionTaken(STAND);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.onActionTaken(SETTLE);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, SETTLE));
     }
 
     @FXML
@@ -125,26 +127,26 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onHit() {
-        eventNetwork.onActionTaken(HIT);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, HIT));
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.onActionTaken(DOUBLE);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.onActionTaken(BUY_INSURANCE);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, BUY_INSURANCE));
     }
 
     @FXML
     private void onWaiveInsurance() {
-        eventNetwork.onActionTaken(WAIVE_INSURANCE);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, WAIVE_INSURANCE));
     }
 
     @FXML void onPlayNextHand() {
-        eventNetwork.onActionTaken(PLAY_NEXT_HAND);
+        eventNetwork.onEvent(Message.of(ACTION_TAKEN, PLAY_NEXT_HAND));
     }
 
     private void renderExposedTable(Snapshot snapshot) {

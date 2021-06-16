@@ -24,6 +24,7 @@ import java.util.function.Function;
 import static main.domain.Deck.fresh;
 import static main.usecase.Layout.*;
 import static main.domain.Deck.shuffle;
+import static main.usecase.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.Predicate.CURRENT_BALANCE;
 
 public class AppRoot {
@@ -82,6 +83,7 @@ public class AppRoot {
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
 
         eventNetwork.registerResponder(CURRENT_BALANCE, accounting);
+        eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
 
         eventNetwork.registerGameStateListener(gameLogger);
         eventNetwork.registerBalanceListener(gameLogger);

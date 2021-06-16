@@ -7,21 +7,19 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
+import main.usecase.Bet;
 import main.io.EventConnection;
-import main.usecase.BalanceListener;
-import main.usecase.Layout;
-import main.usecase.Message;
-import main.usecase.NavListener;
+import main.usecase.*;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
-import static main.usecase.Predicate.BET_PLACED;
-import static main.usecase.Predicate.CURRENT_BALANCE;
+import static main.usecase.Predicate.*;
 
 
-public class BetController extends EventConnection implements Initializable, BalanceListener, NavListener {
+public class BetController extends EventConnection implements Initializable, BalanceListener, EventListener {
 
     @FXML
     private Label lblBet;
@@ -48,7 +46,6 @@ public class BetController extends EventConnection implements Initializable, Bal
     public Button btnBet100;
 
     private final static int MAX_BET = 500;
-    private Account account;
     private int bet = 0;
     private int balance = 0;
 
@@ -63,21 +60,24 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @FXML
     private void onDeal() {
-        final Message message = Message.of(BET_PLACED, this.bet, this.account);
-        eventNetwork.onEvent(message);
-        eventNetwork.onChangeLayout(GAME);
+        final Account selectedAccount = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
+        final Bet betByAccount = Bet.of(LocalDateTime.now(), selectedAccount.getKey(), bet);
+        eventNetwork.onEvent(Message.of(BET_PLACED, betByAccount));
+        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, GAME));
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        eventNetwork.onChangeLayout(HOME);
+        final Message msgLayoutChanged = Message.of(LAYOUT_CHANGED, HOME);
+        eventNetwork.onEvent(msgLayoutChanged);
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        eventNetwork.onChangeLayout(HISTORY, account);
+        final Message msgLayoutChanged = Message.of(LAYOUT_CHANGED, HISTORY);
+        eventNetwork.onEvent(msgLayoutChanged);
     }
 
     @Override
@@ -90,15 +90,11 @@ public class BetController extends EventConnection implements Initializable, Bal
     }
 
     @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        if (layout == BET) {
-            this.account = account;
+    public void onEvent(Message message) {
+        if (message.is(LAYOUT_CHANGED) && message.getLayout().equals(BET)) {
             onBalanceUpdated();
         }
     }
-
-    @Override
-    public void onChangeLayout(Layout layout) {}
 
     private void onBet(MouseEvent mouseEvent, int amount) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {

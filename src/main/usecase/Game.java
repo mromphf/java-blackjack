@@ -8,10 +8,9 @@ import java.util.*;
 
 import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
-import static main.usecase.Predicate.ACTION_TAKEN;
-import static main.usecase.Predicate.BET_PLACED;
+import static main.usecase.Predicate.*;
 
-public class Game extends EventConnection implements NavListener, EventListener {
+public class Game extends EventConnection implements EventListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -37,24 +36,21 @@ public class Game extends EventConnection implements NavListener, EventListener 
     @Override
     public void onEvent(Message message) {
         if (message.is(BET_PLACED)) {
-            round = new Round(message.getAccount().getKey(), deck, message.getAmount(), maxCards, numDecks);
+            final Bet bet = message.getBet();
+            round = new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks);
             eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
         } else if (message.is(ACTION_TAKEN)) {
             round.record(LocalDateTime.now(), message.getAction());
             runnableMap.getOrDefault(message.getAction(), () -> {}).run();
             eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+        } else if (message.is(LAYOUT_CHANGED)) {
+            onChangeLayout(message.getLayout());
         }
     }
 
-    @Override
     public void onChangeLayout(Layout layout) {
         if (layout == HOME) {
             round = new Round(Account.placeholder().getKey(), deck, 0, maxCards, numDecks);
         }
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        onChangeLayout(layout);
     }
 }

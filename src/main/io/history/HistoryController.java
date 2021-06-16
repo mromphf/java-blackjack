@@ -26,7 +26,7 @@ import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.Predicate.*;
 
-public class HistoryController extends EventConnection implements Initializable, NavListener, EventListener {
+public class HistoryController extends EventConnection implements Initializable, EventListener {
 
     @FXML
     public DatePicker datePicker;
@@ -39,9 +39,10 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onBack() {
+        final Message message = Message.of(LAYOUT_CHANGED, BACK);
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onChangeLayout(BACK);
+        eventNetwork.onEvent(message);
     }
 
     @FXML
@@ -74,9 +75,19 @@ public class HistoryController extends EventConnection implements Initializable,
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onChangeLayout(Layout layout, Account account) {
+    public void onEvent(Message message) {
+        if (message.is(TRANSACTIONS_LOADED) || message.is(TRANSACTION_SERIES)) {
+            allTransactions.addAll(message.getTransactions());
+        } else if (message.is(TRANSACTION)) {
+            allTransactions.add(message.getTransaction());
+        } else if (message.is(LAYOUT_CHANGED)) {
+            onChangeLayout(message.getLayout());
+        }
+    }
+
+    public void onChangeLayout(Layout layout) {
         if (layout == HISTORY) {
-            this.account = account;
+            this.account = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
             final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);
             drawChart(
                     account,
@@ -86,18 +97,6 @@ public class HistoryController extends EventConnection implements Initializable,
             );
         }
     }
-
-    @Override
-    public void onEvent(Message message) {
-        if (message.is(TRANSACTIONS_LOADED) || message.is(TRANSACTION_SERIES)) {
-            allTransactions.addAll(message.getTransactions());
-        } else if (message.is(TRANSACTION)) {
-            allTransactions.add(message.getTransaction());
-        }
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout) {}
 
     public void drawChart(Account account, Axis<String> xAxis, NumberAxis yAxis, XYChart.Series<String, Number> series) {
         final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);

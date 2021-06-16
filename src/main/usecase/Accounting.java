@@ -5,22 +5,17 @@ import main.io.EventConnection;
 
 import static main.usecase.Predicate.*;
 
-public class Accounting extends EventConnection implements NavListener, Responder, EventListener {
+public class Accounting extends EventConnection implements Responder, EventListener {
 
     private Account account;
 
     public Accounting() {
-        this.account = Account.placeholder();
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        this.account = account;
+        this.account = null;
     }
 
     @Override
     public void onEvent(Message message) {
-        if (message.is(ACCOUNT_CREATED)) {
+        if (message.is(ACCOUNT_CREATED) || message.is(ACCOUNT_SELECTED)) {
             this.account = message.getAccount();
         } else if (message.is(TRANSACTION)) {
             this.account = account.updateBalance(message.getTransaction());
@@ -32,10 +27,7 @@ public class Accounting extends EventConnection implements NavListener, Responde
     }
 
     @Override
-    public void onChangeLayout(Layout layout) {}
-
-    @Override
-    public Message fulfill(Predicate elm) {
-        return Message.of(elm, account);
+    public Message fulfill(Predicate predicate) {
+        return Message.of(predicate, account);
     }
 }

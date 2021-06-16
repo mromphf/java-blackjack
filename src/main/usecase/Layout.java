@@ -5,5 +5,6 @@ public enum Layout {
     BET,
     GAME,
     HOME,
-    HISTORY
+    HISTORY,
+    PLACEHOLDER
 }

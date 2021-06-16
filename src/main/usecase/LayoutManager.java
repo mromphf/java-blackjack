@@ -2,14 +2,15 @@ package main.usecase;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import main.domain.Account;
 import main.io.EventConnection;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Stack;
 
 import static main.usecase.Layout.BACK;
+import static main.usecase.Predicate.LAYOUT_CHANGED;
 
-public class LayoutManager extends EventConnection implements NavListener {
+public class LayoutManager extends EventConnection implements EventListener {
 
     private final Stack<Layout> navHistory;
     private final Scene scene;
@@ -22,6 +23,12 @@ public class LayoutManager extends EventConnection implements NavListener {
     }
 
     @Override
+    public void onEvent(Message message) {
+        if (message.is(LAYOUT_CHANGED)) {
+            onChangeLayout(message.getLayout());
+        }
+    }
+
     public void onChangeLayout(Layout layout) {
         if (layout == BACK) {
             navHistory.pop();
@@ -30,10 +37,5 @@ public class LayoutManager extends EventConnection implements NavListener {
             navHistory.add(layout);
             scene.setRoot(layoutMap.get(layout));
         }
-    }
-
-    @Override
-    public void onChangeLayout(Layout layout, Account account) {
-        onChangeLayout(layout);
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import main.domain.Snapshot;
 import main.io.EventConnection;
 import main.usecase.BalanceListener;
+import main.usecase.EventListener;
 import main.usecase.GameStateListener;
 import main.usecase.Message;
 
@@ -19,10 +20,10 @@ import java.util.ResourceBundle;
 import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.*;
-import static main.usecase.Predicate.ACTION_TAKEN;
-import static main.usecase.Predicate.CURRENT_BALANCE;
+import static main.usecase.Layout.GAME;
+import static main.usecase.Predicate.*;
 
-public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener {
+public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener, EventListener {
 
     @FXML
     private Label lblBet;
@@ -99,6 +100,13 @@ public class BlackjackController extends EventConnection implements Initializabl
         }
     }
 
+    @Override
+    public void onEvent(Message message) {
+        if (message.is(LAYOUT_CHANGED) && (message.getLayout().equals(GAME))) {
+            onBalanceUpdated();
+        }
+    }
+
     @FXML
     public void onSplit() {
         eventNetwork.onEvent(Message.of(ACTION_TAKEN, SPLIT));
@@ -122,7 +130,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onDone() {
-        eventNetwork.onChangeLayout(BET);
+        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, BET));
     }
 
     @FXML

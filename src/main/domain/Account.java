@@ -61,7 +61,7 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return balance == account.balance && key.equals(account.key) && name.equals(account.name);
+        return balance == account.balance && key.equals(account.key) && name.equals(account.name) && created.equals(account.created);
     }
 
     @Override

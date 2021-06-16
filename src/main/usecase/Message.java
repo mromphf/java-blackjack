@@ -9,54 +9,60 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Message {
-    private final int amount;
+    private final Bet bet;
     private final Predicate predicate;
     private final Account account;
     private final Transaction transaction;
+    private final Layout layout;
     private final List<Transaction> transactions;
     private final Collection<Account> accounts;
     private final Action action;
 
-    private Message(Predicate predicate, int amount, Account account, Transaction transaction, Action action, List<Transaction> transactions, Collection<Account> accounts) {
-        this.amount = amount;
+    private Message(Predicate predicate, Bet bet, Account account, Transaction transaction, Layout layout, Action action, List<Transaction> transactions, Collection<Account> accounts) {
+        this.bet = bet;
         this.predicate = predicate;
         this.account = account;
         this.transaction = transaction;
+        this.layout = layout;
         this.action = action;
         this.transactions = transactions;
         this.accounts = accounts;
     }
 
     public static Message of(Predicate elm, Account account) {
-        return new Message(elm, 0, account, Transaction.placeholder(), Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
+        return new Message(elm, null, account, Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
-    public static Message of(Predicate predicate, int amount, Account account) {
-        return new Message(predicate, amount, account, Transaction.placeholder(), Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
+    public static Message of(Predicate predicate, Bet bet) {
+        return new Message(predicate, bet, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
     public static Message of(Predicate elm, List<Transaction> transactions) {
-        return new Message(elm, 0, Account.placeholder(), Transaction.placeholder(), Action.PLACEHOLDER, transactions, new LinkedList<>());
+        return new Message(elm, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, transactions, new LinkedList<>());
     }
 
     public static Message of(Predicate elm, Collection<Account> accounts) {
-        return new Message(elm, 0, Account.placeholder(), Transaction.placeholder(), Action.PLACEHOLDER, new LinkedList<>(), accounts);
+        return new Message(elm, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), accounts);
     }
 
     public static Message of(Predicate elm, Transaction transaction) {
-        return new Message(elm, 0, Account.placeholder(), transaction, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
+        return new Message(elm, null, Account.placeholder(), transaction, Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
     public static Message of(Predicate predicate, Action action) {
-        return new Message(predicate, 0, Account.placeholder(), Transaction.placeholder(), action, new LinkedList<>(), new LinkedList<>());
+        return new Message(predicate, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, action, new LinkedList<>(), new LinkedList<>());
+    }
+
+    public static Message of(Predicate predicate, Layout layout) {
+        return new Message(predicate, null, Account.placeholder(), Transaction.placeholder(), layout, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
     public boolean is(Predicate predicate) {
         return predicate.equals(this.predicate);
     }
 
-    public int getAmount() {
-        return amount;
+    public Bet getBet() {
+        return bet;
     }
 
     public Predicate getPredicate() {
@@ -85,5 +91,9 @@ public class Message {
 
     public Collection<Account> getAccounts() {
         return accounts;
+    }
+
+    public Layout getLayout() {
+        return layout;
     }
 }

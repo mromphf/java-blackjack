@@ -56,7 +56,9 @@ public class HomeController extends EventConnection implements Initializable, Ba
     @FXML
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.onChangeLayout(BET, selectedAccount);
+
+        eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, BET));
     }
 
     @FXML
@@ -124,7 +126,9 @@ public class HomeController extends EventConnection implements Initializable, Ba
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        eventNetwork.onChangeLayout(HISTORY, selectedAccount);
+
+        eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

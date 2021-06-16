@@ -35,9 +35,10 @@ public class Transactor extends EventConnection implements GameStateListener, Ev
     public void onEvent(Message message) {
         if (message.is(ACCOUNT_CREATED) || message.is(BET_PLACED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
+            final Bet bet = message.getBet();
             final String description = message.is(ACCOUNT_CREATED) ? "SIGNING BONUS" : "BET";
-            final int signingBonus = message.is(ACCOUNT_CREATED) ? 200 : (message.getAmount() * -1);
-            final UUID accountKey = message.getAccount().getKey();
+            final int signingBonus = message.is(ACCOUNT_CREATED) ? 200 : (bet.getVal() * -1);
+            final UUID accountKey = message.getBet().getAccountKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
             final Message m = Message.of(TRANSACTION, transaction);
 

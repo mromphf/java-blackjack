@@ -8,7 +8,7 @@ import java.util.*;
 
 public class EventNetwork implements
         BalanceListener,
-        GameStateListener,
+        SnapshotListener,
         Responder,
         BetListener,
         LayoutListener,
@@ -22,7 +22,7 @@ public class EventNetwork implements
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
-    private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
+    private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
     private final Map<Predicate, Responder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
@@ -31,8 +31,8 @@ public class EventNetwork implements
                 balanceListeners.add((BalanceListener) connection);
             }
 
-            if (connection instanceof GameStateListener) {
-                gameStateListeners.add((GameStateListener) connection);
+            if (connection instanceof SnapshotListener) {
+                snapshotListeners.add((SnapshotListener) connection);
             }
 
             if (connection instanceof BetListener) {
@@ -61,8 +61,8 @@ public class EventNetwork implements
         responders.put(elm, responder);
     }
 
-    public void registerGameStateListener(GameStateListener listener) {
-        gameStateListeners.add(listener);
+    public void registerGameStateListener(SnapshotListener listener) {
+        snapshotListeners.add(listener);
     }
 
     public void registerBalanceListener(BalanceListener listener) {
@@ -83,8 +83,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
-        gameStateListeners.forEach(l -> l.onUpdate(snapshot));
+    public void onGameUpdate(Snapshot snapshot) {
+        snapshotListeners.forEach(l -> l.onGameUpdate(snapshot));
     }
 
     @Override

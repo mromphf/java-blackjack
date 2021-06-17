@@ -15,7 +15,7 @@ import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static main.usecase.eventing.Predicate.*;
 
-public class GameLogger extends Logger implements GameStateListener, BalanceListener, AccountListener, TransactionListener {
+public class GameLogger extends Logger implements SnapshotListener, BalanceListener, AccountListener, TransactionListener {
 
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
     private EventNetwork eventNetwork;
@@ -29,7 +29,7 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
+    public void onGameUpdate(Snapshot snapshot) {
         log(INFO, String.format("%s: SNAPSHOT - %s", snapshot.getTimestamp().toLocalTime().format(pattern), snapshot));
     }
 

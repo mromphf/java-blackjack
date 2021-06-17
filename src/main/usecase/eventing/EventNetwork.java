@@ -1,5 +1,6 @@
 package main.usecase.eventing;
 
+import main.domain.Account;
 import main.domain.Action;
 import main.domain.Bet;
 import main.domain.Snapshot;
@@ -15,8 +16,10 @@ public class EventNetwork implements
         EventListener,
         BetListener,
         LayoutListener,
-        ActionListener {
+        ActionListener,
+        AccountListener {
 
+    private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<BetListener> betListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
@@ -49,6 +52,10 @@ public class EventNetwork implements
 
             if (connection instanceof ActionListener) {
                 actionListeners.add((ActionListener) connection);
+            }
+
+            if (connection instanceof AccountListener) {
+                accountListeners.add((AccountListener) connection);
             }
         }
     }
@@ -85,7 +92,7 @@ public class EventNetwork implements
     }
 
     @Override
-    public Message fulfill(Predicate elm) {
+    public Account fulfill(Predicate elm) {
         return responders.get(elm).fulfill(elm);
     }
 
@@ -102,5 +109,15 @@ public class EventNetwork implements
     @Override
     public void onActionEvent(Event<Action> event) {
         actionListeners.forEach(listener -> listener.onActionEvent(event));
+    }
+
+    @Override
+    public void onAccountEvent(Event<Account> event) {
+        accountListeners.forEach(listener -> listener.onAccountEvent(event));
+    }
+
+    @Override
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        accountListeners.forEach(listener -> listener.onAccountsEvent(event));
     }
 }

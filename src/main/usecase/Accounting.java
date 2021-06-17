@@ -38,6 +38,7 @@ public class Accounting extends EventConnection implements Responder, AccountLis
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
             this.account = event.getData();
+            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
         }
     }
 

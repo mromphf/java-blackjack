@@ -2,13 +2,16 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.GameStateListener;
+import main.usecase.eventing.Message;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class Transactor extends EventConnection implements GameStateListener, EventListener {
 

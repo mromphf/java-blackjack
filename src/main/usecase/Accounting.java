@@ -2,8 +2,12 @@ package main.usecase;
 
 import main.domain.Account;
 import main.io.EventConnection;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
+import main.usecase.eventing.Predicate;
+import main.usecase.eventing.Responder;
 
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class Accounting extends EventConnection implements Responder, EventListener {
 

@@ -2,13 +2,15 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class Game extends EventConnection implements EventListener {
 

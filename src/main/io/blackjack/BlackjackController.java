@@ -9,10 +9,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Snapshot;
 import main.io.EventConnection;
-import main.usecase.BalanceListener;
-import main.usecase.EventListener;
-import main.usecase.GameStateListener;
-import main.usecase.Message;
+import main.usecase.eventing.BalanceListener;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.GameStateListener;
+import main.usecase.eventing.Message;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +21,7 @@ import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
 import static main.domain.Rules.*;
 import static main.usecase.Layout.GAME;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener, EventListener {
 

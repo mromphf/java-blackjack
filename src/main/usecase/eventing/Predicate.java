@@ -1,4 +1,4 @@
-package main.usecase;
+package main.usecase.eventing;
 
 public enum Predicate {
     ACCOUNTS_LOADED,

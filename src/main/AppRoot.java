@@ -17,6 +17,7 @@ import main.io.storage.AccountStorage;
 import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.LayoutManager;
+import main.usecase.eventing.EventNetwork;
 
 import java.util.*;
 import java.util.function.Function;
@@ -24,8 +25,8 @@ import java.util.function.Function;
 import static main.domain.Deck.fresh;
 import static main.usecase.Layout.*;
 import static main.domain.Deck.shuffle;
-import static main.usecase.Predicate.ACCOUNT_SELECTED;
-import static main.usecase.Predicate.CURRENT_BALANCE;
+import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
+import static main.usecase.eventing.Predicate.CURRENT_BALANCE;
 
 public class AppRoot {
 

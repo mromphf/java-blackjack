@@ -3,12 +3,14 @@ package main.usecase;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.io.EventConnection;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
 
 import java.util.Map;
 import java.util.Stack;
 
 import static main.usecase.Layout.BACK;
-import static main.usecase.Predicate.LAYOUT_CHANGED;
+import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class LayoutManager extends EventConnection implements EventListener {
 

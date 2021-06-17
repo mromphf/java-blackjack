@@ -1,4 +1,4 @@
-package main.usecase;
+package main.usecase.eventing;
 
 public class Event<T> {
     private final Predicate predicate;

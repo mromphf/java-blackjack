@@ -1,4 +1,4 @@
-package main.usecase;
+package main.usecase.eventing;
 
 import main.domain.Snapshot;
 import main.io.EventConnection;
@@ -9,11 +9,11 @@ public class EventNetwork implements
         BalanceListener,
         GameStateListener,
         Responder,
-        EventListener {
+        main.usecase.eventing.EventListener {
 
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
-    private final Collection<EventListener> eventListeners = new LinkedList<>();
+    private final Collection<main.usecase.eventing.EventListener> eventListeners = new LinkedList<>();
     private final Map<Predicate, Responder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
@@ -26,8 +26,8 @@ public class EventNetwork implements
                 gameStateListeners.add((GameStateListener) connection);
             }
 
-            if (connection instanceof EventListener) {
-                eventListeners.add((EventListener) connection);
+            if (connection instanceof main.usecase.eventing.EventListener) {
+                eventListeners.add((main.usecase.eventing.EventListener) connection);
             }
         }
     }

@@ -44,7 +44,7 @@ public class Accounting extends EventConnection implements Responder, AccountLis
     }
 
     @Override
-    public Account fulfill(Predicate predicate) {
+    public Account fulfillSelectedAccount(Predicate predicate) {
         return account;
     }
 }

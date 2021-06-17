@@ -11,7 +11,6 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
-import main.usecase.eventing.EventListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
 
-public class HomeController extends EventConnection implements Initializable, BalanceListener, EventListener {
+public class HomeController extends EventConnection implements Initializable, BalanceListener, AccountListener {
 
     @FXML
     public GridPane listControls;
@@ -56,7 +55,7 @@ public class HomeController extends EventConnection implements Initializable, Ba
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_SELECTED, selectedAccount));
         eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, BET));
     }
 
@@ -102,48 +101,49 @@ public class HomeController extends EventConnection implements Initializable, Ba
         final String name = txtName.getText();
         final LocalDateTime now = LocalDateTime.now();
         final Account account = new Account(uuid, name, now);
-        final Message message = Message.of(ACCOUNT_CREATED, account);
 
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
 
-        eventNetwork.onEvent(message);
+        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_CREATED, account));
     }
 
     @FXML
     public void onDelete() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-        final Message message = Message.of(ACCOUNT_DELETED, selectedAccount);
 
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        eventNetwork.onEvent(message);
+        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_DELETED, selectedAccount));
     }
 
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_SELECTED, selectedAccount));
         eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override
     public void onBalanceUpdated() {
-        final Account account = eventNetwork.fulfill(CURRENT_BALANCE).getAccount();
+        final Account account = eventNetwork.fulfill(CURRENT_BALANCE);
         accountMap.put(account.getKey(), account);
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(ACCOUNTS_LOADED)) {
-            for (Account account : message.getAccounts()) {
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        if (event.is(ACCOUNTS_LOADED)) {
+            for (Account account : event.getData()) {
                 accountMap.put(account.getKey(), account);
             }
             lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         }
     }
+
+    @Override
+    public void onAccountEvent(Event<Account> event) {}
 }

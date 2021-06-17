@@ -1,5 +1,7 @@
 package main.usecase.eventing;
 
+import main.domain.Account;
+
 public interface Responder {
-    Message fulfill(Predicate elm);
+    Account fulfill(Predicate predicate);
 }

@@ -61,7 +61,7 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @FXML
     private void onDeal() {
-        final Account selectedAccount = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
+        final Account selectedAccount = eventNetwork.fulfill(ACCOUNT_SELECTED);
         final Bet betByAccount = Bet.of(LocalDateTime.now(), selectedAccount.getKey(), bet);
         eventNetwork.onBetEvent(new Event<>(BET_PLACED, betByAccount));
         eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, GAME));
@@ -81,7 +81,7 @@ public class BetController extends EventConnection implements Initializable, Bal
 
     @Override
     public void onBalanceUpdated() {
-        this.balance = eventNetwork.fulfill(CURRENT_BALANCE).getCurrentBalance();
+        this.balance = eventNetwork.fulfill(CURRENT_BALANCE).getBalance();
 
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);

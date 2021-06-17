@@ -39,7 +39,7 @@ public class Transactor extends EventConnection implements GameStateListener, Ev
             final LocalDateTime timestamp = LocalDateTime.now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;
-            final UUID accountKey = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount().getKey();
+            final UUID accountKey = eventNetwork.fulfill(ACCOUNT_SELECTED).getKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
             final Message m = Message.of(TRANSACTION, transaction);
 

@@ -51,10 +51,6 @@ public class Message {
         return new Message(predicate, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, action, new LinkedList<>(), new LinkedList<>());
     }
 
-    public static Message of(Predicate predicate, Layout layout) {
-        return new Message(predicate, null, Account.placeholder(), Transaction.placeholder(), layout, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
-    }
-
     public boolean is(Predicate predicate) {
         return predicate.equals(this.predicate);
     }

@@ -12,7 +12,9 @@ import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.*;
+import main.usecase.eventing.Event;
 import main.usecase.eventing.EventListener;
+import main.usecase.eventing.LayoutListener;
 import main.usecase.eventing.Message;
 
 import java.net.URL;
@@ -28,7 +30,7 @@ import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
 
-public class HistoryController extends EventConnection implements Initializable, EventListener {
+public class HistoryController extends EventConnection implements Initializable, EventListener, LayoutListener {
 
     @FXML
     public DatePicker datePicker;
@@ -41,10 +43,9 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onBack() {
-        final Message message = Message.of(LAYOUT_CHANGED, BACK);
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onEvent(message);
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, BACK));
     }
 
     @FXML
@@ -82,13 +83,12 @@ public class HistoryController extends EventConnection implements Initializable,
             allTransactions.addAll(message.getTransactions());
         } else if (message.is(TRANSACTION)) {
             allTransactions.add(message.getTransaction());
-        } else if (message.is(LAYOUT_CHANGED)) {
-            onChangeLayout(message.getLayout());
         }
     }
 
-    public void onChangeLayout(Layout layout) {
-        if (layout == HISTORY) {
+    @Override
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
             this.account = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
             final List<Transaction> accountTransactions = listForAccount(account.getKey(), allTransactions);
             drawChart(

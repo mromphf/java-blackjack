@@ -3,8 +3,8 @@ package main.usecase;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.io.EventConnection;
-import main.usecase.eventing.EventListener;
-import main.usecase.eventing.Message;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.LayoutListener;
 
 import java.util.Map;
 import java.util.Stack;
@@ -12,7 +12,7 @@ import java.util.Stack;
 import static main.usecase.Layout.BACK;
 import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
-public class LayoutManager extends EventConnection implements EventListener {
+public class LayoutManager extends EventConnection implements LayoutListener {
 
     private final Stack<Layout> navHistory;
     private final Scene scene;
@@ -25,9 +25,9 @@ public class LayoutManager extends EventConnection implements EventListener {
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(LAYOUT_CHANGED)) {
-            onChangeLayout(message.getLayout());
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED)) {
+            onChangeLayout(event.getData());
         }
     }
 

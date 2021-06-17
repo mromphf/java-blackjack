@@ -10,8 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.EventConnection;
-import main.usecase.eventing.BalanceListener;
-import main.usecase.eventing.Message;
+import main.usecase.eventing.*;
 import main.usecase.eventing.EventListener;
 
 import java.net.URL;
@@ -58,7 +57,7 @@ public class HomeController extends EventConnection implements Initializable, Ba
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, BET));
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, BET));
     }
 
     @FXML
@@ -128,7 +127,7 @@ public class HomeController extends EventConnection implements Initializable, Ba
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onEvent(Message.of(ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

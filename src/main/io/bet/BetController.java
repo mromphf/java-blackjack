@@ -9,10 +9,8 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.domain.Bet;
 import main.io.EventConnection;
-import main.usecase.eventing.BalanceListener;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventListener;
-import main.usecase.eventing.Message;
+import main.usecase.Layout;
+import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -22,7 +20,7 @@ import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 
-public class BetController extends EventConnection implements Initializable, BalanceListener, EventListener {
+public class BetController extends EventConnection implements Initializable, BalanceListener, LayoutListener {
 
     @FXML
     private Label lblBet;
@@ -66,21 +64,19 @@ public class BetController extends EventConnection implements Initializable, Bal
         final Account selectedAccount = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
         final Bet betByAccount = Bet.of(LocalDateTime.now(), selectedAccount.getKey(), bet);
         eventNetwork.onBetEvent(new Event<>(BET_PLACED, betByAccount));
-        eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, GAME));
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, GAME));
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        final Message msgLayoutChanged = Message.of(LAYOUT_CHANGED, HOME);
-        eventNetwork.onEvent(msgLayoutChanged);
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, HOME));
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        final Message msgLayoutChanged = Message.of(LAYOUT_CHANGED, HISTORY);
-        eventNetwork.onEvent(msgLayoutChanged);
+        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, HISTORY));
     }
 
     @Override
@@ -93,8 +89,8 @@ public class BetController extends EventConnection implements Initializable, Bal
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(LAYOUT_CHANGED) && message.getLayout().equals(BET)) {
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == BET) {
             onBalanceUpdated();
         }
     }

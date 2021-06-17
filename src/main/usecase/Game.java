@@ -2,10 +2,8 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
-import main.usecase.eventing.BetListener;
-import main.usecase.eventing.Event;
+import main.usecase.eventing.*;
 import main.usecase.eventing.EventListener;
-import main.usecase.eventing.Message;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -14,7 +12,7 @@ import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements EventListener, BetListener {
+public class Game extends EventConnection implements EventListener, BetListener, LayoutListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -43,10 +41,16 @@ public class Game extends EventConnection implements EventListener, BetListener 
             round.record(LocalDateTime.now(), message.getAction());
             runnableMap.getOrDefault(message.getAction(), () -> {}).run();
             eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
-        } else if (message.is(LAYOUT_CHANGED)) {
-            onChangeLayout(message.getLayout());
         }
     }
+
+    @Override
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME) {
+            round = new Round(Account.placeholder().getKey(), deck, 0, maxCards, numDecks);
+        }
+    }
+
 
     @Override
     public void onBetEvent(Event<Bet> event) {
@@ -57,9 +61,4 @@ public class Game extends EventConnection implements EventListener, BetListener 
         }
     }
 
-    public void onChangeLayout(Layout layout) {
-        if (layout == HOME) {
-            round = new Round(Account.placeholder().getKey(), deck, 0, maxCards, numDecks);
-        }
-    }
 }

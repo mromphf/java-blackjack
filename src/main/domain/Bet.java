@@ -1,4 +1,4 @@
-package main.usecase;
+package main.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,10 +18,6 @@ public class Bet {
 
     public static Bet of(LocalDateTime timestamp, UUID accountKey, int val) {
         return new Bet(timestamp, accountKey, val);
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
     }
 
     public UUID getAccountKey() {

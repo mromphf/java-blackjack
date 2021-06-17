@@ -3,7 +3,7 @@ package main.usecase.eventing;
 import main.domain.Account;
 import main.domain.Action;
 import main.domain.Transaction;
-import main.usecase.Bet;
+import main.domain.Bet;
 import main.usecase.Layout;
 
 import java.util.Collection;

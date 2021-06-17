@@ -8,13 +8,14 @@ import main.usecase.eventing.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static main.usecase.eventing.Predicate.*;
 
-public class GameLogger extends Logger implements GameStateListener, BalanceListener, EventListener, AccountListener {
+public class GameLogger extends Logger implements GameStateListener, BalanceListener, AccountListener, TransactionListener {
 
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
     private EventNetwork eventNetwork;
@@ -43,12 +44,13 @@ public class GameLogger extends Logger implements GameStateListener, BalanceList
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(TRANSACTION)) {
-            onTransaction(message.getTransaction());
-        } else if (message.is(TRANSACTION_SERIES)) {
-            message.getTransactions().forEach(this::onTransaction);
-        }
+    public void onTransactionEvent(Event<Transaction> event) {
+        onTransaction(event.getData());
+    }
+
+    @Override
+    public void onTransactionsEvent(Event<List<Transaction>> event) {
+        event.getData().forEach(this::onTransaction);
     }
 
     @Override

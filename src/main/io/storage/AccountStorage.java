@@ -6,14 +6,12 @@ import main.io.EventConnection;
 import main.usecase.eventing.*;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static main.usecase.eventing.Predicate.*;
 
 
-public class AccountStorage extends EventConnection implements EventListener, AccountListener {
+public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
     private final Memory memory;
 
@@ -22,22 +20,23 @@ public class AccountStorage extends EventConnection implements EventListener, Ac
     }
 
     public void loadAllAccounts() {
-        eventNetwork.onAccountsEvent(new Event<>(ACCOUNTS_LOADED, memory.loadAllAccounts()));
+        final Event<Collection<Account>> event = new Event<>(ACCOUNTS_LOADED, memory.loadAllAccounts());
+        eventNetwork.onAccountsEvent(event);
     }
 
     public void loadAllTransactions() {
-        final Message message = Message.of(TRANSACTIONS_LOADED, memory.loadAllTransactions());
-        eventNetwork.onEvent(message);
+        final Event<List<Transaction>> event = new Event<>(TRANSACTIONS_LOADED, memory.loadAllTransactions());
+        eventNetwork.onTransactionsEvent(event);
     }
 
     @Override
-    public void onEvent(Message message) {
-        final Map<Predicate, Runnable> runnableMap = new HashMap<>();
+    public void onTransactionEvent(Event<Transaction> event) {
+        memory.saveTransaction(event.getData());
+    }
 
-        runnableMap.put(TRANSACTION, () -> saveTransaction(message.getTransaction()));
-        runnableMap.put(TRANSACTION_SERIES, () -> saveTransactions(message.getTransactions()));
-
-        runnableMap.getOrDefault(message.getPredicate(), () -> {}).run();
+    @Override
+    public void onTransactionsEvent(Event<List<Transaction>> event) {
+        memory.saveTransactions(event.getData());
     }
 
     @Override
@@ -49,16 +48,9 @@ public class AccountStorage extends EventConnection implements EventListener, Ac
         }
     }
 
-    private void saveTransaction(Transaction transaction) {
-        memory.saveTransaction(transaction);
-    }
-
-    private void saveTransactions(List<Transaction> transactions) {
-        memory.saveTransactions(transactions);
-    }
-
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
-
+        event.getData().forEach(account ->
+                onAccountEvent(new Event<>(event.getPredicate(), account)));
     }
 }

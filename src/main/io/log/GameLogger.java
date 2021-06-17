@@ -29,12 +29,16 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
-        onTransaction(event.getData());
+        if (event.is(TRANSACTION)) {
+            onTransaction(event.getData());
+        }
     }
 
     @Override
     public void onTransactionsEvent(Event<List<Transaction>> event) {
-        event.getData().forEach(this::onTransaction);
+        if (event.is(TRANSACTION_SERIES)) {
+            event.getData().forEach(this::onTransaction);
+        }
     }
 
     @Override

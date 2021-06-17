@@ -31,12 +31,16 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
-        memory.saveTransaction(event.getData());
+        if (event.is(TRANSACTION)) {
+            memory.saveTransaction(event.getData());
+        }
     }
 
     @Override
     public void onTransactionsEvent(Event<List<Transaction>> event) {
-        memory.saveTransactions(event.getData());
+        if (event.is(TRANSACTION_SERIES)) {
+            memory.saveTransactions(event.getData());
+        }
     }
 
     @Override

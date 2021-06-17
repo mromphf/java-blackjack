@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
-import main.usecase.Bet;
+import main.domain.Bet;
 import main.io.EventConnection;
 import main.usecase.eventing.BalanceListener;
 import main.usecase.eventing.EventListener;

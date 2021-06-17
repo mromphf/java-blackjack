@@ -39,7 +39,7 @@ public class Game extends EventConnection implements ActionListener, BetListener
         if (event.is(ACTION_TAKEN)) {
             round.record(LocalDateTime.now(), event.getData());
             runnableMap.getOrDefault(event.getData(), () -> {}).run();
-            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+            eventNetwork.onGameUpdate(round.getSnapshot(LocalDateTime.now()));
         }
     }
 
@@ -56,7 +56,7 @@ public class Game extends EventConnection implements ActionListener, BetListener
         if (event.is(BET_PLACED)) {
             final Bet bet = event.getData();
             round = new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks);
-            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
+            eventNetwork.onGameUpdate(round.getSnapshot(LocalDateTime.now()));
         }
     }
 

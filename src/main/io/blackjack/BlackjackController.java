@@ -21,7 +21,7 @@ import static main.domain.Rules.*;
 import static main.usecase.Layout.GAME;
 import static main.usecase.eventing.Predicate.*;
 
-public class BlackjackController extends EventConnection implements Initializable, GameStateListener, BalanceListener, LayoutListener {
+public class BlackjackController extends EventConnection implements Initializable, SnapshotListener, BalanceListener, LayoutListener {
 
     @FXML
     private Label lblBet;
@@ -66,7 +66,7 @@ public class BlackjackController extends EventConnection implements Initializabl
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
+    public void onGameUpdate(Snapshot snapshot) {
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(snapshot.isGameInProgress());
         splitControls.setVisible(snapshot.isSplitAvailable());

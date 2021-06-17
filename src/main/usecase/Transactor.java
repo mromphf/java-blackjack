@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements GameStateListener, BetListener, AccountListener {
+public class Transactor extends EventConnection implements SnapshotListener, BetListener, AccountListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -20,7 +20,7 @@ public class Transactor extends EventConnection implements GameStateListener, Be
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
+    public void onGameUpdate(Snapshot snapshot) {
         final List<Transaction> workingTransactions = evaluationFunctions.stream()
             .map(f -> f.apply(snapshot))
             .filter(Optional::isPresent)

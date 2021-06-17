@@ -7,21 +7,25 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import main.domain.Account;
 import main.domain.Snapshot;
 import main.io.EventConnection;
-import main.usecase.Layout;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
-import static main.usecase.Layout.BET;
 import static main.domain.Action.*;
-import static main.domain.Rules.*;
-import static main.usecase.Layout.GAME;
-import static main.usecase.eventing.Predicate.*;
+import static main.domain.Rules.concealedScore;
+import static main.domain.Rules.score;
+import static main.usecase.Layout.BET;
+import static main.usecase.eventing.Predicate.ACTION_TAKEN;
+import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
-public class BlackjackController extends EventConnection implements Initializable, SnapshotListener, BalanceListener, LayoutListener {
+public class BlackjackController extends EventConnection implements Initializable, SnapshotListener, AccountListener {
 
     @FXML
     private Label lblBet;
@@ -60,9 +64,15 @@ public class BlackjackController extends EventConnection implements Initializabl
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onBalanceUpdated() {
-        final int currentBalance = eventNetwork.fulfill(CURRENT_BALANCE).getBalance();
+    public void onAccountEvent(Event<Account> event) {
+        final int currentBalance = event.getData().getBalance();
         lblBalance.setText(String.format("Balance: $%s", currentBalance));
+    }
+
+    @Override
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        event.getData().forEach(account ->
+                onAccountEvent(new Event<>(event.getPredicate(), account)));
     }
 
     @Override
@@ -95,13 +105,6 @@ public class BlackjackController extends EventConnection implements Initializabl
             }
         } else {
             renderConcealedTable(snapshot);
-        }
-    }
-
-    @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == GAME) {
-            onBalanceUpdated();
         }
     }
 

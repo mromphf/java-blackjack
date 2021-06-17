@@ -20,7 +20,7 @@ import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
 
-public class HomeController extends EventConnection implements Initializable, BalanceListener, AccountListener {
+public class HomeController extends EventConnection implements Initializable, AccountListener {
 
     @FXML
     public GridPane listControls;
@@ -128,10 +128,12 @@ public class HomeController extends EventConnection implements Initializable, Ba
     }
 
     @Override
-    public void onBalanceUpdated() {
-        final Account account = eventNetwork.fulfill(CURRENT_BALANCE);
-        accountMap.put(account.getKey(), account);
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+    public void onAccountEvent(Event<Account> event) {
+        if (event.is(CURRENT_BALANCE)) {
+            final Account account = event.getData();
+            accountMap.put(account.getKey(), account);
+            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+        }
     }
 
     @Override
@@ -143,7 +145,4 @@ public class HomeController extends EventConnection implements Initializable, Ba
             lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         }
     }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {}
 }

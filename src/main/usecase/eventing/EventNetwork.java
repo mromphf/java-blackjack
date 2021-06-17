@@ -7,7 +7,6 @@ import main.usecase.Layout;
 import java.util.*;
 
 public class EventNetwork implements
-        BalanceListener,
         SnapshotListener,
         Responder,
         BetListener,
@@ -21,16 +20,11 @@ public class EventNetwork implements
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
-    private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
     private final Map<Predicate, Responder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
-            if (connection instanceof BalanceListener) {
-                balanceListeners.add((BalanceListener) connection);
-            }
-
             if (connection instanceof SnapshotListener) {
                 snapshotListeners.add((SnapshotListener) connection);
             }
@@ -65,21 +59,12 @@ public class EventNetwork implements
         snapshotListeners.add(listener);
     }
 
-    public void registerBalanceListener(BalanceListener listener) {
-        balanceListeners.add(listener);
-    }
-
     public void registerTransactionListener(TransactionListener listener) {
         transactionListeners.add(listener);
     }
 
     public void registerAccountListener(AccountListener listener) {
         accountListeners.add(listener);
-    }
-
-    @Override
-    public void onBalanceUpdated() {
-        balanceListeners.forEach(BalanceListener::onBalanceUpdated);
     }
 
     @Override

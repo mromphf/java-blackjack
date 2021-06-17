@@ -87,7 +87,6 @@ public class AppRoot {
         eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
 
         eventNetwork.registerGameStateListener(gameLogger);
-        eventNetwork.registerBalanceListener(gameLogger);
         eventNetwork.registerTransactionListener(gameLogger);
         eventNetwork.registerAccountListener(gameLogger);
 
@@ -95,7 +94,6 @@ public class AppRoot {
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);
-        gameLogger.connectTo(eventNetwork);
 
         /*
          * Load accounts, transactions and images from disk

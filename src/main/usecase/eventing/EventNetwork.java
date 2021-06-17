@@ -1,5 +1,6 @@
 package main.usecase.eventing;
 
+import main.domain.Action;
 import main.domain.Bet;
 import main.domain.Snapshot;
 import main.io.EventConnection;
@@ -13,10 +14,12 @@ public class EventNetwork implements
         Responder,
         EventListener,
         BetListener,
-        LayoutListener {
+        LayoutListener,
+        ActionListener {
 
     private final Collection<BetListener> betListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
+    private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<main.usecase.eventing.EventListener> eventListeners = new LinkedList<>();
@@ -42,6 +45,10 @@ public class EventNetwork implements
 
             if (connection instanceof LayoutListener) {
                 layoutListeners.add((LayoutListener) connection);
+            }
+
+            if (connection instanceof ActionListener) {
+                actionListeners.add((ActionListener) connection);
             }
         }
     }
@@ -90,5 +97,10 @@ public class EventNetwork implements
     @Override
     public void onLayoutEvent(Event<Layout> event) {
         layoutListeners.forEach(listener -> listener.onLayoutEvent(event));
+    }
+
+    @Override
+    public void onActionEvent(Event<Action> event) {
+        actionListeners.forEach(listener -> listener.onActionEvent(event));
     }
 }

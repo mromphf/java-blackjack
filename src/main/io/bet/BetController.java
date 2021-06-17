@@ -9,14 +9,16 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.usecase.Bet;
 import main.io.EventConnection;
-import main.usecase.*;
+import main.usecase.eventing.BalanceListener;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 
 public class BetController extends EventConnection implements Initializable, BalanceListener, EventListener {

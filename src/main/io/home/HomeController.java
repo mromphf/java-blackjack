@@ -10,9 +10,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.io.EventConnection;
-import main.usecase.BalanceListener;
-import main.usecase.Message;
-import main.usecase.EventListener;
+import main.usecase.eventing.BalanceListener;
+import main.usecase.eventing.Message;
+import main.usecase.eventing.EventListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import java.util.*;
 
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class HomeController extends EventConnection implements Initializable, BalanceListener, EventListener {
 

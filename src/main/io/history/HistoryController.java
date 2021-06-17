@@ -12,6 +12,8 @@ import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.*;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -24,7 +26,7 @@ import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class HistoryController extends EventConnection implements Initializable, EventListener {
 

@@ -3,15 +3,15 @@ package main.io.storage;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.EventListener;
-import main.usecase.Message;
-import main.usecase.Predicate;
+import main.usecase.eventing.EventListener;
+import main.usecase.eventing.Message;
+import main.usecase.eventing.Predicate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 
 public class AccountStorage extends EventConnection implements EventListener {

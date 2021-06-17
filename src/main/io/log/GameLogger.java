@@ -3,7 +3,7 @@ package main.io.log;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.*;
+import main.usecase.eventing.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
-import static main.usecase.Predicate.*;
+import static main.usecase.eventing.Predicate.*;
 
 public class GameLogger extends Logger implements GameStateListener, BalanceListener, EventListener {
 

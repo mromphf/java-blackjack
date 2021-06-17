@@ -11,21 +11,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Message {
-    private final Bet bet;
     private final Predicate predicate;
     private final Account account;
     private final Transaction transaction;
-    private final Layout layout;
     private final List<Transaction> transactions;
     private final Collection<Account> accounts;
     private final Action action;
 
     private Message(Predicate predicate, Bet bet, Account account, Transaction transaction, Layout layout, Action action, List<Transaction> transactions, Collection<Account> accounts) {
-        this.bet = bet;
         this.predicate = predicate;
         this.account = account;
         this.transaction = transaction;
-        this.layout = layout;
         this.action = action;
         this.transactions = transactions;
         this.accounts = accounts;
@@ -47,16 +43,8 @@ public class Message {
         return new Message(elm, null, Account.placeholder(), transaction, Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
-    public static Message of(Predicate predicate, Action action) {
-        return new Message(predicate, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, action, new LinkedList<>(), new LinkedList<>());
-    }
-
     public boolean is(Predicate predicate) {
         return predicate.equals(this.predicate);
-    }
-
-    public Bet getBet() {
-        return bet;
     }
 
     public Predicate getPredicate() {
@@ -85,9 +73,5 @@ public class Message {
 
     public Collection<Account> getAccounts() {
         return accounts;
-    }
-
-    public Layout getLayout() {
-        return layout;
     }
 }

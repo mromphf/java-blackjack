@@ -107,7 +107,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, SPLIT));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, SPLIT));
     }
 
     @FXML
@@ -118,12 +118,12 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, STAND));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, SETTLE));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, SETTLE));
     }
 
     @FXML
@@ -133,26 +133,26 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onHit() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, HIT));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, HIT));
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, DOUBLE));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, BUY_INSURANCE));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, BUY_INSURANCE));
     }
 
     @FXML
     private void onWaiveInsurance() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, WAIVE_INSURANCE));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, WAIVE_INSURANCE));
     }
 
     @FXML void onPlayNextHand() {
-        eventNetwork.onEvent(Message.of(ACTION_TAKEN, PLAY_NEXT_HAND));
+        eventNetwork.onActionEvent(new Event<>(ACTION_TAKEN, PLAY_NEXT_HAND));
     }
 
     private void renderExposedTable(Snapshot snapshot) {

@@ -3,7 +3,6 @@ package main.usecase;
 import main.domain.*;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
-import main.usecase.eventing.EventListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,7 +11,7 @@ import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements EventListener, BetListener, LayoutListener {
+public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -36,10 +35,10 @@ public class Game extends EventConnection implements EventListener, BetListener,
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(ACTION_TAKEN)) {
-            round.record(LocalDateTime.now(), message.getAction());
-            runnableMap.getOrDefault(message.getAction(), () -> {}).run();
+    public void onActionEvent(Event<Action> event) {
+        if (event.is(ACTION_TAKEN)) {
+            round.record(LocalDateTime.now(), event.getData());
+            runnableMap.getOrDefault(event.getData(), () -> {}).run();
             eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
         }
     }

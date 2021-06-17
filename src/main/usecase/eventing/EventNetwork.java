@@ -1,5 +1,6 @@
 package main.usecase.eventing;
 
+import main.domain.Bet;
 import main.domain.Snapshot;
 import main.io.EventConnection;
 
@@ -9,8 +10,10 @@ public class EventNetwork implements
         BalanceListener,
         GameStateListener,
         Responder,
-        main.usecase.eventing.EventListener {
+        EventListener,
+        BetListener {
 
+    private final Collection<BetListener> betListeners = new ArrayList<>();
     private final Collection<BalanceListener> balanceListeners = new LinkedList<>();
     private final Collection<GameStateListener> gameStateListeners = new LinkedList<>();
     private final Collection<main.usecase.eventing.EventListener> eventListeners = new LinkedList<>();
@@ -26,8 +29,12 @@ public class EventNetwork implements
                 gameStateListeners.add((GameStateListener) connection);
             }
 
-            if (connection instanceof main.usecase.eventing.EventListener) {
-                eventListeners.add((main.usecase.eventing.EventListener) connection);
+            if (connection instanceof EventListener) {
+                eventListeners.add((EventListener) connection);
+            }
+
+            if (connection instanceof BetListener) {
+                betListeners.add((BetListener) connection);
             }
         }
     }
@@ -66,5 +73,10 @@ public class EventNetwork implements
     @Override
     public Message fulfill(Predicate elm) {
         return responders.get(elm).fulfill(elm);
+    }
+
+    @Override
+    public void onBetEvent(Event<Bet> event) {
+        betListeners.forEach(listener -> listener.onBetEvent(event));
     }
 }

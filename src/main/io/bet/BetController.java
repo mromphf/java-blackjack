@@ -10,6 +10,7 @@ import main.domain.Account;
 import main.domain.Bet;
 import main.io.EventConnection;
 import main.usecase.eventing.BalanceListener;
+import main.usecase.eventing.Event;
 import main.usecase.eventing.EventListener;
 import main.usecase.eventing.Message;
 
@@ -64,7 +65,7 @@ public class BetController extends EventConnection implements Initializable, Bal
     private void onDeal() {
         final Account selectedAccount = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount();
         final Bet betByAccount = Bet.of(LocalDateTime.now(), selectedAccount.getKey(), bet);
-        eventNetwork.onEvent(Message.of(BET_PLACED, betByAccount));
+        eventNetwork.onBetEvent(new Event<>(BET_PLACED, betByAccount));
         eventNetwork.onEvent(Message.of(LAYOUT_CHANGED, GAME));
         bet = 0;
     }

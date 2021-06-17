@@ -2,9 +2,8 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
+import main.usecase.eventing.*;
 import main.usecase.eventing.EventListener;
-import main.usecase.eventing.GameStateListener;
-import main.usecase.eventing.Message;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements GameStateListener, EventListener {
+public class Transactor extends EventConnection implements GameStateListener, EventListener, BetListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -36,12 +35,26 @@ public class Transactor extends EventConnection implements GameStateListener, Ev
 
     @Override
     public void onEvent(Message message) {
-        if (message.is(ACCOUNT_CREATED) || message.is(BET_PLACED)) {
+        if (message.is(ACCOUNT_CREATED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
-            final Bet bet = message.getBet();
-            final String description = message.is(ACCOUNT_CREATED) ? "SIGNING BONUS" : "BET";
-            final int signingBonus = message.is(ACCOUNT_CREATED) ? 200 : (bet.getVal() * -1);
-            final UUID accountKey = message.getBet().getAccountKey();
+            final String description = "SIGNING BONUS";
+            final int signingBonus = 200;
+            final UUID accountKey = eventNetwork.fulfill(ACCOUNT_SELECTED).getAccount().getKey();
+            final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
+            final Message m = Message.of(TRANSACTION, transaction);
+
+            eventNetwork.onEvent(m);
+        }
+    }
+
+    @Override
+    public void onBetEvent(Event<Bet> event) {
+        if (event.is(BET_PLACED)) {
+            final LocalDateTime timestamp = LocalDateTime.now();
+            final Bet bet = event.getData();
+            final String description = "BET";
+            final int signingBonus = (bet.getVal() * -1);
+            final UUID accountKey = bet.getAccountKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
             final Message m = Message.of(TRANSACTION, transaction);
 

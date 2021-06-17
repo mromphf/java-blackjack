@@ -2,6 +2,8 @@ package main.usecase;
 
 import main.domain.*;
 import main.io.EventConnection;
+import main.usecase.eventing.BetListener;
+import main.usecase.eventing.Event;
 import main.usecase.eventing.EventListener;
 import main.usecase.eventing.Message;
 
@@ -12,7 +14,7 @@ import static main.domain.Action.*;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements EventListener {
+public class Game extends EventConnection implements EventListener, BetListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -37,16 +39,21 @@ public class Game extends EventConnection implements EventListener {
 
     @Override
     public void onEvent(Message message) {
-        if (message.is(BET_PLACED)) {
-            final Bet bet = message.getBet();
-            round = new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks);
-            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
-        } else if (message.is(ACTION_TAKEN)) {
+        if (message.is(ACTION_TAKEN)) {
             round.record(LocalDateTime.now(), message.getAction());
             runnableMap.getOrDefault(message.getAction(), () -> {}).run();
             eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
         } else if (message.is(LAYOUT_CHANGED)) {
             onChangeLayout(message.getLayout());
+        }
+    }
+
+    @Override
+    public void onBetEvent(Event<Bet> event) {
+        if (event.is(BET_PLACED)) {
+            final Bet bet = event.getData();
+            round = new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks);
+            eventNetwork.onUpdate(round.getSnapshot(LocalDateTime.now()));
         }
     }
 

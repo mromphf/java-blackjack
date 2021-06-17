@@ -35,10 +35,6 @@ public class Message {
         return new Message(elm, null, account, Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
     }
 
-    public static Message of(Predicate predicate, Bet bet) {
-        return new Message(predicate, bet, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, new LinkedList<>(), new LinkedList<>());
-    }
-
     public static Message of(Predicate elm, List<Transaction> transactions) {
         return new Message(elm, null, Account.placeholder(), Transaction.placeholder(), Layout.PLACEHOLDER, Action.PLACEHOLDER, transactions, new LinkedList<>());
     }

@@ -38,7 +38,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final LocalDateTime timestamp = LocalDateTime.now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;
-            final UUID accountKey = eventNetwork.fulfill(ACCOUNT_SELECTED).getKey();
+            final UUID accountKey = eventNetwork.fulfillSelectedAccount(ACCOUNT_SELECTED).getKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
             final Event<Transaction> evt = new Event<>(TRANSACTION, transaction);
 

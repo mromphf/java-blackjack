@@ -73,8 +73,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public Account fulfill(Predicate elm) {
-        return responders.get(elm).fulfill(elm);
+    public Account fulfillSelectedAccount(Predicate elm) {
+        return responders.get(elm).fulfillSelectedAccount(elm);
     }
 
     @Override

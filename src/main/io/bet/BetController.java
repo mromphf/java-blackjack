@@ -9,18 +9,19 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.domain.Bet;
 import main.io.EventConnection;
-import main.usecase.Layout;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 
-public class BetController extends EventConnection implements Initializable, BalanceListener, LayoutListener {
+public class BetController extends EventConnection implements Initializable, AccountListener {
 
     @FXML
     private Label lblBet;
@@ -80,19 +81,20 @@ public class BetController extends EventConnection implements Initializable, Bal
     }
 
     @Override
-    public void onBalanceUpdated() {
-        this.balance = eventNetwork.fulfill(CURRENT_BALANCE).getBalance();
+    public void onAccountEvent(Event<Account> event) {
+        if (event.is(CURRENT_BALANCE)) {
+            this.balance = event.getData().getBalance();
 
-        btnDeal.setDisable(bet > balance || bet <= 0);
-        lblBet.setText("$" + bet);
-        lblBalance.setText(String.format("Balance: $%s", balance));
+            btnDeal.setDisable(bet > balance || bet <= 0);
+            lblBet.setText("$" + bet);
+            lblBalance.setText(String.format("Balance: $%s", balance));
+        }
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == BET) {
-            onBalanceUpdated();
-        }
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        event.getData().forEach(account ->
+                onAccountEvent(new Event<>(event.getPredicate(), account)));
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

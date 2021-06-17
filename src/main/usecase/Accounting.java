@@ -21,13 +21,13 @@ public class Accounting extends EventConnection implements Responder, AccountLis
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         this.account = account.updateBalance(event.getData());
-        eventNetwork.onBalanceUpdated();
+        eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
     }
 
     @Override
     public void onTransactionsEvent(Event<List<Transaction>> event) {
         this.account = account.updateBalance(event.getData());
-        eventNetwork.onBalanceUpdated();
+        eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
     }
 
     @Override

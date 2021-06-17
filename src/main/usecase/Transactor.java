@@ -3,7 +3,6 @@ package main.usecase;
 import main.domain.*;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
-import main.usecase.eventing.EventListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements GameStateListener, EventListener, BetListener {
+public class Transactor extends EventConnection implements GameStateListener, BetListener, AccountListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -28,22 +27,22 @@ public class Transactor extends EventConnection implements GameStateListener, Ev
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        final Message message = Message.of(TRANSACTION_SERIES, workingTransactions);
+        final Event<List<Transaction>> event = new Event<>(TRANSACTION_SERIES, workingTransactions);
 
-        eventNetwork.onEvent(message);
+        eventNetwork.onTransactionsEvent(event);
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(ACCOUNT_CREATED)) {
+    public void onAccountEvent(Event<Account> event) {
+        if (event.is(ACCOUNT_CREATED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;
             final UUID accountKey = eventNetwork.fulfill(ACCOUNT_SELECTED).getKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Message m = Message.of(TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(TRANSACTION, transaction);
 
-            eventNetwork.onEvent(m);
+            eventNetwork.onTransactionEvent(evt);
         }
     }
 
@@ -56,9 +55,15 @@ public class Transactor extends EventConnection implements GameStateListener, Ev
             final int signingBonus = (bet.getVal() * -1);
             final UUID accountKey = bet.getAccountKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Message m = Message.of(TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(TRANSACTION, transaction);
 
-            eventNetwork.onEvent(m);
+            eventNetwork.onTransactionEvent(evt);
         }
+    }
+
+    @Override
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        event.getData().forEach(account ->
+                onAccountEvent(new Event<>(event.getPredicate(), account)));
     }
 }

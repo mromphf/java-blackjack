@@ -12,10 +12,7 @@ import main.domain.Account;
 import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.*;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventListener;
-import main.usecase.eventing.LayoutListener;
-import main.usecase.eventing.Message;
+import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -30,7 +27,7 @@ import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
 
-public class HistoryController extends EventConnection implements Initializable, EventListener, LayoutListener {
+public class HistoryController extends EventConnection implements Initializable, LayoutListener, TransactionListener {
 
     @FXML
     public DatePicker datePicker;
@@ -78,11 +75,16 @@ public class HistoryController extends EventConnection implements Initializable,
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(TRANSACTIONS_LOADED) || message.is(TRANSACTION_SERIES)) {
-            allTransactions.addAll(message.getTransactions());
-        } else if (message.is(TRANSACTION)) {
-            allTransactions.add(message.getTransaction());
+    public void onTransactionEvent(Event<Transaction> event) {
+        if (event.is(TRANSACTION)) {
+            allTransactions.add(event.getData());
+        }
+    }
+
+    @Override
+    public void onTransactionsEvent(Event<List<Transaction>> event) {
+        if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES)) {
+            allTransactions.addAll(event.getData());
         }
     }
 

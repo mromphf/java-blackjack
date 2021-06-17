@@ -1,14 +1,16 @@
 package main.usecase;
 
 import main.domain.Account;
+import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
 
 import java.util.Collection;
+import java.util.List;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Accounting extends EventConnection implements Responder, EventListener, AccountListener {
+public class Accounting extends EventConnection implements Responder, AccountListener, TransactionListener {
 
     private Account account;
 
@@ -17,19 +19,15 @@ public class Accounting extends EventConnection implements Responder, EventListe
     }
 
     @Override
-    public void onEvent(Message message) {
-        if (message.is(TRANSACTION)) {
-            this.account = account.updateBalance(message.getTransaction());
-            eventNetwork.onBalanceUpdated();
-        } else if (message.is(TRANSACTION_SERIES)) {
-            this.account = account.updateBalance(message.getTransactions());
-            eventNetwork.onBalanceUpdated();
-        }
+    public void onTransactionEvent(Event<Transaction> event) {
+        this.account = account.updateBalance(event.getData());
+        eventNetwork.onBalanceUpdated();
     }
 
     @Override
-    public Account fulfill(Predicate predicate) {
-        return account;
+    public void onTransactionsEvent(Event<List<Transaction>> event) {
+        this.account = account.updateBalance(event.getData());
+        eventNetwork.onBalanceUpdated();
     }
 
     @Override
@@ -40,5 +38,13 @@ public class Accounting extends EventConnection implements Responder, EventListe
     }
 
     @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {}
+    public void onAccountsEvent(Event<Collection<Account>> event) {
+        event.getData().forEach(account ->
+                onAccountEvent(new Event<>(event.getPredicate(), account)));
+    }
+
+    @Override
+    public Account fulfill(Predicate predicate) {
+        return account;
+    }
 }

@@ -77,8 +77,8 @@ public class AppRoot {
             add(betController);
             add(layoutManager);
             add(accountStorage);
-            add(game);
             add(transactor);
+            add(game);
         }};
 
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);

@@ -84,9 +84,13 @@ public class Snapshot {
         return (!handsToSettle.isEmpty() && isHandResolved());
     }
 
+    public boolean canAffordToSpendMore(int balance) {
+        return balance >= bet;
+    }
+
     public boolean isSplitAvailable() {
         return (canSplit(playerHand) &&
-                this.outcome.equals(UNRESOLVED) &&
+                outcome.equals(UNRESOLVED) &&
                 !isInsuranceAvailable() &&
                 !readyToPlayNextHand());
     }
@@ -97,7 +101,6 @@ public class Snapshot {
                 !isInsuranceAvailable() &&
                 !readyToPlayNextHand());
     }
-
 
     public boolean isHandResolved() {
         return !outcome.equals(UNRESOLVED);

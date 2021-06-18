@@ -22,8 +22,7 @@ import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
 import static main.usecase.Layout.BET;
-import static main.usecase.eventing.Predicate.ACTION_TAKEN;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
+import static main.usecase.eventing.Predicate.*;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener, AccountListener {
 
@@ -58,6 +57,9 @@ public class BlackjackController extends EventConnection implements Initializabl
     private Button btnDouble;
 
     @FXML
+    private Button btnSplit;
+
+    @FXML
     private ProgressBar prgDeck;
 
     @Override
@@ -77,13 +79,16 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
+        final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getBalance();
+
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(snapshot.isGameInProgress());
         splitControls.setVisible(snapshot.isSplitAvailable());
         settleControls.setVisible(snapshot.readyToSettleNextHand());
         nextHandControls.setVisible(snapshot.readyToPlayNextHand());
         gameOverControls.setVisible(snapshot.allBetsSettled());
-        btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn());
+        btnDouble.setDisable(!(snapshot.isAtLeastOneCardDrawn() && snapshot.canAffordToSpendMore(currentBalance)));
+        btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
         prgDeck.setProgress(snapshot.getDeckProgress());
 
         if (snapshot.isRoundResolved()) {

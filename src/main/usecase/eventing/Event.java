@@ -17,6 +17,10 @@ public class Event<T> {
         return predicate.equals(p);
     }
 
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
     public Predicate getPredicate() {
         return predicate;
     }

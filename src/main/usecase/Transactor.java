@@ -27,7 +27,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        final Event<List<Transaction>> event = new Event<>(TRANSACTION_SERIES, workingTransactions);
+        final Event<List<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTION_SERIES, workingTransactions);
 
         eventNetwork.onTransactionsEvent(event);
     }
@@ -40,7 +40,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final int signingBonus = 200;
             final UUID accountKey = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Event<Transaction> evt = new Event<>(TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(LocalDateTime.now(), TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }
@@ -55,7 +55,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final int signingBonus = (bet.getVal() * -1);
             final UUID accountKey = bet.getAccountKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Event<Transaction> evt = new Event<>(TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(LocalDateTime.now(), TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }
@@ -64,6 +64,6 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
-                onAccountEvent(new Event<>(event.getPredicate(), account)));
+                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
     }
 }

@@ -55,8 +55,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, BET));
+        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, BET));
     }
 
     @FXML
@@ -106,7 +106,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
 
-        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_CREATED, account));
+        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_CREATED, account));
     }
 
     @FXML
@@ -116,15 +116,15 @@ public class HomeController extends EventConnection implements Initializable, Ac
         accountMap.remove(selectedAccount.getKey());
         lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
 
-        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_DELETED, selectedAccount));
+        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_DELETED, selectedAccount));
     }
 
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

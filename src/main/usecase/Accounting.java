@@ -22,7 +22,7 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, updatedState));
         }
     }
 
@@ -33,7 +33,7 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, updatedState));
         }
     }
 
@@ -41,14 +41,14 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
             selections.put(now(), event.getData());
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, selections.get(selections.lastKey())));
+            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, selections.get(selections.lastKey())));
         }
     }
 
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
-                onAccountEvent(new Event<>(event.getPredicate(), account)));
+                onAccountEvent(new Event<>(now(), event.getPredicate(), account)));
     }
 
     @Override

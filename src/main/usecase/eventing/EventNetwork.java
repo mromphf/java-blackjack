@@ -67,6 +67,10 @@ public class EventNetwork implements
         accountListeners.add(listener);
     }
 
+    public void registerActionListener(ActionListener listener) {
+        actionListeners.add(listener);
+    }
+
     @Override
     public void onGameUpdate(Snapshot snapshot) {
         snapshotListeners.forEach(l -> l.onGameUpdate(snapshot));

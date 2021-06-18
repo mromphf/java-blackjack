@@ -1,6 +1,7 @@
 package main.io.log;
 
 import main.domain.Account;
+import main.domain.Action;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.*;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 import static java.util.logging.Level.INFO;
 import static main.usecase.eventing.Predicate.*;
 
-public class GameLogger extends Logger implements SnapshotListener, AccountListener, TransactionListener {
+public class GameLogger extends Logger implements SnapshotListener, AccountListener, TransactionListener, ActionListener {
 
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
@@ -60,6 +61,13 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
     public void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
                 onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
+    }
+
+    @Override
+    public void onActionEvent(Event<Action> event) {
+        log(INFO, String.format("%s: ACTION EVENT - %s",
+                event.getTimestamp().format(pattern),
+                event.getData()));
     }
 
     public void onTransaction(Transaction transaction) {

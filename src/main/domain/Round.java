@@ -18,7 +18,7 @@ public class Round {
     private final int maxCards;
     private final int numDecks;
 
-    private Map<LocalDateTime, Action> actionsTaken;
+    private SortedMap<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
     public Round(UUID accountKey, Stack<Card> deck, int bet, int maxCards, int numDecks) {
@@ -29,7 +29,7 @@ public class Round {
         this.maxCards = maxCards;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
-        this.actionsTaken = new HashMap<>();
+        this.actionsTaken = new TreeMap<>();
 
         if (deck.size() < 4) {
             refillDeck();
@@ -147,9 +147,9 @@ public class Round {
 
     private static class HandToSettle {
         public final Stack<Card> playerHand;
-        public final Map<LocalDateTime, Action> actionsTaken;
+        public final SortedMap<LocalDateTime, Action> actionsTaken;
 
-        public HandToSettle(Stack<Card> playerHand, Map<LocalDateTime, Action> actionsTaken) {
+        public HandToSettle(Stack<Card> playerHand, SortedMap<LocalDateTime, Action> actionsTaken) {
             this.playerHand = playerHand;
             this.actionsTaken = actionsTaken;
         }

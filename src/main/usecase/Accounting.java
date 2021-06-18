@@ -5,40 +5,41 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static main.usecase.eventing.Predicate.*;
 
 public class Accounting extends EventConnection implements Responder, AccountListener, TransactionListener {
 
-    private Account account;
-
-    public Accounting() {
-        this.account = null;
-    }
+    private final Stack<Account> selections = new Stack<>();
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         if (event.is(TRANSACTION)) {
-            this.account = account.updateBalance(event.getData());
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
+            final Account currentState = selections.peek();
+            final Account updatedState = currentState.updateBalance(event.getData());
+
+            selections.add(updatedState);
+            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
         }
     }
 
     @Override
     public void onTransactionsEvent(Event<List<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
-            this.account = account.updateBalance(event.getData());
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
+            final Account currentState = selections.peek();
+            final Account updatedState = currentState.updateBalance(event.getData());
+
+            selections.add(updatedState);
+            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
         }
     }
 
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
-            this.account = event.getData();
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, account));
+            selections.add(event.getData());
+            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, selections.peek()));
         }
     }
 
@@ -50,6 +51,6 @@ public class Accounting extends EventConnection implements Responder, AccountLis
 
     @Override
     public Account fulfillSelectedAccount(Predicate predicate) {
-        return account;
+        return selections.peek();
     }
 }

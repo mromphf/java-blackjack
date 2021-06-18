@@ -5,6 +5,7 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,12 +21,12 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     public void loadAllAccounts() {
-        final Event<Collection<Account>> event = new Event<>(ACCOUNTS_LOADED, memory.loadAllAccounts());
+        final Event<Collection<Account>> event = new Event<>(LocalDateTime.now(), ACCOUNTS_LOADED, memory.loadAllAccounts());
         eventNetwork.onAccountsEvent(event);
     }
 
     public void loadAllTransactions() {
-        final Event<List<Transaction>> event = new Event<>(TRANSACTIONS_LOADED, memory.loadAllTransactions());
+        final Event<List<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTIONS_LOADED, memory.loadAllTransactions());
         eventNetwork.onTransactionsEvent(event);
     }
 
@@ -55,6 +56,6 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
-                onAccountEvent(new Event<>(event.getPredicate(), account)));
+                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
     }
 }

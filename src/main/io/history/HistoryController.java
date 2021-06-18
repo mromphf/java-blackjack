@@ -16,6 +16,7 @@ import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -42,7 +43,7 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onLayoutEvent(new Event<>(LAYOUT_CHANGED, BACK));
+        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, BACK));
     }
 
     @FXML

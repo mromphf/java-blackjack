@@ -5,21 +5,23 @@ import main.domain.Transaction;
 import main.io.EventConnection;
 import main.usecase.eventing.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.*;
 import static main.usecase.eventing.Predicate.*;
 
 public class Accounting extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
-    private final Stack<Account> selections = new Stack<>();
+    private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         if (event.is(TRANSACTION)) {
-            final Account currentState = selections.peek();
+            final Account currentState = selections.get(selections.lastKey());
             final Account updatedState = currentState.updateBalance(event.getData());
 
-            selections.add(updatedState);
+            selections.put(now(), updatedState);
             eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
         }
     }
@@ -27,10 +29,10 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
     @Override
     public void onTransactionsEvent(Event<List<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
-            final Account currentState = selections.peek();
+            final Account currentState = selections.get(selections.lastKey());
             final Account updatedState = currentState.updateBalance(event.getData());
 
-            selections.add(updatedState);
+            selections.put(now(), updatedState);
             eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, updatedState));
         }
     }
@@ -38,8 +40,8 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
-            selections.add(event.getData());
-            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, selections.peek()));
+            selections.put(now(), event.getData());
+            eventNetwork.onAccountEvent(new Event<>(CURRENT_BALANCE, selections.get(selections.lastKey())));
         }
     }
 
@@ -51,6 +53,6 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
 
     @Override
     public Account requestSelectedAccount(Predicate predicate) {
-        return selections.peek();
+        return selections.get(selections.lastKey());
     }
 }

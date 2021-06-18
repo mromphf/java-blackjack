@@ -17,8 +17,8 @@ public class Rules {
         return score(cards) > 21;
     }
 
-    public static boolean isPush(Collection<Card> hand1, Collection<Card> hand2) {
-        return score(hand1) == score(hand2);
+    public static boolean isPush(Collection<Card> playerHand, Collection<Card> dealerHand) {
+        return score(playerHand) == score(dealerHand) && !isBust(playerHand);
     }
 
     public static boolean canSplit(Collection<Card> cards) {

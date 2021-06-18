@@ -8,7 +8,7 @@ import java.util.*;
 
 public class EventNetwork implements
         SnapshotListener,
-        Responder,
+        AccountResponder,
         BetListener,
         LayoutListener,
         ActionListener,
@@ -21,7 +21,7 @@ public class EventNetwork implements
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
-    private final Map<Predicate, Responder> responders = new HashMap<>();
+    private final Map<Predicate, AccountResponder> responders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -51,8 +51,8 @@ public class EventNetwork implements
         }
     }
 
-    public void registerResponder(Predicate elm, Responder responder) {
-        responders.put(elm, responder);
+    public void registerResponder(Predicate elm, AccountResponder accountResponder) {
+        responders.put(elm, accountResponder);
     }
 
     public void registerGameStateListener(SnapshotListener listener) {
@@ -73,8 +73,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public Account fulfillSelectedAccount(Predicate elm) {
-        return responders.get(elm).fulfillSelectedAccount(elm);
+    public Account requestSelectedAccount(Predicate elm) {
+        return responders.get(elm).requestSelectedAccount(elm);
     }
 
     @Override

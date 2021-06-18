@@ -9,7 +9,7 @@ import java.util.*;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Accounting extends EventConnection implements Responder, AccountListener, TransactionListener {
+public class Accounting extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
     private final Stack<Account> selections = new Stack<>();
 
@@ -50,7 +50,7 @@ public class Accounting extends EventConnection implements Responder, AccountLis
     }
 
     @Override
-    public Account fulfillSelectedAccount(Predicate predicate) {
+    public Account requestSelectedAccount(Predicate predicate) {
         return selections.peek();
     }
 }

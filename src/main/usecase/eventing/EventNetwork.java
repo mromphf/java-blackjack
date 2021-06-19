@@ -112,7 +112,7 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onTransactionsEvent(Event<List<Transaction>> event) {
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         transactionListeners.forEach(listener -> listener.onTransactionsEvent(event));
     }
 }

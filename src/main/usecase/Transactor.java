@@ -21,13 +21,13 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        final List<Transaction> transactions = evaluationFunctions.stream()
+        final Collection<Transaction> transactions = evaluationFunctions.stream()
             .map(f -> f.apply(snapshot))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        final Event<List<Transaction>> event = new Event<>(snapshot.getTimestamp(), TRANSACTION_SERIES, transactions);
+        final Event<Collection<Transaction>> event = new Event<>(snapshot.getTimestamp(), TRANSACTION_SERIES, transactions);
 
         eventNetwork.onTransactionsEvent(event);
     }

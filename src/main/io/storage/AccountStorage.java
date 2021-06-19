@@ -7,7 +7,6 @@ import main.usecase.eventing.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 
 import static main.usecase.eventing.Predicate.*;
 
@@ -26,7 +25,7 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     public void loadAllTransactions() {
-        final Event<List<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTIONS_LOADED, memory.loadAllTransactions());
+        final Event<Collection<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTIONS_LOADED, memory.loadAllTransactions());
         eventNetwork.onTransactionsEvent(event);
     }
 
@@ -38,7 +37,7 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     @Override
-    public void onTransactionsEvent(Event<List<Transaction>> event) {
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
             memory.saveTransactions(event.getData());
         }

@@ -4,6 +4,7 @@ import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -13,7 +14,7 @@ public interface Memory {
     Set<Account> loadAllAccounts();
     List<Transaction> loadAllTransactions();
     void saveTransaction(Transaction transaction);
-    void saveTransactions(List<Transaction> transactions);
+    void saveTransactions(Collection<Transaction> transactions);
     void saveNewAccount(Account account);
     void deleteAccount(Account account);
 }

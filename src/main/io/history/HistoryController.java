@@ -17,6 +17,7 @@ import main.usecase.eventing.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -83,7 +84,7 @@ public class HistoryController extends EventConnection implements Initializable,
     }
 
     @Override
-    public void onTransactionsEvent(Event<List<Transaction>> event) {
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES)) {
             allTransactions.addAll(event.getData());
         }

@@ -27,7 +27,7 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
     }
 
     @Override
-    public void onTransactionsEvent(Event<List<Transaction>> event) {
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
             final Account currentState = selections.get(selections.lastKey());
             final Account updatedState = currentState.updateBalance(event.getData());

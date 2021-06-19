@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.List;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
@@ -37,7 +36,7 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
     }
 
     @Override
-    public void onTransactionsEvent(Event<List<Transaction>> event) {
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
             event.getData().forEach(this::onTransaction);
         }

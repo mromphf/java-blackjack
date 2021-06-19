@@ -104,7 +104,7 @@ public class FileSystem implements Memory {
     }
 
     @Override
-    public void saveTransactions(List<Transaction> transactions) {
+    public void saveTransactions(Collection<Transaction> transactions) {
         transactions.forEach(this::saveTransaction);
     }
 

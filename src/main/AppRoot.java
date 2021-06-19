@@ -55,7 +55,7 @@ public class AppRoot {
          * These are event listeners
          */
         final Transactor transactor = new Transactor(evaluators);
-        final Accounting accounting = new Accounting();
+        final Accounting accounting = new Accounting(new TreeMap<>());
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);

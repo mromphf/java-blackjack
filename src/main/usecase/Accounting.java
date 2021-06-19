@@ -13,7 +13,11 @@ import static main.usecase.eventing.Predicate.*;
 
 public class Accounting extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
-    private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
+    private final SortedMap<LocalDateTime, Account> selections;
+
+    public Accounting(SortedMap<LocalDateTime, Account> selections) {
+        this.selections = selections;
+    }
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {

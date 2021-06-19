@@ -6,6 +6,8 @@ import main.usecase.Layout;
 
 import java.util.*;
 
+import static main.usecase.eventing.Predicate.TRANSACTION;
+
 public class EventNetwork implements
         SnapshotListener,
         AccountResponder,
@@ -13,7 +15,8 @@ public class EventNetwork implements
         LayoutListener,
         ActionListener,
         AccountListener,
-        TransactionListener {
+        TransactionListener,
+        TransactionResponder {
 
     private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<BetListener> betListeners = new ArrayList<>();
@@ -21,7 +24,8 @@ public class EventNetwork implements
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
-    private final Map<Predicate, AccountResponder> responders = new HashMap<>();
+    private final Map<Predicate, AccountResponder> accountResponders = new HashMap<>();
+    private final Map<Predicate, TransactionResponder> transactionResponders = new HashMap<>();
 
     public EventNetwork(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -51,8 +55,12 @@ public class EventNetwork implements
         }
     }
 
-    public void registerResponder(Predicate elm, AccountResponder accountResponder) {
-        responders.put(elm, accountResponder);
+    public void registerResponder(Predicate predicate, AccountResponder accountResponder) {
+        accountResponders.put(predicate, accountResponder);
+    }
+
+    public void registerResponder(Predicate predicate, TransactionResponder transactionResponder) {
+        transactionResponders.put(predicate, transactionResponder);
     }
 
     public void registerGameStateListener(SnapshotListener listener) {
@@ -78,7 +86,12 @@ public class EventNetwork implements
 
     @Override
     public Account requestSelectedAccount(Predicate elm) {
-        return responders.get(elm).requestSelectedAccount(elm);
+        return accountResponders.get(elm).requestSelectedAccount(elm);
+    }
+
+    @Override
+    public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
+        return transactionResponders.get(TRANSACTION).requestTransactionsByKey(accountKey);
     }
 
     @Override

@@ -74,7 +74,7 @@ public class Transactor extends EventConnection implements
     }
 
     @Override
-    public Collection<Transaction> requestTransactionsByAccountKey(UUID accountKey) {
+    public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(accountKey))
                 .collect(Collectors.toList());

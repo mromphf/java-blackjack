@@ -6,40 +6,51 @@ import main.usecase.eventing.Event;
 import main.usecase.eventing.TransactionListener;
 import main.usecase.eventing.TransactionResponder;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
 public class TransactionCache extends EventConnection implements TransactionListener, TransactionResponder {
 
-    public final Collection<Transaction> transactions;
+    public final Map<UUID, Collection<Transaction>> transactionMap;
 
-    public TransactionCache(Collection<Transaction> transactions) {
-        this.transactions = transactions;
+    public TransactionCache(Map<UUID, Collection<Transaction>> transactionMap) {
+        this.transactionMap = transactionMap;
     }
 
     @Override
     public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
-        return transactions.stream()
-                .filter(t -> t.getAccountKey().equals(accountKey))
-                .collect(Collectors.toList());
+        return transactionMap.get(accountKey);
     }
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         if (event.is(TRANSACTION)) {
-            transactions.add(event.getData());
+            final UUID accountKey = event.getData().getAccountKey();
+            final Collection<Transaction> coll = new LinkedList<>();
+
+            coll.add(event.getData());
+            mapToCache(accountKey, coll);
         }
     }
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTIONS_LOADED)) {
-            transactions.addAll(event.getData());
-        } else if (event.is(TRANSACTION_SERIES)) {
-            transactions.addAll(event.getData());
+        if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES)) {
+            final Map<UUID, List<Transaction>> grouped = event.getData()
+                    .stream()
+                    .collect(Collectors.groupingBy(Transaction::getAccountKey));
+
+            grouped.forEach(this::mapToCache);
+        }
+    }
+
+    private void mapToCache(UUID accountKey, Collection<Transaction> transactions) {
+        if (transactionMap.containsKey(accountKey)) {
+            transactionMap.get(accountKey).addAll(transactions);
+        } else {
+            transactionMap.put(accountKey, transactions);
         }
     }
 }

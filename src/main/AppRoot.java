@@ -62,7 +62,7 @@ public class AppRoot {
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
-        final TransactionCache transactionCache = new TransactionCache(new LinkedList<>());
+        final TransactionCache transactionCache = new TransactionCache(new TreeMap<>());
 
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);

@@ -36,12 +36,6 @@ public class Transaction implements Comparable<Transaction> {
         return description;
     }
 
-    public static List<Transaction> listForAccount(UUID accountKey, List<Transaction> transactions) {
-        return transactions.stream()
-                .filter(t -> t.getAccountKey().equals(accountKey))
-                .collect(Collectors.toList());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

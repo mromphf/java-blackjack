@@ -15,6 +15,7 @@ public class Transactor extends EventConnection implements
         SnapshotListener,
         BetListener,
         AccountListener,
+        TransactionListener,
         TransactionResponder {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
@@ -33,7 +34,8 @@ public class Transactor extends EventConnection implements
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        final Event<Collection<Transaction>> event = new Event<>(snapshot.getTimestamp(), TRANSACTION_SERIES, transactions);
+        final Event<Collection<Transaction>> event = new Event<>(
+                snapshot.getTimestamp(), TRANSACTION_SERIES, transactions);
 
         eventNetwork.onTransactionsEvent(event);
     }
@@ -78,5 +80,12 @@ public class Transactor extends EventConnection implements
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(accountKey))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
+        if (event.is(TRANSACTIONS_LOADED)) {
+            transactions.addAll(event.getData());
+        }
     }
 }

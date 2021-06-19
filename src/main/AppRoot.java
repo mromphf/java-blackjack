@@ -28,6 +28,7 @@ import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
+import static main.usecase.eventing.Predicate.TRANSACTION;
 
 public class AppRoot {
 
@@ -85,6 +86,7 @@ public class AppRoot {
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
 
         eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
+        eventNetwork.registerResponder(TRANSACTION, transactor);
 
         eventNetwork.registerGameStateListener(gameLogger);
         eventNetwork.registerTransactionListener(gameLogger);

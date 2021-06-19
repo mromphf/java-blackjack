@@ -6,5 +6,5 @@ import java.util.Collection;
 import java.util.UUID;
 
 public interface TransactionResponder {
-    Collection<Transaction> requestTransactionsByAccountKey(UUID accountKey);
+    Collection<Transaction> requestTransactionsByKey(UUID accountKey);
 }

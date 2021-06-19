@@ -2,11 +2,7 @@ package main.domain;
 
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
@@ -26,7 +22,7 @@ public class Snapshot {
     private final Stack<Card> playerHand = new Stack<>();
     private final Stack<Stack<Card>> handsToPlay = new Stack<>();
     private final Stack<Stack<Card>> handsToSettle = new Stack<>();
-    private final Map<LocalDateTime, Action> actionsTaken = new HashMap<>();
+    private final SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
 
     public Snapshot(LocalDateTime timestamp,
                     UUID accountKey,
@@ -37,7 +33,7 @@ public class Snapshot {
                     Stack<Card> playerHand,
                     Stack<Stack<Card>> handsToPlay,
                     Stack<Stack<Card>> handsToSettle,
-                    Map<LocalDateTime, Action> actionsTaken) {
+                    SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
         this.accountKey = accountKey;
         this.bet = bet;

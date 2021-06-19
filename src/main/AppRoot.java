@@ -3,7 +3,10 @@ package main;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.domain.*;
+import main.domain.Card;
+import main.domain.Evaluate;
+import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.io.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
@@ -16,17 +19,15 @@ import main.io.log.GameLogger;
 import main.io.storage.AccountStorage;
 import main.io.storage.FileSystem;
 import main.usecase.*;
-import main.usecase.LayoutManager;
 import main.usecase.eventing.EventNetwork;
 
 import java.util.*;
 import java.util.function.Function;
 
 import static main.domain.Deck.fresh;
-import static main.usecase.Layout.*;
 import static main.domain.Deck.shuffle;
+import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
-import static main.usecase.eventing.Predicate.CURRENT_BALANCE;
 
 public class AppRoot {
 
@@ -54,7 +55,7 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor(evaluators, new LinkedList<Transaction>());
+        final Transactor transactor = new Transactor(evaluators, new LinkedList<>());
         final Accounting accounting = new Accounting(new TreeMap<>());
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
@@ -83,7 +84,6 @@ public class AppRoot {
 
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
 
-        eventNetwork.registerResponder(CURRENT_BALANCE, accounting);
         eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
 
         eventNetwork.registerGameStateListener(gameLogger);

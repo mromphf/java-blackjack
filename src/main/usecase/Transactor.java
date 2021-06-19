@@ -52,9 +52,9 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final LocalDateTime timestamp = LocalDateTime.now();
             final Bet bet = event.getData();
             final String description = "BET";
-            final int signingBonus = (bet.getVal() * -1);
+            final int betVal = (bet.getVal() * -1);
             final UUID accountKey = bet.getAccountKey();
-            final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
+            final Transaction transaction = new Transaction(timestamp, accountKey, description, betVal);
             final Event<Transaction> evt = new Event<>(timestamp, TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);

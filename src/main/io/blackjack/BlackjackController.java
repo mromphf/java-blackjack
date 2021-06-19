@@ -16,7 +16,6 @@ import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static main.domain.Action.*;
@@ -70,12 +69,6 @@ public class BlackjackController extends EventConnection implements Initializabl
     public void onAccountEvent(Event<Account> event) {
         final int currentBalance = event.getData().getBalance();
         lblBalance.setText(String.format("Balance: $%s", currentBalance));
-    }
-
-    @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
     }
 
     @Override

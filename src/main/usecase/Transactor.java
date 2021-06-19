@@ -11,12 +11,18 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements SnapshotListener, BetListener, AccountListener {
+public class Transactor extends EventConnection implements
+        SnapshotListener,
+        BetListener,
+        AccountListener,
+        TransactionResponder {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
+    private final Collection<Transaction> transactions;
 
-    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators, Collection<Transaction> transactions) {
         this.evaluationFunctions = evaluators;
+        this.transactions = transactions;
     }
 
     @Override
@@ -65,5 +71,12 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
     public void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
                 onAccountEvent(new Event<>(event.getTimestamp(), event.getPredicate(), account)));
+    }
+
+    @Override
+    public Collection<Transaction> requestTransactionsByAccountKey(UUID accountKey) {
+        return transactions.stream()
+                .filter(t -> t.getAccountKey().equals(accountKey))
+                .collect(Collectors.toList());
     }
 }

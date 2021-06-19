@@ -56,12 +56,14 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor(evaluators, new LinkedList<>());
+        final Transactor transactor = new Transactor(evaluators);
         final Accounting accounting = new Accounting(new TreeMap<>());
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);
         final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
+        final TransactionCache transactionCache = new TransactionCache(new LinkedList<>());
+
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
         final BetController betController = (BetController) loader.loadController(BET);
@@ -80,13 +82,14 @@ public class AppRoot {
             add(layoutManager);
             add(accountStorage);
             add(transactor);
+            add(transactionCache);
             add(game);
         }};
 
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
 
         eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
-        eventNetwork.registerResponder(TRANSACTION, transactor);
+        eventNetwork.registerResponder(TRANSACTION, transactionCache);
 
         eventNetwork.registerGameStateListener(gameLogger);
         eventNetwork.registerTransactionListener(gameLogger);

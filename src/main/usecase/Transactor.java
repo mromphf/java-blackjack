@@ -70,12 +70,6 @@ public class Transactor extends EventConnection implements
     }
 
     @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(event.getTimestamp(), event.getPredicate(), account)));
-    }
-
-    @Override
     public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(accountKey))

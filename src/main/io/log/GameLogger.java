@@ -6,7 +6,6 @@ import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.*;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -54,12 +53,6 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
             final Account account = event.getData();
             log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
         }
-    }
-
-    @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
     }
 
     @Override

@@ -14,7 +14,6 @@ import main.usecase.eventing.Event;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static main.usecase.Layout.*;
@@ -89,12 +88,6 @@ public class BetController extends EventConnection implements Initializable, Acc
             lblBet.setText("$" + bet);
             lblBalance.setText(String.format("Balance: $%s", balance));
         }
-    }
-
-    @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

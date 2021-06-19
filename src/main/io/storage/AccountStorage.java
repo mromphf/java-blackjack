@@ -51,10 +51,4 @@ public class AccountStorage extends EventConnection implements AccountListener, 
             memory.deleteAccount(event.getData());
         }
     }
-
-    @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(LocalDateTime.now(), event.getPredicate(), account)));
-    }
 }

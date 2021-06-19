@@ -50,12 +50,6 @@ public class Accounting extends EventConnection implements AccountResponder, Acc
     }
 
     @Override
-    public void onAccountsEvent(Event<Collection<Account>> event) {
-        event.getData().forEach(account ->
-                onAccountEvent(new Event<>(now(), event.getPredicate(), account)));
-    }
-
-    @Override
     public Account requestSelectedAccount(Predicate predicate) {
         return selections.get(selections.lastKey());
     }

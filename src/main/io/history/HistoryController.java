@@ -75,10 +75,10 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
-
         if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
+            final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+            final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
+
             drawChart(account, dateAxis(transactions), new NumberAxis(), balanceSeries(transactions));
         }
     }

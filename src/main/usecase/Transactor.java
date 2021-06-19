@@ -1,41 +1,42 @@
 package main.usecase;
 
-import main.domain.*;
+import main.domain.Account;
+import main.domain.Bet;
+import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.io.EventConnection;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.BetListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.SnapshotListener;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements
-        SnapshotListener,
-        BetListener,
-        AccountListener,
-        TransactionListener,
-        TransactionResponder {
+public class Transactor extends EventConnection implements SnapshotListener, BetListener, AccountListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
-    private final Collection<Transaction> transactions;
 
-    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators, Collection<Transaction> transactions) {
+    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
         this.evaluationFunctions = evaluators;
-        this.transactions = transactions;
     }
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        final Collection<Transaction> transactions = evaluationFunctions.stream()
+        final Collection<Transaction> workingTransactions = evaluationFunctions.stream()
             .map(f -> f.apply(snapshot))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
 
         final Event<Collection<Transaction>> event = new Event<>(
-                snapshot.getTimestamp(), TRANSACTION_SERIES, transactions);
+                snapshot.getTimestamp(), TRANSACTION_SERIES, workingTransactions);
 
         eventNetwork.onTransactionsEvent(event);
     }
@@ -66,20 +67,6 @@ public class Transactor extends EventConnection implements
             final Event<Transaction> evt = new Event<>(timestamp, TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);
-        }
-    }
-
-    @Override
-    public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
-        return transactions.stream()
-                .filter(t -> t.getAccountKey().equals(accountKey))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTIONS_LOADED)) {
-            transactions.addAll(event.getData());
         }
     }
 }

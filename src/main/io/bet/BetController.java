@@ -4,13 +4,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.domain.Bet;
+import main.domain.Snapshot;
 import main.io.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -20,7 +23,10 @@ import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 
-public class BetController extends EventConnection implements Initializable, AccountListener {
+public class BetController extends EventConnection implements Initializable, AccountListener, SnapshotListener {
+
+    @FXML
+    private ProgressBar prgDeck;
 
     @FXML
     private Label lblBet;
@@ -52,6 +58,8 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        prgDeck.setProgress(100);
+
         btnBet1.setOnMouseClicked(event -> onBet(event, 1));
         btnBet5.setOnMouseClicked(event -> onBet(event, 5));
         btnBet10.setOnMouseClicked(event -> onBet(event, 10));
@@ -98,5 +106,10 @@ public class BetController extends EventConnection implements Initializable, Acc
         }
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
+    }
+
+    @Override
+    public void onGameUpdate(Snapshot snapshot) {
+        prgDeck.setProgress(snapshot.getDeckProgress());
     }
 }

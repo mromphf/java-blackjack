@@ -4,6 +4,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.ProgressBar?>
 <GridPane fx:controller="main.io.bet.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="50" styleClass="background">
 
@@ -11,7 +12,11 @@
         <URL value="@Bet.css"/>
     </stylesheets>
 
-    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
+    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" hgap="20" minHeight="100">
+        <ProgressBar fx:id="prgDeck" minWidth="150" minHeight="40" style="-fx-accent:red"/>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
         <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="300" alignment="BASELINE_CENTER">
             $0
             <font>
@@ -24,7 +29,7 @@
         </Label>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">
+    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="10">
         <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="80" minHeight="80" styleClass="btn-chip,btn-grey">
             1
         </Button>
@@ -46,7 +51,7 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
         <Button fx:id="btnDeal" GridPane.rowIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
             Bet
         </Button>
@@ -58,7 +63,7 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+    <GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
         <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
             Balance: $0
             <font>

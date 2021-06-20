@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import main.AppRoot;
 import main.domain.Account;
 import main.io.EventConnection;
 import main.usecase.eventing.AccountListener;
@@ -18,7 +17,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static javafx.scene.control.ButtonType.*;
+import static java.time.LocalDateTime.now;
+import static javafx.scene.control.ButtonType.OK;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
@@ -61,8 +61,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void onPlay() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, BET));
+        eventNetwork.onAccountEvent(new Event<>(now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, BET));
     }
 
     @FXML
@@ -105,22 +105,22 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void onCreate() {
         final UUID uuid = UUID.randomUUID();
         final String name = txtName.getText();
-        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime now = now();
         final Account account = new Account(uuid, name, now);
 
         txtName.setText("");
         accountCreationControls.setVisible(false);
         listControls.setVisible(true);
 
-        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_CREATED, account));
+        eventNetwork.onAccountEvent(new Event<>(now(), ACCOUNT_CREATED, account));
     }
 
     @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onAccountEvent(new Event<>(now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HISTORY));
     }
 
     @Override
@@ -152,7 +152,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
                 accountMap.remove(selectedAccount.getKey());
 
                 lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-                eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_DELETED, selectedAccount));
+                eventNetwork.onAccountEvent(new Event<>(now(), ACCOUNT_DELETED, selectedAccount));
             }
         };
     }
@@ -160,7 +160,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private Alert initializeConfirmationAlert() {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        alert.initOwner(AppRoot.stage);
+        eventNetwork.onAlertEvent(new Event<>(now(), LAYOUT_ALERT, alert));
+
         alert.setTitle("Confirmation");
         alert.setHeaderText("Confirm Account Closure");
         alert.setContentText("Are you sure you want to close this account?\n" +

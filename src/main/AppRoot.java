@@ -32,7 +32,11 @@ import static main.usecase.eventing.Predicate.TRANSACTION;
 
 public class AppRoot {
 
+    public static Stage stage;
+
     public AppRoot(Stage stage) {
+
+        AppRoot.stage = stage;
 
         /*
          * These are not event listeners.

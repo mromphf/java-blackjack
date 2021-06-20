@@ -145,14 +145,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private EventHandler<ActionEvent> onDeleteEvent() {
         return actionEvent -> {
             final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-
-            alert.initOwner(AppRoot.stage);
-            alert.setTitle("Confirmation");
-            alert.setHeaderText("Confirm Account Closure");
-            alert.setContentText("Are you sure you want to close this account?\n" +
-                    "This action is permanent and cannot be undone.");
-
+            final Alert alert = initializeConfirmationAlert();
             final Optional<ButtonType> buttonType = alert.showAndWait();
 
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
@@ -162,5 +155,17 @@ public class HomeController extends EventConnection implements Initializable, Ac
                 eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_DELETED, selectedAccount));
             }
         };
+    }
+
+    private Alert initializeConfirmationAlert() {
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.initOwner(AppRoot.stage);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Confirm Account Closure");
+        alert.setContentText("Are you sure you want to close this account?\n" +
+                "This action is permanent and cannot be undone.");
+
+        return alert;
     }
 }

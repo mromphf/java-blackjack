@@ -1,21 +1,24 @@
 package main.io.home;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import main.AppRoot;
 import main.domain.Account;
 import main.io.EventConnection;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static javafx.scene.control.ButtonType.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
@@ -49,7 +52,10 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private final Map<UUID, Account> accountMap = new HashMap<>();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        final EventHandler<ActionEvent> handler = onDeleteEvent();
+        btnDelete.setOnAction(handler);
+    }
 
     @FXML
     public void onPlay() {
@@ -110,16 +116,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @FXML
-    public void onDelete() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-
-        accountMap.remove(selectedAccount.getKey());
-        lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
-
-        eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_DELETED, selectedAccount));
-    }
-
-    @FXML
     public void onRequestHistory() {
         final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
 
@@ -144,5 +140,27 @@ public class HomeController extends EventConnection implements Initializable, Ac
             }
             lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
         }
+    }
+
+    private EventHandler<ActionEvent> onDeleteEvent() {
+        return actionEvent -> {
+            final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+            alert.initOwner(AppRoot.stage);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("Confirm Account Closure");
+            alert.setContentText("Are you sure you want to close this account?\n" +
+                    "This action is permanent and cannot be undone.");
+
+            final Optional<ButtonType> buttonType = alert.showAndWait();
+
+            if ((buttonType.isPresent() && buttonType.get() == OK)) {
+                accountMap.remove(selectedAccount.getKey());
+
+                lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+                eventNetwork.onAccountEvent(new Event<>(LocalDateTime.now(), ACCOUNT_DELETED, selectedAccount));
+            }
+        };
     }
 }

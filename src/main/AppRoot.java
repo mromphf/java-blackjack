@@ -65,7 +65,7 @@ public class AppRoot {
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);
-        final LayoutManager layoutManager = new LayoutManager(scene, layoutMap);
+        final LayoutManager layoutManager = new LayoutManager(stage, scene, layoutMap);
         final TransactionCache transactionCache = new TransactionCache(new TreeMap<>());
 
         final HomeController homeController = (HomeController) loader.loadController(HOME);

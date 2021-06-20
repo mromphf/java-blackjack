@@ -1,5 +1,6 @@
 package main.usecase.eventing;
 
+import javafx.scene.control.Alert;
 import main.domain.*;
 import main.io.EventConnection;
 import main.usecase.Layout;
@@ -16,7 +17,8 @@ public class EventNetwork implements
         ActionListener,
         AccountListener,
         TransactionListener,
-        TransactionResponder {
+        TransactionResponder,
+        AlertListener {
 
     private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<BetListener> betListeners = new ArrayList<>();
@@ -24,6 +26,7 @@ public class EventNetwork implements
     private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
+    private final Collection<AlertListener> alertListeners = new ArrayList<>();
     private final Map<Predicate, AccountResponder> accountResponders = new HashMap<>();
     private final Map<Predicate, TransactionResponder> transactionResponders = new HashMap<>();
 
@@ -51,6 +54,10 @@ public class EventNetwork implements
 
             if (connection instanceof TransactionListener) {
                 transactionListeners.add((TransactionListener) connection);
+            }
+
+            if (connection instanceof AlertListener) {
+                alertListeners.add((AlertListener) connection);
             }
         }
     }
@@ -127,5 +134,10 @@ public class EventNetwork implements
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         transactionListeners.forEach(listener -> listener.onTransactionsEvent(event));
+    }
+
+    @Override
+    public void onAlertEvent(Event<Alert> event) {
+        alertListeners.forEach(listener -> listener.onAlertEvent(event));
     }
 }

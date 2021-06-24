@@ -90,19 +90,19 @@ public class Round {
     }
 
     public void split() throws NoSuchElementException, EmptyStackException {
-        final Iterator<Card> iterator = currentHand.iterator();
+        final Iterator<Card> cardsInHand = currentHand.iterator();
 
         if (deck.isEmpty()) {
             refillDeck();
         }
 
         currentHand = new Stack<Card>() {{
-            add(iterator.next());
+            add(cardsInHand.next());
             add(deck.pop());
         }};
 
         Stack<Card> pocketHand = new Stack<Card>() {{
-            add(iterator.next());
+            add(cardsInHand.next());
         }};
 
         handsToPlay.add(pocketHand);

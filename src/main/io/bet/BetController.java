@@ -10,15 +10,15 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+import static java.time.LocalDateTime.now;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
@@ -70,21 +70,21 @@ public class BetController extends EventConnection implements Initializable, Acc
     @FXML
     private void onDeal() {
         final Account selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        final Bet betByAccount = Bet.of(LocalDateTime.now(), selectedAccount.getKey(), bet);
-        eventNetwork.onBetEvent(new Event<>(LocalDateTime.now(), BET_PLACED, betByAccount));
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, GAME));
+        final Bet betByAccount = Bet.of(now(), selectedAccount.getKey(), bet);
+        eventNetwork.onBetEvent(new Event<>(now(), BET_PLACED, betByAccount));
+        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, GAME));
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, HOME));
+        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HOME));
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

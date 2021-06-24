@@ -7,7 +7,7 @@ import main.domain.Card;
 import main.domain.Evaluate;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;

@@ -2,7 +2,6 @@ package main.usecase.eventing;
 
 import javafx.scene.control.Alert;
 import main.domain.*;
-import main.io.EventConnection;
 import main.usecase.Layout;
 
 import java.util.*;

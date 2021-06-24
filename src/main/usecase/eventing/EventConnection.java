@@ -1,6 +1,4 @@
-package main.io;
-
-import main.usecase.eventing.EventNetwork;
+package main.usecase.eventing;
 
 public abstract class EventConnection {
 

@@ -4,7 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AlertListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.LayoutListener;

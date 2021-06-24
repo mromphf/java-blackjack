@@ -4,7 +4,7 @@ import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.BetListener;
 import main.usecase.eventing.Event;

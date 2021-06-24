@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 

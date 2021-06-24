@@ -1,7 +1,7 @@
 package main.usecase;
 
 import main.domain.Transaction;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.TransactionListener;
 import main.usecase.eventing.TransactionResponder;

@@ -10,7 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.*;
 import main.usecase.eventing.*;
 

@@ -2,7 +2,7 @@ package main.usecase;
 
 import main.domain.Account;
 import main.domain.Transaction;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.*;
 
 import java.time.LocalDateTime;

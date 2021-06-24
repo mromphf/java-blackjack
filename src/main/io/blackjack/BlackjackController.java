@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
-import main.io.EventConnection;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.SnapshotListener;

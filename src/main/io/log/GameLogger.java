@@ -9,6 +9,7 @@ import main.usecase.eventing.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;

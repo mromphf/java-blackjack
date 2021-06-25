@@ -2,21 +2,30 @@ package main.usecase;
 
 import main.domain.Account;
 import main.domain.Transaction;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.SortedMap;
+import java.util.UUID;
 
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
 import static main.usecase.eventing.Predicate.*;
 
 public class SelectionMemory extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
+    private final UUID networkId;
     private final SortedMap<LocalDateTime, Account> selections;
 
-    public SelectionMemory(SortedMap<LocalDateTime, Account> selections) {
+    public SelectionMemory(UUID networkId, SortedMap<LocalDateTime, Account> selections) {
+        this.networkId = networkId;
         this.selections = selections;
+    }
+
+    @Override
+    public UUID getKey() {
+        return networkId;
     }
 
     @Override
@@ -26,7 +35,7 @@ public class SelectionMemory extends EventConnection implements AccountResponder
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, updatedState));
         }
     }
 
@@ -37,7 +46,7 @@ public class SelectionMemory extends EventConnection implements AccountResponder
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, updatedState));
         }
     }
 
@@ -45,7 +54,7 @@ public class SelectionMemory extends EventConnection implements AccountResponder
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
             selections.put(now(), event.getData());
-            eventNetwork.onAccountEvent(new Event<>(now(), CURRENT_BALANCE, selections.get(selections.lastKey())));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, selections.get(selections.lastKey())));
         }
     }
 

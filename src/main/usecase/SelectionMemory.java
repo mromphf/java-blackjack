@@ -11,11 +11,11 @@ import java.util.*;
 import static java.time.LocalDateTime.*;
 import static main.usecase.eventing.Predicate.*;
 
-public class Accounting extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
+public class SelectionMemory extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
     private final SortedMap<LocalDateTime, Account> selections;
 
-    public Accounting(SortedMap<LocalDateTime, Account> selections) {
+    public SelectionMemory(SortedMap<LocalDateTime, Account> selections) {
         this.selections = selections;
     }
 

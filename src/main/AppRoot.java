@@ -61,7 +61,7 @@ public class AppRoot {
          * These are event listeners
          */
         final Transactor transactor = new Transactor(evaluators);
-        final SelectionMemory selectionMemory = new SelectionMemory(new TreeMap<>());
+        final SelectionMemory selectionMemory = new SelectionMemory(UUID.randomUUID(), new TreeMap<>());
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);

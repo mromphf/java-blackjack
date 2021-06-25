@@ -61,7 +61,7 @@ public class AppRoot {
          * These are event listeners
          */
         final Transactor transactor = new Transactor(evaluators);
-        final Accounting accounting = new Accounting(new TreeMap<>());
+        final SelectionMemory selectionMemory = new SelectionMemory(new TreeMap<>());
         final Game game = new Game(deck, numDecks);
         final GameLogger gameLogger = new GameLogger("Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(memory);
@@ -78,7 +78,7 @@ public class AppRoot {
          */
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
-            add(accounting); // Accounting needs to be added first since it holds the current account pointer
+            add(selectionMemory); // Accounting needs to be added first since it holds the current account pointer
             add(homeController);
             add(historyController);
             add(blackjackController);
@@ -92,7 +92,7 @@ public class AppRoot {
 
         final EventNetwork eventNetwork = new EventNetwork(eventConnections);
 
-        eventNetwork.registerResponder(ACCOUNT_SELECTED, accounting);
+        eventNetwork.registerResponder(ACCOUNT_SELECTED, selectionMemory);
         eventNetwork.registerResponder(TRANSACTION, transactionCache);
 
         eventNetwork.registerGameStateListener(gameLogger);

@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class TransactionCache extends EventConnection implements TransactionListener, TransactionResponder {
+public class TransactionMemory extends EventConnection implements TransactionListener, TransactionResponder {
 
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
-    public TransactionCache(Map<UUID, Collection<Transaction>> transactionMap) {
+    public TransactionMemory(Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
     }
 

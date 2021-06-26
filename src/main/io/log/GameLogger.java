@@ -17,10 +17,17 @@ import static main.usecase.eventing.Predicate.*;
 
 public class GameLogger extends Logger implements SnapshotListener, AccountListener, TransactionListener, ActionListener {
 
+    private final UUID key;
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
-    public GameLogger(String name, String resourceBundleName) {
+    public GameLogger(UUID key, String name, String resourceBundleName) {
         super(name, resourceBundleName);
+        this.key = key;
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override

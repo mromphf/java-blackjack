@@ -7,15 +7,18 @@ import main.usecase.eventing.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.UUID;
 
 import static main.usecase.eventing.Predicate.*;
 
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
+    private final UUID key;
     private final Memory memory;
 
-    public AccountStorage(Memory memory) {
+    public AccountStorage(UUID key, Memory memory) {
+        this.key = key;
         this.memory = memory;
     }
 
@@ -27,6 +30,11 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     public void loadAllTransactions() {
         final Event<Collection<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTIONS_LOADED, memory.loadAllTransactions());
         eventNetwork.onTransactionsEvent(event);
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override

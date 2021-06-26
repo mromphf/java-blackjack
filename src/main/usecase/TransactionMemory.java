@@ -13,10 +13,17 @@ import static main.usecase.eventing.Predicate.*;
 
 public class TransactionMemory extends EventConnection implements TransactionListener, TransactionResponder {
 
+    public final UUID key;
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
-    public TransactionMemory(Map<UUID, Collection<Transaction>> transactionMap) {
+    public TransactionMemory(UUID key, Map<UUID, Collection<Transaction>> transactionMap) {
+        this.key = key;
         this.transactionMap = transactionMap;
+    }
+
+    @Override
+    public UUID getKey() {
+        return null;
     }
 
     @Override

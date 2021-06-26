@@ -60,13 +60,13 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor(evaluators);
+        final Transactor transactor = new Transactor(UUID.randomUUID(), evaluators);
         final SelectionMemory selectionMemory = new SelectionMemory(UUID.randomUUID(), new TreeMap<>());
         final Game game = new Game(deck, numDecks);
-        final GameLogger gameLogger = new GameLogger("Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(memory);
+        final GameLogger gameLogger = new GameLogger(UUID.randomUUID(), "Game Logger", null);
+        final AccountStorage accountStorage = new AccountStorage(UUID.randomUUID(), memory);
         final LayoutManager layoutManager = new LayoutManager(stage, scene, layoutMap);
-        final TransactionMemory transactionMemory = new TransactionMemory(new TreeMap<>());
+        final TransactionMemory transactionMemory = new TransactionMemory(UUID.randomUUID(), new TreeMap<>());
 
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
@@ -90,7 +90,7 @@ public class AppRoot {
             add(game);
         }};
 
-        final EventNetwork eventNetwork = new EventNetwork(eventConnections);
+        final EventNetwork eventNetwork = new EventNetwork(UUID.randomUUID(), eventConnections);
 
         eventNetwork.registerResponder(ACCOUNT_SELECTED, selectionMemory);
         eventNetwork.registerResponder(TRANSACTION, transactionMemory);

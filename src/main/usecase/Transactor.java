@@ -21,10 +21,17 @@ import static main.usecase.eventing.Predicate.*;
 
 public class Transactor extends EventConnection implements SnapshotListener, BetListener, AccountListener {
 
+    private final UUID key;
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
-    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+    public Transactor(UUID key, Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+        this.key = key;
         this.evaluationFunctions = evaluators;
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override

@@ -9,17 +9,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-import static java.util.UUID.*;
+import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
@@ -113,7 +113,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, SPLIT));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, SPLIT));
     }
 
     @FXML
@@ -124,41 +124,41 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, STAND));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, SETTLE));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, SETTLE));
     }
 
     @FXML
     private void onDone() {
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, BET));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BET));
     }
 
     @FXML
     private void onHit() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, HIT));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, HIT));
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, DOUBLE));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, BUY_INSURANCE));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, BUY_INSURANCE));
     }
 
     @FXML
     private void onWaiveInsurance() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, WAIVE_INSURANCE));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, WAIVE_INSURANCE));
     }
 
     @FXML void onPlayNextHand() {
-        eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, PLAY_NEXT_HAND));
+        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, PLAY_NEXT_HAND));
     }
 
     @Override

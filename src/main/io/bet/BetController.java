@@ -74,20 +74,20 @@ public class BetController extends EventConnection implements Initializable, Acc
     private void onDeal() {
         final Account selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
         final Bet betByAccount = Bet.of(now(), selectedAccount.getKey(), bet);
-        eventNetwork.onBetEvent(new Event<>(now(), BET_PLACED, betByAccount));
-        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, GAME));
+        eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
         bet = 0;
     }
 
     @FXML
     public void onQuit() {
-        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HOME));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HOME));
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HISTORY));
     }
 
     @Override

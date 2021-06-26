@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.*;
 import static java.util.UUID.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
@@ -40,7 +41,7 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onLayoutEvent(new Event<>(LocalDateTime.now(), LAYOUT_CHANGED, BACK));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BACK));
     }
 
     @FXML

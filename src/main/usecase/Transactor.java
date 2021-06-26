@@ -42,8 +42,11 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             .map(Optional::get)
             .collect(Collectors.toList());
 
+        final LocalDateTime timestamp = snapshot.getTimestamp();
+
         final Event<Collection<Transaction>> event = new Event<>(
-                snapshot.getTimestamp(), TRANSACTION_SERIES, workingTransactions);
+                key, timestamp, TRANSACTION_SERIES, workingTransactions
+        );
 
         eventNetwork.onTransactionsEvent(event);
     }
@@ -51,12 +54,13 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED)) {
+            final UUID accountKey = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getKey();
             final LocalDateTime timestamp = LocalDateTime.now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;
-            final UUID accountKey = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getKey();
+
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Event<Transaction> evt = new Event<>(timestamp, TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }
@@ -71,7 +75,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final int betVal = (bet.getVal() * -1);
             final UUID accountKey = bet.getAccountKey();
             final Transaction transaction = new Transaction(timestamp, accountKey, description, betVal);
-            final Event<Transaction> evt = new Event<>(timestamp, TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }

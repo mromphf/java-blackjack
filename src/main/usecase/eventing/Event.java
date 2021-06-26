@@ -11,13 +11,6 @@ public class Event<T> implements Identifiable {
     private final Predicate predicate;
     private final T data;
 
-    public Event(LocalDateTime timestamp, Predicate predicate, T data) {
-        this.sourceKey = UUID.randomUUID();
-        this.timestamp = timestamp;
-        this.predicate = predicate;
-        this.data = data;
-    }
-
     public Event(UUID sourceKey, LocalDateTime timestamp, Predicate predicate, T data) {
         this.sourceKey = sourceKey;
         this.timestamp = timestamp;

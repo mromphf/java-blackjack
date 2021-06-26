@@ -1,9 +1,11 @@
 package main.usecase.eventing;
 
+import main.domain.Identifiable;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Event<T> {
+public class Event<T> implements Identifiable {
     private final UUID sourceKey;
     private final LocalDateTime timestamp;
     private final Predicate predicate;
@@ -27,7 +29,8 @@ public class Event<T> {
         return predicate.equals(p);
     }
 
-    public UUID getSourceKey() {
+    @Override
+    public UUID getKey() {
         return sourceKey;
     }
 

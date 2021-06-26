@@ -128,7 +128,7 @@ public class EventNetwork implements
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         transactionListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getSourceKey()))
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
                 .forEach(listener -> listener.onTransactionEvent(event));
     }
 

@@ -2,7 +2,7 @@
 
 import sys
 import json
-import datetime
+from datetime import datetime
 
 
 def write_file(file_name, csv_struct):
@@ -20,7 +20,7 @@ def json_date_to_time(json_date):
     hour = json_date["time"]["hour"]
     minute = json_date["time"]["minute"]
     second = json_date["time"]["second"]
-    return datetime.datetime(year, month, day, hour, minute, second)
+    return datetime(year, month, day, hour, minute, second)
 
 
 def json_to_csv(file_name):
@@ -35,13 +35,13 @@ def json_to_csv(file_name):
         }
 
 
-def parse_entry(file_path):
+def parse_file_path(file_path):
     exploded = file_path.split("/")
     return exploded[(len(exploded) - 1)]
 
 
 def main(file_path):
-    file_name = parse_entry(file_path)
+    file_name = parse_file_path(file_path)
     csv_struct = json_to_csv(file_path)
     write_file(file_name, csv_struct)
 

@@ -11,6 +11,7 @@ import main.usecase.eventing.LayoutListener;
 
 import java.util.Map;
 import java.util.Stack;
+import java.util.UUID;
 
 import static main.usecase.Layout.BACK;
 import static main.usecase.eventing.Predicate.LAYOUT_ALERT;
@@ -18,16 +19,23 @@ import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class LayoutManager extends EventConnection implements LayoutListener, AlertListener {
 
-    private final Stack<Layout> navHistory;
+    private final UUID key;
     private final Scene scene;
     private final Stage stage;
     private final Map<Layout, Parent> layoutMap;
+    private final Stack<Layout> navHistory;
 
-    public LayoutManager(Stage stage, Scene scene, Map<Layout, Parent> layoutMap) {
+    public LayoutManager(UUID key, Stage stage, Scene scene, Map<Layout, Parent> layoutMap) {
+        this.key = key;
         this.scene = scene;
         this.stage = stage;
         this.layoutMap = layoutMap;
         this.navHistory = new Stack<>();
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override

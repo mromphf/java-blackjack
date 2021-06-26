@@ -13,13 +13,15 @@ import static main.usecase.eventing.Predicate.*;
 
 public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
 
+    private final UUID key;
     private final Stack<Card> deck;
     private final int maxCards;
     private final int numDecks;
     private final Map<Action, Runnable> runnableMap;
     private Round round;
 
-    public Game(Stack<Card> deck, int numDecks) {
+    public Game(UUID key, Stack<Card> deck, int numDecks) {
+        this.key = key;
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
@@ -32,6 +34,11 @@ public class Game extends EventConnection implements ActionListener, BetListener
         runnableMap.put(SETTLE, () -> round.rewind());
         runnableMap.put(DOUBLE, () -> round.doubleDown());
         runnableMap.put(PLAY_NEXT_HAND, () -> round.playNextHand());
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override
@@ -59,5 +66,4 @@ public class Game extends EventConnection implements ActionListener, BetListener
             eventNetwork.onGameUpdate(round.getSnapshot(LocalDateTime.now()));
         }
     }
-
 }

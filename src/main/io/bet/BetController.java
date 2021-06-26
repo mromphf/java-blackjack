@@ -17,8 +17,10 @@ import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
@@ -53,6 +55,7 @@ public class BetController extends EventConnection implements Initializable, Acc
     public Button btnBet100;
 
     private final static int MAX_BET = 500;
+    private final UUID key = randomUUID();
     private int bet = 0;
     private int balance = 0;
 
@@ -85,6 +88,11 @@ public class BetController extends EventConnection implements Initializable, Acc
     @FXML
     public void onHistory() {
         eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HISTORY));
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override

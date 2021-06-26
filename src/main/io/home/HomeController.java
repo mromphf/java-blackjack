@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.*;
 import static javafx.scene.control.ButtonType.OK;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
@@ -49,6 +50,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @FXML
     private Button btnHistory;
 
+    private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
 
     @Override
@@ -103,7 +105,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onCreate() {
-        final UUID uuid = UUID.randomUUID();
+        final UUID uuid = randomUUID();
         final String name = txtName.getText();
         final LocalDateTime now = now();
         final Account account = new Account(uuid, name, now);
@@ -121,6 +123,11 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
         eventNetwork.onAccountEvent(new Event<>(now(), ACCOUNT_SELECTED, selectedAccount));
         eventNetwork.onLayoutEvent(new Event<>(now(), LAYOUT_CHANGED, HISTORY));
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     @Override
@@ -160,7 +167,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private Alert initializeConfirmationAlert() {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        eventNetwork.onAlertEvent(new Event<>(now(), LAYOUT_ALERT, alert));
+        eventNetwork.onAlertEvent(new Event<>(key, now(), LAYOUT_ALERT, alert));
 
         alert.setTitle("Confirmation");
         alert.setHeaderText("Confirm Account Closure");

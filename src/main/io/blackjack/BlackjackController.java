@@ -17,7 +17,9 @@ import main.usecase.eventing.SnapshotListener;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
+import static java.util.UUID.*;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
@@ -61,6 +63,8 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private ProgressBar prgDeck;
+
+    private final UUID key = randomUUID();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -155,6 +159,11 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML void onPlayNextHand() {
         eventNetwork.onActionEvent(new Event<>(LocalDateTime.now(), ACTION_TAKEN, PLAY_NEXT_HAND));
+    }
+
+    @Override
+    public UUID getKey() {
+        return key;
     }
 
     private void renderExposedTable(Snapshot snapshot) {

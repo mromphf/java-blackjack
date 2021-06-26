@@ -1,12 +1,13 @@
 package main.usecase.eventing;
 
 import main.domain.Account;
+import main.domain.Identifiable;
 
 import java.util.Collection;
 
 import static java.time.LocalDateTime.*;
 
-public interface AccountListener {
+public interface AccountListener extends Identifiable {
 
     void onAccountEvent(Event<Account> event);
 

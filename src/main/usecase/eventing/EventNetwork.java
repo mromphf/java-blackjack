@@ -19,6 +19,7 @@ public class EventNetwork implements
         TransactionResponder,
         AlertListener {
 
+    private final UUID key;
     private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<BetListener> betListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
@@ -29,7 +30,9 @@ public class EventNetwork implements
     private final Map<Predicate, AccountResponder> accountResponders = new HashMap<>();
     private final Map<Predicate, TransactionResponder> transactionResponders = new HashMap<>();
 
-    public EventNetwork(Collection<EventConnection> connections) {
+    public EventNetwork(UUID key, Collection<EventConnection> connections) {
+        this.key = key;
+
         for (EventConnection connection : connections) {
             if (connection instanceof SnapshotListener) {
                 snapshotListeners.add((SnapshotListener) connection);
@@ -86,6 +89,11 @@ public class EventNetwork implements
     }
 
     @Override
+    public UUID getKey() {
+        return key;
+    }
+
+    @Override
     public void onGameUpdate(Snapshot snapshot) {
         snapshotListeners.forEach(l -> l.onGameUpdate(snapshot));
     }
@@ -117,12 +125,16 @@ public class EventNetwork implements
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        accountListeners.forEach(listener -> listener.onAccountEvent(event));
+        accountListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onAccountEvent(event));
     }
 
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
-        accountListeners.forEach(listener -> listener.onAccountsEvent(event));
+        accountListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onAccountsEvent(event));
     }
 
     @Override
@@ -134,7 +146,9 @@ public class EventNetwork implements
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        transactionListeners.forEach(listener -> listener.onTransactionsEvent(event));
+        transactionListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onTransactionsEvent(event));
     }
 
     @Override

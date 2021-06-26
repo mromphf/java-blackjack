@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import static java.time.ZoneId.systemDefault;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+
 public class Transaction implements Comparable<Transaction> {
 
     private final LocalDateTime time;
@@ -52,7 +55,8 @@ public class Transaction implements Comparable<Transaction> {
 
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s", time, accountKey, description, amount);
+        String zonedTimestamp = time.atZone(systemDefault()).format(ISO_DATE_TIME);
+        return String.format("%s,%s,%s,%s", zonedTimestamp, accountKey, description, amount);
     }
 
     @Override

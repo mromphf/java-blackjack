@@ -8,6 +8,7 @@ import main.domain.Transaction;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static main.io.storage.FileFunctions.*;
@@ -89,7 +90,7 @@ public class FileSystem implements Memory {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
                     transactions.add(new Transaction(
-                            LocalDateTime.parse(row[0]),
+                            ZonedDateTime.parse(row[0]).toLocalDateTime(),
                             UUID.fromString(row[1]),
                             row[2],
                             Integer.parseInt(row[3])

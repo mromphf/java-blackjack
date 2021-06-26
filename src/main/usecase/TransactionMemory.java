@@ -23,7 +23,7 @@ public class TransactionMemory extends EventConnection implements TransactionLis
 
     @Override
     public UUID getKey() {
-        return null;
+        return key;
     }
 
     @Override

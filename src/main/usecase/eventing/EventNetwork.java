@@ -120,7 +120,9 @@ public class EventNetwork implements
 
     @Override
     public void onActionEvent(Event<Action> event) {
-        actionListeners.forEach(listener -> listener.onActionEvent(event));
+        actionListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onActionEvent(event));
     }
 
     @Override

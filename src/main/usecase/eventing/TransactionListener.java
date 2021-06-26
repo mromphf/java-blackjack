@@ -13,6 +13,6 @@ public interface TransactionListener extends Identifiable {
     default void onTransactionEvent(Event<Transaction> event) {
         Collection<Transaction> transactions = new ArrayList<>();
         transactions.add(event.getData());
-        onTransactionsEvent(new Event<>(event.getSourceKey(), event.getTimestamp(), event.getPredicate(), transactions));
+        onTransactionsEvent(new Event<>(event.getKey(), event.getTimestamp(), event.getPredicate(), transactions));
     }
 }

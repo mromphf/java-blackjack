@@ -12,6 +12,6 @@ public interface AccountListener {
 
     default void onAccountsEvent(Event<Collection<Account>> event) {
         event.getData().forEach(account ->
-                onAccountEvent(new Event<>(event.getSourceKey(), now(), event.getPredicate(), account)));
+                onAccountEvent(new Event<>(event.getKey(), now(), event.getPredicate(), account)));
     }
 }

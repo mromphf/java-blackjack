@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.util.UUID.*;
 import static main.io.util.ChartUtil.balanceSeries;
 import static main.io.util.ChartUtil.dateAxis;
 import static main.usecase.Layout.BACK;
@@ -32,6 +33,8 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public GridPane chartHousing;
+
+    private final UUID key = randomUUID();
 
     @FXML
     public void onBack() {
@@ -72,6 +75,11 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
+
+    @Override
+    public UUID getKey() {
+        return key;
+    }
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {

@@ -65,7 +65,7 @@ public class AppRoot {
         final Game game = new Game(UUID.randomUUID(), deck, numDecks);
         final GameLogger gameLogger = new GameLogger(UUID.randomUUID(), "Game Logger", null);
         final AccountStorage accountStorage = new AccountStorage(UUID.randomUUID(), memory);
-        final LayoutManager layoutManager = new LayoutManager(stage, scene, layoutMap);
+        final LayoutManager layoutManager = new LayoutManager(UUID.randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(UUID.randomUUID(), new TreeMap<>());
 
         final HomeController homeController = (HomeController) loader.loadController(HOME);

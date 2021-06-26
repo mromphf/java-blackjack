@@ -5,10 +5,11 @@ import main.domain.Transaction;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.*;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
+import static java.time.LocalDateTime.now;
 import static main.usecase.eventing.Predicate.*;
 
 
@@ -23,12 +24,16 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     public void loadAllAccounts() {
-        final Event<Collection<Account>> event = new Event<>(LocalDateTime.now(), ACCOUNTS_LOADED, memory.loadAllAccounts());
+        final Collection<Account> accounts = memory.loadAllAccounts();
+        final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts);
+
         eventNetwork.onAccountsEvent(event);
     }
 
     public void loadAllTransactions() {
-        final Event<Collection<Transaction>> event = new Event<>(LocalDateTime.now(), TRANSACTIONS_LOADED, memory.loadAllTransactions());
+        final List<Transaction> transactions = memory.loadAllTransactions();
+        final Event<Collection<Transaction>> event = new Event<>(key, now(), TRANSACTIONS_LOADED, transactions);
+
         eventNetwork.onTransactionsEvent(event);
     }
 

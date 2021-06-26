@@ -5,6 +5,7 @@ import main.domain.*;
 import main.usecase.Layout;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.TRANSACTION;
 
@@ -110,12 +111,16 @@ public class EventNetwork implements
 
     @Override
     public void onBetEvent(Event<Bet> event) {
-        betListeners.forEach(listener -> listener.onBetEvent(event));
+        betListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onBetEvent(event));
     }
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        layoutListeners.forEach(listener -> listener.onLayoutEvent(event));
+        layoutListeners.stream()
+                .filter(listener -> !listener.getKey().equals(event.getKey()))
+                .forEach(listener -> listener.onLayoutEvent(event));
     }
 
     @Override
@@ -148,9 +153,11 @@ public class EventNetwork implements
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        transactionListeners.stream()
+        final List<TransactionListener> collect = transactionListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onTransactionsEvent(event));
+                .collect(Collectors.toList());
+
+        collect.forEach(listener -> listener.onTransactionsEvent(event));
     }
 
     @Override

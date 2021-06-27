@@ -1,6 +1,6 @@
 package main.usecase.eventing;
 
-import main.domain.Identifiable;
+import main.common.Identifiable;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

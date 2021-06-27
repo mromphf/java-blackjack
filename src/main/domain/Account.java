@@ -3,7 +3,10 @@ package main.domain;
 import main.common.Csv;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.time.format.DateTimeFormatter.*;
 
 public class Account implements Csv {
     private final UUID key;
@@ -73,7 +76,7 @@ public class Account implements Csv {
 
     @Override
     public String toString() {
-        return String.format("%s: \t$%s\tCreated: %s-%s-%s", name, balance, created.getYear(), created.getMonthValue(), created.getDayOfMonth());
+        return String.format("%s: \t$%s\tCreated: %s", name, balance, created.format(ISO_DATE));
     }
 
     @Override

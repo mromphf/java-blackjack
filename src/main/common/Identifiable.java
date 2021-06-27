@@ -1,4 +1,4 @@
-package main.domain;
+package main.common;
 
 import java.util.UUID;
 

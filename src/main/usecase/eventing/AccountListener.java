@@ -1,7 +1,7 @@
 package main.usecase.eventing;
 
 import main.domain.Account;
-import main.domain.Identifiable;
+import main.common.Identifiable;
 
 import java.util.Collection;
 

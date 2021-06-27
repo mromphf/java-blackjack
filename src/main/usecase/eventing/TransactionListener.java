@@ -1,6 +1,6 @@
 package main.usecase.eventing;
 
-import main.domain.Identifiable;
+import main.common.Identifiable;
 import main.domain.Transaction;
 
 import java.time.LocalDateTime;

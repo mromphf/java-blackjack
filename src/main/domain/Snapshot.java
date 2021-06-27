@@ -7,9 +7,9 @@ import java.util.*;
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
-import static main.io.util.StringUtil.actionString;
+import static main.common.StringUtil.actionString;
 import static main.domain.Rules.*;
-import static main.io.util.StringUtil.playerString;
+import static main.common.StringUtil.playerString;
 
 public class Snapshot {
     private final LocalDateTime timestamp;

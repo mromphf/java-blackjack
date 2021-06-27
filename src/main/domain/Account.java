@@ -1,9 +1,11 @@
 package main.domain;
 
+import main.common.Csv;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Account {
+public class Account implements Csv {
     private final UUID key;
     private final String name;
     private final int balance;
@@ -72,5 +74,10 @@ public class Account {
     @Override
     public String toString() {
         return String.format("%s: \t$%s\tCreated: %s-%s-%s", name, balance, created.getYear(), created.getMonthValue(), created.getDayOfMonth());
+    }
+
+    @Override
+    public String toCsvRow() {
+        return String.format("%s,%s,%s", key, name, created);
     }
 }

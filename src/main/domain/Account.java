@@ -3,12 +3,16 @@ package main.domain;
 import main.common.Csv;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static java.time.format.DateTimeFormatter.*;
+import static java.time.ZoneId.systemDefault;
+import static java.time.format.DateTimeFormatter.ISO_DATE;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public class Account implements Csv {
+
+    private static final String CSV_HEADER_ROW = "key,name,created";
+
     private final UUID key;
     private final String name;
     private final int balance;
@@ -80,7 +84,13 @@ public class Account implements Csv {
     }
 
     @Override
-    public String toCsvRow() {
-        return String.format("%s,%s,%s", key, name, created);
+    public String header() {
+        return CSV_HEADER_ROW;
+    }
+
+    @Override
+    public String row() {
+        String zonedTimestamp = created.atZone(systemDefault()).format(ISO_DATE_TIME);
+        return String.format("%s,%s,%s", key, name, zonedTimestamp);
     }
 }

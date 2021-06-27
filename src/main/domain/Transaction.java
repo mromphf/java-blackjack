@@ -11,6 +11,8 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public class Transaction implements Csv, Comparable<Transaction> {
 
+    private static final String CSV_HEADER_ROW = "time,accountKey,description,amount";
+
     private final LocalDateTime time;
     private final UUID accountKey;
     private final String description;
@@ -56,7 +58,12 @@ public class Transaction implements Csv, Comparable<Transaction> {
     }
 
     @Override
-    public String toCsvRow() {
+    public String header() {
+        return CSV_HEADER_ROW;
+    }
+
+    @Override
+    public String row() {
         String zonedTimestamp = time.atZone(systemDefault()).format(ISO_DATE_TIME);
         return String.format("%s,%s,%s,%s", zonedTimestamp, accountKey, description, amount);
     }

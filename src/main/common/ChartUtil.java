@@ -1,4 +1,4 @@
-package main.io.util;
+package main.common;
 
 import javafx.collections.FXCollections;
 import javafx.scene.chart.Axis;

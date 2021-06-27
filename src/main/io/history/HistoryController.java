@@ -16,13 +16,12 @@ import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.*;
 import static java.util.UUID.*;
-import static main.io.util.ChartUtil.balanceSeries;
-import static main.io.util.ChartUtil.dateAxis;
+import static main.common.ChartUtil.balanceSeries;
+import static main.common.ChartUtil.dateAxis;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;

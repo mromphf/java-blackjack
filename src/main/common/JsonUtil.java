@@ -1,4 +1,4 @@
-package main.io.util;
+package main.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

@@ -2,6 +2,7 @@ package main.io.storage;
 
 import com.google.gson.Gson;
 import main.Config;
+import main.common.Csv;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
@@ -10,8 +11,9 @@ import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static main.io.storage.FileFunctions.*;
+import static java.lang.System.exit;
 import static main.common.JsonUtil.deckFromJson;
+import static main.io.storage.FileFunctions.*;
 
 public class FileSystem implements Memory {
 
@@ -43,7 +45,7 @@ public class FileSystem implements Memory {
             return new Gson().fromJson(fileToJson(configFile), Config.class);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
             return null;
         }
     }
@@ -55,7 +57,7 @@ public class FileSystem implements Memory {
             return deckFromJson(fileToJson(deckFile));
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
             return null;
         }
     }
@@ -74,7 +76,7 @@ public class FileSystem implements Memory {
             return accounts;
         } catch (NoSuchElementException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
-            System.exit(1);
+            exit(1);
         }
 
         return accounts;
@@ -111,33 +113,13 @@ public class FileSystem implements Memory {
     @Override
     public void saveTransaction(Transaction transaction) {
         final String transactionFilename = transactionsDir.getPath() + "/" + dateBasedFileName(transaction.getTime());
-        final File transactionsFile = new File(transactionFilename);
-
-        try {
-            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
-
-            if (transactionsFile.length() == 0) {
-                writer.println("time,accountKey,description,amount");
-            }
-
-            writer.println(transaction.toCsvRow());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        appendToCsv(transactionFilename, transaction);
     }
 
     @Override
     public void saveNewAccount(Account account) {
-        final File accountFile = accountFileFromKey(account.getKey());
-
-        try {
-            final FileWriter fileWriter = new FileWriter(accountFile);
-            fileWriter.write(new Gson().toJson(account));
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final String accountFile = accountsDir.getPath() + "/" + account.getKey() + ".csv";
+        appendToCsv(accountFile, account);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -148,10 +130,42 @@ public class FileSystem implements Memory {
     }
 
     private Account loadAccount(File file) throws IOException {
-        return new Gson().fromJson(fileToJson(file), Account.class);
+        try {
+            for (String line : readCsvLines(file)) {
+                String[] row = line.split(",");
+
+                return new Account(
+                        UUID.fromString(row[0]),
+                        row[1],
+                        ZonedDateTime.parse(row[2]).toLocalDateTime()
+                );
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            exit(1);
+        }
+
+        return null;
     }
 
     private File accountFileFromKey(UUID accountKey) {
-        return new File(accountsDir.getPath() + "/" + accountKey + ".json");
+        return new File(accountsDir.getPath() + "/" + accountKey + ".csv");
+    }
+
+    private void appendToCsv(String filename, Csv csv) {
+        final File transactionsFile = new File(filename);
+
+        try {
+            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
+
+            if (transactionsFile.length() == 0) {
+                writer.println(csv.header());
+            }
+
+            writer.println(csv.row());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

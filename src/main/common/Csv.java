@@ -1,5 +1,6 @@
 package main.common;
 
 public interface Csv {
-    String toCsvRow();
+    String header();
+    String row();
 }

@@ -1,5 +1,7 @@
 package main.domain;
 
+import main.common.Csv;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -7,7 +9,7 @@ import java.util.UUID;
 import static java.time.ZoneId.systemDefault;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
-public class Transaction implements Comparable<Transaction> {
+public class Transaction implements Csv, Comparable<Transaction> {
 
     private final LocalDateTime time;
     private final UUID accountKey;
@@ -54,7 +56,7 @@ public class Transaction implements Comparable<Transaction> {
     }
 
     @Override
-    public String toString() {
+    public String toCsvRow() {
         String zonedTimestamp = time.atZone(systemDefault()).format(ISO_DATE_TIME);
         return String.format("%s,%s,%s,%s", zonedTimestamp, accountKey, description, amount);
     }

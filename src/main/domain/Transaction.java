@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static java.time.ZoneId.systemDefault;
-import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
 public class Transaction implements Csv, Comparable<Transaction> {
 
@@ -64,7 +64,7 @@ public class Transaction implements Csv, Comparable<Transaction> {
 
     @Override
     public String row() {
-        String zonedTimestamp = time.atZone(systemDefault()).format(ISO_DATE_TIME);
+        String zonedTimestamp = time.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
         return String.format("%s,%s,%s,%s", zonedTimestamp, accountKey, description, amount);
     }
 

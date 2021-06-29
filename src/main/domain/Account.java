@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.ZoneId.systemDefault;
-import static java.time.format.DateTimeFormatter.ISO_DATE;
-import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+import static java.time.format.DateTimeFormatter.*;
 
 public class Account implements Csv {
 
@@ -90,7 +89,7 @@ public class Account implements Csv {
 
     @Override
     public String row() {
-        String zonedTimestamp = created.atZone(systemDefault()).format(ISO_DATE_TIME);
+        String zonedTimestamp = created.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
         return String.format("%s,%s,%s", key, name, zonedTimestamp);
     }
 }

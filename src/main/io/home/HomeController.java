@@ -1,6 +1,5 @@
 package main.io.home;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,16 +8,17 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
+import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
@@ -135,7 +135,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (event.is(CURRENT_BALANCE)) {
             final Account account = event.getData();
             accountMap.put(account.getKey(), account);
-            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+            lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
         }
     }
 
@@ -145,32 +145,31 @@ public class HomeController extends EventConnection implements Initializable, Ac
             for (Account account : event.getData()) {
                 accountMap.put(account.getKey(), account);
             }
-            lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+            lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
         }
     }
 
     private EventHandler<ActionEvent> onDeleteEvent() {
         return actionEvent -> {
             final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
-            final Alert alert = initializeConfirmationAlert();
+            final Alert alert = initializeConfirmationAlert(selectedAccount);
             final Optional<ButtonType> buttonType = alert.showAndWait();
 
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
                 accountMap.remove(selectedAccount.getKey());
-
-                lstAccounts.setItems(FXCollections.observableList(new ArrayList<>(accountMap.values())));
+                lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
                 eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_DELETED, selectedAccount));
             }
         };
     }
 
-    private Alert initializeConfirmationAlert() {
+    private Alert initializeConfirmationAlert(Account account) {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
         eventNetwork.onAlertEvent(new Event<>(key, now(), LAYOUT_ALERT, alert));
 
-        alert.setTitle("Confirmation");
-        alert.setHeaderText("Confirm Account Closure");
+        alert.setTitle("Confirm Account Closure");
+        alert.setHeaderText(account.getName());
         alert.setContentText("Are you sure you want to close this account?\n" +
                 "This action is permanent and cannot be undone.");
 

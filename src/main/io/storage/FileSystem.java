@@ -10,6 +10,7 @@ import main.domain.Transaction;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 import static main.common.JsonUtil.deckFromJson;
@@ -69,7 +70,14 @@ public class FileSystem implements Memory {
 
         try {
             for (File file : allFilesInDir(accountsDir)) {
-                accounts.add(loadAccount(file).updateBalance(transactions));
+                for (String line : readCsvLines(file)) {
+                    String[] row = line.split(",");
+                    accounts.add(new Account(
+                            UUID.fromString(row[0]),
+                            row[1],
+                            ZonedDateTime.parse(row[2]).toLocalDateTime()
+                    ));
+                }
             }
         } catch (IOException e) {
             System.out.println("Could not load accounts file!");
@@ -79,7 +87,9 @@ public class FileSystem implements Memory {
             exit(1);
         }
 
-        return accounts;
+        return accounts.stream()
+                .map(act -> act.updateBalance(transactions))
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -118,7 +128,7 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveNewAccount(Account account) {
-        final String accountFile = accountsDir.getPath() + "/" + account.getKey() + ".csv";
+        final String accountFile = accountsDir.getPath() + "/" + dateBasedFileName(account.getCreated());
         appendToCsv(accountFile, account);
     }
 
@@ -127,25 +137,6 @@ public class FileSystem implements Memory {
     public void deleteAccount(Account account) {
         final File accountFile = accountFileFromKey(account.getKey());
         accountFile.delete();
-    }
-
-    private Account loadAccount(File file) throws IOException {
-        try {
-            for (String line : readCsvLines(file)) {
-                String[] row = line.split(",");
-
-                return new Account(
-                        UUID.fromString(row[0]),
-                        row[1],
-                        ZonedDateTime.parse(row[2]).toLocalDateTime()
-                );
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            exit(1);
-        }
-
-        return null;
     }
 
     private File accountFileFromKey(UUID accountKey) {

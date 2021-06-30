@@ -53,6 +53,10 @@ public class Account implements Csv {
         return name;
     }
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
     public int getBalance() {
         return balance;
     }

@@ -2,7 +2,6 @@ package main.io.storage;
 
 import com.google.gson.Gson;
 import main.Config;
-import main.common.Csv;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
@@ -13,6 +12,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
+import static main.common.CsvUtil.toCsvHeader;
+import static main.common.CsvUtil.toCsvRow;
 import static main.common.JsonUtil.deckFromJson;
 import static main.io.storage.Directory.*;
 import static main.io.storage.FileFunctions.*;
@@ -134,17 +135,25 @@ public class FileSystem implements Memory {
         return new File(directories.get(ACCOUNTS).getPath() + "/" + accountKey + ".csv");
     }
 
-    private void appendToCsv(String filename, Csv csv) {
+    private void appendToCsv(String filename, Account account) {
+        final File file = new File(filename);
+        appendToCsv(file, toCsvHeader(account), toCsvRow(account));
+    }
+
+    private void appendToCsv(String filename, Transaction transaction) {
         final File transactionsFile = new File(filename);
+        appendToCsv(transactionsFile, toCsvHeader(transaction), toCsvRow(transaction));
+    }
 
+    private void appendToCsv(File file, String header, String row) {
         try {
-            final PrintWriter writer = new PrintWriter(new FileWriter(transactionsFile, true));
+            final PrintWriter writer = new PrintWriter(new FileWriter(file, true));
 
-            if (transactionsFile.length() == 0) {
-                writer.println(csv.header());
+            if (file.length() == 0) {
+                writer.println(header);
             }
 
-            writer.println(csv.row());
+            writer.println(row);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

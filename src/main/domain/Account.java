@@ -35,16 +35,6 @@ public class Account implements Csv {
         return new Account(UUID.randomUUID(), "Placeholder", LocalDateTime.now());
     }
 
-    public Account updateBalance(Transaction transaction) {
-        final List<Transaction> transactions = new LinkedList<>();
-        transactions.add(transaction);
-        return updateBalance(transactions);
-    }
-
-    public Account updateBalance(Collection<Transaction> transactions) {
-        return new Account(key, name, balance + deriveBalance(transactions), created);
-    }
-
     public UUID getKey() {
         return key;
     }
@@ -61,6 +51,16 @@ public class Account implements Csv {
         return balance;
     }
 
+    public Account updateBalance(Transaction transaction) {
+        final List<Transaction> transactions = new LinkedList<>();
+        transactions.add(transaction);
+        return updateBalance(transactions);
+    }
+
+    public Account updateBalance(Collection<Transaction> transactions) {
+        return new Account(key, name, balance + deriveBalance(transactions), created);
+    }
+
     private int deriveBalance(Collection<Transaction> transactions) {
         return transactions.stream()
                 .filter(t -> t.getAccountKey().equals(key))
@@ -73,7 +73,10 @@ public class Account implements Csv {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return balance == account.balance && key.equals(account.key) && name.equals(account.name) && created.equals(account.created);
+        return balance == account.balance &&
+                key.equals(account.key) &&
+                name.equals(account.name) &&
+                created.equals(account.created);
     }
 
     @Override
@@ -93,7 +96,7 @@ public class Account implements Csv {
 
     @Override
     public String row() {
-        String zonedTimestamp = created.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
+        final String zonedTimestamp = created.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
         return String.format("%s,%s,%s", key, name, zonedTimestamp);
     }
 }

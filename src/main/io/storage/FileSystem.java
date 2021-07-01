@@ -57,6 +57,29 @@ public class FileSystem implements Memory {
         }
     }
 
+    @Override
+    public void saveTransactions(Collection<Transaction> transactions) {
+        transactions.forEach(this::saveTransaction);
+    }
+
+    @Override
+    public void saveTransaction(Transaction transaction) {
+        final File file = inferFile(TRANSACTIONS, transaction.getTime());
+        appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));
+    }
+
+    @Override
+    public void openAccount(Account account) {
+        final File file = inferFile(ACCOUNTS, account.getCreated());
+        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
+    }
+
+    @Override
+    public void closeAccount(Account account) {
+        final File file = inferFile(ACCOUNTS_CLOSED, account.getCreated());
+        appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
+    }
+
     public Map<LocalDateTime, UUID> loadAllClosedAccountKeys() {
         final File accountsClosedDir = directories.get(ACCOUNTS_CLOSED);
 
@@ -94,29 +117,6 @@ public class FileSystem implements Memory {
                 .map(line -> line.split(","))
                 .map(CsvUtil::transactionsFromCsvRow)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void saveTransactions(Collection<Transaction> transactions) {
-        transactions.forEach(this::saveTransaction);
-    }
-
-    @Override
-    public void saveTransaction(Transaction transaction) {
-        final File file = inferFile(TRANSACTIONS, transaction.getTime());
-        appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));
-    }
-
-    @Override
-    public void openAccount(Account account) {
-        final File file = inferFile(ACCOUNTS, account.getCreated());
-        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
-    }
-
-    @Override
-    public void closeAccount(Account account) {
-        final File file = inferFile(ACCOUNTS_CLOSED, account.getCreated());
-        appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
     }
 
     private File inferFile(Directory directory, LocalDateTime timestamp) {

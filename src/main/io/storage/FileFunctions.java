@@ -35,8 +35,10 @@ public class FileFunctions {
         final Scanner sc = new Scanner(csvFile);
         final Collection<String> strings = new ArrayList<>();
 
-        // Assume header row
-        sc.nextLine();
+        if (sc.hasNextLine()) {
+            // Skip header row
+            sc.nextLine();
+        }
 
         while (sc.hasNextLine()) {
             strings.add(sc.nextLine());

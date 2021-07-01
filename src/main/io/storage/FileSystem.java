@@ -103,21 +103,23 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String transactionFilename = directories.get(TRANSACTIONS).getPath() + "/" + dateBasedCsvFileName(transaction.getTime());
-        appendToCsv(new File(transactionFilename), TRANSACTION_HEADER, toCsvRow(transaction));
+        final File file = inferFile(TRANSACTIONS, transaction.getTime());
+        appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));
     }
 
     @Override
     public void saveNewAccount(Account account) {
-        final String accountFile = directories.get(ACCOUNTS).getPath() + "/" + dateBasedCsvFileName(account.getCreated());
-        appendToCsv(new File(accountFile), ACCOUNT_HEADER, toCsvRow(account));
+        final File file = inferFile(ACCOUNTS, account.getCreated());
+        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
     }
 
     @Override
     public void deleteAccount(Account account) {
-        final File accountFile = new File(directories.get(ACCOUNTS_CLOSED).getPath() + "/" +
-                        dateBasedCsvFileName(account.getCreated()));
+        final File file = inferFile(ACCOUNTS_CLOSED, account.getCreated());
+        appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
+    }
 
-        appendToCsv(accountFile, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
+    private File inferFile(Directory directory, LocalDateTime timestamp) {
+        return new File(directories.get(directory).getPath() + "/" + dateBasedCsvFileName(timestamp));
     }
 }

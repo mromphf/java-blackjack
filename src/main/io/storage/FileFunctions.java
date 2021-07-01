@@ -31,17 +31,23 @@ public class FileFunctions {
         return sb.toString();
     }
 
-    public static Collection<String> readCsvLines(File csvFile) throws FileNotFoundException {
-        final Scanner sc = new Scanner(csvFile);
+    public static Collection<String> readCsvLines(File csvFile)  {
+        final Scanner sc;
         final Collection<String> strings = new ArrayList<>();
 
-        if (sc.hasNextLine()) {
-            // Skip header row
-            sc.nextLine();
-        }
+        try {
+            sc = new Scanner(csvFile);
 
-        while (sc.hasNextLine()) {
-            strings.add(sc.nextLine());
+            if (sc.hasNextLine()) {
+                // Skip header row
+                sc.nextLine();
+            }
+
+            while (sc.hasNextLine()) {
+                strings.add(sc.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         return strings;

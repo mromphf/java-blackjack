@@ -2,11 +2,15 @@ package main.io.storage;
 
 import com.google.gson.Gson;
 import main.Config;
+import main.common.CsvUtil;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,9 +68,6 @@ public class FileSystem implements Memory {
                     timestampedClosures.putAll(accountClosuresFromCsvRow(row));
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Could not load accounts file!");
-            return timestampedClosures;
         } catch (NoSuchElementException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
             exit(1);
@@ -88,9 +89,6 @@ public class FileSystem implements Memory {
                     accounts.add(accountFromCsvRow(row));
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Could not load accounts file!");
-            return accounts;
         } catch (NoSuchElementException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
             exit(1);
@@ -104,20 +102,14 @@ public class FileSystem implements Memory {
 
     @Override
     public List<Transaction> loadAllTransactions() {
-        List<Transaction> transactions = new LinkedList<>();
+        final File transactionsDir = directories.get(TRANSACTIONS);
 
-        try {
-            for (File file : allFilesInDir(directories.get(TRANSACTIONS))) {
-                for (String line : readCsvLines(file)) {
-                    String[] row = line.split(",");
-                    transactions.add(transactionsFromCsvRow(row));
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return transactions;
+        return Arrays.stream(allFilesInDir(transactionsDir))
+                .map(FileFunctions::readCsvLines)
+                .flatMap(Collection::stream)
+                .map(line -> line.split(","))
+                .map(CsvUtil::transactionsFromCsvRow)
+                .collect(Collectors.toList());
     }
 
     @Override

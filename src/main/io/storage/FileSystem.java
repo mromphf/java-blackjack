@@ -7,6 +7,7 @@ import main.domain.Card;
 import main.domain.Transaction;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,10 +55,35 @@ public class FileSystem implements Memory {
         }
     }
 
+    public SortedMap<LocalDateTime, UUID> loadAllClosedAccountKeys() {
+        final SortedMap<LocalDateTime, UUID> timestampedClosures = new TreeMap<>();
+
+        try {
+            for (File file : allFilesInDir(directories.get(ACCOUNTS_CLOSED))) {
+                for (String line : readCsvLines(file)) {
+                    String[] row = line.split(",");
+                    timestampedClosures.put(
+                            ZonedDateTime.parse(row[0]).toLocalDateTime(),
+                            UUID.fromString(row[1])
+                    );
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Could not load accounts file!");
+            return timestampedClosures;
+        } catch (NoSuchElementException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            exit(1);
+        }
+
+        return timestampedClosures;
+    }
+
     @Override
     public Set<Account> loadAllAccounts() {
         final Set<Account> accounts = new HashSet<>();
         final List<Transaction> transactions = loadAllTransactions();
+        final Set<UUID> closedAccountKeys = new HashSet<>(loadAllClosedAccountKeys().values());
 
         try {
             for (File file : allFilesInDir(directories.get(ACCOUNTS))) {
@@ -79,6 +105,7 @@ public class FileSystem implements Memory {
         }
 
         return accounts.stream()
+                .filter(act -> !closedAccountKeys.contains(act.getKey()))
                 .map(act -> act.updateBalance(transactions))
                 .collect(Collectors.toSet());
     }
@@ -114,34 +141,21 @@ public class FileSystem implements Memory {
     @Override
     public void saveTransaction(Transaction transaction) {
         final String transactionFilename = directories.get(TRANSACTIONS).getPath() + "/" + dateBasedCsvFileName(transaction.getTime());
-        appendToCsv(transactionFilename, transaction);
+        appendToCsv(new File(transactionFilename), TRANSACTION_HEADER, toCsvRow(transaction));
     }
 
     @Override
     public void saveNewAccount(Account account) {
         final String accountFile = directories.get(ACCOUNTS).getPath() + "/" + dateBasedCsvFileName(account.getCreated());
-        appendToCsv(accountFile, account);
+        appendToCsv(new File(accountFile), ACCOUNT_HEADER, toCsvRow(account));
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void deleteAccount(Account account) {
-        final File accountFile = accountFileFromKey(account.getKey());
-        accountFile.delete();
-    }
+        final File accountFile = new File(directories.get(ACCOUNTS_CLOSED).getPath() + "/" +
+                        dateBasedCsvFileName(account.getCreated()));
 
-    private File accountFileFromKey(UUID accountKey) {
-        return new File(directories.get(ACCOUNTS).getPath() + "/" + accountKey + ".csv");
-    }
-
-    private void appendToCsv(String filename, Account account) {
-        final File file = new File(filename);
-        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
-    }
-
-    private void appendToCsv(String filename, Transaction transaction) {
-        final File transactionsFile = new File(filename);
-        appendToCsv(transactionsFile, TRANSACTION_HEADER, toCsvRow(transaction));
+        appendToCsv(accountFile, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
     }
 
     private void appendToCsv(File file, String header, String row) {

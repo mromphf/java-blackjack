@@ -1,16 +1,11 @@
 package main.domain;
 
-import main.common.Csv;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static java.time.ZoneId.systemDefault;
 import static java.time.format.DateTimeFormatter.*;
 
-public class Account implements Csv {
-
-    private static final String CSV_HEADER_ROW = "key,name,created";
+public class Account {
 
     private final UUID key;
     private final String name;
@@ -87,16 +82,5 @@ public class Account implements Csv {
     @Override
     public String toString() {
         return String.format("%s: \t$%s\tCreated: %s", name, balance, created.format(ISO_DATE));
-    }
-
-    @Override
-    public String header() {
-        return CSV_HEADER_ROW;
-    }
-
-    @Override
-    public String row() {
-        final String zonedTimestamp = created.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
-        return String.format("%s,%s,%s", key, name, zonedTimestamp);
     }
 }

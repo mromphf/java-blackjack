@@ -1,17 +1,10 @@
 package main.domain;
 
-import main.common.Csv;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.time.ZoneId.systemDefault;
-import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-
-public class Transaction implements Csv, Comparable<Transaction> {
-
-    private static final String CSV_HEADER_ROW = "time,accountKey,description,amount";
+public class Transaction implements Comparable<Transaction> {
 
     private final LocalDateTime time;
     private final UUID accountKey;
@@ -55,17 +48,6 @@ public class Transaction implements Csv, Comparable<Transaction> {
     @Override
     public int hashCode() {
         return Objects.hash(time, accountKey, description, amount);
-    }
-
-    @Override
-    public String header() {
-        return CSV_HEADER_ROW;
-    }
-
-    @Override
-    public String row() {
-        String zonedTimestamp = time.atZone(systemDefault()).format(ISO_OFFSET_DATE_TIME);
-        return String.format("%s,%s,%s,%s", zonedTimestamp, accountKey, description, amount);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class AppRoot {
          * Load config from disk.
          */
         final ResourceLoader loader = new ResourceLoader();
-        final FileSystem memory = new FileSystem("./accounts/", "./transactions/", "./decks/");
+        final FileSystem memory = new FileSystem(loader.getDirectoryMap());
         final Config config = memory.loadConfig();
         final String deckName = config.deckName;
         final int numDecks = config.numDecks;

@@ -2,13 +2,16 @@ package main.io;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import main.io.storage.Directory;
 import main.usecase.Layout;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static main.io.storage.Directory.*;
 import static main.usecase.Layout.*;
 
 public class ResourceLoader {
@@ -20,7 +23,14 @@ public class ResourceLoader {
         put(HISTORY, new FXMLLoader(ResourceLoader.class.getResource("history/HistoryView.fxml")));
     }};
 
+    private final static Map<Directory, File> directoryMap = new HashMap<>();
+
     public ResourceLoader() {
+        directoryMap.put(ACCOUNTS, new File("./accounts/"));
+        directoryMap.put(ACCOUNTS_CLOSED, new File("./accounts-closed/"));
+        directoryMap.put(DECKS, new File("./decks"));
+        directoryMap.put(TRANSACTIONS, new File("./transactions"));
+
         resourceMap.keySet().forEach(k -> {
             try {
                 resourceMap.get(k).load();
@@ -34,6 +44,10 @@ public class ResourceLoader {
         return resourceMap.keySet()
                 .stream()
                 .collect(Collectors.toMap(l -> l, this::loadRoot));
+    }
+
+    public Map<Directory, File> getDirectoryMap() {
+        return directoryMap;
     }
 
     public Object loadController(Layout layout) {

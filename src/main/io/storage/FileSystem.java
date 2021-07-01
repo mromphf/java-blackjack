@@ -14,29 +14,20 @@ import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 import static main.common.JsonUtil.deckFromJson;
+import static main.io.storage.Directory.*;
 import static main.io.storage.FileFunctions.*;
 
 public class FileSystem implements Memory {
 
-    private final File accountsDir;
-    private final File transactionsDir;
-    private final File decksDir;
+    private final Map<Directory, File> directories;
 
-    public FileSystem(String accountsPath, String transactionsPath, String decksPath) {
-        this.accountsDir = new File(accountsPath);
-        this.transactionsDir = new File(transactionsPath);
-        this.decksDir = new File(decksPath);
+    public FileSystem(Map<Directory, File> directories) {
+        this.directories = directories;
 
-        if (accountsDir.mkdir()) {
-            System.out.printf("Created new directory: %s\n", accountsDir.getPath());
-        }
-
-        if (transactionsDir.mkdir()) {
-            System.out.printf("Created new directory: %s\n", transactionsDir.getPath());
-        }
-
-        if (decksDir.mkdir()) {
-            System.out.printf("Created new directory: %s\n", decksDir.getPath());
+        for (File file : directories.values()) {
+            if (file.mkdir()) {
+                System.out.printf("Created new directory: %s\n", file.getPath());
+            }
         }
     }
 
@@ -54,7 +45,7 @@ public class FileSystem implements Memory {
     @Override
     public Stack<Card> loadDeck(String name) {
         try {
-            final File deckFile = new File(String.format("%s/%s.json", decksDir, name));
+            final File deckFile = new File(String.format("%s/%s.json", directories.get(DECKS), name));
             return deckFromJson(fileToJson(deckFile));
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,7 +60,7 @@ public class FileSystem implements Memory {
         final List<Transaction> transactions = loadAllTransactions();
 
         try {
-            for (File file : allFilesInDir(accountsDir)) {
+            for (File file : allFilesInDir(directories.get(ACCOUNTS))) {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
                     accounts.add(new Account(
@@ -97,7 +88,7 @@ public class FileSystem implements Memory {
         List<Transaction> transactions = new LinkedList<>();
 
         try {
-            for (File file : allFilesInDir(transactionsDir)) {
+            for (File file : allFilesInDir(directories.get(TRANSACTIONS))) {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
                     transactions.add(new Transaction(
@@ -122,13 +113,13 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String transactionFilename = transactionsDir.getPath() + "/" + dateBasedFileName(transaction.getTime());
+        final String transactionFilename = directories.get(TRANSACTIONS).getPath() + "/" + dateBasedFileName(transaction.getTime());
         appendToCsv(transactionFilename, transaction);
     }
 
     @Override
     public void saveNewAccount(Account account) {
-        final String accountFile = accountsDir.getPath() + "/" + dateBasedFileName(account.getCreated());
+        final String accountFile = directories.get(ACCOUNTS).getPath() + "/" + dateBasedFileName(account.getCreated());
         appendToCsv(accountFile, account);
     }
 
@@ -140,7 +131,7 @@ public class FileSystem implements Memory {
     }
 
     private File accountFileFromKey(UUID accountKey) {
-        return new File(accountsDir.getPath() + "/" + accountKey + ".csv");
+        return new File(directories.get(ACCOUNTS).getPath() + "/" + accountKey + ".csv");
     }
 
     private void appendToCsv(String filename, Csv csv) {

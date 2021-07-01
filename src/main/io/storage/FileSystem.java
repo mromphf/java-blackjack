@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
+import static java.util.Arrays.stream;
 import static main.common.CsvUtil.*;
 import static main.common.JsonUtil.deckFromJson;
 import static main.io.storage.Directory.*;
@@ -58,22 +59,15 @@ public class FileSystem implements Memory {
         }
     }
 
-    public SortedMap<LocalDateTime, UUID> loadAllClosedAccountKeys() {
-        final SortedMap<LocalDateTime, UUID> timestampedClosures = new TreeMap<>();
+    public Map<LocalDateTime, UUID> loadAllClosedAccountKeys() {
+        final File accountsClosedDir = directories.get(ACCOUNTS_CLOSED);
 
-        try {
-            for (File file : allFilesInDir(directories.get(ACCOUNTS_CLOSED))) {
-                for (String line : readCsvLines(file)) {
-                    String[] row = line.split(",");
-                    timestampedClosures.putAll(accountClosuresFromCsvRow(row));
-                }
-            }
-        } catch (NoSuchElementException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-            exit(1);
-        }
-
-        return timestampedClosures;
+        return stream(allFilesInDir(accountsClosedDir))
+                .map(FileFunctions::readCsvLines)
+                .flatMap(Collection::stream)
+                .map(line -> line.split(","))
+                .map(CsvUtil::accountClosuresFromCsvRow)
+                .collect(Collectors.toMap(SortedMap::firstKey, v -> v.get(v.firstKey())));
     }
 
     @Override
@@ -104,7 +98,7 @@ public class FileSystem implements Memory {
     public List<Transaction> loadAllTransactions() {
         final File transactionsDir = directories.get(TRANSACTIONS);
 
-        return Arrays.stream(allFilesInDir(transactionsDir))
+        return stream(allFilesInDir(transactionsDir))
                 .map(FileFunctions::readCsvLines)
                 .flatMap(Collection::stream)
                 .map(line -> line.split(","))

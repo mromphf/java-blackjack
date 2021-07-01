@@ -12,8 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
-import static main.common.CsvUtil.toCsvHeader;
-import static main.common.CsvUtil.toCsvRow;
+import static main.common.CsvUtil.*;
 import static main.common.JsonUtil.deckFromJson;
 import static main.io.storage.Directory.*;
 import static main.io.storage.FileFunctions.*;
@@ -137,12 +136,12 @@ public class FileSystem implements Memory {
 
     private void appendToCsv(String filename, Account account) {
         final File file = new File(filename);
-        appendToCsv(file, toCsvHeader(account), toCsvRow(account));
+        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
     }
 
     private void appendToCsv(String filename, Transaction transaction) {
         final File transactionsFile = new File(filename);
-        appendToCsv(transactionsFile, toCsvHeader(transaction), toCsvRow(transaction));
+        appendToCsv(transactionsFile, TRANSACTION_HEADER, toCsvRow(transaction));
     }
 
     private void appendToCsv(File file, String header, String row) {

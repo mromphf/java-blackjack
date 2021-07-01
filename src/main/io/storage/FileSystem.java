@@ -72,23 +72,15 @@ public class FileSystem implements Memory {
 
     @Override
     public Set<Account> loadAllAccounts() {
-        final Set<Account> accounts = new HashSet<>();
         final List<Transaction> transactions = loadAllTransactions();
+        final File accountsDir = directories.get(ACCOUNTS);
         final Set<UUID> closedAccountKeys = new HashSet<>(loadAllClosedAccountKeys().values());
 
-        try {
-            for (File file : allFilesInDir(directories.get(ACCOUNTS))) {
-                for (String line : readCsvLines(file)) {
-                    String[] row = line.split(",");
-                    accounts.add(accountFromCsvRow(row));
-                }
-            }
-        } catch (NoSuchElementException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-            exit(1);
-        }
-
-        return accounts.stream()
+        return stream(allFilesInDir(accountsDir))
+                .map(FileFunctions::readCsvLines)
+                .flatMap(Collection::stream)
+                .map(line -> line.split(","))
+                .map(CsvUtil::accountFromCsvRow)
                 .filter(act -> !closedAccountKeys.contains(act.getKey()))
                 .map(act -> act.updateBalance(transactions))
                 .collect(Collectors.toSet());

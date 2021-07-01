@@ -8,7 +8,6 @@ import main.domain.Transaction;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,10 +61,7 @@ public class FileSystem implements Memory {
             for (File file : allFilesInDir(directories.get(ACCOUNTS_CLOSED))) {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
-                    timestampedClosures.put(
-                            ZonedDateTime.parse(row[0]).toLocalDateTime(),
-                            UUID.fromString(row[1])
-                    );
+                    timestampedClosures.putAll(accountClosuresFromCsvRow(row));
                 }
             }
         } catch (IOException e) {
@@ -89,11 +85,7 @@ public class FileSystem implements Memory {
             for (File file : allFilesInDir(directories.get(ACCOUNTS))) {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
-                    accounts.add(new Account(
-                            UUID.fromString(row[0]),
-                            row[1],
-                            ZonedDateTime.parse(row[2]).toLocalDateTime()
-                    ));
+                    accounts.add(accountFromCsvRow(row));
                 }
             }
         } catch (IOException e) {
@@ -118,12 +110,7 @@ public class FileSystem implements Memory {
             for (File file : allFilesInDir(directories.get(TRANSACTIONS))) {
                 for (String line : readCsvLines(file)) {
                     String[] row = line.split(",");
-                    transactions.add(new Transaction(
-                            ZonedDateTime.parse(row[0]).toLocalDateTime(),
-                            UUID.fromString(row[1]),
-                            row[2],
-                            Integer.parseInt(row[3])
-                    ));
+                    transactions.add(transactionsFromCsvRow(row));
                 }
             }
         } catch (FileNotFoundException e) {

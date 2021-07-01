@@ -113,13 +113,13 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String transactionFilename = directories.get(TRANSACTIONS).getPath() + "/" + dateBasedFileName(transaction.getTime());
+        final String transactionFilename = directories.get(TRANSACTIONS).getPath() + "/" + dateBasedCsvFileName(transaction.getTime());
         appendToCsv(transactionFilename, transaction);
     }
 
     @Override
     public void saveNewAccount(Account account) {
-        final String accountFile = directories.get(ACCOUNTS).getPath() + "/" + dateBasedFileName(account.getCreated());
+        final String accountFile = directories.get(ACCOUNTS).getPath() + "/" + dateBasedCsvFileName(account.getCreated());
         appendToCsv(accountFile, account);
     }
 

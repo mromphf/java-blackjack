@@ -12,7 +12,7 @@ import java.util.Scanner;
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 
 public class FileFunctions {
-    public static String dateBasedFileName(LocalDateTime t) {
+    public static String dateBasedCsvFileName(LocalDateTime t) {
         return String.format("%s.csv", t.format(ISO_DATE));
     }
 

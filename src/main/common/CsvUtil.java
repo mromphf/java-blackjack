@@ -3,6 +3,10 @@ package main.common;
 import main.domain.Account;
 import main.domain.Transaction;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -67,5 +71,20 @@ public class CsvUtil {
         );
 
         return timestampedClosures;
+    }
+
+    public static void appendToCsv(File file, String header, String row) {
+        try {
+            final PrintWriter writer = new PrintWriter(new FileWriter(file, true));
+
+            if (file.length() == 0) {
+                writer.println(header);
+            }
+
+            writer.println(row);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -8,9 +8,7 @@ import main.domain.Card;
 import main.domain.Transaction;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -121,20 +119,5 @@ public class FileSystem implements Memory {
                         dateBasedCsvFileName(account.getCreated()));
 
         appendToCsv(accountFile, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
-    }
-
-    private void appendToCsv(File file, String header, String row) {
-        try {
-            final PrintWriter writer = new PrintWriter(new FileWriter(file, true));
-
-            if (file.length() == 0) {
-                writer.println(header);
-            }
-
-            writer.println(row);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

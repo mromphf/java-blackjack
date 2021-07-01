@@ -15,6 +15,6 @@ public interface Memory {
     List<Transaction> loadAllTransactions();
     void saveTransaction(Transaction transaction);
     void saveTransactions(Collection<Transaction> transactions);
-    void saveNewAccount(Account account);
-    void deleteAccount(Account account);
+    void openAccount(Account account);
+    void closeAccount(Account account);
 }

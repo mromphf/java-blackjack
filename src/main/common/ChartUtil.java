@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 public class ChartUtil {
 
@@ -33,25 +33,32 @@ public class ChartUtil {
                 .collect(Collectors.toList())));
     }
 
+    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions) {
+        return transactionDataMap(0, transactions);
+    }
+
     public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions, LocalDate date) {
-        return transactionDataMap(transactions.stream()
-                .filter(t -> t.getTime().getDayOfYear() == date.getDayOfYear())
+        final int startingBalance = transactions.stream()
+                .filter(t -> t.getTime().toLocalDate().isBefore(date))
+                .map(Transaction::getAmount)
+                .reduce(0, Integer::sum);
+
+        return transactionDataMap(startingBalance, transactions.stream()
+                .filter(t -> t.getTime().toLocalDate().isEqual(date) ||
+                        t.getTime().toLocalDate().isAfter(date))
                 .collect(Collectors.toList()));
     }
 
-    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions) {
+    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(int balance, List<Transaction> transactions) {
         final Map<Transaction, XYChart.Data<String, Number>> dataMap = new Hashtable<>();
         final Collection<Transaction> transactionsSortedFiltered = transactions.stream()
                 .filter(t -> Math.abs(t.getAmount()) > 0)
                 .sorted()
                 .collect(Collectors.toList());
 
-        int balance = 0;
-
         for (Transaction t : transactionsSortedFiltered) {
             balance += t.getAmount();
-            final XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(t.getTime().toString(), balance);
-            dataMap.put(t, dataPoint);
+            dataMap.put(t, new XYChart.Data<>(t.getTime().toString(), balance));
         }
 
         return dataMap;

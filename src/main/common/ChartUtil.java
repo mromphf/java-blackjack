@@ -4,12 +4,17 @@ import javafx.collections.FXCollections;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
 import main.domain.Transaction;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.lang.String.*;
 
 public class ChartUtil {
 
@@ -28,27 +33,34 @@ public class ChartUtil {
                 .collect(Collectors.toList())));
     }
 
-    public static XYChart.Series<String, Number> balanceSeries(List<Transaction> transactions, LocalDate date) {
-        return balanceSeries(transactions.stream()
+    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions, LocalDate date) {
+        return transactionDataMap(transactions.stream()
                 .filter(t -> t.getTime().getDayOfYear() == date.getDayOfYear())
                 .collect(Collectors.toList()));
     }
 
-    public static XYChart.Series<String, Number> balanceSeries(List<Transaction> transactions) {
-        final XYChart.Series<String, Number> series = new XYChart.Series<>();
+    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions) {
+        final Map<Transaction, XYChart.Data<String, Number>> dataMap = new Hashtable<>();
         final Collection<Transaction> transactionsSortedFiltered = transactions.stream()
                 .filter(t -> Math.abs(t.getAmount()) > 0)
                 .sorted()
                 .collect(Collectors.toList());
-        int balance = 0;
 
-        series.setName("Transactions");
+        int balance = 0;
 
         for (Transaction t : transactionsSortedFiltered) {
             balance += t.getAmount();
-            series.getData().add(new XYChart.Data<>(t.getTime().toString(), balance));
+            final XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(t.getTime().toString(), balance);
+            dataMap.put(t, dataPoint);
         }
 
-        return series;
+        return dataMap;
+    }
+
+    public static void installTransactionTooltips(Map<Transaction, XYChart.Data<String, Number>> transactionDataMap) {
+        transactionDataMap.forEach((transaction, data) -> {
+            final Tooltip tooltip = new Tooltip(format("%s: %s", transaction.getDescription(), transaction.getAmount()));
+            Tooltip.install(data.getNode(), tooltip);
+        });
     }
 }

@@ -10,21 +10,22 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
+import main.usecase.Layout;
+import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
-import main.usecase.*;
-import main.usecase.eventing.*;
+import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
-import static java.time.LocalDateTime.*;
-import static java.util.UUID.*;
-import static main.common.ChartUtil.balanceSeries;
-import static main.common.ChartUtil.dateAxis;
+import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
+import static main.common.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.eventing.Predicate.*;
+import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
+import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class HistoryController extends EventConnection implements Initializable, LayoutListener {
 
@@ -51,8 +52,8 @@ public class HistoryController extends EventConnection implements Initializable,
         final LocalDate date = datePicker.getValue();
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
-        final XYChart.Series<String, Number> balanceSeries =
-                date == null ? balanceSeries(accountTransactions) : balanceSeries(accountTransactions, date);
+        final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
+                date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
 
         chartHousing.getChildren().clear();
 
@@ -66,11 +67,10 @@ public class HistoryController extends EventConnection implements Initializable,
                 eventNetwork.requestTransactionsByKey(account.getKey()));
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = dateAxis(accountTransactions);
-        final XYChart.Series<String, Number> balanceSeries = balanceSeries(accountTransactions);
 
         datePicker.setValue(null);
 
-        drawChart(account, xAxis, yAxis, balanceSeries);
+        drawChart(account, xAxis, yAxis, transactionDataMap(accountTransactions));
     }
 
     @Override
@@ -87,19 +87,30 @@ public class HistoryController extends EventConnection implements Initializable,
             final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
             final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
 
-            drawChart(account, dateAxis(transactions), new NumberAxis(), balanceSeries(transactions));
+            drawChart(account, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }
     }
 
-    public void drawChart(Account account, Axis<String> xAxis, NumberAxis yAxis, XYChart.Series<String, Number> series) {
+    public void drawChart(Account account,
+                          Axis<String> xAxis,
+                          NumberAxis yAxis,
+                          Map<Transaction, XYChart.Data<String, Number>> transactionDataMap) {
         final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
         final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        final XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        series.setName("Transactions");
+
+        for (XYChart.Data<String, Number> dataPoint : transactionDataMap.values()) {
+            series.getData().add(dataPoint);
+        }
 
         chart.setPrefWidth(1200);
         chart.setPrefHeight(800);
         chart.setTitle(String.format("%s Transactions: %s", account.getName(), transactions.size()));
         chart.getData().add(series);
 
+        installTransactionTooltips(transactionDataMap);
         chartHousing.add(chart, 0, 0);
     }
 }

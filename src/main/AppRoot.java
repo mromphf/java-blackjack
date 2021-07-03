@@ -7,6 +7,7 @@ import main.domain.Card;
 import main.domain.Evaluate;
 import main.domain.Snapshot;
 import main.domain.Transaction;
+import main.io.log.FileLogHandler;
 import main.usecase.eventing.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
@@ -48,6 +49,7 @@ public class AppRoot {
         final String deckName = config.deckName;
         final int numDecks = config.numDecks;
         final Stack<Card> deck = deckName.equals("default") ? shuffle(fresh(numDecks)) : memory.loadDeck(deckName);
+        final FileLogHandler fileLogHandler = new FileLogHandler();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
@@ -103,6 +105,7 @@ public class AppRoot {
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);
+        gameLogger.addHandler(fileLogHandler);
 
         /*
          * Load accounts, transactions and images from disk

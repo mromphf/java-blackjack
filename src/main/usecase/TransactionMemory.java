@@ -28,7 +28,11 @@ public class TransactionMemory extends EventConnection implements TransactionLis
 
     @Override
     public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
-        return transactionMap.get(accountKey);
+        if (transactionMap.containsKey(accountKey)) {
+            return transactionMap.get(accountKey);
+        }
+
+        return new LinkedList<>();
     }
 
     @Override

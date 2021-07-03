@@ -28,8 +28,9 @@ public class ResourceLoader {
     public ResourceLoader() {
         directoryMap.put(ACCOUNTS, new File("./accounts/"));
         directoryMap.put(ACCOUNTS_CLOSED, new File("./accounts-closed/"));
-        directoryMap.put(DECKS, new File("./decks"));
-        directoryMap.put(TRANSACTIONS, new File("./transactions"));
+        directoryMap.put(DECKS, new File("./decks/"));
+        directoryMap.put(LOG, new File("./log/"));
+        directoryMap.put(TRANSACTIONS, new File("./transactions/"));
 
         resourceMap.keySet().forEach(k -> {
             try {

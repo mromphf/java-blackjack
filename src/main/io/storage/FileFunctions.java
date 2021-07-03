@@ -9,11 +9,16 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 
 public class FileFunctions {
     public static String dateBasedCsvFileName(LocalDateTime t) {
-        return String.format("%s.csv", t.format(ISO_DATE));
+        return format("%s.csv", t.format(ISO_DATE));
+    }
+
+    public static String dateBasedLogFileName(LocalDateTime t) {
+        return format("%s.log", t.format(ISO_DATE));
     }
 
     public static File[] allFilesInDir(File directory) {

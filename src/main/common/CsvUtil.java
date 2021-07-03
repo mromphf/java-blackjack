@@ -85,6 +85,19 @@ public class CsvUtil {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public static void appendToFile(File file, String row) {
+        try {
+            final PrintWriter writer = new PrintWriter(new FileWriter(file, true));
+
+            writer.println(row);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 }

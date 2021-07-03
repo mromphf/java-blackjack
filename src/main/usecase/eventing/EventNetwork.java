@@ -100,7 +100,7 @@ public class EventNetwork implements
     }
 
     @Override
-    public Account requestSelectedAccount(Predicate elm) {
+    public Optional<Account> requestSelectedAccount(Predicate elm) {
         return accountResponders.get(elm).requestSelectedAccount(elm);
     }
 

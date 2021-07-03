@@ -6,7 +6,6 @@ import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.*;
 
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.UUID;
@@ -32,7 +31,9 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        log(INFO, String.format("%s: SNAPSHOT - %s", snapshot.getTimestamp().toLocalTime().format(pattern), snapshot));
+        log(INFO, String.format("%s: Round Snapshot - %s",
+                snapshot.getTimestamp().toLocalTime().format(pattern),
+                snapshot));
     }
 
     @Override
@@ -54,27 +55,36 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
         if (event.is(ACCOUNT_CREATED)) {
             final Account account = event.getData();
             log(INFO, String.format(
-                    "%s: Account no. %s has been opened under the name %s.", LocalTime.now().format(pattern), account.getKey(), account.getName()));
+                    "%s: Account Opened - %s - %s.",
+                    event.getTimestamp().format(pattern),
+                    account.getName(),
+                    account.getKey()));
         } else if (event.is(ACCOUNT_DELETED)) {
-            log(INFO, String.format("%s: Request issued to close account no. %s.", LocalTime.now().format(pattern), event.getData().getKey()));
+            log(INFO, String.format("%s: Account Closure Request - %s - %s.",
+                    event.getTimestamp().format(pattern),
+                    event.getData().getName(),
+                    event.getData().getKey()));
         } else if (event.is(CURRENT_BALANCE)) {
             final Account account = event.getData();
-            log(INFO, String.format("%s: BALANCE - %s ($%s)", LocalTime.now().format(pattern), account.getName(), account.getBalance()));
+            log(INFO, String.format("%s: Current Balance - %s - $%s",
+                    event.getTimestamp().format(pattern),
+                    account.getName(),
+                    account.getBalance()));
         }
     }
 
     @Override
     public void onActionEvent(Event<Action> event) {
-        log(INFO, String.format("%s: ACTION EVENT - %s",
+        log(INFO, String.format("%s: Action Taken - %s",
                 event.getTimestamp().format(pattern),
                 event.getData()));
     }
 
     public void onTransaction(Transaction transaction) {
-        log(INFO, String.format("%s: TRANSACTION - %s ($%s) Account Key: %s",
+        log(INFO, String.format("%s: Transaction Issued - Account Key: %s - %s - $%s",
                 transaction.getTime().toLocalTime().format(pattern),
+                transaction.getAccountKey(),
                 transaction.getDescription(),
-                transaction.getAmount(),
-                transaction.getAccountKey()));
+                Math.abs(transaction.getAmount())));
     }
 }

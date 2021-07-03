@@ -144,16 +144,23 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("Outcome: %s, Bet: %s, ActionsTaken: {%s}, Player: %s, Dealer: %s, " +
-                        "Deck: %s, Hands to Play: %s, Hands to Settle: %s, Account Key: %s",
+        return String.format("\n\tAccount Key: %s\n\t" +
+                        "Deck: %s,\n\t" +
+                        "Outcome: %s,\n\t" +
+                        "Bet: %s,\n\t" +
+                        "Hands to Play: %s,\n\t" +
+                        "Hands to Settle: %s,\n\t" +
+                        "ActionsTaken: {%s\n\t},\n\t" +
+                        "Player: %s,\n\t" +
+                        "Dealer: %s",
+                accountKey,
+                deck.size(),
                 outcome,
                 bet,
-                actionString(actionsTaken),
-                playerString(playerHand),
-                playerString(dealerHand),
-                deck.size(),
                 handsToPlay.size(),
                 handsToSettle.size(),
-                accountKey);
+                actionString(actionsTaken),
+                playerString(playerHand),
+                playerString(dealerHand));
     }
 }

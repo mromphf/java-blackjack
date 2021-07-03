@@ -33,7 +33,7 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        log(INFO, String.format("%s: Round Snapshot - %s",
+        log(INFO, String.format("%s: Round Snapshot%s",
                 snapshot.getTimestamp().toLocalTime().format(pattern),
                 snapshot));
     }

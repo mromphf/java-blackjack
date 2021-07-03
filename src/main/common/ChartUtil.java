@@ -34,7 +34,7 @@ public class ChartUtil {
     }
 
     public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions) {
-        return transactionDataMap(0, transactions);
+        return transactionDataMap(transactions, 0);
     }
 
     public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions, LocalDate date) {
@@ -43,13 +43,13 @@ public class ChartUtil {
                 .map(Transaction::getAmount)
                 .reduce(0, Integer::sum);
 
-        return transactionDataMap(startingBalance, transactions.stream()
+        return transactionDataMap(transactions.stream()
                 .filter(t -> t.getTime().toLocalDate().isEqual(date) ||
                         t.getTime().toLocalDate().isAfter(date))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()), startingBalance);
     }
 
-    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(int balance, List<Transaction> transactions) {
+    public static Map<Transaction, XYChart.Data<String, Number>> transactionDataMap(List<Transaction> transactions, int balance) {
         final Map<Transaction, XYChart.Data<String, Number>> dataMap = new Hashtable<>();
         final Collection<Transaction> transactionsSortedFiltered = transactions.stream()
                 .filter(t -> Math.abs(t.getAmount()) > 0)

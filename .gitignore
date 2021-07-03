@@ -3,6 +3,7 @@
 /transactions
 /decks
 /target
+/log
 *.class
 *.iml
 .idea

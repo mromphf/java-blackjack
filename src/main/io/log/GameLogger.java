@@ -1,10 +1,12 @@
 package main.io.log;
 
 import main.domain.Account;
-import main.domain.Action;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.SnapshotListener;
+import main.usecase.eventing.TransactionListener;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -14,7 +16,7 @@ import java.util.logging.Logger;
 import static java.util.logging.Level.INFO;
 import static main.usecase.eventing.Predicate.*;
 
-public class GameLogger extends Logger implements SnapshotListener, AccountListener, TransactionListener, ActionListener {
+public class GameLogger extends Logger implements SnapshotListener, AccountListener, TransactionListener {
 
     private final UUID key;
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
@@ -71,13 +73,6 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
                     account.getName(),
                     account.getBalance()));
         }
-    }
-
-    @Override
-    public void onActionEvent(Event<Action> event) {
-        log(INFO, String.format("%s: Action Taken - %s",
-                event.getTimestamp().format(pattern),
-                event.getData()));
     }
 
     public void onTransaction(Transaction transaction) {

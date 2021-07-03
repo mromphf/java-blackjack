@@ -5,10 +5,7 @@ import main.domain.Transaction;
 import main.usecase.eventing.*;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.SortedMap;
-import java.util.UUID;
+import java.util.*;
 
 import static java.time.LocalDateTime.now;
 import static main.usecase.eventing.Predicate.*;
@@ -59,7 +56,11 @@ public class SelectionMemory extends EventConnection implements AccountResponder
     }
 
     @Override
-    public Account requestSelectedAccount(Predicate predicate) {
-        return selections.get(selections.lastKey());
+    public Optional<Account> requestSelectedAccount(Predicate predicate) {
+        if (selections.size() > 0) {
+            return Optional.of(selections.get(selections.lastKey()));
+        }
+
+        return Optional.empty();
     }
 }

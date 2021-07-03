@@ -53,8 +53,10 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_CREATED)) {
-            final UUID accountKey = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getKey();
+        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+
+        if (event.is(ACCOUNT_CREATED) && selectedAccount.isPresent()) {
+            final UUID accountKey = selectedAccount.get().getKey();
             final LocalDateTime timestamp = LocalDateTime.now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;

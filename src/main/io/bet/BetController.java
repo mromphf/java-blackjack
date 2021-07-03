@@ -16,6 +16,7 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -72,10 +73,16 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     @FXML
     private void onDeal() {
-        final Account selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        final Bet betByAccount = Bet.of(now(), selectedAccount.getKey(), bet);
-        eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
+        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+
+        if (selectedAccount.isPresent()) {
+            final UUID accountKey = selectedAccount.get().getKey();
+            final Bet betByAccount = Bet.of(now(), accountKey, bet);
+
+            eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
+            eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
+        }
+
         bet = 0;
     }
 

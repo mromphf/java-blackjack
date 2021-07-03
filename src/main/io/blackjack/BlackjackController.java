@@ -15,6 +15,7 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -77,7 +78,10 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED).getBalance();
+        final int defaultBalance = 0;
+        final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED)
+                .map(Account::getBalance)
+                .orElse(defaultBalance);
 
         insuranceControls.setVisible(snapshot.isInsuranceAvailable());
         gameControls.setVisible(snapshot.isGameInProgress());

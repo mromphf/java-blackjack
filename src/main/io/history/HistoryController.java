@@ -46,31 +46,37 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        final List<Transaction> accountTransactions = new ArrayList<>(
-                eventNetwork.requestTransactionsByKey(account.getKey()));
-        final LocalDate date = datePicker.getValue();
-        final NumberAxis yAxis = new NumberAxis();
-        final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
-        final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
-                date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
+        final Optional<Account> account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
 
-        chartHousing.getChildren().clear();
+        if (account.isPresent()) {
+            final List<Transaction> accountTransactions = new ArrayList<>(
+                    eventNetwork.requestTransactionsByKey(account.get().getKey()));
+            final LocalDate date = datePicker.getValue();
+            final NumberAxis yAxis = new NumberAxis();
+            final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
+            final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
+                    date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
 
-        drawChart(account, xAxis, yAxis, balanceSeries);
+            chartHousing.getChildren().clear();
+
+            drawChart(account.get(), xAxis, yAxis, balanceSeries);
+        }
     }
 
     @FXML
     public void clearFilter() {
-        final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        final List<Transaction> accountTransactions = new ArrayList<>(
-                eventNetwork.requestTransactionsByKey(account.getKey()));
-        final NumberAxis yAxis = new NumberAxis();
-        final Axis<String> xAxis = dateAxis(accountTransactions);
+        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+        if (selectedAccount.isPresent()) {
+            final Account account = selectedAccount.get();
+            final List<Transaction> accountTransactions = new ArrayList<>(
+                    eventNetwork.requestTransactionsByKey(account.getKey()));
+            final NumberAxis yAxis = new NumberAxis();
+            final Axis<String> xAxis = dateAxis(accountTransactions);
 
-        datePicker.setValue(null);
+            datePicker.setValue(null);
 
-        drawChart(account, xAxis, yAxis, transactionDataMap(accountTransactions));
+            drawChart(account, xAxis, yAxis, transactionDataMap(accountTransactions));
+        }
     }
 
     @Override
@@ -83,8 +89,10 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
-            final Account account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY && selectedAccount.isPresent()) {
+            final Account account = selectedAccount.get();
             final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
 
             drawChart(account, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));

@@ -2,6 +2,8 @@ package main.usecase.eventing;
 
 import main.domain.Account;
 
+import java.util.Optional;
+
 public interface AccountResponder {
-    Account requestSelectedAccount(Predicate predicate);
+    Optional<Account> requestSelectedAccount(Predicate predicate);
 }

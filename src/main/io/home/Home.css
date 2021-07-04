@@ -25,6 +25,10 @@
     -fx-background-color: #b84e25;
 }
 
+.header {
+    -fx-font-size: 4em;
+}
+
 .list-cell {
     -fx-text-fill: black;
     -fx-font-size: 1.5em;

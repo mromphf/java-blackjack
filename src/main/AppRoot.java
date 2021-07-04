@@ -41,8 +41,10 @@ public class AppRoot {
 
         /*
          * These are not event listeners.
-         * Load config from disk.
+         * Load images and config from disk.
          */
+        ImageMap.load();
+
         final ResourceLoader loader = new ResourceLoader();
         final FileSystem memory = new FileSystem(loader.getDirectoryMap());
         final Config config = memory.loadConfig();
@@ -113,7 +115,6 @@ public class AppRoot {
 
         accountStorage.loadAllAccounts();
         accountStorage.loadAllTransactions();
-        ImageMap.load();
 
         /*
          * Initialize JavaFX Stage

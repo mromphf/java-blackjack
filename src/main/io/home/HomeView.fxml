@@ -9,13 +9,20 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20" styleClass="background">
+<?import javafx.scene.text.Text?>
+
+
+<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" styleClass="background">
     <stylesheets>
        <URL value="@Home.css"/>
     </stylesheets>
 
     <GridPane fx:id="listControls" vgap="15">
-        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="10">
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="10" alignment="CENTER">
+            <Text styleClass="header" textAlignment="JUSTIFY">Blackjack</Text>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">
             <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
                 New
                 <effect>
@@ -31,7 +38,7 @@
             </Button>
         </GridPane>
 
-        <TableView fx:id="tblAccounts" GridPane.rowIndex="1" GridPane.columnIndex="0" minHeight="600" minWidth="800" onMouseClicked="#onClickList">
+        <TableView fx:id="tblAccounts" GridPane.rowIndex="2" GridPane.columnIndex="0" minHeight="600" minWidth="800" onMouseClicked="#onClickList">
             <columns>
                 <TableColumn prefWidth="270">
                     <text>Name</text>
@@ -57,7 +64,7 @@
             </effect>
         </TableView>
 
-        <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="10">
+        <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
             <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
                 Play
                 <effect>

@@ -1,25 +1,43 @@
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
-<?import java.net.URL?>
-<?import javafx.scene.effect.DropShadow?>
-
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-
+<?import java.net.URL?>
 <GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" styleClass="background">
     <stylesheets>
        <URL value="@Home.css"/>
     </stylesheets>
 
     <GridPane fx:id="listControls" vgap="15">
-        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" hgap="10" alignment="CENTER">
-            <Text styleClass="header" textAlignment="JUSTIFY">Blackjack</Text>
+        <GridPane
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="0"
+                hgap="20"
+                alignment="CENTER">
+            <ImageView
+                    fx:id = "img1"
+                    fitHeight="70"
+                    fitWidth="50"
+                    GridPane.rowIndex="0"
+                    GridPane.columnIndex="0">
+            </ImageView>
+            <Text
+                    GridPane.rowIndex="0"
+                    GridPane.columnIndex="1"
+                    styleClass="header"
+                    textAlignment="JUSTIFY">
+                Blackjack
+            </Text>
+            <ImageView
+                    fx:id = "img2"
+                    fitHeight="70"
+                    fitWidth="50"
+                    GridPane.rowIndex="0"
+                    GridPane.columnIndex="2">
+            </ImageView>
         </GridPane>
 
         <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">

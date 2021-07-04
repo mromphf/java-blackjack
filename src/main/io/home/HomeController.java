@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
@@ -20,6 +21,8 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
+import static main.io.blackjack.ImageMap.blankBlueCard;
+import static main.io.blackjack.ImageMap.blankRedCard;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
@@ -31,6 +34,12 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public GridPane accountCreationControls;
+
+    @FXML
+    public ImageView img1;
+
+    @FXML
+    public ImageView img2;
 
     @FXML
     public TextField txtName;
@@ -56,7 +65,10 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
+
         btnDelete.setOnAction(handler);
+        img1.imageProperty().setValue(blankBlueCard());
+        img2.imageProperty().setValue(blankRedCard());
     }
 
     @FXML

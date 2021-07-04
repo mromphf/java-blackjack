@@ -61,6 +61,14 @@ public class ImageMap {
         }
     }
 
+    public static Image blankBlueCard() {
+        return imageMap.get(BLUE_CARD);
+    }
+
+    public static Image blankRedCard() {
+        return imageMap.get(RED_CARD);
+    }
+
     private static List<Image> conceal(Collection<Card> cards) {
         if (cards.isEmpty()) {
             return new LinkedList<>();

@@ -1,12 +1,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
 <?import javafx.scene.effect.DropShadow?>
 
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" vgap="20" styleClass="background">
     <stylesheets>
        <URL value="@Home.css"/>
@@ -29,11 +31,31 @@
             </Button>
         </GridPane>
 
-        <ListView fx:id="lstAccounts" GridPane.rowIndex="1" GridPane.columnIndex="0" minHeight="600" minWidth="800" onMouseClicked="#onClickList">
+        <TableView fx:id="tblAccounts" GridPane.rowIndex="1" GridPane.columnIndex="0" minHeight="600" minWidth="800" onMouseClicked="#onClickList">
+            <columns>
+                <TableColumn prefWidth="270">
+                    <text>Name</text>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="name"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="270">
+                    <text>Balance</text>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="balance"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn prefWidth="270">
+                    <text>Date Opened</text>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="created"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
             <effect>
                 <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
             </effect>
-        </ListView>
+        </TableView>
 
         <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="10">
             <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">

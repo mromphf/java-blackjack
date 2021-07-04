@@ -36,7 +36,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public TextField txtName;
 
     @FXML
-    private ListView<Account> lstAccounts;
+    private TableView<Account> tblAccounts;
 
     @FXML
     private Button btnOk;
@@ -61,7 +61,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onPlay() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+        final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
         eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BET));
@@ -77,7 +77,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else {
-            final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+            final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
             btnPlay.setDisable(selectedAccount == null);
             btnDelete.setDisable(selectedAccount == null);
             btnHistory.setDisable(selectedAccount == null);
@@ -119,7 +119,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onRequestHistory() {
-        final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+        final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
         eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HISTORY));
@@ -135,29 +135,31 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (event.is(CURRENT_BALANCE)) {
             final Account account = event.getData();
             accountMap.put(account.getKey(), account);
-            lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+            tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
         }
     }
 
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
         if (event.is(ACCOUNTS_LOADED)) {
+
             for (Account account : event.getData()) {
                 accountMap.put(account.getKey(), account);
             }
-            lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+
+            tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
         }
     }
 
     private EventHandler<ActionEvent> onDeleteEvent() {
         return actionEvent -> {
-            final Account selectedAccount = lstAccounts.getSelectionModel().getSelectedItem();
+            final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
             final Alert alert = initializeConfirmationAlert(selectedAccount);
             final Optional<ButtonType> buttonType = alert.showAndWait();
 
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
                 accountMap.remove(selectedAccount.getKey());
-                lstAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+                tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
                 eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_DELETED, selectedAccount));
             }
         };

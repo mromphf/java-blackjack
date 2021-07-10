@@ -21,8 +21,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
-import static main.io.blackjack.ImageMap.blankBlueCard;
-import static main.io.blackjack.ImageMap.blankRedCard;
+import static main.io.blackjack.ImageMap.*;
 import static main.usecase.Layout.BET;
 import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.*;
@@ -40,6 +39,12 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public ImageView img2;
+
+    @FXML
+    public ImageView img3;
+
+    @FXML
+    public ImageView img4;
 
     @FXML
     public TextField txtName;
@@ -67,8 +72,11 @@ public class HomeController extends EventConnection implements Initializable, Ac
         final EventHandler<ActionEvent> handler = onDeleteEvent();
 
         btnDelete.setOnAction(handler);
-        img1.imageProperty().setValue(blankBlueCard());
-        img2.imageProperty().setValue(blankRedCard());
+        img1.imageProperty().setValue(symSpades());
+        img2.imageProperty().setValue(symDiamonds());
+        img3.imageProperty().setValue(symHearts());
+        img4.imageProperty().setValue(symClubs());
+
     }
 
     @FXML

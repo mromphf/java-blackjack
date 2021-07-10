@@ -16,6 +16,10 @@ public class ImageMap {
     private static final Map<String, Image> imageMap = new HashMap<>();
     private static final String BLUE_CARD = "card_blue";
     private static final String RED_CARD = "card_red";
+    private static final String SYMBOL_SPADES = "sym_spades";
+    private static final String SYMBOL_HEARTS = "sym_hearts";
+    private static final String SYMBOL_CLUBS = "sym_clubs";
+    private static final String SYMBOL_DIAMONDS = "sym_diamonds";
 
     public static void load() {
         for(Card c : fresh()) {
@@ -27,8 +31,17 @@ public class ImageMap {
 
         final Image blueCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", BLUE_CARD)).toString());
         final Image redCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", RED_CARD)).toString());
+        final Image clubsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_CLUBS)).toString());
+        final Image diamondsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_DIAMONDS)).toString());
+        final Image heartsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_HEARTS)).toString());
+        final Image spadesImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_SPADES)).toString());
+
         imageMap.put(BLUE_CARD, blueCardImage);
         imageMap.put(RED_CARD, redCardImage);
+        imageMap.put(SYMBOL_CLUBS, clubsImage);
+        imageMap.put(SYMBOL_DIAMONDS, diamondsImage);
+        imageMap.put(SYMBOL_HEARTS, heartsImage);
+        imageMap.put(SYMBOL_SPADES, spadesImage);
     }
 
     public static Map<ImageKey, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
@@ -67,6 +80,22 @@ public class ImageMap {
 
     public static Image blankRedCard() {
         return imageMap.get(RED_CARD);
+    }
+
+    public static Image symSpades() {
+        return imageMap.get(SYMBOL_SPADES);
+    }
+
+    public static Image symHearts() {
+        return imageMap.get(SYMBOL_HEARTS);
+    }
+
+    public static Image symClubs() {
+        return imageMap.get(SYMBOL_CLUBS);
+    }
+
+    public static Image symDiamonds() {
+        return imageMap.get(SYMBOL_DIAMONDS);
     }
 
     private static List<Image> conceal(Collection<Card> cards) {

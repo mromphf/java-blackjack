@@ -6,6 +6,8 @@ import main.domain.Card;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static main.domain.Deck.fresh;
 import static main.io.blackjack.ImageKey.DEALER_CARDS;
 import static main.io.blackjack.ImageKey.PLAYER_CARDS;
@@ -24,24 +26,17 @@ public class ImageMap {
     public static void load() {
         for(Card c : fresh()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getFaceValue();
-            final String imagePath = String.format("/graphics/%s.png", imageName);
-            final Image image = new Image(ImageMap.class.getResource(imagePath).toString());
+            final String imagePath = format("/graphics/%s.png", imageName);
+            final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());
             imageMap.put(imageName, image);
         }
 
-        final Image blueCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", BLUE_CARD)).toString());
-        final Image redCardImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", RED_CARD)).toString());
-        final Image clubsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_CLUBS)).toString());
-        final Image diamondsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_DIAMONDS)).toString());
-        final Image heartsImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_HEARTS)).toString());
-        final Image spadesImage = new Image(ImageMap.class.getResource(String.format("/graphics/%s.png", SYMBOL_SPADES)).toString());
-
-        imageMap.put(BLUE_CARD, blueCardImage);
-        imageMap.put(RED_CARD, redCardImage);
-        imageMap.put(SYMBOL_CLUBS, clubsImage);
-        imageMap.put(SYMBOL_DIAMONDS, diamondsImage);
-        imageMap.put(SYMBOL_HEARTS, heartsImage);
-        imageMap.put(SYMBOL_SPADES, spadesImage);
+        imageMap.put(BLUE_CARD, getImage(BLUE_CARD));
+        imageMap.put(RED_CARD, getImage(RED_CARD));
+        imageMap.put(SYMBOL_CLUBS, getImage(SYMBOL_CLUBS));
+        imageMap.put(SYMBOL_DIAMONDS, getImage(SYMBOL_DIAMONDS));
+        imageMap.put(SYMBOL_HEARTS, getImage(SYMBOL_HEARTS));
+        imageMap.put(SYMBOL_SPADES, getImage(SYMBOL_SPADES));
     }
 
     public static Map<ImageKey, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
@@ -74,14 +69,6 @@ public class ImageMap {
         }
     }
 
-    public static Image blankBlueCard() {
-        return imageMap.get(BLUE_CARD);
-    }
-
-    public static Image blankRedCard() {
-        return imageMap.get(RED_CARD);
-    }
-
     public static Image symSpades() {
         return imageMap.get(SYMBOL_SPADES);
     }
@@ -111,5 +98,11 @@ public class ImageMap {
 
     private static Image imageByCard(Card c) {
         return imageMap.get(c.getSuit().name().toLowerCase() + c.getFaceValue());
+    }
+
+    private static Image getImage(String blueCard) {
+        return new Image(requireNonNull(
+                ImageMap.class.getResource(format("/graphics/%s.png", blueCard))).toString()
+        );
     }
 }

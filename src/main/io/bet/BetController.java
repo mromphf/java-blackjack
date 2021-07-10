@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.*;
 import static main.usecase.Layout.*;
@@ -108,9 +109,14 @@ public class BetController extends EventConnection implements Initializable, Acc
             this.balance = event.getData().getBalance();
 
             btnDeal.setDisable(bet > balance || bet <= 0);
-            lblBet.setText("$" + bet);
-            lblBalance.setText(String.format("Balance: $%s", balance));
+            lblBet.setText(format("$%s", bet));
+            lblBalance.setText(format("Balance: $%s", balance));
         }
+    }
+
+    @Override
+    public void onGameUpdate(Snapshot snapshot) {
+        prgDeck.setProgress(snapshot.getDeckProgress());
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {
@@ -121,10 +127,5 @@ public class BetController extends EventConnection implements Initializable, Acc
         }
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
-    }
-
-    @Override
-    public void onGameUpdate(Snapshot snapshot) {
-        prgDeck.setProgress(snapshot.getDeckProgress());
     }
 }

@@ -9,9 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventConnection;
+import main.usecase.Layout;
+import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -22,11 +21,10 @@ import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
 import static main.io.blackjack.ImageMap.*;
-import static main.usecase.Layout.BET;
-import static main.usecase.Layout.HISTORY;
+import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
-public class HomeController extends EventConnection implements Initializable, AccountListener {
+public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
 
     @FXML
     public GridPane listControls;
@@ -168,6 +166,15 @@ public class HomeController extends EventConnection implements Initializable, Ac
             }
 
             tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+        }
+    }
+
+    @Override
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME) {
+            btnPlay.setDisable(true);
+            btnDelete.setDisable(true);
+            btnHistory.setDisable(true);
         }
     }
 

@@ -6,16 +6,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-<GridPane fx:controller="main.io.home.HomeController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" styleClass="background">
+
+
+<GridPane
+        fx:controller="main.io.home.HomeController"
+        xmlns:fx="http://javafx.com/fxml"
+        alignment="BASELINE_CENTER"
+        styleClass="background">
+
     <stylesheets>
        <URL value="@Home.css"/>
     </stylesheets>
 
-    <GridPane fx:id="listControls" vgap="15">
+    <GridPane fx:id="listControls" vgap="20">
         <GridPane
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="0"
                 hgap="20"
+                styleClass="header-panel"
                 alignment="CENTER">
             <ImageView
                     fx:id = "img1"

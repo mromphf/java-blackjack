@@ -1,0 +1,20 @@
+.background {
+    -fx-background-color: #228b22;
+}
+
+.button {
+    -fx-font-size: 1.1em;
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 3px;
+    -fx-border-width: 2px;
+}
+
+.registration-form {
+    -fx-padding: 450 0 0 0;
+}
+
+.white {
+    -fx-padding: 10px;
+    -fx-text-fill: white;
+}

@@ -6,4 +6,5 @@ public enum Layout {
     GAME,
     HOME,
     HISTORY,
+    REGISTRATION
 }

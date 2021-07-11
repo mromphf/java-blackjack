@@ -110,8 +110,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @FXML
     public void onNew() {
         btnOk.setDisable(txtName.getText().length() < 3);
-        accountCreationControls.setVisible(true);
-        listControls.setVisible(false);
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, REGISTRATION));
     }
 
     @FXML

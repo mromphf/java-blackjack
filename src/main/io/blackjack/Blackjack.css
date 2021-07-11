@@ -13,5 +13,8 @@
 .label {
     -fx-padding: 10px;
     -fx-text-fill: white;
-    -fx-background-color: rgba(100, 100, 100, 0.3);
+}
+
+.lower-hud {
+    -fx-padding: 75 0 0 0;
 }

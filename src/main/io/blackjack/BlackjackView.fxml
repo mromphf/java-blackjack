@@ -6,7 +6,8 @@
 <?import javafx.scene.control.ProgressBar?>
 
 <?import java.net.URL?>
-<GridPane fx:controller="main.io.blackjack.BlackjackController" xmlns:fx="http://javafx.com/fxml" vgap="20" style="-fx-background-color:#228b22">
+<GridPane fx:controller="main.io.blackjack.BlackjackController" xmlns:fx="http://javafx.com/fxml" vgap="20"
+          style="-fx-background-color:#228b22">
 
     <stylesheets>
         <URL value="@Blackjack.css"/>
@@ -26,7 +27,7 @@
             <Label textAlignment="CENTER" style="-fx-text-fill:white">
                 Deck:
                 <font>
-                    <Font name="Arial" size="30" />
+                    <Font name="Arial" size="30"/>
                 </font>
             </Label>
         </GridPane>
@@ -40,64 +41,74 @@
         <TableDisplay fx:id="tableDisplay"/>
     </GridPane>
 
-    <GridPane fx:id="gameControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onDouble">
-            Double
-        </Button>
+    <GridPane styleClass="lower-hud" GridPane.rowIndex="2" alignment="CENTER">
+        <GridPane fx:id="gameControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+            <Button fx:id="btnDouble" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50"
+                    onAction="#onDouble">
+                Double
+            </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onHit">
-            Hit
-        </Button>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onHit">
+                Hit
+            </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onStand">
-            Stand
-        </Button>
-    </GridPane>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" onAction="#onStand">
+                Stand
+            </Button>
+        </GridPane>
 
-    <GridPane visible="false" fx:id="splitControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button fx:id="btnSplit" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onSplit">
-            Split
-        </Button>
+        <GridPane visible="false" fx:id="splitControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+            <Button fx:id="btnSplit" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50"
+                    onAction="#onSplit">
+                Split
+            </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onNoSplit">
-            Don't Split
-        </Button>
-    </GridPane>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onNoSplit">
+                Don't Split
+            </Button>
+        </GridPane>
 
-    <GridPane visible="false" fx:id="insuranceControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onTakeInsurance">
-            Take Insurance
-        </Button>
+        <GridPane visible="false" fx:id="insuranceControls" GridPane.rowIndex="2" alignment="center" hgap="20"
+                  vgap="20">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50"
+                    onAction="#onTakeInsurance">
+                Take Insurance
+            </Button>
 
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onWaiveInsurance">
-            No Insurance
-        </Button>
-    </GridPane>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50"
+                    onAction="#onWaiveInsurance">
+                No Insurance
+            </Button>
+        </GridPane>
 
-    <GridPane visible="false" fx:id="settleControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onSettleNextHand">
-            Settle Next Hand
-        </Button>
-    </GridPane>
+        <GridPane visible="false" fx:id="settleControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50"
+                    onAction="#onSettleNextHand">
+                Settle Next Hand
+            </Button>
+        </GridPane>
 
-    <GridPane visible="false" fx:id="nextHandControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlayNextHand">
-            Play Next Hand
-        </Button>
-    </GridPane>
+        <GridPane visible="false" fx:id="nextHandControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50"
+                    onAction="#onPlayNextHand">
+                Play Next Hand
+            </Button>
+        </GridPane>
 
-    <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
-        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onDone">
-            Done
-        </Button>
-    </GridPane>
+        <GridPane visible="false" fx:id="gameOverControls" GridPane.rowIndex="2" alignment="center" hgap="20" vgap="20">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onDone">
+                Done
+            </Button>
+        </GridPane>
 
-    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER" style="-fx-text-fill:white">
-            Balance: $0
-            <font>
-                <Font name="Arial" size="30" />
-            </font>
-        </Label>
+        <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+            <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50"
+                   alignment="BASELINE_CENTER" style="-fx-text-fill:white; -fx-padding: 30 0 0 0;">
+                Balance $0
+                <font>
+                    <Font name="Arial" size="40"/>
+                </font>
+            </Label>
+        </GridPane>
     </GridPane>
 </GridPane>

@@ -106,7 +106,6 @@ public class AppRoot {
         eventNetwork.registerTransactionListener(gameLogger);
         eventNetwork.registerAccountListener(gameLogger);
 
-        // If this doesn't happen, prepare for NullPointerExceptions (there must be a better way?)
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
         gameLogger.addHandler(consoleLogHandler);

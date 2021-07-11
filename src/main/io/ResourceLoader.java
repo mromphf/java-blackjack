@@ -21,6 +21,7 @@ public class ResourceLoader {
         put(BET, new FXMLLoader(ResourceLoader.class.getResource("bet/BetView.fxml")));
         put(GAME, new FXMLLoader(ResourceLoader.class.getResource("blackjack/BlackjackView.fxml")));
         put(HISTORY, new FXMLLoader(ResourceLoader.class.getResource("history/HistoryView.fxml")));
+        put(REGISTRATION, new FXMLLoader(ResourceLoader.class.getResource("registration/RegistrationView.fxml")));
     }};
 
     private final static Map<Directory, File> directoryMap = new HashMap<>();

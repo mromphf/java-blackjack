@@ -7,8 +7,6 @@ import main.domain.Card;
 import main.domain.Evaluate;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.io.log.FileLogHandler;
-import main.usecase.eventing.EventConnection;
 import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
@@ -16,10 +14,13 @@ import main.io.blackjack.ImageMap;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
 import main.io.log.ConsoleLogHandler;
+import main.io.log.FileLogHandler;
 import main.io.log.GameLogger;
+import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
 import main.io.storage.FileSystem;
 import main.usecase.*;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
 import java.util.*;
@@ -76,6 +77,7 @@ public class AppRoot {
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
         final BetController betController = (BetController) loader.loadController(BET);
         final HistoryController historyController = (HistoryController) loader.loadController(HISTORY);
+        final RegistrationController registrationController = (RegistrationController) loader.loadController(REGISTRATION);
 
         /*
          * Wire everything up
@@ -87,6 +89,7 @@ public class AppRoot {
             add(historyController);
             add(blackjackController);
             add(betController);
+            add(registrationController);
             add(layoutManager);
             add(accountStorage);
             add(transactor);

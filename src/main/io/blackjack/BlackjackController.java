@@ -15,7 +15,6 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -73,7 +72,7 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onAccountEvent(Event<Account> event) {
         final int currentBalance = event.getData().getBalance();
-        lblBalance.setText(String.format("Balance: $%s", currentBalance));
+        lblBalance.setText(String.format("Balance $%s", currentBalance));
     }
 
     @Override

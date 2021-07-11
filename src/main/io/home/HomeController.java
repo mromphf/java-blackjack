@@ -7,13 +7,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.usecase.Layout;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
@@ -25,12 +26,6 @@ import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
-
-    @FXML
-    public GridPane listControls;
-
-    @FXML
-    public GridPane accountCreationControls;
 
     @FXML
     public ImageView img1;
@@ -45,13 +40,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public ImageView img4;
 
     @FXML
-    public TextField txtName;
-
-    @FXML
     private TableView<Account> tblAccounts;
-
-    @FXML
-    private Button btnOk;
 
     @FXML
     private Button btnPlay;
@@ -103,35 +92,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @FXML
-    public void onKeyTyped() {
-        btnOk.setDisable(txtName.getText().length() < 3);
-    }
-
-    @FXML
     public void onNew() {
-        btnOk.setDisable(txtName.getText().length() < 3);
         eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, REGISTRATION));
-    }
-
-    @FXML
-    public void onCancel() {
-        accountCreationControls.setVisible(false);
-        listControls.setVisible(true);
-        txtName.setText("");
-    }
-
-    @FXML
-    public void onCreate() {
-        final UUID uuid = randomUUID();
-        final String name = txtName.getText();
-        final LocalDateTime now = now();
-        final Account account = new Account(uuid, name, now);
-
-        txtName.setText("");
-        accountCreationControls.setVisible(false);
-        listControls.setVisible(true);
-
-        eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_CREATED, account));
     }
 
     @FXML

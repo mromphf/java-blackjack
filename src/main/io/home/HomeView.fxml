@@ -3,155 +3,131 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+
 
 
 <GridPane
         fx:controller="main.io.home.HomeController"
         xmlns:fx="http://javafx.com/fxml"
         alignment="BASELINE_CENTER"
-        styleClass="background">
+        styleClass="background"
+        vgap="20">
 
     <stylesheets>
-       <URL value="@Home.css"/>
+        <URL value="@Home.css"/>
     </stylesheets>
 
-    <GridPane fx:id="listControls" vgap="20">
-        <GridPane
+    <GridPane
+            GridPane.rowIndex="0"
+            GridPane.columnIndex="0"
+            hgap="20"
+            styleClass="header-panel"
+            alignment="CENTER">
+        <ImageView
+                fx:id="img1"
+                fitHeight="70"
+                fitWidth="60"
                 GridPane.rowIndex="0"
-                GridPane.columnIndex="0"
-                hgap="20"
-                styleClass="header-panel"
-                alignment="CENTER">
-            <ImageView
-                    fx:id = "img1"
-                    fitHeight="70"
-                    fitWidth="60"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="0">
-            </ImageView>
-            <ImageView
-                    fx:id = "img2"
-                    fitHeight="70"
-                    fitWidth="60"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="1">
-            </ImageView>
-            <Text
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="2"
-                    styleClass="header"
-                    textAlignment="JUSTIFY">
-                Blackjack
-            </Text>
-            <ImageView
-                    fx:id = "img3"
-                    fitHeight="70"
-                    fitWidth="60"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="3">
-            </ImageView>
-            <ImageView
-                    fx:id = "img4"
-                    fitHeight="70"
-                    fitWidth="60"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="4">
-            </ImageView>
-        </GridPane>
+                GridPane.columnIndex="0">
+        </ImageView>
+        <ImageView
+                fx:id="img2"
+                fitHeight="70"
+                fitWidth="60"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="1">
+        </ImageView>
+        <Text
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="2"
+                styleClass="header"
+                textAlignment="JUSTIFY">
+            Blackjack
+        </Text>
+        <ImageView
+                fx:id="img3"
+                fitHeight="70"
+                fitWidth="60"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="3">
+        </ImageView>
+        <ImageView
+                fx:id="img4"
+                fitHeight="70"
+                fitWidth="60"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="4">
+        </ImageView>
+    </GridPane>
 
-        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
-                New
-                <effect>
-                    <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
-                </effect>
-            </Button>
-
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
-                Exit
-                <effect>
-                    <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
-                </effect>
-            </Button>
-        </GridPane>
-
-        <TableView fx:id="tblAccounts" GridPane.rowIndex="2" GridPane.columnIndex="0" minHeight="600" minWidth="800" onMouseClicked="#onClickList">
-            <columns>
-                <TableColumn prefWidth="270">
-                    <text>Name</text>
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn prefWidth="270">
-                    <text>Balance</text>
-                    <cellValueFactory>
-                        <PropertyValueFactory property="balance"/>
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn prefWidth="270">
-                    <text>Date Opened</text>
-                    <cellValueFactory>
-                        <PropertyValueFactory property="created"/>
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
+    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" hgap="10">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
+            New
             <effect>
                 <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
             </effect>
-        </TableView>
+        </Button>
 
-        <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
-            <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onPlay">
-                Play
-                <effect>
-                    <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
-                </effect>
-            </Button>
-
-            <Button fx:id="btnHistory" GridPane.rowIndex="0" disable="true" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onRequestHistory">
-                History
-                <effect>
-                    <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
-                </effect>
-            </Button>
-
-            <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100" minHeight="50" styleClass="btn-del">
-                Delete
-                <effect>
-                    <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
-                </effect>
-            </Button>
-        </GridPane>
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
+            Exit
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
     </GridPane>
 
-    <GridPane fx:id="accountCreationControls" visible="false" vgap="20" hgap="20">
-        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0">
-            <Label>
-                <font>
-                    <Font name="Arial" size="20"/>
-                </font>
-                Your Name:
-            </Label>
-        </GridPane>
+    <TableView fx:id="tblAccounts" GridPane.rowIndex="2" GridPane.columnIndex="0" minHeight="600" minWidth="800"
+               onMouseClicked="#onClickList">
+        <columns>
+            <TableColumn prefWidth="270">
+                <text>Name</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="name"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="270">
+                <text>Balance</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="balance"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="270">
+                <text>Date Opened</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="created"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+        <effect>
+            <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+        </effect>
+    </TableView>
 
-        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1">
-            <TextField fx:id="txtName" minWidth="100" minHeight="50" onKeyTyped="#onKeyTyped" />
-        </GridPane>
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
+        <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100"
+                minHeight="50" onAction="#onPlay">
+            Play
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
 
-        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0">
-            <Button fx:id="btnOk" minWidth="100" minHeight="50" onAction="#onCreate">
-                OK
-            </Button>
-        </GridPane>
+        <Button fx:id="btnHistory" GridPane.rowIndex="0" disable="true" GridPane.columnIndex="1" minWidth="100"
+                minHeight="50" onAction="#onRequestHistory">
+            History
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
 
-        <GridPane GridPane.rowIndex="1" GridPane.columnIndex="1">
-            <Button onAction="#onCancel" minWidth="100" minHeight="50">
-                Cancel
-            </Button>
-        </GridPane>
+        <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100"
+                minHeight="50" styleClass="btn-del">
+            Delete
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
     </GridPane>
 </GridPane>

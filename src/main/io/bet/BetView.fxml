@@ -61,13 +61,13 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
-        <Button fx:id="btnDeal" GridPane.rowIndex="0" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
+        <Button fx:id="btnDeal" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
             Bet
         </Button>
-        <Button GridPane.rowIndex="1" minWidth="250" minHeight="50" onAction="#onQuit">
+        <Button GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="125" minHeight="50" onAction="#onQuit">
             Quit
         </Button>
-        <Button GridPane.rowIndex="2" minWidth="250" minHeight="50" onAction="#onHistory">
+        <Button GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="125" minHeight="50" onAction="#onHistory" >
             History
         </Button>
     </GridPane>
@@ -76,7 +76,7 @@
         <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
             Balance: $0
             <font>
-                <Font name="Arial" size="30" />
+                <Font name="Arial" size="40" />
             </font>
         </Label>
     </GridPane>

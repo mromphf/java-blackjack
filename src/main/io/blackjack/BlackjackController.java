@@ -96,6 +96,9 @@ public class BlackjackController extends EventConnection implements Initializabl
             renderExposedTable(snapshot);
 
             switch (snapshot.getOutcome()) {
+                case BLACKJACK:
+                    tableDisplay.drawResults("Blackjack!!!", Color.WHITE);
+                    break;
                 case WIN:
                     tableDisplay.drawResults("Win", Color.WHITE);
                     break;

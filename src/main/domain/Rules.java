@@ -102,6 +102,8 @@ public class Rules {
                 (!isBust(playerHand) &&
                         (actionsTaken.isEmpty() || !standOrDouble))) {
             return UNRESOLVED;
+        } else if (playerWins(playerHand, dealerHand) && isBlackjack(playerHand)) {
+            return BLACKJACK;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
         } else if (isPush(playerHand, dealerHand)) {
@@ -127,6 +129,7 @@ public class Rules {
         final float blackjackMultiplier = isBlackjack(playerHand) ? 1.5f : 1.0f;
 
         switch (determineOutcome(snapshot)) {
+            case BLACKJACK:
             case WIN:
                 return (((int) (bet * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;
             case PUSH:

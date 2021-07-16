@@ -2,6 +2,7 @@ package main.domain;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -10,6 +11,17 @@ import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 
 public class Evaluate {
+
+    public static Collection<Function<Snapshot, Optional<Transaction>>> transactionEvaluators() {
+        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = new HashSet<>();
+
+        evaluators.add(Evaluate.doubleDownTransactions());
+        evaluators.add(Evaluate.insuranceTransactions());
+        evaluators.add(Evaluate.outcomeTransactions());
+        evaluators.add(Evaluate.splitTransactions());
+
+        return evaluators;
+    }
 
     public static Function<Snapshot, Optional<Transaction>> insuranceTransactions() {
        return (snapshot) -> {

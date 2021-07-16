@@ -23,7 +23,15 @@ public class Evaluate {
         return evaluators;
     }
 
-    public static Function<Snapshot, Optional<Transaction>> insuranceTransactions() {
+    public static Transaction betTransaction(LocalDateTime timestamp, Bet bet) {
+        final String description = "BET";
+        final int betVal = (bet.getVal() * -1);
+        final UUID accountKey = bet.getAccountKey();
+
+        return new Transaction(timestamp, accountKey, description, betVal);
+    }
+
+    private static Function<Snapshot, Optional<Transaction>> insuranceTransactions() {
        return (snapshot) -> {
             final Collection<Action> actionsTaken = snapshot.getActionsTaken();
             final boolean insurancePurchased = actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE);
@@ -40,14 +48,14 @@ public class Evaluate {
         };
     }
 
-    public static Function<Snapshot, Optional<Transaction>> doubleDownTransactions() {
+    private static Function<Snapshot, Optional<Transaction>> doubleDownTransactions() {
         return (snapshot) -> {
             final Collection<Action> actionsTaken = snapshot.getActionsTaken();
 
             if (actionsTaken.stream().filter(a -> a.equals(DOUBLE)).count() == 1) {
                 final LocalDateTime timestamp = snapshot.getTimestamp();
                 final UUID accountKey = snapshot.getAccountKey();
-                final String description = "DOUBLE";
+                final String description = DOUBLE.name();
                 final int bet = snapshot.getNegativeBet();
 
                 return Optional.of(new Transaction(timestamp, accountKey, description, bet));
@@ -57,7 +65,7 @@ public class Evaluate {
         };
     }
 
-    public static Function<Snapshot, Optional<Transaction>> outcomeTransactions() {
+    private static Function<Snapshot, Optional<Transaction>> outcomeTransactions() {
         return (snapshot) -> {
             if (snapshot.isHandResolved()) {
                 final LocalDateTime timestamp = snapshot.getTimestamp();
@@ -72,7 +80,7 @@ public class Evaluate {
         };
     }
 
-    public static Function<Snapshot, Optional<Transaction>> splitTransactions() {
+    private static Function<Snapshot, Optional<Transaction>> splitTransactions() {
         return (snapshot) -> {
             final Collection<Action> actionsTaken = snapshot.getActionsTaken();
             final LocalDateTime timestamp = snapshot.getTimestamp();

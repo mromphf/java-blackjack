@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.domain.Card;
-import main.domain.Evaluate;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.io.ResourceLoader;
@@ -19,16 +18,32 @@ import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
 import main.io.storage.FileSystem;
-import main.usecase.*;
+import main.usecase.Game;
+import main.usecase.Layout;
+import main.usecase.LayoutManager;
+import main.usecase.SelectionMemory;
+import main.usecase.TransactionMemory;
+import main.usecase.Transactor;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Stack;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
-import static main.usecase.Layout.*;
+import static main.domain.Evaluate.transactionEvaluators;
+import static main.usecase.Layout.BET;
+import static main.usecase.Layout.GAME;
+import static main.usecase.Layout.HISTORY;
+import static main.usecase.Layout.HOME;
+import static main.usecase.Layout.REGISTRATION;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.TRANSACTION;
 
@@ -41,8 +56,8 @@ public class AppRoot {
         AppRoot.stage = stage;
 
         /*
-         * These are not event listeners.
          * Load images and config from disk.
+         * These are not event listeners.
          */
         ImageMap.load();
 
@@ -56,11 +71,7 @@ public class AppRoot {
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
-        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = new HashSet<>();
-        evaluators.add(Evaluate.doubleDownTransactions());
-        evaluators.add(Evaluate.insuranceTransactions());
-        evaluators.add(Evaluate.outcomeTransactions());
-        evaluators.add(Evaluate.splitTransactions());
+        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
 
         /*
          * These are event listeners

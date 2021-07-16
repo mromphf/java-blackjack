@@ -2,6 +2,7 @@ package main.usecase;
 
 import main.domain.Account;
 import main.domain.Bet;
+import main.domain.Evaluate;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.EventConnection;
@@ -70,11 +71,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
     public void onBetEvent(Event<Bet> event) {
         if (event.is(BET_PLACED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
-            final Bet bet = event.getData();
-            final String description = "BET";
-            final int betVal = (bet.getVal() * -1);
-            final UUID accountKey = bet.getAccountKey();
-            final Transaction transaction = new Transaction(timestamp, accountKey, description, betVal);
+            final Transaction transaction = Evaluate.betTransaction(timestamp, event.getData());
             final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION, transaction);
 
             eventNetwork.onTransactionEvent(evt);

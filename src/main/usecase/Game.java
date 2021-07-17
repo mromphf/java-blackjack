@@ -1,39 +1,31 @@
 package main.usecase;
 
 import main.domain.*;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.*;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+import java.util.UUID;
 
+import static java.time.LocalDateTime.now;
 import static main.domain.Action.*;
-import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
+public class Game extends EventConnection implements ActionListener, BetListener {
 
     private final UUID key;
     private final Stack<Card> deck;
     private final int maxCards;
     private final int numDecks;
-    private final Map<Action, Runnable> runnableMap;
-    private Round round;
+    private final Map<Action, Runnable> runnableMap = new HashMap<>();
+    private final Stack<Round> roundStack = new Stack<>();
 
     public Game(UUID key, Stack<Card> deck, int numDecks) {
         this.key = key;
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
-        runnableMap = new HashMap<>();
-        round = new Round(Account.placeholder().getKey(), new Stack<>(), 0, maxCards, numDecks);
-
-        runnableMap.put(HIT, () -> round.hit());
-        runnableMap.put(SPLIT, () -> round.split());
-        runnableMap.put(STAND, () -> round.stand());
-        runnableMap.put(SETTLE, () -> round.rewind());
-        runnableMap.put(DOUBLE, () -> round.doubleDown());
-        runnableMap.put(PLAY_NEXT_HAND, () -> round.playNextHand());
     }
 
     @Override
@@ -43,27 +35,29 @@ public class Game extends EventConnection implements ActionListener, BetListener
 
     @Override
     public void onActionEvent(Event<Action> event) {
-        if (event.is(ACTION_TAKEN)) {
-            round.record(LocalDateTime.now(), event.getData());
+        if (event.is(ACTION_TAKEN) && roundStack.size() > 0) {
+            final Round currentRound = roundStack.peek();
+
+            runnableMap.put(HIT, currentRound::hit);
+            runnableMap.put(SPLIT, currentRound::split);
+            runnableMap.put(STAND, currentRound::stand);
+            runnableMap.put(SETTLE, currentRound::rewind);
+            runnableMap.put(DOUBLE, currentRound::doubleDown);
+            runnableMap.put(PLAY_NEXT_HAND, currentRound::playNextHand);
+
+            currentRound.record(now(), event.getData());
             runnableMap.getOrDefault(event.getData(), () -> {}).run();
-            eventNetwork.onGameUpdate(round.getSnapshot(LocalDateTime.now()));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(now()));
         }
     }
-
-    @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME) {
-            round = new Round(Account.placeholder().getKey(), deck, 0, maxCards, numDecks);
-        }
-    }
-
 
     @Override
     public void onBetEvent(Event<Bet> event) {
         if (event.is(BET_PLACED)) {
             final Bet bet = event.getData();
-            round = new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks);
-            eventNetwork.onGameUpdate(round.getSnapshot(LocalDateTime.now()));
+
+            roundStack.add(new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now()));
         }
     }
 }

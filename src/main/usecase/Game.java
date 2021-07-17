@@ -1,16 +1,22 @@
 package main.usecase;
 
-import main.domain.*;
-import main.usecase.eventing.*;
+import main.domain.Action;
+import main.domain.Bet;
+import main.domain.Card;
+import main.domain.Round;
+import main.usecase.eventing.ActionListener;
+import main.usecase.eventing.BetListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
-import static java.time.LocalDateTime.now;
 import static main.domain.Action.*;
-import static main.usecase.eventing.Predicate.*;
+import static main.usecase.eventing.Predicate.ACTION_TAKEN;
+import static main.usecase.eventing.Predicate.BET_PLACED;
 
 public class Game extends EventConnection implements ActionListener, BetListener {
 
@@ -45,9 +51,9 @@ public class Game extends EventConnection implements ActionListener, BetListener
             runnableMap.put(DOUBLE, currentRound::doubleDown);
             runnableMap.put(PLAY_NEXT_HAND, currentRound::playNextHand);
 
-            currentRound.record(now(), event.getData());
+            currentRound.record(event.getTimestamp(), event.getData());
             runnableMap.getOrDefault(event.getData(), () -> {}).run();
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(now()));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp()));
         }
     }
 
@@ -57,7 +63,7 @@ public class Game extends EventConnection implements ActionListener, BetListener
             final Bet bet = event.getData();
 
             roundStack.add(new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks));
-            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now()));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(event.getTimestamp()));
         }
     }
 }

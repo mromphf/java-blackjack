@@ -36,6 +36,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static java.lang.Thread.currentThread;
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
 import static main.domain.Evaluate.transactionEvaluators;
@@ -54,6 +55,8 @@ public class AppRoot {
     public AppRoot(Stage stage) {
 
         AppRoot.stage = stage;
+
+        currentThread().setName("Trunk thread");
 
         /*
          * Load images and config from disk.

@@ -89,7 +89,7 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     @FXML
     public void onQuit() {
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HOME));
+        eventNetwork.onLayoutChangedTo(HOME, key);
         bet = 0;
     }
 

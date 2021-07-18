@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
+import static javafx.application.Platform.runLater;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
@@ -71,50 +72,54 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        final int currentBalance = event.getData().getBalance();
-        lblBalance.setText(String.format("Balance $%s", currentBalance));
+        if (event.is(CURRENT_BALANCE)) {
+            final int currentBalance = event.getData().getBalance();
+            runLater(() -> lblBalance.setText(String.format("Balance $%s", currentBalance)));
+        }
     }
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        final int defaultBalance = 0;
-        final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED)
-                .map(Account::getBalance)
-                .orElse(defaultBalance);
+        runLater(() -> {
+            final int defaultBalance = 0;
+            final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED)
+                    .map(Account::getBalance)
+                    .orElse(defaultBalance);
 
-        insuranceControls.setVisible(snapshot.isInsuranceAvailable());
-        gameControls.setVisible(snapshot.isGameInProgress());
-        splitControls.setVisible(snapshot.isSplitAvailable());
-        settleControls.setVisible(snapshot.readyToSettleNextHand());
-        nextHandControls.setVisible(snapshot.readyToPlayNextHand());
-        gameOverControls.setVisible(snapshot.allBetsSettled());
-        btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore(currentBalance));
-        btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
-        prgDeck.setProgress(snapshot.getDeckProgress());
+            insuranceControls.setVisible(snapshot.isInsuranceAvailable());
+            gameControls.setVisible(snapshot.isGameInProgress());
+            splitControls.setVisible(snapshot.isSplitAvailable());
+            settleControls.setVisible(snapshot.readyToSettleNextHand());
+            nextHandControls.setVisible(snapshot.readyToPlayNextHand());
+            gameOverControls.setVisible(snapshot.allBetsSettled());
+            btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore(currentBalance));
+            btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
+            prgDeck.setProgress(snapshot.getDeckProgress());
 
-        if (snapshot.isRoundResolved()) {
-            renderExposedTable(snapshot);
+            if (snapshot.isRoundResolved()) {
+                renderExposedTable(snapshot);
 
-            switch (snapshot.getOutcome()) {
-                case BLACKJACK:
-                    tableDisplay.drawResults("Blackjack!!!", Color.WHITE);
-                    break;
-                case WIN:
-                    tableDisplay.drawResults("Win", Color.WHITE);
-                    break;
-                case LOSE:
-                    tableDisplay.drawResults("Lose", Color.RED);
-                    break;
-                case BUST:
-                    tableDisplay.drawResults("Bust", Color.RED);
-                    break;
-                default:
-                    tableDisplay.drawResults("Push", Color.ORANGE);
-                    break;
+                switch (snapshot.getOutcome()) {
+                    case BLACKJACK:
+                        tableDisplay.drawResults("Blackjack!!!", Color.WHITE);
+                        break;
+                    case WIN:
+                        tableDisplay.drawResults("Win", Color.WHITE);
+                        break;
+                    case LOSE:
+                        tableDisplay.drawResults("Lose", Color.RED);
+                        break;
+                    case BUST:
+                        tableDisplay.drawResults("Bust", Color.RED);
+                        break;
+                    default:
+                        tableDisplay.drawResults("Push", Color.ORANGE);
+                        break;
+                }
+            } else {
+                renderConcealedTable(snapshot);
             }
-        } else {
-            renderConcealedTable(snapshot);
-        }
+        });
     }
 
     @FXML

@@ -28,14 +28,14 @@
         <ImageView
                 fx:id="img1"
                 fitHeight="70"
-                fitWidth="60"
+                fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="0">
         </ImageView>
         <ImageView
                 fx:id="img2"
                 fitHeight="70"
-                fitWidth="60"
+                fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="1">
         </ImageView>
@@ -49,14 +49,14 @@
         <ImageView
                 fx:id="img3"
                 fitHeight="70"
-                fitWidth="60"
+                fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="3">
         </ImageView>
         <ImageView
                 fx:id="img4"
                 fitHeight="70"
-                fitWidth="60"
+                fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="4">
         </ImageView>

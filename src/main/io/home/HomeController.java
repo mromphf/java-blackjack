@@ -58,6 +58,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
 
+        tblAccounts.setPlaceholder(new Label("Loading accounts..."));
         btnDelete.setOnAction(handler);
         img1.imageProperty().setValue(symSpades());
         img2.imageProperty().setValue(symDiamonds());

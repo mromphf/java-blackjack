@@ -85,10 +85,6 @@ public class EventNetwork implements
         accountListeners.add(listener);
     }
 
-    public void registerActionListener(ActionListener listener) {
-        actionListeners.add(listener);
-    }
-
     @Override
     public UUID getKey() {
         return key;

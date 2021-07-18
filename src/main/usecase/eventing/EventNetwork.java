@@ -109,7 +109,9 @@ public class EventNetwork implements
     public void onBetEvent(Event<Bet> event) {
         betListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onBetEvent(event));
+                .forEach(listener -> new Thread(
+                        () -> listener.onBetEvent(event), "Bet Event Thread"
+                ).start());
     }
 
     @Override

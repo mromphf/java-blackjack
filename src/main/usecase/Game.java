@@ -4,10 +4,7 @@ import main.domain.Action;
 import main.domain.Bet;
 import main.domain.Card;
 import main.domain.Round;
-import main.usecase.eventing.ActionListener;
-import main.usecase.eventing.BetListener;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +12,12 @@ import java.util.Stack;
 import java.util.UUID;
 
 import static main.domain.Action.*;
-import static main.usecase.eventing.Predicate.ACTION_TAKEN;
-import static main.usecase.eventing.Predicate.BET_PLACED;
+import static main.domain.Deck.fresh;
+import static main.domain.Deck.shuffle;
+import static main.usecase.Layout.HOME;
+import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements ActionListener, BetListener {
+public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
 
     private final UUID key;
     private final Stack<Card> deck;
@@ -64,6 +63,17 @@ public class Game extends EventConnection implements ActionListener, BetListener
 
             roundStack.add(new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks));
             eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(event.getTimestamp()));
+        }
+    }
+
+    @Override
+    public void onLayoutEvent(Event<Layout> event) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME && roundStack.size() > 0) {
+            final Round currentRound = roundStack.peek();
+
+            deck.clear();
+            deck.addAll(shuffle(fresh(maxCards)));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp()));
         }
     }
 }

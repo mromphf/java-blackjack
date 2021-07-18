@@ -124,14 +124,6 @@ public class AppRoot {
 
         gameLogger.addHandler(consoleLogHandler);
         gameLogger.addHandler(fileLogHandler);
-
-        /*
-         * Load accounts, transactions and images from disk
-         */
-
-        accountStorage.loadAllAccounts();
-        accountStorage.loadAllTransactions();
-
         /*
          * Initialize JavaFX Stage
          */
@@ -143,5 +135,14 @@ public class AppRoot {
         stage.setMaximized(true);
         stage.setFullScreen(true);
         stage.show();
+
+        /*
+         * Load accounts, transactions and images from disk
+         */
+
+        new Thread(() -> {
+            accountStorage.loadAllAccounts();
+            accountStorage.loadAllTransactions();
+        }, "Data Load Thread").start();
     }
 }

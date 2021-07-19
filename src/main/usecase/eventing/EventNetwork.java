@@ -92,7 +92,9 @@ public class EventNetwork implements
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        snapshotListeners.forEach(l -> l.onGameUpdate(snapshot));
+        snapshotListeners.forEach(listener -> new Thread(
+            () -> listener.onGameUpdate(snapshot), "Snapshot Thread"
+        ).start());
     }
 
     @Override

@@ -27,11 +27,11 @@ public class ResourceLoader {
     private final static Map<Directory, File> directoryMap = new HashMap<>();
 
     public ResourceLoader() {
-        directoryMap.put(ACCOUNTS, new File("./accounts/"));
-        directoryMap.put(ACCOUNTS_CLOSED, new File("./accounts-closed/"));
-        directoryMap.put(DECKS, new File("./decks/"));
-        directoryMap.put(LOG, new File("./log/"));
-        directoryMap.put(TRANSACTIONS, new File("./transactions/"));
+        directoryMap.put(ACCOUNTS, new File("./app-data/accounts/"));
+        directoryMap.put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/"));
+        directoryMap.put(DECKS, new File("./app-data/decks/"));
+        directoryMap.put(LOG, new File("./app-data/log/"));
+        directoryMap.put(TRANSACTIONS, new File("./app-data/transactions/"));
 
         resourceMap.keySet().forEach(k -> {
             try {

@@ -1,9 +1,5 @@
-/accounts
-/accounts-closed
-/transactions
-/decks
+/app-data
 /target
-/log
 *.class
 .idea
 .swp

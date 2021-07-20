@@ -12,7 +12,7 @@ public class FileLogHandler extends Handler {
 
     @Override
     public void publish(LogRecord record) {
-        final File f = new File("./log/" + dateBasedLogFileName(now()));
+        final File f = new File("./app-data/log/" + dateBasedLogFileName(now()));
         appendToFile(f, String.format("%s: %s", record.getLevel(), record.getMessage()));
     }
 

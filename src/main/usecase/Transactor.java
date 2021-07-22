@@ -43,13 +43,15 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        final LocalDateTime timestamp = snapshot.getTimestamp();
+        if (workingTransactions.size() > 0) {
+            final LocalDateTime timestamp = snapshot.getTimestamp();
 
-        final Event<Collection<Transaction>> event = new Event<>(
-                key, timestamp, TRANSACTION_SERIES, workingTransactions
-        );
+            final Event<Collection<Transaction>> event = new Event<>(
+                    key, timestamp, TRANSACTION_SERIES, workingTransactions
+            );
 
-        eventNetwork.onTransactionsEvent(event);
+            eventNetwork.onTransactionsEvent(event);
+        }
     }
 
     @Override

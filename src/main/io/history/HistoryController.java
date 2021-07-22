@@ -1,5 +1,6 @@
 package main.io.history;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Axis;
@@ -119,6 +120,6 @@ public class HistoryController extends EventConnection implements Initializable,
         chart.getData().add(series);
 
         installTransactionTooltips(transactionDataMap);
-        chartHousing.add(chart, 0, 0);
+        Platform.runLater(() -> chartHousing.add(chart, 0, 0));
     }
 }

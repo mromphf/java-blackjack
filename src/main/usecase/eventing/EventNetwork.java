@@ -91,13 +91,6 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onGameUpdate(Snapshot snapshot) {
-        snapshotListeners.forEach(listener -> new Thread(
-            () -> listener.onGameUpdate(snapshot), "Snapshot Thread"
-        ).start());
-    }
-
-    @Override
     public Optional<Account> requestSelectedAccount(Predicate elm) {
         return accountResponders.get(elm).requestSelectedAccount(elm);
     }
@@ -105,6 +98,13 @@ public class EventNetwork implements
     @Override
     public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
         return transactionResponders.get(TRANSACTION).requestTransactionsByKey(accountKey);
+    }
+
+    @Override
+    public void onGameUpdate(Snapshot snapshot) {
+        snapshotListeners.forEach(listener -> new Thread(
+                () -> listener.onGameUpdate(snapshot), "Snapshot Thread"
+        ).start());
     }
 
     @Override
@@ -127,28 +127,36 @@ public class EventNetwork implements
     public void onActionEvent(Event<Action> event) {
         actionListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onActionEvent(event));
+                .forEach(listener -> new Thread(
+                        () -> listener.onActionEvent(event), "Action Event Thread"
+                ).start());
     }
 
     @Override
     public void onAccountEvent(Event<Account> event) {
         accountListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onAccountEvent(event));
+                .forEach(listener -> new Thread(
+                        () -> listener.onAccountEvent(event), "Account Event Thread"
+                ).start());
     }
 
     @Override
     public void onAccountsEvent(Event<Collection<Account>> event) {
         accountListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onAccountsEvent(event));
+                .forEach(listener -> new Thread(
+                        () -> listener.onAccountsEvent(event), "Accounts Event Thread"
+                ).start());
     }
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         transactionListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onTransactionEvent(event));
+                .forEach(listener -> new Thread(
+                        () -> listener.onTransactionEvent(event), "Transaction Event Thread"
+                ).start());
     }
 
     @Override

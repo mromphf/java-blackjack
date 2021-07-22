@@ -22,7 +22,8 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
+import static javafx.application.Platform.runLater;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
@@ -108,9 +109,11 @@ public class BetController extends EventConnection implements Initializable, Acc
         if (event.is(CURRENT_BALANCE)) {
             this.balance = event.getData().getBalance();
 
-            btnDeal.setDisable(bet > balance || bet <= 0);
-            lblBet.setText(format("$%s", bet));
-            lblBalance.setText(format("Balance: $%s", balance));
+            runLater(() -> {
+                btnDeal.setDisable(bet > balance || bet <= 0);
+                lblBet.setText(format("$%s", bet));
+                lblBalance.setText(format("Balance: $%s", balance));
+            });
         }
     }
 

@@ -98,7 +98,7 @@ public class AppRoot {
          */
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
-            add(selectionMemory); // Accounting needs to be added first since it holds the current account pointer
+            add(selectionMemory); // TODO: monitor this after switching to multi-threading.
             add(homeController);
             add(historyController);
             add(blackjackController);

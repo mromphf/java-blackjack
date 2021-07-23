@@ -12,8 +12,7 @@ import java.util.Stack;
 import java.util.UUID;
 
 import static main.domain.Action.*;
-import static main.domain.Deck.fresh;
-import static main.domain.Deck.shuffle;
+import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
@@ -72,7 +71,7 @@ public class Game extends EventConnection implements ActionListener, BetListener
             final Round currentRound = roundStack.peek();
 
             deck.clear();
-            deck.addAll(shuffle(fresh(maxCards)));
+            deck.addAll(freshlyShuffledDeck(numDecks));
             eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp()));
         }
     }

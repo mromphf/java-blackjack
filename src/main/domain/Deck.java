@@ -23,7 +23,11 @@ public class Deck {
         return result;
     }
 
-    public static Stack<Card> shuffle(List<Card> deck) {
+    public static Stack<Card> freshlyShuffledDeck(int numDecks) {
+        return shuffle(fresh(numDecks));
+    }
+
+    public static Stack<Card> shuffle(Stack<Card> deck) {
         Stack<Card> stack = new Stack<>();
         while(!deck.isEmpty()) {
             Random r = new Random();

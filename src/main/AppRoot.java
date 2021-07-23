@@ -28,8 +28,7 @@ import java.util.function.Function;
 import static java.lang.Integer.parseInt;
 import static java.lang.Thread.currentThread;
 import static java.util.UUID.randomUUID;
-import static main.domain.Deck.fresh;
-import static main.domain.Deck.shuffle;
+import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
@@ -56,7 +55,7 @@ public class AppRoot {
         final Properties config = memory.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
-        final Stack<Card> deck = deckName.equals("default") ? shuffle(fresh(numDecks)) : memory.loadDeck(deckName);
+        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : memory.loadDeck(deckName);
         final FileLogHandler fileLogHandler = new FileLogHandler();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();

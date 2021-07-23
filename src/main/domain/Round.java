@@ -118,7 +118,7 @@ public class Round {
 
     public void refillDeck() {
         record(LocalDateTime.now(), REFILL);
-        deck.addAll(shuffle(fresh(numDecks)));
+        deck.addAll(freshlyShuffledDeck(numDecks));
     }
 
     public Snapshot getSnapshot(LocalDateTime timestamp) {

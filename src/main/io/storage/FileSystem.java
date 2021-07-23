@@ -1,7 +1,5 @@
 package main.io.storage;
 
-import com.google.gson.Gson;
-import main.Config;
 import main.common.CsvUtil;
 import main.domain.Account;
 import main.domain.Card;
@@ -34,10 +32,11 @@ public class FileSystem implements Memory {
         }
     }
 
-    public Config loadConfig() {
+    public Properties loadConfig() {
         try {
-            final File configFile = new File(FileSystem.class.getResource("/config/config.json").getPath());
-            return new Gson().fromJson(fileToJson(configFile), Config.class);
+            final Properties properties = new Properties();
+            properties.load(FileSystem.class.getResourceAsStream("/config/dev.conf"));
+            return properties;
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             exit(1);

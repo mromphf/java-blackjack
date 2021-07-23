@@ -31,11 +31,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Thread.currentThread;
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
@@ -66,9 +68,9 @@ public class AppRoot {
 
         final ResourceLoader loader = new ResourceLoader();
         final FileSystem memory = new FileSystem(loader.getDirectoryMap());
-        final Config config = memory.loadConfig();
-        final String deckName = config.deckName;
-        final int numDecks = config.numDecks;
+        final Properties config = memory.loadConfig();
+        final String deckName = (String) config.get("game.deckName");
+        final int numDecks = parseInt((String) config.get("game.numDecks"));
         final Stack<Card> deck = deckName.equals("default") ? shuffle(fresh(numDecks)) : memory.loadDeck(deckName);
         final FileLogHandler fileLogHandler = new FileLogHandler();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();

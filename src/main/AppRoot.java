@@ -18,35 +18,20 @@ import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
 import main.io.storage.FileSystem;
-import main.usecase.Game;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
-import main.usecase.SelectionMemory;
-import main.usecase.TransactionMemory;
-import main.usecase.Transactor;
+import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Thread.currentThread;
+import static java.util.UUID.randomUUID;
 import static main.domain.Deck.fresh;
 import static main.domain.Deck.shuffle;
 import static main.domain.Evaluate.transactionEvaluators;
-import static main.usecase.Layout.BET;
-import static main.usecase.Layout.GAME;
-import static main.usecase.Layout.HISTORY;
-import static main.usecase.Layout.HOME;
-import static main.usecase.Layout.REGISTRATION;
+import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.TRANSACTION;
 
@@ -81,13 +66,13 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor(UUID.randomUUID(), evaluators);
-        final SelectionMemory selectionMemory = new SelectionMemory(UUID.randomUUID(), new TreeMap<>());
-        final Game game = new Game(UUID.randomUUID(), deck, numDecks);
-        final GameLogger gameLogger = new GameLogger(UUID.randomUUID(), "Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(UUID.randomUUID(), memory);
-        final LayoutManager layoutManager = new LayoutManager(UUID.randomUUID(), stage, scene, layoutMap);
-        final TransactionMemory transactionMemory = new TransactionMemory(UUID.randomUUID(), new TreeMap<>());
+        final Transactor transactor = new Transactor(randomUUID(), evaluators);
+        final SelectionMemory selectionMemory = new SelectionMemory(randomUUID(), new TreeMap<>());
+        final Game game = new Game(randomUUID(), deck, numDecks);
+        final GameLogger gameLogger = new GameLogger(randomUUID(), "Game Logger", null);
+        final AccountStorage accountStorage = new AccountStorage(randomUUID(), memory);
+        final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
+        final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 
         final HomeController homeController = (HomeController) loader.loadController(HOME);
         final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
@@ -113,7 +98,7 @@ public class AppRoot {
             add(game);
         }};
 
-        final EventNetwork eventNetwork = new EventNetwork(UUID.randomUUID(), eventConnections);
+        final EventNetwork eventNetwork = new EventNetwork(randomUUID(), eventConnections);
 
         eventNetwork.registerResponder(ACCOUNT_SELECTED, selectionMemory);
         eventNetwork.registerResponder(TRANSACTION, transactionMemory);

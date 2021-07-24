@@ -91,6 +91,7 @@ public class BetController extends EventConnection implements Initializable, Acc
     @FXML
     public void onQuit() {
         eventNetwork.onLayoutChangedTo(HOME, key);
+        prgDeck.setProgress(100f);
         bet = 0;
     }
 

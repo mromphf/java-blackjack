@@ -72,7 +72,6 @@ public class Game extends EventConnection implements ActionListener, BetListener
 
             deck.clear();
             deck.addAll(freshlyShuffledDeck(numDecks));
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp()));
         }
     }
 }

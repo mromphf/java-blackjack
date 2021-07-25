@@ -8,17 +8,10 @@ from uuid import UUID
 
 def compile_csv_files(csv_files):
     dictionaries = []
-    format = "%Y-%m-%d %H:%M:%S"
     for file in csv_files:
         with open(file, 'r') as csv_contents:
-            reader = DictReader(csv_contents)
-            for reader_line in reader:
-                dictionaries.append({
-                    "time": parser.parse(reader_line["time"]),
-                    "accountKey": UUID(reader_line["accountKey"]),
-                    "description": reader_line["description"],
-                    "amount": reader_line["amount"]
-                })
+            for csv_row in DictReader(csv_contents):
+                dictionaries.append({key:csv_row[key] for key in csv_row.keys()})
     return dictionaries
 
 

@@ -1,7 +1,7 @@
 /app-data
 /target
 *.class
+*.swp
 .idea
-.swp
 .DS_Store
 out

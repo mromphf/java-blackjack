@@ -4,15 +4,14 @@ import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public interface Memory {
     Stack<Card> loadDeck(String name);
-    Set<Account> loadAllAccounts();
-    List<Transaction> loadAllTransactions();
+    Set<Account> loadAllAccounts(Collection<UUID> closedKeys);
+    List<Transaction> loadAllTransactions(Collection<UUID> closedKeys);
+    Map<LocalDateTime, UUID> loadAllClosedAccountKeys();
     void saveTransaction(Transaction transaction);
     void saveTransactions(Collection<Transaction> transactions);
     void openAccount(Account account);

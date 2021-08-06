@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.lang.System.exit;
 import static java.util.Arrays.stream;
 import static main.common.CsvUtil.*;
@@ -47,7 +48,7 @@ public class FileSystem implements Memory {
     @Override
     public Stack<Card> loadDeck(String name) {
         try {
-            final File deckFile = new File(String.format("%s/%s.json", directories.get(DECKS), name));
+            final File deckFile = new File(format("%s/%s.json", directories.get(DECKS), name));
             return deckFromJson(fileToJson(deckFile));
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +64,7 @@ public class FileSystem implements Memory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final File file = inferFile(TRANSACTIONS, transaction.getTime());
+        final File file = inferTransactionsFile(transaction.getAccountKey());
         appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));
     }
 
@@ -75,42 +76,37 @@ public class FileSystem implements Memory {
 
     @Override
     public void closeAccount(Account account) {
-        final File file = inferFile(ACCOUNTS_CLOSED, account.getCreated());
+        final File file = directories.get(ACCOUNTS_CLOSED);
         appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
     }
 
+    @Override
     public Map<LocalDateTime, UUID> loadAllClosedAccountKeys() {
         final File accountsClosedDir = directories.get(ACCOUNTS_CLOSED);
 
-        return stream(allFilesInDir(accountsClosedDir))
-                .map(FileFunctions::readCsvLines)
-                .flatMap(Collection::stream)
+        return readCsvLines(accountsClosedDir).stream()
                 .map(line -> line.split(","))
                 .map(CsvUtil::accountClosuresFromCsvRow)
                 .collect(Collectors.toMap(SortedMap::firstKey, v -> v.get(v.firstKey())));
     }
 
     @Override
-    public Set<Account> loadAllAccounts() {
-        final List<Transaction> transactions = loadAllTransactions();
+    public Set<Account> loadAllAccounts(Collection<UUID> closedAccountKeys) {
         final File accountsDir = directories.get(ACCOUNTS);
-        final Set<UUID> closedAccountKeys = new HashSet<>(loadAllClosedAccountKeys().values());
 
-        return stream(allFilesInDir(accountsDir))
-                .map(FileFunctions::readCsvLines)
-                .flatMap(Collection::stream)
+        return readCsvLines(accountsDir).stream()
                 .map(line -> line.split(","))
                 .map(CsvUtil::accountFromCsvRow)
                 .filter(act -> !closedAccountKeys.contains(act.getKey()))
-                .map(act -> act.updateBalance(transactions))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public List<Transaction> loadAllTransactions() {
+    public List<Transaction> loadAllTransactions(Collection<UUID> closedAccountKeys) {
         final File transactionsDir = directories.get(TRANSACTIONS);
 
         return stream(allFilesInDir(transactionsDir))
+                .filter(f -> !closedAccountKeys.contains(uuidFromCsvFileName(f)))
                 .map(FileFunctions::readCsvLines)
                 .flatMap(Collection::stream)
                 .map(line -> line.split(","))
@@ -118,7 +114,11 @@ public class FileSystem implements Memory {
                 .collect(Collectors.toList());
     }
 
-    private File inferFile(Directory directory, LocalDateTime timestamp) {
-        return new File(directories.get(directory).getPath() + "/" + dateBasedCsvFileName(timestamp));
+    private UUID uuidFromCsvFileName(File f) {
+        return UUID.fromString(f.getName().split("\\.")[0]);
+    }
+
+    private File inferTransactionsFile(UUID key) {
+        return new File(format("%s/%s.csv", directories.get(TRANSACTIONS).getPath(), key));
     }
 }

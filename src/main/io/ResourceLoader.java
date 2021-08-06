@@ -27,11 +27,12 @@ public class ResourceLoader {
     private final static Map<Directory, File> directoryMap = new HashMap<>();
 
     public ResourceLoader() {
-        directoryMap.put(ACCOUNTS, new File("./app-data/accounts/"));
-        directoryMap.put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/"));
+        //TODO: Fix the csv files being in here -- Aug 5 2021
+        directoryMap.put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
+        directoryMap.put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
         directoryMap.put(DECKS, new File("./app-data/decks/"));
         directoryMap.put(LOG, new File("./app-data/log/"));
-        directoryMap.put(TRANSACTIONS, new File("./app-data/transactions/"));
+        directoryMap.put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
 
         resourceMap.keySet().forEach(k -> {
             try {

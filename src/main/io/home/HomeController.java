@@ -8,11 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
+import main.domain.Transaction;
 import main.usecase.Layout;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventConnection;
-import main.usecase.eventing.LayoutListener;
+import main.usecase.eventing.*;
 
 import java.net.URL;
 import java.util.*;

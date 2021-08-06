@@ -69,8 +69,8 @@ public class FileSystem implements Memory {
     }
 
     @Override
-    public void openAccount(Account account) {
-        final File file = inferFile(ACCOUNTS, account.getCreated());
+    public void openNewAccount(Account account) {
+        final File file = directories.get(ACCOUNTS);
         appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
     }
 

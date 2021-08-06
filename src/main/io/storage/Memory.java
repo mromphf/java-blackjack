@@ -14,6 +14,6 @@ public interface Memory {
     Map<LocalDateTime, UUID> loadAllClosedAccountKeys();
     void saveTransaction(Transaction transaction);
     void saveTransactions(Collection<Transaction> transactions);
-    void openAccount(Account account);
+    void openNewAccount(Account account);
     void closeAccount(Account account);
 }

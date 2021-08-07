@@ -29,16 +29,16 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     public void loadAllAccounts() {
         final Map<LocalDateTime, UUID> closures = memory.loadAllClosedAccountKeys();
-        final Collection<Transaction> allTransactions = memory.loadAllTransactions(closures.values());
+        final Collection<Account> accounts = memory.loadAllAccounts(closures.values());
+
+        final Collection<Transaction> allTransactions = memory.loadAllTransactions(accounts);
         final Map<UUID, List<Transaction>> grouped = allTransactions.stream()
                 .collect(groupingBy(Transaction::getAccountKey));
 
-        final Collection<Account> accounts = memory.loadAllAccounts(closures.values()).stream()
-                .map(a -> applyTransactions(a, grouped))
-                .collect(Collectors.toSet());
-
         final Event<Collection<Transaction>> transEvent = new Event<>(key, now(), TRANSACTIONS_LOADED, allTransactions);
-        final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts);
+        final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts.stream()
+                .map(a -> applyTransactions(a, grouped))
+                .collect(Collectors.toList()));
 
         eventNetwork.onAccountsEvent(event);
         eventNetwork.onTransactionsEvent(transEvent);

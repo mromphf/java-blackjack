@@ -24,6 +24,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
+import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.io.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
@@ -60,9 +61,12 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @FXML
     private Button btnHistory;
 
+    private final static String TOP_SCROLLER = "top";
+    private final static String BOTTOM_SCROLLER = "bottom";
+
     private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
-    private final Collection<HomeScreenAnimation> animations = new ArrayList<>();
+    private final Map<String, HomeScreenAnimation> animations = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,8 +74,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
         final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        animations.add(new HomeScreenAnimation(topScrollerGraphics, true));
-        animations.add(new HomeScreenAnimation(bottomScrollerGraphics, false));
+        animations.put(TOP_SCROLLER, new HomeScreenAnimation(topScrollerGraphics, true));
+        animations.put(BOTTOM_SCROLLER, new HomeScreenAnimation(bottomScrollerGraphics, false));
 
         cvsTopScroller.setHeight(40);
         cvsTopScroller.setWidth(840);
@@ -126,6 +130,24 @@ public class HomeController extends EventConnection implements Initializable, Ac
         eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HISTORY));
     }
 
+    @FXML
+    public void onClickTopScroller(MouseEvent event) {
+        animations.get(TOP_SCROLLER).switchDirection();
+
+        if (event.getButton() == SECONDARY) {
+            animations.get(BOTTOM_SCROLLER).switchDirection();
+        }
+    }
+
+    @FXML
+    public void onClickBottomScroller(MouseEvent event) {
+        animations.get(BOTTOM_SCROLLER).switchDirection();
+
+        if (event.getButton() == SECONDARY) {
+            animations.get(TOP_SCROLLER).switchDirection();
+        }
+    }
+
     @Override
     public UUID getKey() {
         return key;
@@ -166,9 +188,10 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     private void toggleAnimationsRunning(boolean isRunning) {
         if (isRunning) {
-            animations.forEach(animation -> new Thread(animation::start, "Home Screen Animation Thread").start());
+            animations.values()
+                    .forEach(animation -> new Thread(animation::start, "Home Screen Animation Thread").start());
         } else {
-            animations.forEach(HomeScreenAnimation::stop);
+            animations.values().forEach(HomeScreenAnimation::stop);
         }
     }
 

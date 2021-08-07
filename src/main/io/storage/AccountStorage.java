@@ -44,10 +44,6 @@ public class AccountStorage extends EventConnection implements AccountListener, 
         eventNetwork.onTransactionsEvent(transEvent);
     }
 
-    public void loadAllTransactions() {
-       // This method and its usages can be deleted -- Aug 6 2021
-    }
-
     @Override
     public UUID getKey() {
         return key;

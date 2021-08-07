@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.lang.System.exit;
-import static java.util.Arrays.stream;
 import static main.common.CsvUtil.*;
 import static main.common.JsonUtil.deckFromJson;
 import static main.io.storage.Directory.*;
-import static main.io.storage.FileFunctions.*;
+import static main.io.storage.FileFunctions.fileToJson;
+import static main.io.storage.FileFunctions.readCsvLines;
 
 public class FileSystem implements Memory {
 
@@ -97,16 +97,16 @@ public class FileSystem implements Memory {
         return readCsvLines(accountsDir).stream()
                 .map(line -> line.split(","))
                 .map(CsvUtil::accountFromCsvRow)
-                .filter(act -> !closedAccountKeys.contains(act.getKey()))
+                .filter(account -> !closedAccountKeys.contains(account.getKey()))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public List<Transaction> loadAllTransactions(Collection<UUID> closedAccountKeys) {
-        final File transactionsDir = directories.get(TRANSACTIONS);
-
-        return stream(allFilesInDir(transactionsDir))
-                .filter(f -> !closedAccountKeys.contains(uuidFromCsvFileName(f)))
+    public List<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
+        return openAccounts.stream()
+                .map(Account::getKey)
+                .map(key -> format("%s/%s.csv", directories.get(TRANSACTIONS), key))
+                .map(File::new)
                 .map(FileFunctions::readCsvLines)
                 .flatMap(Collection::stream)
                 .map(line -> line.split(","))

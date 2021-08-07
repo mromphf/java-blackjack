@@ -22,6 +22,7 @@ import java.util.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
+import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
@@ -158,7 +159,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (event.is(CURRENT_BALANCE)) {
             final Account account = event.getData();
             accountMap.put(account.getKey(), account);
-            tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
         }
     }
 

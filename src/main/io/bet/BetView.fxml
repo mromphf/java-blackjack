@@ -7,6 +7,7 @@
 
 <?import java.net.URL?>
 
+<?import javafx.scene.canvas.Canvas?>
 <GridPane fx:controller="main.io.bet.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" vgap="50" styleClass="background">
 
@@ -33,7 +34,15 @@
         </Label>
     </GridPane>
 
-    <GridPane styleClass="lower-hud" GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="10" vgap="10">
+    <GridPane
+            GridPane.rowIndex="2"
+            GridPane.columnIndex="0"
+            alignment="CENTER"
+            styleClass="scrolling-animation">
+        <Canvas fx:id="cvsScroller" onMouseClicked="#onClickScroller" height="40" width="450"/>
+    </GridPane>
+
+    <GridPane styleClass="lower-hud" GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10" vgap="10">
         <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="80" minHeight="80" styleClass="btn-chip,btn-grey">
             1
             <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
@@ -60,7 +69,7 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
+    <GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
         <Button fx:id="btnDeal" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
             Bet
         </Button>
@@ -72,7 +81,7 @@
         </Button>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
+    <GridPane GridPane.rowIndex="5" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
         <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
             Balance: $0
             <font>

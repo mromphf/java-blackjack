@@ -114,10 +114,6 @@ public class FileSystem implements Memory {
                 .collect(Collectors.toList());
     }
 
-    private UUID uuidFromCsvFileName(File f) {
-        return UUID.fromString(f.getName().split("\\.")[0]);
-    }
-
     private File inferTransactionsFile(UUID key) {
         return new File(format("%s/%s.csv", directories.get(TRANSACTIONS).getPath(), key));
     }

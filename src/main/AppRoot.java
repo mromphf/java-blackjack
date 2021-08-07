@@ -122,13 +122,7 @@ public class AppRoot {
         stage.setFullScreen(true);
         stage.show();
 
-        /*
-         * Load accounts, transactions and images from disk
-         */
-
-        new Thread(() -> {
-            accountStorage.loadAllAccounts();
-            accountStorage.loadAllTransactions();
-        }, "Data Load Thread").start();
+        // Load accounts and transactions from disk
+        new Thread(accountStorage::loadAllAccounts, "Data Load Thread").start();
     }
 }

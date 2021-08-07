@@ -23,7 +23,7 @@
             GridPane.rowIndex="0"
             GridPane.columnIndex="0"
             alignment="CENTER"
-            style="padding: 20 0 0 0">
+            style="-fx-padding: 50 0 0 0">
         <Canvas fx:id="cvsTopScroller"/>
     </GridPane>
 
@@ -70,7 +70,15 @@
         </ImageView>
     </GridPane>
 
-    <GridPane GridPane.rowIndex="2" GridPane.columnIndex="0" hgap="10">
+    <GridPane
+            GridPane.rowIndex="2"
+            GridPane.columnIndex="0"
+            alignment="CENTER"
+            style="-fx-padding: 0 0 20 0">
+        <Canvas fx:id="cvsBottomScroller"/>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
         <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
             New
             <effect>
@@ -86,7 +94,7 @@
         </Button>
     </GridPane>
 
-    <TableView fx:id="tblAccounts" GridPane.rowIndex="3" GridPane.columnIndex="0" minHeight="600" minWidth="800"
+    <TableView fx:id="tblAccounts" GridPane.rowIndex="4" GridPane.columnIndex="0" minHeight="600" minWidth="800"
                onMouseClicked="#onClickList">
         <columns>
             <TableColumn prefWidth="270">
@@ -113,7 +121,7 @@
         </effect>
     </TableView>
 
-    <GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" hgap="10">
+    <GridPane GridPane.rowIndex="5" GridPane.columnIndex="0" hgap="10">
         <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100"
                 minHeight="50" onAction="#onPlay">
             Play

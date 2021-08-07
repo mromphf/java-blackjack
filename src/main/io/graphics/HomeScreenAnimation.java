@@ -14,12 +14,13 @@ public class HomeScreenAnimation extends AnimationTimer {
     private final GraphicsContext graphics;
     private final Collection<MovingImage> topImages = new ArrayList<>();
 
-    public HomeScreenAnimation(GraphicsContext graphics) {
+    public HomeScreenAnimation(GraphicsContext graphics, boolean isMovingLeft) {
         this.graphics = graphics;
+
         final Image[] images = {symClubs(), symHearts(), symSpades(), symDiamonds()};
 
-        for (int i = 0, x = 0, imageIndex = 0; i < 19; i++, x += 50) {
-            topImages.add(new MovingImage(images[imageIndex], 1, true, 50, 50, x, 0));
+        for (int i = 0, x = 0, imageIndex = 0; i < 23; i++, x += 40) {
+            topImages.add(new MovingImage(images[imageIndex], 1, isMovingLeft, 40, 40, x, 0));
 
             imageIndex++;
 
@@ -31,7 +32,7 @@ public class HomeScreenAnimation extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        graphics.clearRect(0, 0, 850, 50);
+        graphics.clearRect(0, 0, 840, 40);
         topImages.forEach(MovingImage::move);
         topImages.forEach(img -> img.draw(graphics));
     }

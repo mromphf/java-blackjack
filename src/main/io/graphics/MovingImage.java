@@ -32,7 +32,9 @@ public class MovingImage {
         }
 
         if (isMovingLeft && x + width < 0) {
-            x = 900;
+            x = 880;
+        } else if (x - width >= 840){
+            x = -40;
         }
     }
 

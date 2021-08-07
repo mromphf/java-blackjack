@@ -26,9 +26,7 @@
 }
 
 .header-panel {
-    -fx-border-color: red;
-    -fx-border-size: 1px;
-    -fx-padding: 30 0 60 0;
+    -fx-padding: 2 0 2 0;
 }
 
 .header {

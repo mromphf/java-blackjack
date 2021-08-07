@@ -9,8 +9,8 @@ import java.util.*;
 
 public interface Memory {
     Stack<Card> loadDeck(String name);
-    Set<Account> loadAllAccounts(Collection<UUID> closedKeys);
-    List<Transaction> loadAllTransactions(Collection<UUID> closedKeys);
+    Collection<Account> loadAllAccounts(Collection<UUID> closedKeys);
+    Collection<Transaction> loadAllTransactions(Collection<UUID> closedKeys);
     Map<LocalDateTime, UUID> loadAllClosedAccountKeys();
     void saveTransaction(Transaction transaction);
     void saveTransactions(Collection<Transaction> transactions);

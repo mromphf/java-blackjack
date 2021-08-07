@@ -24,7 +24,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
-import static javafx.scene.paint.Color.RED;
 import static main.io.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
@@ -33,6 +32,9 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     Canvas cvsTopScroller;
+
+    @FXML
+    Canvas cvsBottomScroller;
 
     @FXML
     public ImageView img1;
@@ -60,17 +62,22 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
-    private HomeScreenAnimation animation;
+    private final Collection<HomeScreenAnimation> animations = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
-        final GraphicsContext graphics = cvsTopScroller.getGraphicsContext2D();
+        final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
+        final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        this.animation = new HomeScreenAnimation(graphics);
+        animations.add(new HomeScreenAnimation(topScrollerGraphics, true));
+        animations.add(new HomeScreenAnimation(bottomScrollerGraphics, false));
 
-        cvsTopScroller.setHeight(50);
-        cvsTopScroller.setWidth(850);
+        cvsTopScroller.setHeight(40);
+        cvsTopScroller.setWidth(840);
+        cvsBottomScroller.setHeight(40);
+        cvsBottomScroller.setWidth(840);
+
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
         btnDelete.setOnAction(handler);
         img1.imageProperty().setValue(symSpades());
@@ -78,10 +85,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         img3.imageProperty().setValue(symHearts());
         img4.imageProperty().setValue(symClubs());
 
-        graphics.setStroke(RED);
-        graphics.strokeRect(0, 0, 850, 50);
-
-        new Thread(animation::start, "Home Screen Animation Thread").start();
+        toggleAnimationsRunning(true);
     }
 
     @FXML
@@ -151,12 +155,20 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @Override
     public void onLayoutEvent(Event<Layout> event) {
         if (event.is(LAYOUT_CHANGED) && event.getData() == HOME || event.getData() == BACK) {
-            animation.start();
+            toggleAnimationsRunning(true);
             btnPlay.setDisable(true);
             btnDelete.setDisable(true);
             btnHistory.setDisable(true);
         } else if (event.is(LAYOUT_CHANGED) && event.getData() != HOME) {
-            animation.stop();
+            toggleAnimationsRunning(false);
+        }
+    }
+
+    private void toggleAnimationsRunning(boolean isRunning) {
+        if (isRunning) {
+            animations.forEach(animation -> new Thread(animation::start, "Home Screen Animation Thread").start());
+        } else {
+            animations.forEach(HomeScreenAnimation::stop);
         }
     }
 

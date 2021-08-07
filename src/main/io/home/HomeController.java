@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,11 +21,15 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
+import static javafx.scene.paint.Color.RED;
 import static main.io.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
+
+    @FXML
+    Canvas cvsTopScroller;
 
     @FXML
     public ImageView img1;
@@ -55,7 +61,10 @@ public class HomeController extends EventConnection implements Initializable, Ac
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
+        final GraphicsContext graphics = cvsTopScroller.getGraphicsContext2D();
 
+        cvsTopScroller.setHeight(50);
+        cvsTopScroller.setWidth(850);
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
         btnDelete.setOnAction(handler);
         img1.imageProperty().setValue(symSpades());
@@ -63,6 +72,12 @@ public class HomeController extends EventConnection implements Initializable, Ac
         img3.imageProperty().setValue(symHearts());
         img4.imageProperty().setValue(symClubs());
 
+        graphics.setStroke(RED);
+        graphics.strokeRect(0, 0, 850, 50);
+        graphics.drawImage(symClubs(), 0, 0, 50, 50);
+        graphics.drawImage(symHearts(), 50, 0, 50, 50);
+        graphics.drawImage(symSpades(), 100, 0, 50, 50);
+        graphics.drawImage(symDiamonds(), 150, 0, 50, 50);
     }
 
     @FXML

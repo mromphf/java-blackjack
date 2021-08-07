@@ -10,9 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
-import main.domain.Transaction;
+import main.io.graphics.HomeScreenAnimation;
 import main.usecase.Layout;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.util.*;
@@ -57,11 +60,14 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
+    private HomeScreenAnimation animation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
         final GraphicsContext graphics = cvsTopScroller.getGraphicsContext2D();
+
+        this.animation = new HomeScreenAnimation(graphics);
 
         cvsTopScroller.setHeight(50);
         cvsTopScroller.setWidth(850);
@@ -74,10 +80,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
         graphics.setStroke(RED);
         graphics.strokeRect(0, 0, 850, 50);
-        graphics.drawImage(symClubs(), 0, 0, 50, 50);
-        graphics.drawImage(symHearts(), 50, 0, 50, 50);
-        graphics.drawImage(symSpades(), 100, 0, 50, 50);
-        graphics.drawImage(symDiamonds(), 150, 0, 50, 50);
+
+        new Thread(animation::start, "Home Screen Animation Thread").start();
     }
 
     @FXML
@@ -146,10 +150,13 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME) {
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME || event.getData() == BACK) {
+            animation.start();
             btnPlay.setDisable(true);
             btnDelete.setDisable(true);
             btnHistory.setDisable(true);
+        } else if (event.is(LAYOUT_CHANGED) && event.getData() != HOME) {
+            animation.stop();
         }
     }
 

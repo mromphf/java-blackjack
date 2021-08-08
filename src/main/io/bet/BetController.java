@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
-import main.io.graphics.ScrollingImageReelAnimation;
+import main.io.graphics.ImageReelAnimation;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
@@ -65,7 +65,7 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     private final static int MAX_BET = 500;
     private final UUID key = randomUUID();
-    private ScrollingImageReelAnimation animation;
+    private ImageReelAnimation animation;
     private int bet = 0;
     private int balance = 0;
 
@@ -81,7 +81,7 @@ public class BetController extends EventConnection implements Initializable, Acc
         btnBet25.setOnMouseClicked(event -> onBet(event, 25));
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
 
-        animation = new ScrollingImageReelAnimation(graphics, true);
+        animation = new ImageReelAnimation(graphics, true);
 
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }

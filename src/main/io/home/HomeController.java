@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.domain.Account;
-import main.io.graphics.ScrollingImageReelAnimation;
+import main.io.graphics.ImageReelAnimation;
 import main.usecase.Layout;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
@@ -67,7 +67,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
-    private final Map<String, ScrollingImageReelAnimation> animations = new HashMap<>();
+    private final Map<String, ImageReelAnimation> animations = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,8 +75,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
         final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        animations.put(TOP_SCROLLER, new ScrollingImageReelAnimation(topScrollerGraphics, true));
-        animations.put(BOTTOM_SCROLLER, new ScrollingImageReelAnimation(bottomScrollerGraphics, false));
+        animations.put(TOP_SCROLLER, new ImageReelAnimation(topScrollerGraphics, true));
+        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(bottomScrollerGraphics, false));
 
         cvsTopScroller.setHeight(40);
         cvsTopScroller.setWidth(840);
@@ -192,7 +192,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
             animations.values()
                     .forEach(animation -> new Thread(animation::start, "Home Screen Animation Thread").start());
         } else {
-            animations.values().forEach(ScrollingImageReelAnimation::stop);
+            animations.values().forEach(ImageReelAnimation::stop);
         }
     }
 

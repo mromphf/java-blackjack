@@ -6,16 +6,21 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import main.io.graphics.OpeningHandsAnimation;
 
 import java.util.List;
 import java.util.Map;
 
+import static javafx.scene.paint.Color.*;
 import static main.io.blackjack.ImageKey.DEALER_CARDS;
 import static main.io.blackjack.ImageKey.PLAYER_CARDS;
 
 public class TableDisplay extends Canvas {
 
     private final static int TEXT_OFFSET = 50;
+
+    private final int DEALER_PLANE;
+    private final int PLAYER_PLANE;
 
     private final int HOR_CENTER;
     private final int VER_CENTER;
@@ -29,28 +34,41 @@ public class TableDisplay extends Canvas {
         final Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
         setHeight((int) screen.getHeight() * 0.6);
         setWidth((int) screen.getWidth());
+
+        context.setStroke(RED);
+
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;
         CARD_HEIGHT = (int) (screen.getHeight() * 0.175);
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
         GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
         BOTTOM = (int) getHeight();
+
+        DEALER_PLANE = 100;
+        PLAYER_PLANE = VER_CENTER + 110;
     }
 
     public void reset() {
         context.clearRect(0, 0, getWidth(), getHeight());
-        context.setFill(Color.valueOf("#228b22"));
+        context.setFill(valueOf("#228b22"));
         context.fillRect(0, 0, getWidth(), getHeight());
     }
 
     public void drawScores(int dealerScore, int playerScore) {
-        drawLabel(String.format("Dealer: %s", dealerScore), 100);
-        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 110);
+        drawLabel(String.format("Dealer: %s", dealerScore), DEALER_PLANE);
+        drawLabel(String.format("You: %s", playerScore), PLAYER_PLANE);
     }
 
     public void drawCards(Map<ImageKey, List<Image>> imageMap) {
-        drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 110);
+        drawLineOfCards(imageMap.get(DEALER_CARDS), DEALER_PLANE);
+        drawLineOfCards(imageMap.get(PLAYER_CARDS), PLAYER_PLANE);
+        context.strokeRect(0, 0, getWidth(), getHeight());
+    }
+
+    public void drawOpeningDealAnimation(Map<ImageKey, List<Image>> imageMap) {
+        final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, imageMap);
+
+        animation.start();
     }
 
     public void drawHandsToPlay(List<List<Image>> cards) {
@@ -69,7 +87,7 @@ public class TableDisplay extends Canvas {
     private void drawLabel(String label, int y) {
         final Font f = new Font("Arial", 30);
         context.setFont(f);
-        context.setFill(Color.WHITE);
+        context.setFill(WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
     }
 

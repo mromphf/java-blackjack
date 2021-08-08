@@ -189,7 +189,8 @@ public class BlackjackController extends EventConnection implements Initializabl
         lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
         tableDisplay.reset();
         tableDisplay.drawScores(concealedScore(snapshot.getDealerHand()), score(snapshot.getPlayerHand()));
-        tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.getDealerHand(), snapshot.getPlayerHand()));
+        //tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.getDealerHand(), snapshot.getPlayerHand()));
+        tableDisplay.drawOpeningDealAnimation(ImageMap.ofConcealed(snapshot.getDealerHand(), snapshot.getPlayerHand()));
         tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
     }
 }

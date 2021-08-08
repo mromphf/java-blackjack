@@ -15,7 +15,6 @@ public class TravelingImage {
 
     private double y;
     private double x;
-    private boolean isInFlight = false;
 
     public TravelingImage(Image img, Rectangle2D rectangle, Point2D destination, float velocity) {
         this.destination = destination;
@@ -23,40 +22,33 @@ public class TravelingImage {
         this.velocity = velocity;
         this.width = rectangle.getWidth();
         this.height = rectangle.getHeight();
-        this.x = x;
-        this.y = y;
-    }
-
-    public void startMoving() {
-        isInFlight = true;
-    }
-
-    public void stopMoving() {
-        isInFlight = false;
+        this.x = rectangle.getMinX();
+        this.y = rectangle.getMaxY();
     }
 
     public void move() {
-        final Point2D loc = new Point2D(x, y);
+        if (!hasReachedDestination()) {
+            final Point2D loc = new Point2D(x, y);
+            final Point2D nextLocation = nextLocation(loc, destination);
 
-        final double distance = loc.distance(destination);
-
-        final Point2D nextLocation = nextLocation(loc, destination);
-
-        x = nextLocation.getX();
-        y = nextLocation.getY();
+            x = nextLocation.getX();
+            y = nextLocation.getY();
+        }
     }
 
-    public Point2D nextLocation(Point2D p1, Point2D p2) {
-        return new Point2D(
-                p1.getX() + (p2.getX() - p1.getX()) * 0.01,
-                p2.getY() + (p2.getY() - p1.getY()) * 0.01
-        );
-    };
+    public boolean hasReachedDestination() {
+        return x == destination.getX() &&
+               y == destination.getY();
+    }
 
-    public Point2D makeMeAwesome(double x, double y) {
+    public Point2D nextLocation(Point2D src, Point2D dest) {
+        if (src.distance(dest) < 0.1)
+            return dest;
+
         return new Point2D(
-                x + (this.x - x) / 2.0,
-                y + (this.y - y) / 2.0);
+                src.getX() + ((dest.getX() - src.getX()) * (velocity * 0.1)),
+                src.getY() + ((dest.getY() - src.getY()) * (velocity * 0.1))
+        );
     }
 
     public void draw(GraphicsContext graphics) {

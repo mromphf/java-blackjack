@@ -27,7 +27,7 @@ public class ScrollingImageReelAnimation extends AnimationTimer {
 
             imageIndex++;
 
-            if (imageIndex >= 4) {
+            if (imageIndex >= images.length) {
                 imageIndex = 0;
             }
         }

@@ -1,6 +1,7 @@
 package main.io.graphics;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -19,11 +20,11 @@ public class ImageReelAnimation extends AnimationTimer {
 
         final Image[] images = {symClubs(), symHearts(), symSpades(), symDiamonds()};
 
+        // Assemble the image reel
         for (int i = 0, x = 0, imageIndex = 0; i < 23; i++, x += 40) {
-            final MovingImage img = new MovingImage(
-                    images[imageIndex], 1, isMovingLeft, 40, 40, x, 0);
+            final Rectangle2D rectangle = new Rectangle2D(x, 0, 40, 40);
 
-            this.images.add(img);
+            this.images.add(new MovingImage(images[imageIndex], rectangle, 1, isMovingLeft));
 
             imageIndex++;
 

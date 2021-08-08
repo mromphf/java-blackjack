@@ -9,12 +9,12 @@ import java.util.Collection;
 
 import static main.io.blackjack.ImageMap.*;
 
-public class ScrollingImageReelAnimation extends AnimationTimer {
+public class ImageReelAnimation extends AnimationTimer {
 
     private final GraphicsContext graphics;
     private final Collection<MovingImage> images = new ArrayList<>();
 
-    public ScrollingImageReelAnimation(GraphicsContext graphics, boolean isMovingLeft) {
+    public ImageReelAnimation(GraphicsContext graphics, boolean isMovingLeft) {
         this.graphics = graphics;
 
         final Image[] images = {symClubs(), symHearts(), symSpades(), symDiamonds()};

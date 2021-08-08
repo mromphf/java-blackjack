@@ -1,27 +1,28 @@
 package main.io.graphics;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class MovingImage {
 
     private final Image img;
-    private final float velocity;
-    private final float width;
-    private final float height;
-    private final float y;
+    private final double velocity;
+    private final double width;
+    private final double height;
+    private final double y;
 
     private boolean isMovingLeft;
-    private float x;
+    private double x;
 
-    public MovingImage(Image img, float velocity, boolean isMovingLeft, float height, float width, float x, float y) {
+    public MovingImage(Image img, Rectangle2D rectangle, float velocity, boolean isMovingLeft) {
         this.img = img;
-        this.x = x;
-        this.y = y;
         this.velocity = velocity;
         this.isMovingLeft = isMovingLeft;
-        this.height = height;
-        this.width = width;
+        this.x = rectangle.getMinX();
+        this.y = rectangle.getMinY();
+        this.height = rectangle.getHeight();
+        this.width = rectangle.getWidth();
     }
 
     public void move() {

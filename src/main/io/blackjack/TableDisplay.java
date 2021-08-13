@@ -1,13 +1,17 @@
 package main.io.blackjack;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import main.io.graphics.AnimationCallback;
 import main.io.graphics.OpeningHandsAnimation;
+import main.io.graphics.TravelingImage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +70,37 @@ public class TableDisplay extends Canvas {
     }
 
     public void drawOpeningDealAnimation(Map<ImageKey, List<Image>> imageMap) {
-        final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, imageMap);
+        final Rectangle2D rect = new Rectangle2D(850, -100, 120, 150);
+
+        final Point2D dealerDestination1 = new Point2D(750, 100);
+        final Point2D dealerDestination2 = new Point2D(1100, 100);
+        final Point2D playerDestination1 = new Point2D(750, 400);
+        final Point2D playerDestination2 = new Point2D(1100, 400);
+
+        final TravelingImage img1 = new TravelingImage(imageMap.get(PLAYER_CARDS).get(0), rect, playerDestination1,1);
+        final TravelingImage img2 = new TravelingImage(imageMap.get(DEALER_CARDS).get(0), rect, dealerDestination1,1);
+        final TravelingImage img3 = new TravelingImage(imageMap.get(PLAYER_CARDS).get(1), rect, playerDestination2,1);
+        final TravelingImage img4 = new TravelingImage(imageMap.get(DEALER_CARDS).get(1), rect, dealerDestination2,1);
+
+        final AnimationCallback callback3 = (existingImages) -> {
+            final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, img4, null, existingImages);
+
+            animation.start();
+        };
+
+        final AnimationCallback callback2 = (existingImages) -> {
+            final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, img3, callback3, existingImages);
+
+            animation.start();
+        };
+
+        final AnimationCallback callback1 = (existingImages) -> {
+            final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, img2, callback2, existingImages);
+
+            animation.start();
+        };
+
+        final OpeningHandsAnimation animation = new OpeningHandsAnimation(context, img1, callback1, new ArrayList<>());
 
         animation.start();
     }

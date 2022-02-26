@@ -20,18 +20,20 @@ import static main.usecase.eventing.Predicate.*;
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
     private final UUID key;
-    private final Memory memory;
+    private final TransactionMemory transactionMemory;
+    private final AccountMemory accountMemory;
 
-    public AccountStorage(UUID key, Memory memory) {
+    public AccountStorage(UUID key, TransactionMemory transactionMemory, AccountMemory accountMemory) {
         this.key = key;
-        this.memory = memory;
+        this.transactionMemory = transactionMemory;
+        this.accountMemory = accountMemory;
     }
 
     public void loadAllAccounts() {
-        final Map<LocalDateTime, UUID> closures = memory.loadAllClosedAccountKeys();
-        final Collection<Account> accounts = memory.loadAllAccounts(closures.values());
+        final Map<LocalDateTime, UUID> closures = transactionMemory.loadAllClosedAccountKeys();
+        final Collection<Account> accounts = accountMemory.loadAllAccounts(closures.values());
 
-        final Collection<Transaction> allTransactions = memory.loadAllTransactions(accounts);
+        final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(accounts);
         final Map<UUID, List<Transaction>> grouped = allTransactions.stream()
                 .collect(groupingBy(Transaction::getAccountKey));
 
@@ -52,23 +54,23 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
         if (event.is(TRANSACTION)) {
-            memory.saveTransaction(event.getData());
+            transactionMemory.saveTransaction(event.getData());
         }
     }
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
         if (event.is(TRANSACTION_SERIES)) {
-            memory.saveTransactions(event.getData());
+            transactionMemory.saveTransactions(event.getData());
         }
     }
 
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED)) {
-            memory.openNewAccount(event.getData());
+            accountMemory.openNewAccount(event.getData());
         } else if (event.is(ACCOUNT_DELETED)) {
-            memory.closeAccount(event.getData());
+            accountMemory.closeAccount(event.getData());
         }
     }
 

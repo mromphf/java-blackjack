@@ -2,14 +2,12 @@ package main.io.storage;
 
 import main.domain.Account;
 import main.domain.Transaction;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
-import main.usecase.eventing.*;
+import main.usecase.eventing.TransactionListener;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
@@ -30,8 +28,7 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     public void loadAllAccounts() {
-        final Map<LocalDateTime, UUID> closures = transactionMemory.loadAllClosedAccountKeys();
-        final Collection<Account> accounts = accountMemory.loadAllAccounts(closures.values());
+        final Collection<Account> accounts = accountMemory.loadAllAccounts(new ArrayList<>());
 
         final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(accounts);
         final Map<UUID, List<Transaction>> grouped = allTransactions.stream()

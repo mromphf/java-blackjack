@@ -17,11 +17,13 @@ import main.io.log.FileLogHandler;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
+import main.io.storage.Database;
 import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
+import java.sql.Connection;
 import java.util.*;
 import java.util.function.Function;
 
@@ -51,6 +53,8 @@ public class AppRoot {
         ImageMap.load();
 
         final ResourceLoader loader = new ResourceLoader();
+        final Connection conn = loader.loadDbConnection();
+        final Database database = new Database(conn);
         final FileSystem memory = new FileSystem(loader.getDirectoryMap());
         final Properties config = memory.loadConfig();
         final String deckName = (String) config.get("game.deckName");
@@ -69,7 +73,7 @@ public class AppRoot {
         final SelectionMemory selectionMemory = new SelectionMemory(randomUUID(), new TreeMap<>());
         final Game game = new Game(randomUUID(), deck, numDecks);
         final GameLogger gameLogger = new GameLogger(randomUUID(), "Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(randomUUID(), memory, memory);
+        final AccountStorage accountStorage = new AccountStorage(randomUUID(), memory, database);
         final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 

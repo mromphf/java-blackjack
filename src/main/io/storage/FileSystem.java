@@ -19,7 +19,7 @@ import static main.io.storage.Directory.*;
 import static main.io.storage.FileFunctions.fileToJson;
 import static main.io.storage.FileFunctions.readCsvLines;
 
-public class FileSystem implements Memory {
+public class FileSystem implements TransactionMemory, AccountMemory {
 
     private final Map<Directory, File> directories;
 

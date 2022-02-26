@@ -12,8 +12,12 @@ public interface Memory {
     Collection<Account> loadAllAccounts(Collection<UUID> closedKeys);
     Collection<Transaction> loadAllTransactions(Collection<Account> openAccoutns);
     Map<LocalDateTime, UUID> loadAllClosedAccountKeys();
-    void saveTransaction(Transaction transaction);
-    void saveTransactions(Collection<Transaction> transactions);
+
     void openNewAccount(Account account);
     void closeAccount(Account account);
+    void saveTransaction(Transaction transaction);
+
+    default void saveTransactions(Collection<Transaction> transactions) {
+        transactions.forEach(this::saveTransaction);
+    }
 }

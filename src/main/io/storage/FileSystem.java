@@ -58,11 +58,6 @@ public class FileSystem implements Memory {
     }
 
     @Override
-    public void saveTransactions(Collection<Transaction> transactions) {
-        transactions.forEach(this::saveTransaction);
-    }
-
-    @Override
     public void saveTransaction(Transaction transaction) {
         final File file = inferTransactionsFile(transaction.getAccountKey());
         appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));

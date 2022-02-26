@@ -7,7 +7,6 @@ import main.domain.Transaction;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,16 +72,6 @@ public class FileSystem implements TransactionMemory, AccountMemory {
     public void closeAccount(Account account) {
         final File file = directories.get(ACCOUNTS_CLOSED);
         appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
-    }
-
-    @Override
-    public Map<LocalDateTime, UUID> loadAllClosedAccountKeys() {
-        final File accountsClosedDir = directories.get(ACCOUNTS_CLOSED);
-
-        return readCsvLines(accountsClosedDir).stream()
-                .map(line -> line.split(","))
-                .map(CsvUtil::accountClosuresFromCsvRow)
-                .collect(Collectors.toMap(SortedMap::firstKey, v -> v.get(v.firstKey())));
     }
 
     @Override

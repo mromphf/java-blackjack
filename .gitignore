@@ -1,5 +1,6 @@
 /app-data
 /target
+/scripts/sql/queries.sql
 *.class
 *.swp
 .idea

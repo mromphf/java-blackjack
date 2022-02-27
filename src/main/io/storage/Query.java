@@ -1,7 +1,7 @@
 package main.io.storage;
 
 public enum Query {
-    SELECT_ALL_ACCOUNTS("SELECT * FROM blackjack.account_balances;"),
+    SELECT_ALL_ACCOUNTS("SELECT * FROM blackjack.account_stats;"),
 
     SELECT_ALL_TRANSACTIONS("SELECT accountkey, description, amount, TO_CHAR(timestamp AT TIME ZONE 'UTC', " +
             "'YYYY-MM-DDThh:mm:SS-06:00') AS timestamp FROM blackjack.transactions;"),

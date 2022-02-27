@@ -55,11 +55,11 @@ public class AppRoot {
         final ResourceLoader loader = new ResourceLoader();
         final Connection conn = loader.loadDbConnection();
         final Database database = new Database(conn);
-        final FileSystem memory = new FileSystem(loader.getDirectoryMap());
-        final Properties config = memory.loadConfig();
+        final FileSystem fileSystem = new FileSystem(loader.getDirectoryMap());
+        final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
-        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : memory.loadDeck(deckName);
+        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
         final FileLogHandler fileLogHandler = new FileLogHandler();
         final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
@@ -127,6 +127,7 @@ public class AppRoot {
         stage.show();
 
         // Load accounts and transactions from disk
-        new Thread(accountStorage::loadAllAccounts, "Data Load Thread").start();
+        new Thread(accountStorage::loadAllAccounts, "Account Load Thread").start();
+        new Thread(accountStorage::loadAllTransactions, "Transaction Load Thread").start();
     }
 }

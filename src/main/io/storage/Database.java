@@ -4,13 +4,13 @@ import main.domain.Account;
 import main.domain.Transaction;
 
 import java.sql.*;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+import static main.common.ResultSetUtil.accountFromResultSet;
+import static main.common.ResultSetUtil.transactionFromResultSet;
 
 public class Database implements AccountMemory, TransactionMemory {
 
@@ -26,20 +26,38 @@ public class Database implements AccountMemory, TransactionMemory {
             final ArrayList<Account> accounts = new ArrayList<>();
             final Statement st = conn.createStatement();
             final ResultSet rs = st.executeQuery("SELECT * FROM blackjack.account_balances;");
+
             while (rs.next()) {
-
-                final UUID key = UUID.fromString(rs.getString("key"));
-                final String name = rs.getString("name");
-                final int balance = rs.getInt("balance");
-                final ZonedDateTime timestamp = ZonedDateTime.parse(rs.getString("timestamp"), ISO_OFFSET_DATE_TIME);
-
-                accounts.add(new Account(key, name, balance, timestamp.toLocalDateTime()));
+                accounts.add(accountFromResultSet(rs));
             }
 
             rs.close();
             st.close();
 
             return accounts;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
+    }
+
+    @Override
+    public Collection<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
+        try {
+            final ArrayList<Transaction> transactions = new ArrayList<>();
+            final Statement st = conn.createStatement();
+            final ResultSet rs = st.executeQuery("SELECT accountkey, description, amount, TO_CHAR(timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DDThh:mm:SS-06:00') AS timestamp FROM blackjack.transactions;");
+
+            while (rs.next()) {
+                transactions.add(transactionFromResultSet(rs));
+            }
+
+            rs.close();
+            st.close();
+
+            return transactions;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,35 +81,6 @@ public class Database implements AccountMemory, TransactionMemory {
                 account.getKey(), account.getCreated());
 
         executePreparedStatement(sql);
-    }
-
-    @Override
-    public Collection<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
-        try {
-            final ArrayList<Transaction> transactions = new ArrayList<>();
-            final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery("SELECT accountkey, description, amount, TO_CHAR(timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DDThh:mm:SS-06:00') AS timestamp FROM blackjack.transactions;");
-            while (rs.next()) {
-
-                final UUID key = UUID.fromString(rs.getString("accountkey"));
-                final String description = rs.getString("description");
-                final int amount = rs.getInt("amount");
-                final ZonedDateTime timestamp = ZonedDateTime.parse(rs.getString("timestamp"), ISO_OFFSET_DATE_TIME);
-
-                transactions.add(new Transaction(timestamp.toLocalDateTime(), key, description, amount));
-            }
-
-            rs.close();
-            st.close();
-
-            return transactions;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-
-            return null;
-        }
     }
 
     @Override

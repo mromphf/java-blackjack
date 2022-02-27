@@ -14,6 +14,7 @@ import static main.common.ResultSetUtil.transactionFromResultSet;
 
 public class Database implements AccountMemory, TransactionMemory {
 
+    //TODO: Connection needs to be opening and closing
     private final Connection conn;
 
     public Database(Connection conn) {

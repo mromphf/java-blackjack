@@ -54,8 +54,8 @@ public class AppRoot {
         final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
         final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
+        final FileSystem fileSystem = injector.getInstance(FileSystem.class);
 
-        final FileSystem fileSystem = new FileSystem(getDirectoryMap());
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));

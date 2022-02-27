@@ -7,15 +7,10 @@ import main.usecase.Layout;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static java.lang.System.getenv;
 import static main.io.storage.Directory.*;
 import static main.usecase.Layout.*;
 
@@ -64,21 +59,5 @@ public class ResourceLoader {
 
     public Parent loadRoot(Layout layout) {
         return resourceMap.get(layout).getRoot();
-    }
-
-    public Connection loadDbConnection() {
-        final String url = getenv("PSQL_URL");
-        final String username = getenv("PSQL_USERNAME");
-        final Properties props = new Properties();
-
-        props.setProperty("user", username);
-
-        try {
-            return DriverManager.getConnection(url, props);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
     }
 }

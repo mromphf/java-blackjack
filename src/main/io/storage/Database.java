@@ -6,26 +6,24 @@ import main.domain.Transaction;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static java.lang.System.getenv;
+import static java.sql.DriverManager.getConnection;
 import static main.common.ResultSetUtil.accountFromResultSet;
 import static main.common.ResultSetUtil.transactionFromResultSet;
 import static main.io.storage.Query.*;
 
 public class Database implements AccountMemory, TransactionMemory {
 
-    //TODO: Connection needs to be opening and closing
-    private final Connection conn;
-
-    public Database(Connection conn) {
-        this.conn = conn;
-    }
 
     @Override
     public Collection<Account> loadAllAccounts(Collection<UUID> closedKeys) {
         try {
             final ArrayList<Account> accounts = new ArrayList<>();
+            final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
             final ResultSet rs = st.executeQuery(SELECT_ALL_ACCOUNTS.sql);
 
@@ -35,6 +33,7 @@ public class Database implements AccountMemory, TransactionMemory {
 
             rs.close();
             st.close();
+            conn.close();
 
             return accounts;
 
@@ -49,6 +48,7 @@ public class Database implements AccountMemory, TransactionMemory {
     public Collection<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
         try {
             final ArrayList<Transaction> transactions = new ArrayList<>();
+            final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
             final ResultSet rs = st.executeQuery(SELECT_ALL_TRANSACTIONS.sql);
 
@@ -58,6 +58,7 @@ public class Database implements AccountMemory, TransactionMemory {
 
             rs.close();
             st.close();
+            conn.close();
 
             return transactions;
 
@@ -101,12 +102,24 @@ public class Database implements AccountMemory, TransactionMemory {
 
     private void executePreparedStatement(String sql) {
         try {
+            final Connection conn = openDbConnection();
             final PreparedStatement st = conn.prepareStatement(sql);
+
             st.executeUpdate();
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    private static Connection openDbConnection() throws SQLException {
+        final String url = getenv("PSQL_URL");
+        final String username = getenv("PSQL_USERNAME");
+        final Properties props = new Properties();
+
+        props.setProperty("user", username);
+
+        return getConnection(url, props);
     }
 }

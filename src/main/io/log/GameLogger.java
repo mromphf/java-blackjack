@@ -1,5 +1,7 @@
 package main.io.log;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
@@ -21,9 +23,12 @@ public class GameLogger extends Logger implements SnapshotListener, AccountListe
     private final UUID key;
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
-    public GameLogger(UUID key, String name, String resourceBundleName) {
-        super(name, resourceBundleName);
+    @Inject
+    public GameLogger(@Named("random") UUID key, @Named("logger") String name) {
+        super(name, null);
         this.key = key;
+        addHandler(new ConsoleLogHandler());
+        addHandler(new FileLogHandler());
     }
 
     @Override

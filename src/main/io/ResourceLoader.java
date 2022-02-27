@@ -24,16 +24,15 @@ public class ResourceLoader {
         put(REGISTRATION, new FXMLLoader(ResourceLoader.class.getResource("registration/RegistrationView.fxml")));
     }};
 
-    private final static Map<Directory, File> directoryMap = new HashMap<>();
+    private final static Map<Directory, File> directoryMap = new HashMap<Directory, File>() {{
+        put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
+        put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
+        put(DECKS, new File("./app-data/decks/"));
+        put(LOG, new File("./app-data/log/"));
+        put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
+    }};
 
-    public ResourceLoader() {
-        //TODO: Fix the csv files being in here -- Aug 5 2021
-        directoryMap.put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
-        directoryMap.put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
-        directoryMap.put(DECKS, new File("./app-data/decks/"));
-        directoryMap.put(LOG, new File("./app-data/log/"));
-        directoryMap.put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
-
+    public static void load() {
         resourceMap.keySet().forEach(k -> {
             try {
                 resourceMap.get(k).load();
@@ -43,21 +42,21 @@ public class ResourceLoader {
         });
     }
 
-    public Map<Layout, Parent> loadLayoutMap() {
+    public static Map<Layout, Parent> loadLayoutMap() {
         return resourceMap.keySet()
                 .stream()
-                .collect(Collectors.toMap(l -> l, this::loadRoot));
+                .collect(Collectors.toMap(layout -> layout, ResourceLoader::loadRoot));
     }
 
-    public Map<Directory, File> getDirectoryMap() {
+    public static Map<Directory, File> getDirectoryMap() {
         return directoryMap;
     }
 
-    public Object loadController(Layout layout) {
+    public static Object loadController(Layout layout) {
         return resourceMap.get(layout).getController();
     }
 
-    public Parent loadRoot(Layout layout) {
+    public static Parent loadRoot(Layout layout) {
         return resourceMap.get(layout).getRoot();
     }
 }

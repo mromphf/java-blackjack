@@ -1,5 +1,7 @@
 package main.usecase;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.*;
@@ -8,16 +10,17 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
 import static main.usecase.eventing.Predicate.*;
 
 public class SelectionMemory extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
     private final UUID networkId;
-    private final SortedMap<LocalDateTime, Account> selections;
+    private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
 
-    public SelectionMemory(UUID networkId, SortedMap<LocalDateTime, Account> selections) {
+    @Inject
+    public SelectionMemory(@Named("random") UUID networkId) {
         this.networkId = networkId;
-        this.selections = selections;
     }
 
     @Override

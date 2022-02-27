@@ -1,6 +1,5 @@
 package main;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,9 +13,6 @@ import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
-import main.io.injection.MemoryModule;
-import main.io.log.ConsoleLogHandler;
-import main.io.log.FileLogHandler;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
@@ -41,7 +37,7 @@ public class AppRoot {
 
     public static Stage stage;
 
-    public AppRoot(Stage stage) {
+    public AppRoot(Stage stage, Injector injector) {
 
         AppRoot.stage = stage;
 
@@ -53,16 +49,17 @@ public class AppRoot {
          */
         ImageMap.load();
 
-        final Injector memoryInjector = Guice.createInjector(new MemoryModule());
+        final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
+        final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
+        final GameLogger gameLogger = injector.getInstance(GameLogger.class);
 
         final ResourceLoader loader = new ResourceLoader();
+
         final FileSystem fileSystem = new FileSystem(loader.getDirectoryMap());
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
         final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
-        final FileLogHandler fileLogHandler = new FileLogHandler();
-        final ConsoleLogHandler consoleLogHandler = new ConsoleLogHandler();
         final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
         final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
@@ -70,11 +67,6 @@ public class AppRoot {
         /*
          * These are event listeners
          */
-        final Transactor transactor = new Transactor(randomUUID(), evaluators);
-        final SelectionMemory selectionMemory = new SelectionMemory(randomUUID(), new TreeMap<>());
-        final Game game = new Game(randomUUID(), deck, numDecks);
-        final GameLogger gameLogger = new GameLogger(randomUUID(), "Game Logger", null);
-        final AccountStorage accountStorage = memoryInjector.getInstance(AccountStorage.class);
         final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 
@@ -97,9 +89,9 @@ public class AppRoot {
             add(registrationController);
             add(layoutManager);
             add(accountStorage);
-            add(transactor);
+            add(new Transactor(randomUUID(), evaluators));
             add(transactionMemory);
-            add(game);
+            add(new Game(randomUUID(), deck, numDecks));
         }};
 
         final EventNetwork eventNetwork = new EventNetwork(randomUUID(), eventConnections);
@@ -113,8 +105,6 @@ public class AppRoot {
 
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
-        gameLogger.addHandler(consoleLogHandler);
-        gameLogger.addHandler(fileLogHandler);
         /*
          * Initialize JavaFX Stage
          */

@@ -12,14 +12,7 @@ public class Account {
     private final int balance;
     private final LocalDateTime created;
 
-    public Account(UUID key, String name, LocalDateTime created) {
-        this.key = key;
-        this.name = name;
-        this.balance = 0;
-        this.created = created;
-    }
-
-    private Account(UUID key, String name, int balance, LocalDateTime created) {
+    public Account(UUID key, String name, int balance, LocalDateTime created) {
         this.key = key;
         this.name = name;
         this.balance = balance;
@@ -43,9 +36,7 @@ public class Account {
     }
 
     public Account updateBalance(Transaction transaction) {
-        final List<Transaction> transactions = new LinkedList<>();
-        transactions.add(transaction);
-        return updateBalance(transactions);
+        return new Account(key, name, balance + transaction.getAmount(), created);
     }
 
     public Account updateBalance(Collection<Transaction> transactions) {

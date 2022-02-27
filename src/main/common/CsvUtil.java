@@ -49,6 +49,7 @@ public class CsvUtil {
         return new Account(
                 UUID.fromString(delineatedRow[0]),
                 delineatedRow[1],
+                0,
                 ZonedDateTime.parse(delineatedRow[2]).toLocalDateTime()
         );
     }

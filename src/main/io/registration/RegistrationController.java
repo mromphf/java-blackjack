@@ -50,7 +50,7 @@ public class RegistrationController extends EventConnection implements Initializ
         final UUID uuid = randomUUID();
         final String name = txtName.getText();
         final LocalDateTime now = now();
-        final Account account = new Account(uuid, name, now);
+        final Account account = new Account(uuid, name, 0, now);
 
         txtName.setText("");
 

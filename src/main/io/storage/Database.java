@@ -23,19 +23,16 @@ public class Database implements AccountMemory {
     public Collection<Account> loadAllAccounts(Collection<UUID> closedKeys) {
         try {
             final ArrayList<Account> accounts = new ArrayList<>();
-            final String formatString = "YYYY-MM-DDThh:mm:SS-06:00";
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery("SELECT key, name, " +
-                    " TO_CHAR(timestamp AT TIME ZONE 'UTC', '" + formatString + "') AS timestamp" +
-                    " FROM blackjack.accounts " +
-                    " WHERE key NOT IN (SELECT key FROM blackjack.account_closures); ");
+            final ResultSet rs = st.executeQuery("SELECT * FROM blackjack.account_balances;");
             while (rs.next()) {
 
                 final UUID key = UUID.fromString(rs.getString("key"));
                 final String name = rs.getString("name");
+                final int balance = rs.getInt("balance");
                 final ZonedDateTime timestamp = ZonedDateTime.parse(rs.getString("timestamp"), ISO_OFFSET_DATE_TIME);
 
-                accounts.add(new Account(key, name, timestamp.toLocalDateTime()));
+                accounts.add(new Account(key, name, balance, timestamp.toLocalDateTime()));
             }
 
             rs.close();

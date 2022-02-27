@@ -8,10 +8,8 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
-import static java.util.stream.Collectors.groupingBy;
 import static main.usecase.eventing.Predicate.*;
 
 
@@ -29,15 +27,10 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     public void loadAllAccounts() {
         final Collection<Account> accounts = accountMemory.loadAllAccounts(new ArrayList<>());
-
         final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(accounts);
-        final Map<UUID, List<Transaction>> grouped = allTransactions.stream()
-                .collect(groupingBy(Transaction::getAccountKey));
 
         final Event<Collection<Transaction>> transEvent = new Event<>(key, now(), TRANSACTIONS_LOADED, allTransactions);
-        final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts.stream()
-                .map(a -> applyTransactions(a, grouped))
-                .collect(Collectors.toList()));
+        final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts);
 
         eventNetwork.onAccountsEvent(event);
         eventNetwork.onTransactionsEvent(transEvent);
@@ -69,15 +62,5 @@ public class AccountStorage extends EventConnection implements AccountListener, 
         } else if (event.is(ACCOUNT_DELETED)) {
             accountMemory.closeAccount(event.getData());
         }
-    }
-
-    private Account applyTransactions(Account account, Map<UUID, List<Transaction>> grouped) {
-        final UUID accountKey = account.getKey();
-
-        if (grouped.containsKey(accountKey)) {
-            return account.updateBalance(grouped.get(accountKey));
-        }
-
-        return account;
     }
 }

@@ -23,7 +23,6 @@ import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
-import java.sql.Connection;
 import java.util.*;
 import java.util.function.Function;
 
@@ -53,8 +52,7 @@ public class AppRoot {
         ImageMap.load();
 
         final ResourceLoader loader = new ResourceLoader();
-        final Connection conn = loader.loadDbConnection();
-        final Database database = new Database(conn);
+        final Database database = new Database();
         final FileSystem fileSystem = new FileSystem(loader.getDirectoryMap());
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");

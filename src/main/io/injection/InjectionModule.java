@@ -3,12 +3,14 @@ package main.io.injection;
 import com.google.inject.AbstractModule;
 import main.io.storage.AccountMemory;
 import main.io.storage.Database;
+import main.io.storage.FileSystem;
 import main.io.storage.TransactionMemory;
 
 import java.util.UUID;
 
 import static com.google.inject.name.Names.named;
 import static java.util.UUID.randomUUID;
+import static main.io.ResourceLoader.getDirectoryMap;
 
 public class InjectionModule extends AbstractModule {
 
@@ -24,5 +26,8 @@ public class InjectionModule extends AbstractModule {
         bind(UUID.class)
                 .annotatedWith(named("random"))
                 .toInstance(randomUUID());
+
+        bind(FileSystem.class)
+                .toInstance(new FileSystem(getDirectoryMap()));
     }
 }

@@ -1,5 +1,7 @@
 package main;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -12,12 +14,12 @@ import main.io.blackjack.BlackjackController;
 import main.io.blackjack.ImageMap;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
+import main.io.injection.MemoryModule;
 import main.io.log.ConsoleLogHandler;
 import main.io.log.FileLogHandler;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
-import main.io.storage.Database;
 import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
@@ -51,8 +53,9 @@ public class AppRoot {
          */
         ImageMap.load();
 
+        final Injector memoryInjector = Guice.createInjector(new MemoryModule());
+
         final ResourceLoader loader = new ResourceLoader();
-        final Database database = new Database();
         final FileSystem fileSystem = new FileSystem(loader.getDirectoryMap());
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
@@ -71,7 +74,7 @@ public class AppRoot {
         final SelectionMemory selectionMemory = new SelectionMemory(randomUUID(), new TreeMap<>());
         final Game game = new Game(randomUUID(), deck, numDecks);
         final GameLogger gameLogger = new GameLogger(randomUUID(), "Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(randomUUID(), database, database);
+        final AccountStorage accountStorage = memoryInjector.getInstance(AccountStorage.class);
         final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 

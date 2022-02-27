@@ -1,5 +1,6 @@
 package main.io.storage;
 
+import com.google.inject.Inject;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
@@ -15,12 +16,12 @@ import static main.usecase.eventing.Predicate.*;
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
-    private final UUID key;
+    private final UUID key = UUID.randomUUID();
     private final TransactionMemory transactionMemory;
     private final AccountMemory accountMemory;
 
-    public AccountStorage(UUID key, TransactionMemory transactionMemory, AccountMemory accountMemory) {
-        this.key = key;
+    @Inject
+    public AccountStorage(TransactionMemory transactionMemory, AccountMemory accountMemory) {
         this.transactionMemory = transactionMemory;
         this.accountMemory = accountMemory;
     }

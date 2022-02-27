@@ -11,6 +11,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static main.common.ResultSetUtil.accountFromResultSet;
 import static main.common.ResultSetUtil.transactionFromResultSet;
+import static main.io.storage.Query.*;
 
 public class Database implements AccountMemory, TransactionMemory {
 
@@ -26,7 +27,7 @@ public class Database implements AccountMemory, TransactionMemory {
         try {
             final ArrayList<Account> accounts = new ArrayList<>();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery("SELECT * FROM blackjack.account_balances;");
+            final ResultSet rs = st.executeQuery(SELECT_ALL_ACCOUNTS.sql);
 
             while (rs.next()) {
                 accounts.add(accountFromResultSet(rs));
@@ -49,7 +50,7 @@ public class Database implements AccountMemory, TransactionMemory {
         try {
             final ArrayList<Transaction> transactions = new ArrayList<>();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery("SELECT accountkey, description, amount, TO_CHAR(timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DDThh:mm:SS-06:00') AS timestamp FROM blackjack.transactions;");
+            final ResultSet rs = st.executeQuery(SELECT_ALL_TRANSACTIONS.sql);
 
             while (rs.next()) {
                 transactions.add(transactionFromResultSet(rs));
@@ -70,24 +71,30 @@ public class Database implements AccountMemory, TransactionMemory {
 
     @Override
     public void openNewAccount(Account account) {
-        final String sql = format("INSERT INTO blackjack.accounts (key, name, timestamp) VALUES ('%s', '%s', '%s');",
-                account.getKey(), account.getName(), account.getCreated());
+        final String sql = format(INSERT_NEW_ACCOUNT.sql,
+                account.getKey(),
+                account.getName(),
+                account.getCreated());
 
         executePreparedStatement(sql);
     }
 
     @Override
     public void closeAccount(Account account) {
-        final String sql = format("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');",
-                account.getKey(), account.getCreated());
+        final String sql = format(CLOSE_ACCOUNT.sql,
+                account.getKey(),
+                account.getCreated());
 
         executePreparedStatement(sql);
     }
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String sql = format("INSERT INTO blackjack.transactions (accountkey, timestamp, amount, description) VALUES ('%s', '%s', '%s', '%s');",
-                transaction.getAccountKey(), transaction.getTime(), transaction.getAmount(), transaction.getDescription());
+        final String sql = format(INSERT_NEW_TRANSACTION.sql,
+                transaction.getAccountKey(),
+                transaction.getTime(),
+                transaction.getAmount(),
+                transaction.getDescription());
 
         executePreparedStatement(sql);
     }

@@ -29,6 +29,7 @@ import static java.lang.Thread.currentThread;
 import static java.util.UUID.randomUUID;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
+import static main.io.ResourceLoader.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.TRANSACTION;
@@ -48,19 +49,18 @@ public class AppRoot {
          * These are not event listeners.
          */
         ImageMap.load();
+        ResourceLoader.load();
 
         final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
         final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
 
-        final ResourceLoader loader = new ResourceLoader();
-
-        final FileSystem fileSystem = new FileSystem(loader.getDirectoryMap());
+        final FileSystem fileSystem = new FileSystem(getDirectoryMap());
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
         final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
-        final Map<Layout, Parent> layoutMap = loader.loadLayoutMap();
+        final Map<Layout, Parent> layoutMap = loadLayoutMap();
         final Scene scene = new Scene(layoutMap.get(HOME));
         final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
 
@@ -70,11 +70,11 @@ public class AppRoot {
         final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 
-        final HomeController homeController = (HomeController) loader.loadController(HOME);
-        final BlackjackController blackjackController = (BlackjackController) loader.loadController(GAME);
-        final BetController betController = (BetController) loader.loadController(BET);
-        final HistoryController historyController = (HistoryController) loader.loadController(HISTORY);
-        final RegistrationController registrationController = (RegistrationController) loader.loadController(REGISTRATION);
+        final HomeController homeController = (HomeController) loadController(HOME);
+        final BlackjackController blackjackController = (BlackjackController) loadController(GAME);
+        final BetController betController = (BetController) loadController(BET);
+        final HistoryController historyController = (HistoryController) loadController(HISTORY);
+        final RegistrationController registrationController = (RegistrationController) loadController(REGISTRATION);
 
         /*
          * Wire everything up

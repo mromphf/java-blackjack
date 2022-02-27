@@ -51,38 +51,18 @@ public class Database implements AccountMemory, TransactionMemory {
 
     @Override
     public void openNewAccount(Account account) {
-        try {
-            final String sql = format("INSERT INTO blackjack.accounts (key, name, timestamp) VALUES ('%s', '%s', '%s');",
-                    account.getKey(), account.getName(), account.getCreated());
+        final String sql = format("INSERT INTO blackjack.accounts (key, name, timestamp) VALUES ('%s', '%s', '%s');",
+                account.getKey(), account.getName(), account.getCreated());
 
-            final PreparedStatement st = conn.prepareStatement(sql);
-
-            st.executeUpdate();
-
-            st.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        executePreparedStatement(sql);
     }
 
     @Override
     public void closeAccount(Account account) {
-        try {
-            final String sql = format("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');",
-                    account.getKey(), account.getCreated());
+        final String sql = format("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');",
+                account.getKey(), account.getCreated());
 
-            final PreparedStatement st = conn.prepareStatement(sql);
-
-            st.executeUpdate();
-
-            st.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        executePreparedStatement(sql);
     }
 
     @Override
@@ -116,16 +96,17 @@ public class Database implements AccountMemory, TransactionMemory {
 
     @Override
     public void saveTransaction(Transaction transaction) {
+        final String sql = format("INSERT INTO blackjack.transactions (accountkey, timestamp, amount, description) VALUES ('%s', '%s', '%s', '%s');",
+                transaction.getAccountKey(), transaction.getTime(), transaction.getAmount(), transaction.getDescription());
+
+        executePreparedStatement(sql);
+    }
+
+    private void executePreparedStatement(String sql) {
         try {
-            final String sql = format("INSERT INTO blackjack.transactions (accountkey, timestamp, amount, description) VALUES ('%s', '%s', '%s', '%s');",
-                    transaction.getAccountKey(), transaction.getTime(), transaction.getAmount(), transaction.getDescription());
-
             final PreparedStatement st = conn.prepareStatement(sql);
-
             st.executeUpdate();
-
             st.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);

@@ -27,7 +27,7 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     public void loadAllAccounts() {
         final Collection<Account> accounts = accountMemory.loadAllAccounts(new ArrayList<>());
-        final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(accounts);
+        final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(new ArrayList<>());
 
         final Event<Collection<Transaction>> transEvent = new Event<>(key, now(), TRANSACTIONS_LOADED, allTransactions);
         final Event<Collection<Account>> event = new Event<>(key, now(), ACCOUNTS_LOADED, accounts);

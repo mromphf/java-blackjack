@@ -73,7 +73,7 @@ public class AppRoot {
         final SelectionMemory selectionMemory = new SelectionMemory(randomUUID(), new TreeMap<>());
         final Game game = new Game(randomUUID(), deck, numDecks);
         final GameLogger gameLogger = new GameLogger(randomUUID(), "Game Logger", null);
-        final AccountStorage accountStorage = new AccountStorage(randomUUID(), memory, database);
+        final AccountStorage accountStorage = new AccountStorage(randomUUID(), database, database);
         final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
         final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
 

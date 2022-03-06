@@ -1,36 +1,27 @@
 package main;
 
 import com.google.inject.Injector;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.domain.Card;
-import main.domain.Snapshot;
-import main.domain.Transaction;
-import main.io.ResourceLoader;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
-import main.io.blackjack.ImageMap;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
+import main.io.injection.InjectionModule;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
-import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.LinkedList;
 
-import static java.lang.Integer.parseInt;
+import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
 import static java.util.UUID.randomUUID;
-import static main.domain.Deck.freshlyShuffledDeck;
-import static main.domain.Evaluate.transactionEvaluators;
-import static main.io.ResourceLoader.*;
-import static main.usecase.Layout.*;
+import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.TRANSACTION;
 
@@ -38,47 +29,27 @@ public class AppRoot {
 
     public static Stage stage;
 
-    public AppRoot(Stage stage, Injector injector) {
+    public AppRoot(Stage stage) {
 
         AppRoot.stage = stage;
 
         currentThread().setName("Trunk thread");
 
-        /*
-         * Load images and config from disk.
-         * These are not event listeners.
-         */
-        ImageMap.load();
-        ResourceLoader.load();
+        final Injector injector = createInjector(new InjectionModule());
 
-        final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
         final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
+        final Game game = injector.getInstance(Game.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
-        final FileSystem fileSystem = injector.getInstance(FileSystem.class);
-
-        final Properties config = fileSystem.loadConfig();
-        final String deckName = (String) config.get("game.deckName");
-        final int numDecks = parseInt((String) config.get("game.numDecks"));
-        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
-        final Map<Layout, Parent> layoutMap = loadLayoutMap();
-        final Scene scene = new Scene(layoutMap.get(HOME));
-        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
-
-        /*
-         * These are event listeners
-         */
-        final LayoutManager layoutManager = new LayoutManager(randomUUID(), stage, scene, layoutMap);
-        final TransactionMemory transactionMemory = new TransactionMemory(randomUUID(), new TreeMap<>());
-
-        final HomeController homeController = (HomeController) loadController(HOME);
-        final BlackjackController blackjackController = (BlackjackController) loadController(GAME);
-        final BetController betController = (BetController) loadController(BET);
-        final HistoryController historyController = (HistoryController) loadController(HISTORY);
-        final RegistrationController registrationController = (RegistrationController) loadController(REGISTRATION);
-
-        /*
-         * Wire everything up
-         */
+        final LayoutManager layoutManager = injector.getInstance(LayoutManager.class);
+        final Scene scene = injector.getInstance(Scene.class);
+        final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
+        final TransactionMemory transactionMemory = injector.getInstance(TransactionMemory.class);
+        final Transactor transactor = injector.getInstance(Transactor.class);
+        final HomeController homeController = injector.getInstance(HomeController.class);
+        final HistoryController historyController = injector.getInstance(HistoryController.class);
+        final BlackjackController blackjackController = injector.getInstance(BlackjackController.class);
+        final BetController betController = injector.getInstance(BetController.class);
+        final RegistrationController registrationController = injector.getInstance(RegistrationController.class);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory); // TODO: monitor this after switching to multi-threading.
@@ -89,19 +60,16 @@ public class AppRoot {
             add(registrationController);
             add(layoutManager);
             add(accountStorage);
-            add(new Transactor(randomUUID(), evaluators));
+            add(transactor);
             add(transactionMemory);
-            add(new Game(randomUUID(), deck, numDecks));
+            add(game);
+            add(gameLogger);
         }};
 
         final EventNetwork eventNetwork = new EventNetwork(randomUUID(), eventConnections);
 
         eventNetwork.registerResponder(ACCOUNT_SELECTED, selectionMemory);
         eventNetwork.registerResponder(TRANSACTION, transactionMemory);
-
-        eventNetwork.registerGameStateListener(gameLogger);
-        eventNetwork.registerTransactionListener(gameLogger);
-        eventNetwork.registerAccountListener(gameLogger);
 
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 

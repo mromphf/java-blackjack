@@ -1,5 +1,6 @@
 package main.usecase;
 
+import com.google.inject.Inject;
 import main.domain.Transaction;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.Event;
@@ -16,6 +17,7 @@ public class TransactionMemory extends EventConnection implements TransactionLis
     public final UUID key;
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
+    @Inject
     public TransactionMemory(UUID key, Map<UUID, Collection<Transaction>> transactionMap) {
         this.key = key;
         this.transactionMap = transactionMap;

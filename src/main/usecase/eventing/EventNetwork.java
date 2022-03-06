@@ -73,18 +73,6 @@ public class EventNetwork implements
         transactionResponders.put(predicate, transactionResponder);
     }
 
-    public void registerGameStateListener(SnapshotListener listener) {
-        snapshotListeners.add(listener);
-    }
-
-    public void registerTransactionListener(TransactionListener listener) {
-        transactionListeners.add(listener);
-    }
-
-    public void registerAccountListener(AccountListener listener) {
-        accountListeners.add(listener);
-    }
-
     @Override
     public UUID getKey() {
         return key;

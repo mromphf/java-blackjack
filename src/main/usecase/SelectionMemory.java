@@ -1,7 +1,5 @@
 package main.usecase;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.*;
@@ -15,13 +13,8 @@ import static main.usecase.eventing.Predicate.*;
 
 public class SelectionMemory extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
 
-    private final UUID networkId;
+    private final UUID networkId = randomUUID();
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
-
-    @Inject
-    public SelectionMemory(@Named("random") UUID networkId) {
-        this.networkId = networkId;
-    }
 
     @Override
     public UUID getKey() {

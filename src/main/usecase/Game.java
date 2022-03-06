@@ -1,5 +1,7 @@
 package main.usecase;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.Action;
 import main.domain.Bet;
 import main.domain.Card;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
@@ -18,15 +21,15 @@ import static main.usecase.eventing.Predicate.*;
 
 public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
 
-    private final UUID key;
+    private final UUID key = randomUUID();
     private final Stack<Card> deck;
     private final int maxCards;
     private final int numDecks;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
 
-    public Game(UUID key, Stack<Card> deck, int numDecks) {
-        this.key = key;
+    @Inject
+    public Game(@Named("deck") Stack<Card> deck, @Named("numDecks") int numDecks) {
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
@@ -68,8 +71,6 @@ public class Game extends EventConnection implements ActionListener, BetListener
     @Override
     public void onLayoutEvent(Event<Layout> event) {
         if (event.is(LAYOUT_CHANGED) && event.getData() == HOME && roundStack.size() > 0) {
-            final Round currentRound = roundStack.peek();
-
             deck.clear();
             deck.addAll(freshlyShuffledDeck(numDecks));
         }

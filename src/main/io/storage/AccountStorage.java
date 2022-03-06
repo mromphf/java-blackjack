@@ -11,12 +11,13 @@ import main.usecase.eventing.TransactionListener;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
 import static main.usecase.eventing.Predicate.*;
 
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
-    private final UUID key = UUID.randomUUID();
+    private final UUID key = randomUUID();
     private final TransactionMemory transactionMemory;
     private final AccountMemory accountMemory;
 

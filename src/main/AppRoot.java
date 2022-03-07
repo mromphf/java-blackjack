@@ -9,11 +9,13 @@ import main.io.blackjack.BlackjackController;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
 import main.io.injection.BaseInjectionModule;
+import main.io.injection.ConfigInjectionModule;
 import main.io.injection.FXMLInjectionModule;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
 import main.io.storage.Directory;
+import main.io.storage.FileSystem;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
@@ -34,17 +36,21 @@ public class AppRoot {
 
         AppRoot.stage = stage;
 
-        final Injector injector = createInjector(new BaseInjectionModule(directoryMap));
-        final Injector fxmlInjection = createInjector(new FXMLInjectionModule(injector, resourceMap));
+        final FileSystem fileSystem = new FileSystem(directoryMap);
 
-        final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
-        final Game game = injector.getInstance(Game.class);
-        final GameLogger gameLogger = injector.getInstance(GameLogger.class);
+        final Injector configInjector = createInjector(new ConfigInjectionModule(fileSystem));
+        final Injector baseInjector = createInjector(new BaseInjectionModule(directoryMap));
+        final Injector fxmlInjection = createInjector(new FXMLInjectionModule(baseInjector, resourceMap));
+
+        final Game game = configInjector.getInstance(Game.class);
+
+        final AccountStorage accountStorage = baseInjector.getInstance(AccountStorage.class);
+        final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
         final Scene scene = fxmlInjection.getInstance(Scene.class);
-        final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
-        final TransactionCache transactionCache = injector.getInstance(TransactionCache.class);
-        final Transactor transactor = injector.getInstance(Transactor.class);
-        final EventNetwork eventNetwork = injector.getInstance(EventNetwork.class);
+        final SelectionMemory selectionMemory = baseInjector.getInstance(SelectionMemory.class);
+        final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
+        final Transactor transactor = baseInjector.getInstance(Transactor.class);
+        final EventNetwork eventNetwork = baseInjector.getInstance(EventNetwork.class);
 
         final LayoutManager layoutManager = fxmlInjection.getInstance(LayoutManager.class);
         final HomeController homeController = fxmlInjection.getInstance(HomeController.class);

@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import main.io.blackjack.ImageMap;
 import main.io.injection.BaseInjectionModule;
 import main.io.storage.Directory;
+import main.io.storage.FileSystem;
 import main.usecase.Layout;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        new AppRoot(stage, directoryMap(), resourceMap());
+        new AppRoot(stage, directoryMap(), resourceMap(), new FileSystem(directoryMap()));
     }
 
     public static void main(String[] args) {

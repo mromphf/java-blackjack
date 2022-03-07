@@ -6,14 +6,34 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import main.domain.Outcome;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static javafx.scene.paint.Color.*;
 import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
 import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
+import static main.domain.Outcome.*;
 
 public class TableDisplay extends Canvas {
+
+    private final static Map<Outcome, String> OUTCOME_STRINGS = new HashMap<Outcome, String>() {{
+        put(BLACKJACK, "Blackjack!!!");
+        put(WIN, "Win");
+        put(LOSE, "Lose");
+        put(BUST, "Bust");
+        put(PUSH, "Push");
+    }};
+
+    private final static Map<Outcome, Color> OUTCOME_COLORS = new HashMap<Outcome, Color>() {{
+        put(BLACKJACK, WHITE);
+        put(WIN, WHITE);
+        put(LOSE, RED);
+        put(BUST, RED);
+        put(PUSH, ORANGE);
+    }};
 
     private final static int TEXT_OFFSET = 50;
 
@@ -59,17 +79,17 @@ public class TableDisplay extends Canvas {
         }
     }
 
-    public void drawResults(String text, Color color) {
+    public void drawResults(Outcome outcome) {
         final Font f = new Font("Arial", 50);
         context.setFont(f);
-        context.setFill(color);
-        context.fillText(text, HOR_CENTER - 50, VER_CENTER + 5);
+        context.setFill(OUTCOME_COLORS.get(outcome));
+        context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 5);
     }
 
     private void drawLabel(String label, int y) {
         final Font f = new Font("Arial", 30);
         context.setFont(f);
-        context.setFill(Color.WHITE);
+        context.setFill(WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
     }
 

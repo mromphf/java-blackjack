@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.usecase.AccountCache;
@@ -110,24 +109,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
             if (snapshot.isRoundResolved()) {
                 renderExposedTable(snapshot);
-
-                switch (snapshot.getOutcome()) {
-                    case BLACKJACK:
-                        tableDisplay.drawResults("Blackjack!!!", Color.WHITE);
-                        break;
-                    case WIN:
-                        tableDisplay.drawResults("Win", Color.WHITE);
-                        break;
-                    case LOSE:
-                        tableDisplay.drawResults("Lose", Color.RED);
-                        break;
-                    case BUST:
-                        tableDisplay.drawResults("Bust", Color.RED);
-                        break;
-                    default:
-                        tableDisplay.drawResults("Push", Color.ORANGE);
-                        break;
-                }
+                tableDisplay.drawResults(snapshot.getOutcome());
             } else {
                 renderConcealedTable(snapshot);
             }

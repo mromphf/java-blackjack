@@ -2,6 +2,7 @@ package main.io.injection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import main.AppRoot;
@@ -15,34 +16,60 @@ import main.io.home.HomeController;
 import main.io.log.ConsoleLogHandler;
 import main.io.log.FileLogHandler;
 import main.io.registration.RegistrationController;
-import main.io.storage.AccountMemory;
-import main.io.storage.Database;
-import main.io.storage.FileSystem;
-import main.io.storage.TransactionMemory;
+import main.io.storage.*;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
 import main.usecase.Transactor;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.google.inject.name.Names.named;
 import static java.lang.Integer.parseInt;
 import static java.util.UUID.randomUUID;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
-import static main.io.ResourceLoader.*;
+import static main.io.storage.Directory.*;
 import static main.usecase.Layout.*;
 
 public class InjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        final Map<Layout, Parent> layoutMap = loadLayoutMap();
+        final Map<Directory, File> directoryMap = new HashMap<Directory, File>() {{
+            put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
+            put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
+            put(DECKS, new File("./app-data/decks/"));
+            put(LOG, new File("./app-data/log/"));
+            put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
+        }};
 
-        final FileSystem fileSystem = new FileSystem(getDirectoryMap());
+        final Map<Layout, FXMLLoader> resourceMap = new HashMap<Layout, FXMLLoader>() {{
+            put(HOME, new FXMLLoader(InjectionModule.class.getResource("../home/HomeView.fxml")));
+            put(BET, new FXMLLoader(InjectionModule.class.getResource("../bet/BetView.fxml")));
+            put(GAME, new FXMLLoader(InjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
+            put(HISTORY, new FXMLLoader(InjectionModule.class.getResource("../history/HistoryView.fxml")));
+            put(REGISTRATION, new FXMLLoader(InjectionModule.class.getResource("../registration/RegistrationView.fxml")));
+        }};
+
+        resourceMap.keySet().forEach(k -> {
+            try {
+                resourceMap.get(k).load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        final Map<Layout, Parent> layoutMap = resourceMap.keySet()
+                .stream()
+                .collect(Collectors.toMap(layout -> layout, layout -> resourceMap.get(layout).getRoot()));
+
+        final FileSystem fileSystem = new FileSystem(directoryMap);
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
@@ -55,19 +82,19 @@ public class InjectionModule extends AbstractModule {
                 .toInstance(Logger.getLogger("Game Logger"));
 
         bind(BetController.class)
-                .toInstance((BetController) loadController(BET));
+                .toInstance(resourceMap.get(BET).getController());
 
         bind(BlackjackController.class)
-                .toInstance((BlackjackController) loadController(GAME));
+                .toInstance(resourceMap.get(GAME).getController());
 
         bind(HistoryController.class)
-                .toInstance((HistoryController) loadController(HISTORY));
+                .toInstance(resourceMap.get(HISTORY).getController());
 
         bind(HomeController.class)
-                .toInstance((HomeController) loadController(HOME));
+                .toInstance(resourceMap.get(HOME).getController());
 
         bind(RegistrationController.class)
-                .toInstance((RegistrationController) loadController(REGISTRATION));
+                .toInstance(resourceMap.get(REGISTRATION).getController());
 
 
         bind(AccountMemory.class).to(Database.class);

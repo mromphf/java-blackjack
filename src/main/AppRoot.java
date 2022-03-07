@@ -51,6 +51,7 @@ public class AppRoot {
         final EventNetwork eventNetwork = new EventNetwork(randomUUID());
 
         historyController.setTransactionMemory(transactionMemory);
+        historyController.setSelectionMemory(selectionMemory);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory); // TODO: monitor this after switching to multi-threading.

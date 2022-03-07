@@ -2,7 +2,10 @@ package main.usecase;
 
 import main.domain.Account;
 import main.domain.Transaction;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -15,6 +18,14 @@ public class SelectionMemory extends EventConnection implements AccountListener,
 
     private final UUID networkId = randomUUID();
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
+
+    public Optional<Account> getLastSelectedAccount() {
+        if (selections.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(selections.get(selections.lastKey()));
+        }
+    }
 
     @Override
     public UUID getKey() {

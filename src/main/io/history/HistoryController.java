@@ -12,8 +12,8 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.Layout;
+import main.usecase.SelectionMemory;
 import main.usecase.TransactionMemory;
-import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
@@ -30,10 +30,9 @@ import static java.util.UUID.randomUUID;
 import static main.common.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
-public class HistoryController extends EventConnection implements Initializable, LayoutListener, AccountListener {
+public class HistoryController extends EventConnection implements Initializable, LayoutListener {
 
     @FXML
     public DatePicker datePicker;
@@ -43,11 +42,14 @@ public class HistoryController extends EventConnection implements Initializable,
 
     private final UUID key = randomUUID();
     private TransactionMemory transactionMemory;
-
-    private Account selectedAccount;
+    private SelectionMemory selectionMemory;
 
     public void setTransactionMemory(TransactionMemory transactionMemory) {
         this.transactionMemory = transactionMemory;
+    }
+
+    public void setSelectionMemory(SelectionMemory selectionMemory) {
+        this.selectionMemory = selectionMemory;
     }
 
     @FXML
@@ -59,6 +61,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
+        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
         final List<Transaction> accountTransactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
         final LocalDate date = datePicker.getValue();
         final NumberAxis yAxis = new NumberAxis();
@@ -73,6 +76,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void clearFilter() {
+        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
         final List<Transaction> accountTransactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = dateAxis(accountTransactions);
@@ -93,6 +97,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
+        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
         if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
             final List<Transaction> transactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
 
@@ -121,12 +126,5 @@ public class HistoryController extends EventConnection implements Initializable,
 
         installTransactionTooltips(transactionDataMap);
         Platform.runLater(() -> chartHousing.add(chart, 0, 0));
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_SELECTED)) {
-            selectedAccount = event.getData();
-        }
     }
 }

@@ -1,5 +1,6 @@
 package main.adapter.ui.bet;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -13,12 +14,12 @@ import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
 import main.adapter.graphics.ImageReelAnimation;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
-import main.usecase.eventing.EventConnection;
-import main.usecase.eventing.SnapshotListener;
+import main.usecase.AccountCache;
+import main.usecase.Layout;
+import main.usecase.eventing.*;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 
 
-public class BetController extends EventConnection implements Initializable, AccountListener, SnapshotListener {
+public class BetController extends EventConnection implements Initializable, LayoutListener, SnapshotListener {
 
     @FXML
     private Canvas cvsScroller;
@@ -62,13 +63,17 @@ public class BetController extends EventConnection implements Initializable, Acc
     @FXML
     public Button btnBet100;
 
+    private final AccountCache accountCache;
     private final static int MAX_BET = 500;
     private final UUID key = randomUUID();
+
     private ImageReelAnimation animation;
     private int bet = 0;
-    private int balance = 0;
 
-    private Account selectedAccount;
+    @Inject
+    public BetController(AccountCache accountCache) {
+        this.accountCache = accountCache;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -87,15 +92,34 @@ public class BetController extends EventConnection implements Initializable, Acc
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }
 
+    @Override
+    public void onLayoutEvent(Event<Layout> event) {
+        final Optional<Account> account = accountCache.getLastSelectedAccount();
+
+        if (event.is(LAYOUT_CHANGED) && account.isPresent())  {
+            final int balance = account.get().getBalance();
+
+            runLater(() -> {
+                btnDeal.setDisable(bet > balance || bet <= 0);
+                lblBet.setText(format("$%s", bet));
+                lblBalance.setText(format("Balance: $%s", balance));
+            });
+        }
+    }
+
     @FXML
     private void onDeal() {
-        final UUID accountKey = selectedAccount.getKey();
-        final Bet betByAccount = Bet.of(now(), accountKey, bet);
+        final Optional<Account> account = accountCache.getLastSelectedAccount();
 
-        eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
+        if (account.isPresent()) {
+            final UUID accountKey = account.get().getKey();
+            final Bet betByAccount = Bet.of(now(), accountKey, bet);
 
-        bet = 0;
+            eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
+            eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
+
+            bet = 0;
+        }
     }
 
     @FXML
@@ -121,32 +145,24 @@ public class BetController extends EventConnection implements Initializable, Acc
     }
 
     @Override
-    public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE_UPDATED)) {
-            this.balance = event.getData().getBalance();
-
-            runLater(() -> {
-                btnDeal.setDisable(bet > balance || bet <= 0);
-                lblBet.setText(format("$%s", bet));
-                lblBalance.setText(format("Balance: $%s", balance));
-            });
-        } else if (event.is(ACCOUNT_SELECTED)) {
-            this.selectedAccount = event.getData();
-        }
-    }
-
-    @Override
     public void onGameUpdate(Snapshot snapshot) {
         prgDeck.setProgress(snapshot.getDeckProgress());
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {
+        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             this.bet = Math.min(MAX_BET, this.bet + amount);
         } else {
             this.bet = Math.max(0, this.bet - amount);
         }
-        btnDeal.setDisable(bet > balance || bet <= 0);
-        lblBet.setText("$" + bet);
+
+        if (selectedAccount.isPresent()) {
+            final int balance = selectedAccount.get().getBalance();
+
+            btnDeal.setDisable(bet > balance || bet <= 0);
+            lblBet.setText("$" + bet);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package main;
 
 import com.google.inject.Injector;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.io.bet.BetController;
@@ -11,29 +12,34 @@ import main.io.injection.InjectionModule;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
+import main.io.storage.Directory;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
 import static java.util.UUID.randomUUID;
+import static main.io.storage.Directory.*;
 import static main.usecase.Layout.HOME;
 
 public class AppRoot {
 
     public static Stage stage;
 
-    public AppRoot(Stage stage) {
+    public AppRoot(Stage stage, Map<Directory, File> directoryMap, Map<Layout, FXMLLoader> resourceMap) {
 
         AppRoot.stage = stage;
 
         currentThread().setName("Trunk thread");
 
-        final Injector injector = createInjector(new InjectionModule());
+        final Injector injector = createInjector(new InjectionModule(directoryMap, resourceMap));
 
         final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
         final Game game = injector.getInstance(Game.class);
@@ -50,8 +56,6 @@ public class AppRoot {
         final RegistrationController registrationController = injector.getInstance(RegistrationController.class);
         final EventNetwork eventNetwork = new EventNetwork(randomUUID());
 
-        historyController.setTransactionMemory(transactionMemory);
-        historyController.setSelectionMemory(selectionMemory);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory); // TODO: monitor this after switching to multi-threading.

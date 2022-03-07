@@ -108,13 +108,15 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onClickList(MouseEvent mouseEvent) {
+        final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
+        btnPlay.setDisable(selectedAccount == null);
+        btnDelete.setDisable(selectedAccount == null);
+        btnHistory.setDisable(selectedAccount == null);
+
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
-        } else {
-            final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
-            btnPlay.setDisable(selectedAccount == null);
-            btnDelete.setDisable(selectedAccount == null);
-            btnHistory.setDisable(selectedAccount == null);
+        } else if (selectedAccount != null) {
+            eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
         }
     }
 

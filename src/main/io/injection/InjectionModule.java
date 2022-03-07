@@ -19,6 +19,7 @@ import main.io.registration.RegistrationController;
 import main.io.storage.*;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
+import main.usecase.SelectionMemory;
 import main.usecase.Transactor;
 
 import java.io.File;
@@ -34,28 +35,31 @@ import static java.lang.Integer.parseInt;
 import static java.util.UUID.randomUUID;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
-import static main.io.storage.Directory.*;
 import static main.usecase.Layout.*;
 
 public class InjectionModule extends AbstractModule {
 
+    final Map<Directory, File> directoryFileMap;
+    final Map<Layout, FXMLLoader> resourceMap;
+
+    public InjectionModule(Map<Directory, File> directoryFileMap, Map<Layout, FXMLLoader> resourceMap) {
+        this.directoryFileMap = directoryFileMap;
+        this.resourceMap = resourceMap;
+    }
+
     @Override
     public void configure() {
-        final Map<Directory, File> directoryMap = new HashMap<Directory, File>() {{
-            put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
-            put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
-            put(DECKS, new File("./app-data/decks/"));
-            put(LOG, new File("./app-data/log/"));
-            put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
-        }};
+        final main.usecase.TransactionMemory transactionMemory = new main.usecase.TransactionMemory(randomUUID(), new TreeMap<>());
+        final SelectionMemory selectionMemory = new SelectionMemory();
+        final HistoryController historyController = new HistoryController(transactionMemory, selectionMemory);
+        final FileSystem fileSystem = new FileSystem(directoryFileMap);
+        final Properties config = fileSystem.loadConfig();
+        final String deckName = (String) config.get("game.deckName");
+        final int numDecks = parseInt((String) config.get("game.numDecks"));
+        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
+        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
 
-        final Map<Layout, FXMLLoader> resourceMap = new HashMap<Layout, FXMLLoader>() {{
-            put(HOME, new FXMLLoader(InjectionModule.class.getResource("../home/HomeView.fxml")));
-            put(BET, new FXMLLoader(InjectionModule.class.getResource("../bet/BetView.fxml")));
-            put(GAME, new FXMLLoader(InjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
-            put(HISTORY, new FXMLLoader(InjectionModule.class.getResource("../history/HistoryView.fxml")));
-            put(REGISTRATION, new FXMLLoader(InjectionModule.class.getResource("../registration/RegistrationView.fxml")));
-        }};
+        resourceMap.get(HISTORY).setControllerFactory(params -> historyController);
 
         resourceMap.keySet().forEach(k -> {
             try {
@@ -69,13 +73,10 @@ public class InjectionModule extends AbstractModule {
                 .stream()
                 .collect(Collectors.toMap(layout -> layout, layout -> resourceMap.get(layout).getRoot()));
 
-        final FileSystem fileSystem = new FileSystem(directoryMap);
-        final Properties config = fileSystem.loadConfig();
-        final String deckName = (String) config.get("game.deckName");
-        final int numDecks = parseInt((String) config.get("game.numDecks"));
-        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
-        final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
         final Scene scene = new Scene(layoutMap.get(HOME));
+
+        bind(main.usecase.TransactionMemory.class)
+                .toInstance(transactionMemory);
 
         bind(Logger.class)
                 .annotatedWith(named("logger"))
@@ -88,14 +89,13 @@ public class InjectionModule extends AbstractModule {
                 .toInstance(resourceMap.get(GAME).getController());
 
         bind(HistoryController.class)
-                .toInstance(resourceMap.get(HISTORY).getController());
+                .toInstance(historyController);
 
         bind(HomeController.class)
                 .toInstance(resourceMap.get(HOME).getController());
 
         bind(RegistrationController.class)
                 .toInstance(resourceMap.get(REGISTRATION).getController());
-
 
         bind(AccountMemory.class).to(Database.class);
         bind(TransactionMemory.class).to(Database.class);
@@ -130,7 +130,7 @@ public class InjectionModule extends AbstractModule {
         bind(LayoutManager.class)
                 .toInstance(new LayoutManager(randomUUID(), AppRoot.stage, scene, layoutMap));
 
-        bind(main.usecase.TransactionMemory.class)
-                .toInstance(new main.usecase.TransactionMemory(randomUUID(), new TreeMap<>()));
+        bind(SelectionMemory.class)
+                .toInstance(selectionMemory);
     }
 }

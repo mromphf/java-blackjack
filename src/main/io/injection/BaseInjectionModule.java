@@ -9,6 +9,7 @@ import main.io.log.ConsoleLogHandler;
 import main.io.log.FileLogHandler;
 import main.io.storage.*;
 import main.usecase.SelectionMemory;
+import main.usecase.TransactionCache;
 import main.usecase.Transactor;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class BaseInjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        final main.usecase.TransactionMemory transactionMemory = new main.usecase.TransactionMemory(randomUUID(), new TreeMap<>());
+        final TransactionCache transactionCache = new TransactionCache(randomUUID(), new TreeMap<>());
         final SelectionMemory selectionMemory = new SelectionMemory();
         final FileSystem fileSystem = new FileSystem(directoryFileMap);
         final Properties config = fileSystem.loadConfig();
@@ -42,8 +43,8 @@ public class BaseInjectionModule extends AbstractModule {
         final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
         final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
 
-        bind(main.usecase.TransactionMemory.class)
-                .toInstance(transactionMemory);
+        bind(TransactionCache.class)
+                .toInstance(transactionCache);
 
         bind(Logger.class)
                 .annotatedWith(named("logger"))

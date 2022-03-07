@@ -8,7 +8,7 @@ import main.io.storage.AccountMemory;
 import main.io.storage.Database;
 import main.io.storage.Directory;
 import main.io.storage.TransactionMemory;
-import main.usecase.SelectionMemory;
+import main.usecase.AccountCache;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
 import main.usecase.eventing.EventNetwork;
@@ -44,7 +44,7 @@ public class BaseInjectionModule extends AbstractModule {
 
         bind(AccountMemory.class).to(Database.class);
         bind(TransactionMemory.class).to(Database.class);
-        bind(SelectionMemory.class).toInstance(new SelectionMemory());
+        bind(AccountCache.class).toInstance(new AccountCache());
 
         bind(Transactor.class)
                 .toInstance(new Transactor(randomUUID(), transactionEvaluators()));

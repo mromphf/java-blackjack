@@ -16,7 +16,6 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -96,16 +95,8 @@ public class BlackjackController extends EventConnection implements Initializabl
             nextHandControls.setVisible(snapshot.readyToPlayNextHand());
             gameOverControls.setVisible(snapshot.allBetsSettled());
             prgDeck.setProgress(snapshot.getDeckProgress());
-            btnDouble.setDisable(true);
-            btnSplit.setDisable(true);
-
-            final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
-
-            if (selectedAccount.isPresent() && selectedAccount.get().getBalance() > 0) {
-                final int currentBalance = selectedAccount.get().getBalance();
-                btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore(currentBalance));
-                btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
-            }
+            btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore());
+            btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore()));
 
             if (snapshot.isRoundResolved()) {
                 renderExposedTable(snapshot);

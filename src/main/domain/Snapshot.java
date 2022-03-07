@@ -14,6 +14,7 @@ import static main.common.StringUtil.playerString;
 public class Snapshot {
     private final LocalDateTime timestamp;
     private final UUID accountKey;
+    private final int balance;
     private final int bet;
     private final int maxCards;
     private final Outcome outcome;
@@ -26,6 +27,7 @@ public class Snapshot {
 
     public Snapshot(LocalDateTime timestamp,
                     UUID accountKey,
+                    int balance,
                     int bet,
                     int maxCards,
                     Stack<Card> deck,
@@ -36,6 +38,7 @@ public class Snapshot {
                     SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
         this.accountKey = accountKey;
+        this.balance = balance;
         this.bet = bet;
         this.maxCards = maxCards;
         this.deck.addAll(deck);
@@ -60,6 +63,10 @@ public class Snapshot {
         return bet;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
     public int getNegativeBet() {
         return Math.negateExact(bet);
     }
@@ -80,7 +87,7 @@ public class Snapshot {
         return (!handsToSettle.isEmpty() && isHandResolved());
     }
 
-    public boolean canAffordToSpendMore(int balance) {
+    public boolean canAffordToSpendMore() {
         return balance >= bet;
     }
 
@@ -147,6 +154,7 @@ public class Snapshot {
         return String.format("\n\tAccount Key: %s\n\t" +
                         "Deck: %s,\n\t" +
                         "Outcome: %s,\n\t" +
+                        "Balance: %s,\n\t" +
                         "Bet: %s,\n\t" +
                         "Hands to Play: %s,\n\t" +
                         "Hands to Settle: %s,\n\t" +
@@ -156,6 +164,7 @@ public class Snapshot {
                 accountKey,
                 deck.size(),
                 outcome,
+                balance,
                 bet,
                 handsToPlay.size(),
                 handsToSettle.size(),

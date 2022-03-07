@@ -18,11 +18,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-       final Injector configInjector = createInjector(new ConfigInjectionModule(new FileSystem(directoryMap())));
-       final Injector baseInjector = createInjector(new BaseInjectionModule(directoryMap()));
-       final Injector fxmlInjector = createInjector(new FXMLInjectionModule(stage, baseInjector, resourceMap()));
+        final FileSystem fileSystem = new FileSystem(directoryMap());
+        final Injector configInjector = createInjector(new ConfigInjectionModule(fileSystem));
+        final Injector baseInjector = createInjector(new BaseInjectionModule(fileSystem));
+        final Injector fxmlInjector = createInjector(new FXMLInjectionModule(stage, baseInjector, resourceMap()));
 
-       final AppRoot appRoot = new AppRoot(configInjector, baseInjector, fxmlInjector);
+        final AppRoot appRoot = new AppRoot(configInjector, baseInjector, fxmlInjector);
 
         appRoot.init();
     }

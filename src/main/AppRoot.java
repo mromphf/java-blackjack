@@ -1,13 +1,13 @@
 package main;
 
 import com.google.inject.Injector;
+import main.adapter.log.GameLogger;
+import main.adapter.storage.AccountStorage;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.history.HistoryController;
 import main.adapter.ui.home.HomeController;
-import main.adapter.log.GameLogger;
 import main.adapter.ui.registration.RegistrationController;
-import main.adapter.storage.AccountStorage;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.EventNetwork;
@@ -29,8 +29,8 @@ public class AppRoot {
 
 
     public void init() {
-        final Game game = configInjector.getInstance(Game.class);
 
+        final Game game = baseInjector.getInstance(Game.class);
         final AccountStorage accountStorage = baseInjector.getInstance(AccountStorage.class);
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
         final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);

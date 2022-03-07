@@ -5,35 +5,46 @@ import com.google.inject.TypeLiteral;
 import main.adapter.log.FileLogHandler;
 import main.adapter.storage.AccountMemory;
 import main.adapter.storage.Database;
-import main.adapter.storage.Directory;
+import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionMemory;
+import main.domain.Card;
 import main.usecase.AccountCache;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
 import main.usecase.eventing.EventNetwork;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import static com.google.inject.name.Names.named;
+import static java.lang.Integer.parseInt;
 import static java.util.UUID.randomUUID;
+import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
 
 public class BaseInjectionModule extends AbstractModule {
 
-    final Map<Directory, File> directoryFileMap;
+    private final FileSystem fileSystem;
 
-    public BaseInjectionModule(Map<Directory, File> directoryFileMap) {
-        this.directoryFileMap = directoryFileMap;
+    public BaseInjectionModule(FileSystem fileSystem) {
+        this.fileSystem = fileSystem;
     }
 
     @Override
     public void configure() {
+        final Properties config = fileSystem.loadConfig();
+        final String deckName = (String) config.get("game.deckName");
+        final int numDecks = parseInt((String) config.get("game.numDecks"));
+
+        bind(Integer.class)
+                .annotatedWith(named("numDecks"))
+                .toInstance(numDecks);
+
+        bind(new TypeLiteral<Stack<Card>>() {})
+                .annotatedWith(named("deck"))
+                .toInstance(deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName));
+
         bind(TransactionCache.class)
                 .toInstance(new TransactionCache(randomUUID(), new TreeMap<>()));
 

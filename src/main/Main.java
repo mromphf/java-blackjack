@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import main.io.blackjack.ImageMap;
-import main.io.injection.InjectionModule;
+import main.io.injection.BaseInjectionModule;
 import main.io.storage.Directory;
 import main.usecase.Layout;
 
@@ -39,11 +39,11 @@ public class Main extends Application {
 
     private static Map<Layout, FXMLLoader> resourceMap() {
         return new HashMap<Layout, FXMLLoader>() {{
-            put(BET, new FXMLLoader(InjectionModule.class.getResource("../bet/BetView.fxml")));
-            put(GAME, new FXMLLoader(InjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
-            put(HISTORY, new FXMLLoader(InjectionModule.class.getResource("../history/HistoryView.fxml")));
-            put(HOME, new FXMLLoader(InjectionModule.class.getResource("../home/HomeView.fxml")));
-            put(REGISTRATION, new FXMLLoader(InjectionModule.class.getResource("../registration/RegistrationView.fxml")));
+            put(BET, new FXMLLoader(BaseInjectionModule.class.getResource("../bet/BetView.fxml")));
+            put(GAME, new FXMLLoader(BaseInjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
+            put(HISTORY, new FXMLLoader(BaseInjectionModule.class.getResource("../history/HistoryView.fxml")));
+            put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../home/HomeView.fxml")));
+            put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../registration/RegistrationView.fxml")));
         }};
     }
 }

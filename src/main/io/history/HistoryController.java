@@ -1,5 +1,6 @@
 package main.io.history;
 
+import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,6 +45,7 @@ public class HistoryController extends EventConnection implements Initializable,
     private final TransactionMemory transactionMemory;
     private final SelectionMemory selectionMemory;
 
+    @Inject
     public HistoryController(TransactionMemory transactionMemory, SelectionMemory selectionMemory) {
         this.transactionMemory = transactionMemory;
         this.selectionMemory = selectionMemory;

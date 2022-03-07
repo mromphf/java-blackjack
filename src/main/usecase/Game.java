@@ -5,15 +5,17 @@ import com.google.inject.name.Named;
 import main.domain.*;
 import main.usecase.eventing.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements ActionListener, BetListener, LayoutListener {
+public class Game extends EventConnection implements BetListener, LayoutListener {
 
     private final UUID key = randomUUID();
     private final Stack<Card> deck;
@@ -36,11 +38,11 @@ public class Game extends EventConnection implements ActionListener, BetListener
         return key;
     }
 
-    @Override
-    public void onActionEvent(Event<Action> event) {
+    public void onActionTaken(Action action) {
         final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+        final LocalDateTime timestamp = now();
 
-        if (event.is(ACTION_TAKEN) && roundStack.size() > 0 && selectedAccount.isPresent()) {
+        if (roundStack.size() > 0 && selectedAccount.isPresent()) {
             final Round currentRound = roundStack.peek();
 
             runnableMap.put(HIT, currentRound::hit);
@@ -50,9 +52,9 @@ public class Game extends EventConnection implements ActionListener, BetListener
             runnableMap.put(DOUBLE, currentRound::doubleDown);
             runnableMap.put(PLAY_NEXT_HAND, currentRound::playNextHand);
 
-            currentRound.record(event.getTimestamp(), event.getData());
-            runnableMap.getOrDefault(event.getData(), () -> {}).run();
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp(), selectedAccount.get()));
+            currentRound.record(timestamp, action);
+            runnableMap.getOrDefault(action, () -> {}).run();
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(timestamp, selectedAccount.get()));
         }
     }
 

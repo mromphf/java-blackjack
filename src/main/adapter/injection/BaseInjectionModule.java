@@ -9,6 +9,7 @@ import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionMemory;
 import main.domain.Card;
 import main.usecase.AccountCache;
+import main.usecase.Game;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
 import main.usecase.eventing.EventNetwork;
@@ -36,6 +37,8 @@ public class BaseInjectionModule extends AbstractModule {
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
+
+        bind(Game.class).asEagerSingleton();
 
         bind(Integer.class)
                 .annotatedWith(named("numDecks"))

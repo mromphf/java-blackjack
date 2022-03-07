@@ -41,14 +41,11 @@ public class HistoryController extends EventConnection implements Initializable,
     public GridPane chartHousing;
 
     private final UUID key = randomUUID();
-    private TransactionMemory transactionMemory;
-    private SelectionMemory selectionMemory;
+    private final TransactionMemory transactionMemory;
+    private final SelectionMemory selectionMemory;
 
-    public void setTransactionMemory(TransactionMemory transactionMemory) {
+    public HistoryController(TransactionMemory transactionMemory, SelectionMemory selectionMemory) {
         this.transactionMemory = transactionMemory;
-    }
-
-    public void setSelectionMemory(SelectionMemory selectionMemory) {
         this.selectionMemory = selectionMemory;
     }
 
@@ -97,8 +94,8 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
         if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
+            final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
             final List<Transaction> transactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
 
 

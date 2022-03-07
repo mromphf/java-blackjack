@@ -21,10 +21,7 @@ import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.util.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
@@ -60,29 +57,37 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Account selectedAccount = accountCache.getLastSelectedAccount().get();
-        final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
-        final LocalDate date = datePicker.getValue();
-        final NumberAxis yAxis = new NumberAxis();
-        final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
-        final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
-                date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
+        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
+        if (optionalAccount.isPresent()) {
+            final Account selectedAccount = optionalAccount.get();
+            final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+            final LocalDate date = datePicker.getValue();
+            final NumberAxis yAxis = new NumberAxis();
+            final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
+            final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
+                    date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
 
-        chartHousing.getChildren().clear();
+            chartHousing.getChildren().clear();
 
-        drawChart(selectedAccount, xAxis, yAxis, balanceSeries);
+            drawChart(selectedAccount, xAxis, yAxis, balanceSeries);
+        }
     }
 
     @FXML
     public void clearFilter() {
-        final Account selectedAccount = accountCache.getLastSelectedAccount().get();
-        final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
-        final NumberAxis yAxis = new NumberAxis();
-        final Axis<String> xAxis = dateAxis(accountTransactions);
+        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
 
-        datePicker.setValue(null);
+        if (optionalAccount.isPresent()) {
 
-        drawChart(selectedAccount, xAxis, yAxis, transactionDataMap(accountTransactions));
+            final Account selectedAccount = optionalAccount.get();
+            final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+            final NumberAxis yAxis = new NumberAxis();
+            final Axis<String> xAxis = dateAxis(accountTransactions);
+
+            datePicker.setValue(null);
+
+            drawChart(selectedAccount, xAxis, yAxis, transactionDataMap(accountTransactions));
+        }
     }
 
     @Override
@@ -96,10 +101,12 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
-            final Account selectedAccount = accountCache.getLastSelectedAccount().get();
-            final List<Transaction> transactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
 
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY && optionalAccount.isPresent()) {
+
+            final Account selectedAccount = optionalAccount.get();
+            final List<Transaction> transactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
 
             drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }

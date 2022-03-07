@@ -122,7 +122,7 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE)) {
+        if (event.is(CURRENT_BALANCE_UPDATED)) {
             this.balance = event.getData().getBalance();
 
             runLater(() -> {

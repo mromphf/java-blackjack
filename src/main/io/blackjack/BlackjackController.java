@@ -74,7 +74,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE)) {
+        if (event.is(CURRENT_BALANCE_UPDATED)) {
             currentBalance = event.getData().getBalance();
             runLater(() -> lblBalance.setText(String.format("Balance $%s", currentBalance)));
         }

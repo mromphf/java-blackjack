@@ -9,7 +9,6 @@ import static main.domain.Rules.*;
 
 public class Round {
 
-    private final UUID accountKey;
     private final Stack<Card> deck;
     private final Stack<Stack<Card>> handsToPlay;
     private final Stack<HandToSettle> handsToSettle;
@@ -21,8 +20,7 @@ public class Round {
     private SortedMap<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(UUID accountKey, Stack<Card> deck, int bet, int maxCards, int numDecks) {
-        this.accountKey = accountKey;
+    public Round(Stack<Card> deck, int bet, int maxCards, int numDecks) {
         this.bet = bet;
         this.deck = deck;
         this.numDecks = numDecks;
@@ -121,10 +119,11 @@ public class Round {
         deck.addAll(freshlyShuffledDeck(numDecks));
     }
 
-    public Snapshot getSnapshot(LocalDateTime timestamp) {
+    public Snapshot getSnapshot(LocalDateTime timestamp, Account account) {
         return new Snapshot(
                 timestamp,
-                accountKey,
+                account.getKey(),
+                account.getBalance(),
                 bet,
                 maxCards,
                 deck,

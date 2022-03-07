@@ -2,16 +2,10 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.Action;
-import main.domain.Bet;
-import main.domain.Card;
-import main.domain.Round;
+import main.domain.*;
 import main.usecase.eventing.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
@@ -27,9 +21,11 @@ public class Game extends EventConnection implements ActionListener, BetListener
     private final int numDecks;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
+    private final AccountCache accountCache;
 
     @Inject
-    public Game(@Named("deck") Stack<Card> deck, @Named("numDecks") int numDecks) {
+    public Game(@Named("deck") Stack<Card> deck, @Named("numDecks") int numDecks, AccountCache accountCache) {
+        this.accountCache = accountCache;
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
@@ -42,7 +38,9 @@ public class Game extends EventConnection implements ActionListener, BetListener
 
     @Override
     public void onActionEvent(Event<Action> event) {
-        if (event.is(ACTION_TAKEN) && roundStack.size() > 0) {
+        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+
+        if (event.is(ACTION_TAKEN) && roundStack.size() > 0 && selectedAccount.isPresent()) {
             final Round currentRound = roundStack.peek();
 
             runnableMap.put(HIT, currentRound::hit);
@@ -54,17 +52,19 @@ public class Game extends EventConnection implements ActionListener, BetListener
 
             currentRound.record(event.getTimestamp(), event.getData());
             runnableMap.getOrDefault(event.getData(), () -> {}).run();
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp()));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(event.getTimestamp(), selectedAccount.get()));
         }
     }
 
     @Override
     public void onBetEvent(Event<Bet> event) {
-        if (event.is(BET_PLACED)) {
+        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+
+        if (event.is(BET_PLACED) && selectedAccount.isPresent()) {
             final Bet bet = event.getData();
 
-            roundStack.add(new Round(bet.getAccountKey(), deck, bet.getVal(), maxCards, numDecks));
-            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(event.getTimestamp()));
+            roundStack.add(new Round(deck, bet.getVal(), maxCards, numDecks));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(event.getTimestamp(), selectedAccount.get()));
         }
     }
 

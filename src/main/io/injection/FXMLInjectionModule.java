@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import main.AppRoot;
+import javafx.stage.Stage;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.history.HistoryController;
@@ -25,10 +25,12 @@ public class FXMLInjectionModule extends AbstractModule {
 
     final Injector baseInjector;
     final Map<Layout, FXMLLoader> resourceMap;
+    final Stage stage;
 
-    public FXMLInjectionModule(Injector baseInjector, Map<Layout, FXMLLoader> resourceMap) {
+    public FXMLInjectionModule(Stage stage, Injector baseInjector, Map<Layout, FXMLLoader> resourceMap) {
         this.baseInjector = baseInjector;
         this.resourceMap = resourceMap;
+        this.stage = stage;
     }
 
     @Override
@@ -69,6 +71,6 @@ public class FXMLInjectionModule extends AbstractModule {
         bind(Scene.class).toInstance(scene);
 
         bind(LayoutManager.class)
-                .toInstance(new LayoutManager(randomUUID(), AppRoot.stage, scene, layoutMap));
+                .toInstance(new LayoutManager(randomUUID(), stage, scene, layoutMap));
     }
 }

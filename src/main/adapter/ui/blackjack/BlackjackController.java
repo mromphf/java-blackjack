@@ -1,5 +1,6 @@
 package main.adapter.ui.blackjack;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -7,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.Snapshot;
+import main.usecase.Game;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
@@ -64,6 +66,12 @@ public class BlackjackController extends EventConnection implements Initializabl
     private ProgressBar prgDeck;
 
     private final UUID key = randomUUID();
+    private final Game game;
+
+    @Inject
+    public BlackjackController(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -93,7 +101,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     public void onSplit() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, SPLIT));
+        game.onActionTaken(SPLIT);
     }
 
     @FXML
@@ -104,12 +112,12 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onStand() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, STAND));
+        game.onActionTaken(STAND);
     }
 
     @FXML
     private void onSettleNextHand() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, SETTLE));
+        game.onActionTaken(SETTLE);
     }
 
     @FXML
@@ -119,22 +127,22 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onHit() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, HIT));
+        game.onActionTaken(HIT);
     }
 
     @FXML
     private void onDouble() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, DOUBLE));
+        game.onActionTaken(DOUBLE);
     }
 
     @FXML
     private void onTakeInsurance() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, BUY_INSURANCE));
+        game.onActionTaken(BUY_INSURANCE);
     }
 
     @FXML
     private void onWaiveInsurance() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, WAIVE_INSURANCE));
+        game.onActionTaken(WAIVE_INSURANCE);
     }
 
     @FXML

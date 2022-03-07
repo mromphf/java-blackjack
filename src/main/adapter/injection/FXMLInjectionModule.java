@@ -36,8 +36,10 @@ public class FXMLInjectionModule extends AbstractModule {
     @Override
     public void configure() {
         HistoryController historyController = baseInjector.getInstance(HistoryController.class);
+        BlackjackController blackjackController = baseInjector.getInstance(BlackjackController.class);
 
         resourceMap.get(HISTORY).setControllerFactory(params -> historyController);
+        resourceMap.get(GAME).setControllerFactory(params -> blackjackController);
 
         resourceMap.keySet().forEach(k -> {
             try {
@@ -61,6 +63,9 @@ public class FXMLInjectionModule extends AbstractModule {
 
         bind(HistoryController.class)
                 .toInstance(historyController);
+
+        bind(BlackjackController.class)
+                .toInstance(blackjackController);
 
         bind(HomeController.class)
                 .toInstance(resourceMap.get(HOME).getController());

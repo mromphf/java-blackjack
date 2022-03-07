@@ -32,11 +32,12 @@ public class AppRoot {
 
     public static Stage stage;
 
-    public AppRoot(Stage stage, Map<Directory, File> directoryMap, Map<Layout, FXMLLoader> resourceMap) {
+    public AppRoot(Stage stage,
+                   Map<Directory, File> directoryMap,
+                   Map<Layout, FXMLLoader> resourceMap,
+                   FileSystem fileSystem) {
 
         AppRoot.stage = stage;
-
-        final FileSystem fileSystem = new FileSystem(directoryMap);
 
         final Injector configInjector = createInjector(new ConfigInjectionModule(fileSystem));
         final Injector baseInjector = createInjector(new BaseInjectionModule(directoryMap));
@@ -58,7 +59,6 @@ public class AppRoot {
         final BlackjackController blackjackController = fxmlInjection.getInstance(BlackjackController.class);
         final BetController betController = fxmlInjection.getInstance(BetController.class);
         final RegistrationController registrationController = fxmlInjection.getInstance(RegistrationController.class);
-
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory);

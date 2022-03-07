@@ -11,7 +11,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.usecase.eventing.Predicate.*;
 
-public class SelectionMemory extends EventConnection implements AccountResponder, AccountListener, TransactionListener {
+public class SelectionMemory extends EventConnection implements AccountListener, TransactionListener {
 
     private final UUID networkId = randomUUID();
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
@@ -49,14 +49,5 @@ public class SelectionMemory extends EventConnection implements AccountResponder
             selections.put(now(), event.getData());
             eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, selections.get(selections.lastKey())));
         }
-    }
-
-    @Override
-    public Optional<Account> requestSelectedAccount(Predicate predicate) {
-        if (selections.size() > 0) {
-            return Optional.of(selections.get(selections.lastKey()));
-        }
-
-        return Optional.empty();
     }
 }

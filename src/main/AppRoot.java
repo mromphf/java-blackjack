@@ -50,6 +50,7 @@ public class AppRoot {
         final BlackjackController blackjackController = injector.getInstance(BlackjackController.class);
         final BetController betController = injector.getInstance(BetController.class);
         final RegistrationController registrationController = injector.getInstance(RegistrationController.class);
+        final EventNetwork eventNetwork = new EventNetwork(randomUUID());
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory); // TODO: monitor this after switching to multi-threading.
@@ -66,16 +67,8 @@ public class AppRoot {
             add(gameLogger);
         }};
 
-        final EventNetwork eventNetwork = new EventNetwork(randomUUID(), eventConnections);
-
-        eventNetwork.registerResponder(ACCOUNT_SELECTED, selectionMemory);
-        eventNetwork.registerResponder(TRANSACTION, transactionMemory);
-
+        eventNetwork.registerListeners(eventConnections);
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
-
-        /*
-         * Initialize JavaFX Stage
-         */
 
         layoutManager.onChangeLayout(HOME);
 
@@ -85,7 +78,6 @@ public class AppRoot {
         stage.setFullScreen(true);
         stage.show();
 
-        // Load accounts and transactions from disk
         new Thread(accountStorage::loadAllAccounts, "Account Load Thread").start();
         new Thread(accountStorage::loadAllTransactions, "Transaction Load Thread").start();
     }

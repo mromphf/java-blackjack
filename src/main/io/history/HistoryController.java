@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.Layout;
+import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
@@ -28,7 +29,7 @@ import static main.usecase.Layout.HISTORY;
 import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
 import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
-public class HistoryController extends EventConnection implements Initializable, LayoutListener {
+public class HistoryController extends EventConnection implements Initializable, LayoutListener, AccountListener {
 
     @FXML
     public DatePicker datePicker;
@@ -37,6 +38,8 @@ public class HistoryController extends EventConnection implements Initializable,
     public GridPane chartHousing;
 
     private final UUID key = randomUUID();
+
+    private Account selectedAccount;
 
     @FXML
     public void onBack() {
@@ -47,41 +50,32 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Optional<Account> account = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+        final List<Transaction> accountTransactions = new LinkedList<>();
+        final LocalDate date = datePicker.getValue();
+        final NumberAxis yAxis = new NumberAxis();
+        final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
+        final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
+                date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
 
-        if (account.isPresent()) {
-            final List<Transaction> accountTransactions = new ArrayList<>(
-                    eventNetwork.requestTransactionsByKey(account.get().getKey()));
-            final LocalDate date = datePicker.getValue();
-            final NumberAxis yAxis = new NumberAxis();
-            final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
-            final Map<Transaction, XYChart.Data<String, Number>> balanceSeries =
-                    date == null ? transactionDataMap(accountTransactions) : transactionDataMap(accountTransactions, date);
+        chartHousing.getChildren().clear();
 
-            chartHousing.getChildren().clear();
-
-            drawChart(account.get(), xAxis, yAxis, balanceSeries);
-        }
+        drawChart(selectedAccount, xAxis, yAxis, balanceSeries);
     }
 
     @FXML
     public void clearFilter() {
-        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
-        if (selectedAccount.isPresent()) {
-            final Account account = selectedAccount.get();
-            final List<Transaction> accountTransactions = new ArrayList<>(
-                    eventNetwork.requestTransactionsByKey(account.getKey()));
-            final NumberAxis yAxis = new NumberAxis();
-            final Axis<String> xAxis = dateAxis(accountTransactions);
+        final List<Transaction> accountTransactions = new LinkedList<>();
+        final NumberAxis yAxis = new NumberAxis();
+        final Axis<String> xAxis = dateAxis(accountTransactions);
 
-            datePicker.setValue(null);
+        datePicker.setValue(null);
 
-            drawChart(account, xAxis, yAxis, transactionDataMap(accountTransactions));
-        }
+        drawChart(selectedAccount, xAxis, yAxis, transactionDataMap(accountTransactions));
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     @Override
     public UUID getKey() {
@@ -90,13 +84,10 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Event<Layout> event) {
-        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
+            final List<Transaction> transactions = new LinkedList<>();
 
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY && selectedAccount.isPresent()) {
-            final Account account = selectedAccount.get();
-            final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
-
-            drawChart(account, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
+            drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }
     }
 
@@ -104,7 +95,6 @@ public class HistoryController extends EventConnection implements Initializable,
                           Axis<String> xAxis,
                           NumberAxis yAxis,
                           Map<Transaction, XYChart.Data<String, Number>> transactionDataMap) {
-        final List<Transaction> transactions = new ArrayList<>(eventNetwork.requestTransactionsByKey(account.getKey()));
         final LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
         final XYChart.Series<String, Number> series = new XYChart.Series<>();
 
@@ -116,10 +106,17 @@ public class HistoryController extends EventConnection implements Initializable,
 
         chart.setPrefWidth(1200);
         chart.setPrefHeight(800);
-        chart.setTitle(String.format("%s Transactions: %s", account.getName(), transactions.size()));
+        chart.setTitle(String.format("%s Transactions: %s", account.getName(), 0));
         chart.getData().add(series);
 
         installTransactionTooltips(transactionDataMap);
         Platform.runLater(() -> chartHousing.add(chart, 0, 0));
+    }
+
+    @Override
+    public void onAccountEvent(Event<Account> event) {
+        if (event.is(ACCOUNT_SELECTED)) {
+            selectedAccount = event.getData();
+        }
     }
 }

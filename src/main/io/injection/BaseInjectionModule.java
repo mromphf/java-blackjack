@@ -2,7 +2,6 @@ package main.io.injection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import main.io.log.ConsoleLogHandler;
 import main.io.log.FileLogHandler;
 import main.io.storage.AccountMemory;
 import main.io.storage.Database;
@@ -56,7 +55,7 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named("logHandlers"))
                 .toInstance(new ArrayList<Handler>() {
                     {
-                        add(new ConsoleLogHandler());
+                        //add(new ConsoleLogHandler());
                         add(new FileLogHandler());
                     }
                 });

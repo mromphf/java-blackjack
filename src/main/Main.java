@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Thread.currentThread;
 import static main.io.storage.Directory.*;
 import static main.usecase.Layout.*;
 
@@ -23,6 +24,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        currentThread().setName("Main Thread");
         ImageMap.load();
         launch(args);
     }

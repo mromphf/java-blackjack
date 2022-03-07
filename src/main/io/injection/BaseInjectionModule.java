@@ -11,6 +11,7 @@ import main.io.storage.*;
 import main.usecase.SelectionMemory;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
+import main.usecase.eventing.EventNetwork;
 
 import java.io.File;
 import java.util.*;
@@ -34,17 +35,14 @@ public class BaseInjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        final TransactionCache transactionCache = new TransactionCache(randomUUID(), new TreeMap<>());
-        final SelectionMemory selectionMemory = new SelectionMemory();
         final FileSystem fileSystem = new FileSystem(directoryFileMap);
         final Properties config = fileSystem.loadConfig();
         final String deckName = (String) config.get("game.deckName");
         final int numDecks = parseInt((String) config.get("game.numDecks"));
-        final Stack<Card> deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
         final Collection<Function<Snapshot, Optional<Transaction>>> evaluators = transactionEvaluators();
 
         bind(TransactionCache.class)
-                .toInstance(transactionCache);
+                .toInstance(new TransactionCache(randomUUID(), new TreeMap<>()));
 
         bind(Logger.class)
                 .annotatedWith(named("logger"))
@@ -52,6 +50,7 @@ public class BaseInjectionModule extends AbstractModule {
 
         bind(AccountMemory.class).to(Database.class);
         bind(TransactionMemory.class).to(Database.class);
+        bind(SelectionMemory.class).toInstance(new SelectionMemory());
 
         bind(Integer.class)
                 .annotatedWith(named("numDecks"))
@@ -64,10 +63,13 @@ public class BaseInjectionModule extends AbstractModule {
         bind(Transactor.class)
                 .toInstance(new Transactor(randomUUID(), evaluators));
 
+        bind(EventNetwork.class)
+                .toInstance(new EventNetwork(randomUUID()));
+
         bind(new TypeLiteral<Stack<Card>>() {
         })
                 .annotatedWith(named("deck"))
-                .toInstance(deck);
+                .toInstance(deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName));
 
         bind(new TypeLiteral<Collection<Handler>>() {})
                 .annotatedWith(named("logHandlers"))
@@ -77,8 +79,5 @@ public class BaseInjectionModule extends AbstractModule {
                         add(new FileLogHandler());
                     }
                 });
-
-        bind(SelectionMemory.class)
-                .toInstance(selectionMemory);
     }
 }

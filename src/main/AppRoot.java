@@ -8,8 +8,8 @@ import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
 import main.io.history.HistoryController;
 import main.io.home.HomeController;
-import main.io.injection.FXMLInjectionModule;
 import main.io.injection.BaseInjectionModule;
+import main.io.injection.FXMLInjectionModule;
 import main.io.log.GameLogger;
 import main.io.registration.RegistrationController;
 import main.io.storage.AccountStorage;
@@ -24,8 +24,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import static com.google.inject.Guice.createInjector;
-import static java.lang.Thread.currentThread;
-import static java.util.UUID.randomUUID;
 import static main.usecase.Layout.HOME;
 
 public class AppRoot {
@@ -36,29 +34,28 @@ public class AppRoot {
 
         AppRoot.stage = stage;
 
-        currentThread().setName("Trunk thread");
-
         final Injector injector = createInjector(new BaseInjectionModule(directoryMap));
         final Injector fxmlInjection = createInjector(new FXMLInjectionModule(injector, resourceMap));
 
         final AccountStorage accountStorage = injector.getInstance(AccountStorage.class);
         final Game game = injector.getInstance(Game.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
-        final LayoutManager layoutManager = fxmlInjection.getInstance(LayoutManager.class);
         final Scene scene = fxmlInjection.getInstance(Scene.class);
         final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
         final TransactionCache transactionCache = injector.getInstance(TransactionCache.class);
         final Transactor transactor = injector.getInstance(Transactor.class);
+        final EventNetwork eventNetwork = injector.getInstance(EventNetwork.class);
+
+        final LayoutManager layoutManager = fxmlInjection.getInstance(LayoutManager.class);
         final HomeController homeController = fxmlInjection.getInstance(HomeController.class);
         final HistoryController historyController = fxmlInjection.getInstance(HistoryController.class);
         final BlackjackController blackjackController = fxmlInjection.getInstance(BlackjackController.class);
         final BetController betController = fxmlInjection.getInstance(BetController.class);
         final RegistrationController registrationController = fxmlInjection.getInstance(RegistrationController.class);
-        final EventNetwork eventNetwork = new EventNetwork(randomUUID());
 
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
-            add(selectionMemory); // TODO: monitor this after switching to multi-threading.
+            add(selectionMemory);
             add(homeController);
             add(historyController);
             add(blackjackController);

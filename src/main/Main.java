@@ -3,10 +3,10 @@ package main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import main.io.blackjack.ImageMap;
-import main.io.injection.BaseInjectionModule;
-import main.io.storage.Directory;
-import main.io.storage.FileSystem;
+import main.adapter.blackjack.ImageMap;
+import main.adapter.injection.BaseInjectionModule;
+import main.adapter.storage.Directory;
+import main.adapter.storage.FileSystem;
 import main.usecase.Layout;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Thread.currentThread;
-import static main.io.storage.Directory.*;
+import static main.adapter.storage.Directory.*;
 import static main.usecase.Layout.*;
 
 public class Main extends Application {

@@ -1,0 +1,149 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+
+<?import javafx.scene.canvas.Canvas?>
+<GridPane
+        fx:controller="main.adapter.home.HomeController"
+        xmlns:fx="http://javafx.com/fxml"
+        alignment="BASELINE_CENTER"
+        styleClass="background"
+        vgap="20">
+
+    <stylesheets>
+        <URL value="@Home.css"/>
+    </stylesheets>
+
+    <GridPane
+            GridPane.rowIndex="0"
+            GridPane.columnIndex="0"
+            alignment="CENTER"
+            style="-fx-padding: 50 0 0 0">
+        <Canvas fx:id="cvsTopScroller" onMouseClicked="#onClickTopScroller"/>
+    </GridPane>
+
+    <GridPane
+            GridPane.rowIndex="1"
+            GridPane.columnIndex="0"
+            hgap="20"
+            styleClass="header-panel"
+            alignment="CENTER">
+        <ImageView
+                fx:id="img1"
+                fitHeight="70"
+                fitWidth="70"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="0">
+        </ImageView>
+        <ImageView
+                fx:id="img2"
+                fitHeight="70"
+                fitWidth="70"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="1">
+        </ImageView>
+        <Text
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="2"
+                styleClass="header"
+                textAlignment="JUSTIFY">
+            Blackjack
+        </Text>
+        <ImageView
+                fx:id="img3"
+                fitHeight="70"
+                fitWidth="70"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="3">
+        </ImageView>
+        <ImageView
+                fx:id="img4"
+                fitHeight="70"
+                fitWidth="70"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="4">
+        </ImageView>
+    </GridPane>
+
+    <GridPane
+            GridPane.rowIndex="2"
+            GridPane.columnIndex="0"
+            alignment="CENTER"
+            style="-fx-padding: 0 0 20 0">
+        <Canvas fx:id="cvsBottomScroller" onMouseClicked="#onClickBottomScroller"/>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">
+            New
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
+
+        <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50" onAction="#onExit">
+            Exit
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
+    </GridPane>
+
+    <TableView fx:id="tblAccounts" GridPane.rowIndex="4" GridPane.columnIndex="0" minHeight="600" minWidth="800"
+               onMouseClicked="#onClickList">
+        <columns>
+            <TableColumn prefWidth="270">
+                <text>Name</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="name"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="270">
+                <text>Balance</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="balance"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="270">
+                <text>Date Opened</text>
+                <cellValueFactory>
+                    <PropertyValueFactory property="created"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+        <effect>
+            <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+        </effect>
+    </TableView>
+
+    <GridPane GridPane.rowIndex="5" GridPane.columnIndex="0" hgap="10">
+        <Button fx:id="btnPlay" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100"
+                minHeight="50" onAction="#onPlay">
+            Play
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
+
+        <Button fx:id="btnHistory" GridPane.rowIndex="0" disable="true" GridPane.columnIndex="1" minWidth="100"
+                minHeight="50" onAction="#onRequestHistory">
+            History
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
+
+        <Button fx:id="btnDelete" disable="true" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="100"
+                minHeight="50" styleClass="btn-del">
+            Delete
+            <effect>
+                <DropShadow blurType="GAUSSIAN" offsetX="1" offsetY="1"/>
+            </effect>
+        </Button>
+    </GridPane>
+</GridPane>

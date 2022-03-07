@@ -6,11 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.adapter.bet.BetController;
-import main.adapter.blackjack.BlackjackController;
-import main.adapter.history.HistoryController;
-import main.adapter.home.HomeController;
-import main.adapter.registration.RegistrationController;
+import main.adapter.ui.bet.BetController;
+import main.adapter.ui.blackjack.BlackjackController;
+import main.adapter.ui.history.HistoryController;
+import main.adapter.ui.home.HomeController;
+import main.adapter.ui.registration.RegistrationController;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
 

@@ -1,4 +1,4 @@
-package main.adapter.home;
+package main.adapter.ui.home;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,7 +26,7 @@ import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
-import static main.adapter.blackjack.ImageMap.*;
+import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 import static main.usecase.eventing.Predicate.*;
 

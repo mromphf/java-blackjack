@@ -3,7 +3,7 @@ package main;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import main.adapter.blackjack.ImageMap;
+import main.adapter.ui.blackjack.ImageMap;
 import main.adapter.injection.BaseInjectionModule;
 import main.adapter.injection.ConfigInjectionModule;
 import main.adapter.injection.FXMLInjectionModule;

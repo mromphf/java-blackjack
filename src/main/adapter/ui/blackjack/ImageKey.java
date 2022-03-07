@@ -1,4 +1,4 @@
-package main.adapter.blackjack;
+package main.adapter.ui.blackjack;
 
 public enum ImageKey {
     DEALER_CARDS,

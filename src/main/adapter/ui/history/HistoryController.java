@@ -1,4 +1,4 @@
-package main.adapter.history;
+package main.adapter.ui.history;
 
 import com.google.inject.Inject;
 import javafx.application.Platform;

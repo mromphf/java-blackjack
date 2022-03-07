@@ -1,4 +1,4 @@
-package main.adapter.blackjack;
+package main.adapter.ui.blackjack;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

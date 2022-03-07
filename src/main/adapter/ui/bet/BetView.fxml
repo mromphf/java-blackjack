@@ -8,7 +8,7 @@
 <?import java.net.URL?>
 
 <?import javafx.scene.canvas.Canvas?>
-<GridPane fx:controller="main.adapter.bet.BetController"
+<GridPane fx:controller="main.adapter.ui.bet.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" vgap="50" styleClass="background">
 
     <stylesheets>

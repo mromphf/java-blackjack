@@ -1,5 +1,6 @@
 package main.adapter.ui.blackjack;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,12 +10,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import main.domain.Account;
 import main.domain.Snapshot;
+import main.usecase.AccountCache;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -65,9 +68,13 @@ public class BlackjackController extends EventConnection implements Initializabl
     @FXML
     private ProgressBar prgDeck;
 
+    private final AccountCache accountCache;
     private final UUID key = randomUUID();
 
-    private int currentBalance = 0;
+    @Inject
+    public BlackjackController(AccountCache accountCache) {
+        this.accountCache = accountCache;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -75,7 +82,7 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(CURRENT_BALANCE_UPDATED)) {
-            currentBalance = event.getData().getBalance();
+            int currentBalance = event.getData().getBalance();
             runLater(() -> lblBalance.setText(String.format("Balance $%s", currentBalance)));
         }
     }
@@ -89,9 +96,17 @@ public class BlackjackController extends EventConnection implements Initializabl
             settleControls.setVisible(snapshot.readyToSettleNextHand());
             nextHandControls.setVisible(snapshot.readyToPlayNextHand());
             gameOverControls.setVisible(snapshot.allBetsSettled());
-            btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore(currentBalance));
-            btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
             prgDeck.setProgress(snapshot.getDeckProgress());
+            btnDouble.setDisable(true);
+            btnSplit.setDisable(true);
+
+            final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+
+            if (selectedAccount.isPresent() && selectedAccount.get().getBalance() > 0) {
+                final int currentBalance = selectedAccount.get().getBalance();
+                btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore(currentBalance));
+                btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore(currentBalance)));
+            }
 
             if (snapshot.isRoundResolved()) {
                 renderExposedTable(snapshot);

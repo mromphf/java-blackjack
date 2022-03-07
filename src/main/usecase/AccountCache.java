@@ -14,7 +14,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.usecase.eventing.Predicate.*;
 
-public class SelectionMemory extends EventConnection implements AccountListener, TransactionListener {
+public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
     private final UUID networkId = randomUUID();
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();

@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.Layout;
-import main.usecase.SelectionMemory;
+import main.usecase.AccountCache;
 import main.usecase.TransactionCache;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
@@ -43,12 +43,12 @@ public class HistoryController extends EventConnection implements Initializable,
 
     private final UUID key = randomUUID();
     private final TransactionCache transactionCache;
-    private final SelectionMemory selectionMemory;
+    private final AccountCache accountCache;
 
     @Inject
-    public HistoryController(TransactionCache transactionCache, SelectionMemory selectionMemory) {
+    public HistoryController(TransactionCache transactionCache, AccountCache accountCache) {
         this.transactionCache = transactionCache;
-        this.selectionMemory = selectionMemory;
+        this.accountCache = accountCache;
     }
 
     @FXML
@@ -60,7 +60,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
+        final Account selectedAccount = accountCache.getLastSelectedAccount().get();
         final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
         final LocalDate date = datePicker.getValue();
         final NumberAxis yAxis = new NumberAxis();
@@ -75,7 +75,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void clearFilter() {
-        final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
+        final Account selectedAccount = accountCache.getLastSelectedAccount().get();
         final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = dateAxis(accountTransactions);
@@ -97,7 +97,7 @@ public class HistoryController extends EventConnection implements Initializable,
     @Override
     public void onLayoutEvent(Event<Layout> event) {
         if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
-            final Account selectedAccount = selectionMemory.getLastSelectedAccount().get();
+            final Account selectedAccount = accountCache.getLastSelectedAccount().get();
             final List<Transaction> transactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
 
 

@@ -48,7 +48,7 @@ public class AppRoot {
         final AccountStorage accountStorage = baseInjector.getInstance(AccountStorage.class);
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
         final Scene scene = fxmlInjection.getInstance(Scene.class);
-        final SelectionMemory selectionMemory = baseInjector.getInstance(SelectionMemory.class);
+        final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);
         final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
         final Transactor transactor = baseInjector.getInstance(Transactor.class);
         final EventNetwork eventNetwork = baseInjector.getInstance(EventNetwork.class);
@@ -61,7 +61,7 @@ public class AppRoot {
         final RegistrationController registrationController = fxmlInjection.getInstance(RegistrationController.class);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
-            add(selectionMemory);
+            add(accountCache);
             add(homeController);
             add(historyController);
             add(blackjackController);

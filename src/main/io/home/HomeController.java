@@ -158,7 +158,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE)) {
+        if (event.is(CURRENT_BALANCE_UPDATED)) {
             final Account account = event.getData();
             accountMap.put(account.getKey(), account);
             runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));

@@ -43,14 +43,14 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
-        if (event.is(TRANSACTION)) {
+        if (event.is(TRANSACTION_ISSUED)) {
             onTransaction(event.getData());
         }
     }
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTION_SERIES)) {
+        if (event.is(TRANSACTION_SERIES_ISSUED)) {
             event.getData().forEach(this::onTransaction);
         }
     }
@@ -69,7 +69,7 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
                     event.getTimestamp().format(pattern),
                     event.getData().getName(),
                     event.getData().getKey()));
-        } else if (event.is(CURRENT_BALANCE)) {
+        } else if (event.is(CURRENT_BALANCE_UPDATED)) {
             final Account account = event.getData();
             logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
                     event.getTimestamp().format(pattern),

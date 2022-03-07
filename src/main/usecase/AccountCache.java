@@ -34,23 +34,23 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
-        if (event.is(TRANSACTION)) {
+        if (event.is(TRANSACTION_ISSUED)) {
             final Account currentState = selections.get(selections.lastKey());
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
         }
     }
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTION_SERIES)) {
+        if (event.is(TRANSACTION_SERIES_ISSUED)) {
             final Account currentState = selections.get(selections.lastKey());
             final Account updatedState = currentState.updateBalance(event.getData());
 
             selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, updatedState));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
         }
     }
 
@@ -58,7 +58,7 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED) || event.is(ACCOUNT_SELECTED)) {
             selections.put(now(), event.getData());
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE, selections.get(selections.lastKey())));
+            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, selections.get(selections.lastKey())));
         }
     }
 }

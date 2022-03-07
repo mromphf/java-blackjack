@@ -37,7 +37,7 @@ public class TransactionCache extends EventConnection implements TransactionList
 
     @Override
     public void onTransactionEvent(Event<Transaction> event) {
-        if (event.is(TRANSACTION)) {
+        if (event.is(TRANSACTION_ISSUED)) {
             final UUID accountKey = event.getData().getAccountKey();
             final Collection<Transaction> coll = new LinkedList<>();
 
@@ -48,7 +48,7 @@ public class TransactionCache extends EventConnection implements TransactionList
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES)) {
+        if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES_ISSUED)) {
             final Map<UUID, List<Transaction>> grouped = event.getData()
                     .stream()
                     .collect(Collectors.groupingBy(Transaction::getAccountKey));

@@ -49,7 +49,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final LocalDateTime timestamp = snapshot.getTimestamp();
 
             final Event<Collection<Transaction>> event = new Event<>(
-                    key, timestamp, TRANSACTION_SERIES, workingTransactions
+                    key, timestamp, TRANSACTION_SERIES_ISSUED, workingTransactions
             );
 
             eventNetwork.onTransactionsEvent(event);
@@ -65,7 +65,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
             final int signingBonus = 200;
 
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }
@@ -76,7 +76,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
         if (event.is(BET_PLACED)) {
             final LocalDateTime timestamp = LocalDateTime.now();
             final Transaction transaction = Evaluate.betTransaction(timestamp, event.getData());
-            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION, transaction);
+            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
 
             eventNetwork.onTransactionEvent(evt);
         }

@@ -1,9 +1,12 @@
 package main.adapter.storage;
 
+import javafx.fxml.FXMLLoader;
+import main.adapter.injection.BaseInjectionModule;
 import main.common.CsvUtil;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Transaction;
+import main.usecase.Layout;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +20,7 @@ import static main.common.JsonUtil.deckFromJson;
 import static main.adapter.storage.Directory.*;
 import static main.adapter.storage.FileFunctions.fileToJson;
 import static main.adapter.storage.FileFunctions.readCsvLines;
+import static main.usecase.Layout.*;
 
 public class FileSystem implements TransactionMemory, AccountMemory {
 
@@ -53,6 +57,26 @@ public class FileSystem implements TransactionMemory, AccountMemory {
             exit(1);
             return null;
         }
+    }
+
+    public static Map<Directory, File> directoryMap() {
+        return new HashMap<Directory, File>() {{
+            put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
+            put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
+            put(DECKS, new File("./app-data/decks/"));
+            put(LOG, new File("./app-data/log/"));
+            put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
+        }};
+    }
+
+    public static Map<Layout, FXMLLoader> resourceMap() {
+        return new HashMap<Layout, FXMLLoader>() {{
+            put(BET, new FXMLLoader(BaseInjectionModule.class.getResource("../bet/BetView.fxml")));
+            put(GAME, new FXMLLoader(BaseInjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
+            put(HISTORY, new FXMLLoader(BaseInjectionModule.class.getResource("../history/HistoryView.fxml")));
+            put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../home/HomeView.fxml")));
+            put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../registration/RegistrationView.fxml")));
+        }};
     }
 
     @Override

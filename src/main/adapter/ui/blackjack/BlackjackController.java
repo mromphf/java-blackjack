@@ -1,16 +1,12 @@
 package main.adapter.ui.blackjack;
 
-import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.domain.Account;
 import main.domain.Snapshot;
-import main.usecase.AccountCache;
-import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
@@ -26,9 +22,10 @@ import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
 import static main.usecase.Layout.BET;
-import static main.usecase.eventing.Predicate.*;
+import static main.usecase.eventing.Predicate.ACTION_TAKEN;
+import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
-public class BlackjackController extends EventConnection implements Initializable, SnapshotListener, AccountListener {
+public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
 
     @FXML
     private Label lblBet;
@@ -66,24 +63,10 @@ public class BlackjackController extends EventConnection implements Initializabl
     @FXML
     private ProgressBar prgDeck;
 
-    private final AccountCache accountCache;
     private final UUID key = randomUUID();
-
-    @Inject
-    public BlackjackController(AccountCache accountCache) {
-        this.accountCache = accountCache;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE_UPDATED)) {
-            int currentBalance = event.getData().getBalance();
-            runLater(() -> lblBalance.setText(String.format("Balance $%s", currentBalance)));
-        }
-    }
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
@@ -97,6 +80,7 @@ public class BlackjackController extends EventConnection implements Initializabl
             prgDeck.setProgress(snapshot.getDeckProgress());
             btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore()));
+            lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));
 
             if (snapshot.isRoundResolved()) {
                 renderExposedTable(snapshot);
@@ -153,7 +137,8 @@ public class BlackjackController extends EventConnection implements Initializabl
         eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, WAIVE_INSURANCE));
     }
 
-    @FXML void onPlayNextHand() {
+    @FXML
+    void onPlayNextHand() {
         eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, PLAY_NEXT_HAND));
     }
 

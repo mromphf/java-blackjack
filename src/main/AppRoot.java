@@ -2,7 +2,6 @@ package main;
 
 import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.io.bet.BetController;
 import main.io.blackjack.BlackjackController;
@@ -26,28 +25,22 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import static com.google.inject.Guice.createInjector;
-import static main.usecase.Layout.HOME;
 
 public class AppRoot {
-
-    public static Stage stage;
 
     public AppRoot(Stage stage,
                    Map<Directory, File> directoryMap,
                    Map<Layout, FXMLLoader> resourceMap,
                    FileSystem fileSystem) {
 
-        AppRoot.stage = stage;
-
         final Injector configInjector = createInjector(new ConfigInjectionModule(fileSystem));
         final Injector baseInjector = createInjector(new BaseInjectionModule(directoryMap));
-        final Injector fxmlInjection = createInjector(new FXMLInjectionModule(baseInjector, resourceMap));
+        final Injector fxmlInjection = createInjector(new FXMLInjectionModule(stage, baseInjector, resourceMap));
 
         final Game game = configInjector.getInstance(Game.class);
 
         final AccountStorage accountStorage = baseInjector.getInstance(AccountStorage.class);
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
-        final Scene scene = fxmlInjection.getInstance(Scene.class);
         final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);
         final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
         final Transactor transactor = baseInjector.getInstance(Transactor.class);
@@ -78,13 +71,7 @@ public class AppRoot {
         eventNetwork.registerListeners(eventConnections);
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
-        layoutManager.onChangeLayout(HOME);
-
-        stage.setScene(scene);
-        stage.setTitle("Blackjack");
-        stage.setMaximized(true);
-        stage.setFullScreen(true);
-        stage.show();
+        layoutManager.initializeLayout();
 
         new Thread(accountStorage::loadAllAccounts, "Account Load Thread").start();
         new Thread(accountStorage::loadAllTransactions, "Transaction Load Thread").start();

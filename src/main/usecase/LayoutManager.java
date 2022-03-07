@@ -4,9 +4,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.AlertListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
 import java.util.Map;
@@ -14,6 +14,7 @@ import java.util.Stack;
 import java.util.UUID;
 
 import static main.usecase.Layout.BACK;
+import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.LAYOUT_ALERT;
 import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
@@ -31,6 +32,16 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
         this.stage = stage;
         this.layoutMap = layoutMap;
         this.navHistory = new Stack<>();
+    }
+
+    public void initializeLayout() {
+        onChangeLayout(HOME);
+
+        stage.setScene(scene);
+        stage.setTitle("Blackjack");
+        stage.setMaximized(true);
+        stage.setFullScreen(true);
+        stage.show();
     }
 
     @Override

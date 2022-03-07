@@ -47,7 +47,7 @@ public class AppRoot {
         final LayoutManager layoutManager = fxmlInjection.getInstance(LayoutManager.class);
         final Scene scene = fxmlInjection.getInstance(Scene.class);
         final SelectionMemory selectionMemory = injector.getInstance(SelectionMemory.class);
-        final TransactionMemory transactionMemory = injector.getInstance(TransactionMemory.class);
+        final TransactionCache transactionCache = injector.getInstance(TransactionCache.class);
         final Transactor transactor = injector.getInstance(Transactor.class);
         final HomeController homeController = fxmlInjection.getInstance(HomeController.class);
         final HistoryController historyController = fxmlInjection.getInstance(HistoryController.class);
@@ -67,7 +67,7 @@ public class AppRoot {
             add(layoutManager);
             add(accountStorage);
             add(transactor);
-            add(transactionMemory);
+            add(transactionCache);
             add(game);
             add(gameLogger);
         }};

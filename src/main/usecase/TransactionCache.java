@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class TransactionMemory extends EventConnection implements TransactionListener {
+public class TransactionCache extends EventConnection implements TransactionListener {
 
     public final UUID key;
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
     @Inject
-    public TransactionMemory(UUID key, Map<UUID, Collection<Transaction>> transactionMap) {
+    public TransactionCache(UUID key, Map<UUID, Collection<Transaction>> transactionMap) {
         this.key = key;
         this.transactionMap = transactionMap;
     }

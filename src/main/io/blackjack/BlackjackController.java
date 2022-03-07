@@ -67,13 +67,15 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     private final UUID key = randomUUID();
 
+    private int currentBalance = 0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(CURRENT_BALANCE)) {
-            final int currentBalance = event.getData().getBalance();
+            currentBalance = event.getData().getBalance();
             runLater(() -> lblBalance.setText(String.format("Balance $%s", currentBalance)));
         }
     }
@@ -81,11 +83,6 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onGameUpdate(Snapshot snapshot) {
         runLater(() -> {
-            final int defaultBalance = 0;
-            final int currentBalance = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED)
-                    .map(Account::getBalance)
-                    .orElse(defaultBalance);
-
             insuranceControls.setVisible(snapshot.isInsuranceAvailable());
             gameControls.setVisible(snapshot.isGameInProgress());
             splitControls.setVisible(snapshot.isSplitAvailable());

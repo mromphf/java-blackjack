@@ -71,11 +71,11 @@ public class FileSystem implements TransactionMemory, AccountMemory {
 
     public static Map<Layout, FXMLLoader> resourceMap() {
         return new HashMap<Layout, FXMLLoader>() {{
-            put(BET, new FXMLLoader(BaseInjectionModule.class.getResource("../bet/BetView.fxml")));
-            put(GAME, new FXMLLoader(BaseInjectionModule.class.getResource("../blackjack/BlackjackView.fxml")));
-            put(HISTORY, new FXMLLoader(BaseInjectionModule.class.getResource("../history/HistoryView.fxml")));
-            put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../home/HomeView.fxml")));
-            put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../registration/RegistrationView.fxml")));
+            put(BET, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/bet/BetView.fxml")));
+            put(GAME, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/blackjack/BlackjackView.fxml")));
+            put(HISTORY, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/history/HistoryView.fxml")));
+            put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/home/HomeView.fxml")));
+            put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/registration/RegistrationView.fxml")));
         }};
     }
 

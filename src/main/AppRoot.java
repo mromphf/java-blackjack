@@ -1,12 +1,12 @@
 package main;
 
 import com.google.inject.Injector;
-import main.adapter.bet.BetController;
-import main.adapter.blackjack.BlackjackController;
-import main.adapter.history.HistoryController;
-import main.adapter.home.HomeController;
+import main.adapter.ui.bet.BetController;
+import main.adapter.ui.blackjack.BlackjackController;
+import main.adapter.ui.history.HistoryController;
+import main.adapter.ui.home.HomeController;
 import main.adapter.log.GameLogger;
-import main.adapter.registration.RegistrationController;
+import main.adapter.ui.registration.RegistrationController;
 import main.adapter.storage.AccountStorage;
 import main.usecase.*;
 import main.usecase.eventing.EventConnection;

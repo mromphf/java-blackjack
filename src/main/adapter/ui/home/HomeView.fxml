@@ -9,7 +9,7 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <GridPane
-        fx:controller="main.adapter.home.HomeController"
+        fx:controller="main.adapter.ui.home.HomeController"
         xmlns:fx="http://javafx.com/fxml"
         alignment="BASELINE_CENTER"
         styleClass="background"

@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static main.adapter.blackjack.ImageMap.*;
+import static main.adapter.ui.blackjack.ImageMap.*;
 
 public class ImageReelAnimation extends AnimationTimer {
 

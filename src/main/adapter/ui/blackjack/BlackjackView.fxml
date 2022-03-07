@@ -1,12 +1,12 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
-<?import main.adapter.blackjack.TableDisplay?>
+<?import main.adapter.ui.blackjack.TableDisplay?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.ProgressBar?>
 
 <?import java.net.URL?>
-<GridPane fx:controller="main.adapter.blackjack.BlackjackController" xmlns:fx="http://javafx.com/fxml" vgap="20"
+<GridPane fx:controller="main.adapter.ui.blackjack.BlackjackController" xmlns:fx="http://javafx.com/fxml" vgap="20"
           style="-fx-background-color:#228b22">
 
     <stylesheets>

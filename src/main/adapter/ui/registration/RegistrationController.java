@@ -1,4 +1,4 @@
-package main.adapter.registration;
+package main.adapter.ui.registration;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

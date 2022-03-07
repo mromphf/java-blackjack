@@ -8,7 +8,7 @@
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
-          fx:controller="main.adapter.registration.RegistrationController"
+          fx:controller="main.adapter.ui.registration.RegistrationController"
           prefHeight="400.0" prefWidth="600.0" alignment="BASELINE_CENTER" styleClass="background">
 
     <stylesheets>

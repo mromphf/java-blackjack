@@ -1,4 +1,4 @@
-package main.adapter.blackjack;
+package main.adapter.ui.blackjack;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
@@ -10,8 +10,8 @@ import javafx.scene.text.Font;
 import java.util.List;
 import java.util.Map;
 
-import static main.adapter.blackjack.ImageKey.DEALER_CARDS;
-import static main.adapter.blackjack.ImageKey.PLAYER_CARDS;
+import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
+import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
 
 public class TableDisplay extends Canvas {
 

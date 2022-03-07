@@ -1,4 +1,4 @@
-package main.adapter.bet;
+package main.adapter.ui.bet;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

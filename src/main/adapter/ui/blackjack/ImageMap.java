@@ -1,4 +1,4 @@
-package main.adapter.blackjack;
+package main.adapter.ui.blackjack;
 
 import javafx.scene.image.Image;
 import main.domain.Card;
@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static main.domain.Deck.fresh;
-import static main.adapter.blackjack.ImageKey.DEALER_CARDS;
-import static main.adapter.blackjack.ImageKey.PLAYER_CARDS;
+import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
+import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
 
 public class ImageMap {
 

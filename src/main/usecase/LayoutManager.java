@@ -63,7 +63,7 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
         }
     }
 
-    public void onChangeLayout(Layout layout) {
+    private void onChangeLayout(Layout layout) {
         if (layout == BACK) {
             navHistory.pop();
             scene.setRoot(layoutMap.get(navHistory.peek()));

@@ -4,7 +4,7 @@
 <?import java.net.URL?>
 
 <?import javafx.scene.control.DatePicker?>
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.adapter.history.HistoryController" alignment="CENTER" vgap="10" styleClass="background">
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.adapter.ui.history.HistoryController" alignment="CENTER" vgap="10" styleClass="background">
     <stylesheets>
         <URL value="@History.css"/>
     </stylesheets>

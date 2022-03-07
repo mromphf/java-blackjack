@@ -19,7 +19,6 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -69,6 +68,8 @@ public class BetController extends EventConnection implements Initializable, Acc
     private int bet = 0;
     private int balance = 0;
 
+    private Account selectedAccount;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final GraphicsContext graphics = cvsScroller.getGraphicsContext2D();
@@ -88,15 +89,11 @@ public class BetController extends EventConnection implements Initializable, Acc
 
     @FXML
     private void onDeal() {
-        final Optional<Account> selectedAccount = eventNetwork.requestSelectedAccount(ACCOUNT_SELECTED);
+        final UUID accountKey = selectedAccount.getKey();
+        final Bet betByAccount = Bet.of(now(), accountKey, bet);
 
-        if (selectedAccount.isPresent()) {
-            final UUID accountKey = selectedAccount.get().getKey();
-            final Bet betByAccount = Bet.of(now(), accountKey, bet);
-
-            eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
-            eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
-        }
+        eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
+        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
 
         bet = 0;
     }
@@ -133,6 +130,8 @@ public class BetController extends EventConnection implements Initializable, Acc
                 lblBet.setText(format("$%s", bet));
                 lblBalance.setText(format("Balance: $%s", balance));
             });
+        } else if (event.is(ACCOUNT_SELECTED)) {
+            this.selectedAccount = event.getData();
         }
     }
 

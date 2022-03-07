@@ -5,14 +5,13 @@ import main.domain.Transaction;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.TransactionListener;
-import main.usecase.eventing.TransactionResponder;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class TransactionMemory extends EventConnection implements TransactionListener, TransactionResponder {
+public class TransactionMemory extends EventConnection implements TransactionListener {
 
     public final UUID key;
     public final Map<UUID, Collection<Transaction>> transactionMap;
@@ -26,15 +25,6 @@ public class TransactionMemory extends EventConnection implements TransactionLis
     @Override
     public UUID getKey() {
         return key;
-    }
-
-    @Override
-    public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
-        if (transactionMap.containsKey(accountKey)) {
-            return transactionMap.get(accountKey);
-        }
-
-        return new LinkedList<>();
     }
 
     @Override

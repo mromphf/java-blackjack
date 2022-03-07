@@ -7,17 +7,13 @@ import main.usecase.Layout;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static main.usecase.eventing.Predicate.TRANSACTION;
-
 public class EventNetwork implements
         SnapshotListener,
-        AccountResponder,
         BetListener,
         LayoutListener,
         ActionListener,
         AccountListener,
         TransactionListener,
-        TransactionResponder,
         AlertListener {
 
     private final UUID key;
@@ -28,12 +24,12 @@ public class EventNetwork implements
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
     private final Collection<AlertListener> alertListeners = new ArrayList<>();
-    private final Map<Predicate, AccountResponder> accountResponders = new HashMap<>();
-    private final Map<Predicate, TransactionResponder> transactionResponders = new HashMap<>();
 
-    public EventNetwork(UUID key, Collection<EventConnection> connections) {
+    public EventNetwork(UUID key) {
         this.key = key;
+    }
 
+    public void registerListeners(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
             if (connection instanceof SnapshotListener) {
                 snapshotListeners.add((SnapshotListener) connection);
@@ -65,27 +61,9 @@ public class EventNetwork implements
         }
     }
 
-    public void registerResponder(Predicate predicate, AccountResponder accountResponder) {
-        accountResponders.put(predicate, accountResponder);
-    }
-
-    public void registerResponder(Predicate predicate, TransactionResponder transactionResponder) {
-        transactionResponders.put(predicate, transactionResponder);
-    }
-
     @Override
     public UUID getKey() {
         return key;
-    }
-
-    @Override
-    public Optional<Account> requestSelectedAccount(Predicate elm) {
-        return accountResponders.get(elm).requestSelectedAccount(elm);
-    }
-
-    @Override
-    public Collection<Transaction> requestTransactionsByKey(UUID accountKey) {
-        return transactionResponders.get(TRANSACTION).requestTransactionsByKey(accountKey);
     }
 
     @Override

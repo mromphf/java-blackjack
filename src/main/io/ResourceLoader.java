@@ -2,6 +2,7 @@ package main.io;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import main.io.history.HistoryController;
 import main.io.storage.Directory;
 import main.usecase.Layout;
 

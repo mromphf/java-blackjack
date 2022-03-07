@@ -2,8 +2,8 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import main.domain.Transaction;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
@@ -20,6 +20,14 @@ public class TransactionMemory extends EventConnection implements TransactionLis
     public TransactionMemory(UUID key, Map<UUID, Collection<Transaction>> transactionMap) {
         this.key = key;
         this.transactionMap = transactionMap;
+    }
+
+    public List<Transaction> getTransactionsByKey(UUID accountKey) {
+        if (transactionMap.containsKey(accountKey)) {
+            return new ArrayList<>(transactionMap.get(accountKey));
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

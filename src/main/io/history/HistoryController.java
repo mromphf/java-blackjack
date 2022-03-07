@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.Layout;
+import main.usecase.TransactionMemory;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
@@ -19,7 +20,10 @@ import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
@@ -38,8 +42,13 @@ public class HistoryController extends EventConnection implements Initializable,
     public GridPane chartHousing;
 
     private final UUID key = randomUUID();
+    private TransactionMemory transactionMemory;
 
     private Account selectedAccount;
+
+    public void setTransactionMemory(TransactionMemory transactionMemory) {
+        this.transactionMemory = transactionMemory;
+    }
 
     @FXML
     public void onBack() {
@@ -50,7 +59,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final List<Transaction> accountTransactions = new LinkedList<>();
+        final List<Transaction> accountTransactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
         final LocalDate date = datePicker.getValue();
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
@@ -64,7 +73,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void clearFilter() {
-        final List<Transaction> accountTransactions = new LinkedList<>();
+        final List<Transaction> accountTransactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
         final NumberAxis yAxis = new NumberAxis();
         final Axis<String> xAxis = dateAxis(accountTransactions);
 
@@ -85,7 +94,8 @@ public class HistoryController extends EventConnection implements Initializable,
     @Override
     public void onLayoutEvent(Event<Layout> event) {
         if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY) {
-            final List<Transaction> transactions = new LinkedList<>();
+            final List<Transaction> transactions = transactionMemory.getTransactionsByKey(selectedAccount.getKey());
+
 
             drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }

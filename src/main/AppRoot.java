@@ -22,8 +22,6 @@ import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
 import static java.util.UUID.randomUUID;
 import static main.usecase.Layout.HOME;
-import static main.usecase.eventing.Predicate.ACCOUNT_SELECTED;
-import static main.usecase.eventing.Predicate.TRANSACTION;
 
 public class AppRoot {
 
@@ -51,6 +49,8 @@ public class AppRoot {
         final BetController betController = injector.getInstance(BetController.class);
         final RegistrationController registrationController = injector.getInstance(RegistrationController.class);
         final EventNetwork eventNetwork = new EventNetwork(randomUUID());
+
+        historyController.setTransactionMemory(transactionMemory);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(selectionMemory); // TODO: monitor this after switching to multi-threading.

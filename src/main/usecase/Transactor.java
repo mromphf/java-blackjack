@@ -61,6 +61,11 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        // No-op stub
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         // No-op stub
     }

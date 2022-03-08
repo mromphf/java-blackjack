@@ -61,13 +61,16 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        logger.log(INFO, String.format("%s: Account Closure Request - %s - %s.",
+                account.getCreated().format(pattern),
+                account.getName(),
+                account.getKey()));
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_DELETED)) {
-            logger.log(INFO, String.format("%s: Account Closure Request - %s - %s.",
-                    event.getTimestamp().format(pattern),
-                    event.getData().getName(),
-                    event.getData().getKey()));
-        } else if (event.is(CURRENT_BALANCE_UPDATED)) {
+        if (event.is(CURRENT_BALANCE_UPDATED)) {
             final Account account = event.getData();
             logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
                     event.getTimestamp().format(pattern),

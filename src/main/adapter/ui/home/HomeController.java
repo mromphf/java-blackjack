@@ -162,6 +162,11 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        // No-op stub
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(CURRENT_BALANCE_UPDATED)) {
             final Account account = event.getData();
@@ -209,7 +214,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
                 accountMap.remove(selectedAccount.getKey());
                 tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
-                eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_DELETED, selectedAccount));
+                eventNetwork.onAccountDeleted(selectedAccount);
             }
         };
     }

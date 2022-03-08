@@ -36,6 +36,11 @@ public class AccountMap implements AccountListener {
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        // No-op stub
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(Predicate.ACCOUNT_SELECTED)) {
             final Account account = event.getData();

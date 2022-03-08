@@ -1,7 +1,6 @@
 package main.usecase.eventing;
 
 public enum Predicate {
-    ACCOUNTS_LOADED,
     ACCOUNT_CREATED,
     ACCOUNT_DELETED,
     ACCOUNT_SELECTED,

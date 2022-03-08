@@ -34,9 +34,4 @@ public class AccountMap implements AccountListener {
     public void onAccountSelected(Account account) {
         throw new RuntimeException();
     }
-
-    @Override
-    public void onAccountBalanceUpdated(Account account) {
-        throw new RuntimeException();
-    }
 }

@@ -32,8 +32,6 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         final Account updatedState = currentState.updateBalance(transaction);
 
         selections.put(now(), updatedState);
-
-        eventNetwork.onAccountBalanceUpdated(updatedState);
     }
 
     @Override
@@ -42,21 +40,15 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         final Account updatedState = currentState.updateBalance(transactions);
 
         selections.put(now(), updatedState);
-
-        eventNetwork.onAccountBalanceUpdated(updatedState);
     }
 
     @Override
     public void onAccountCreated(Account account) {
         selections.put(now(), account);
-
-        eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
     }
 
     @Override
     public void onAccountSelected(Account account) {
         selections.put(now(), account);
-
-        eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
     }
 }

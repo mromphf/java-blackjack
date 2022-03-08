@@ -62,14 +62,6 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
                 account.getKey()));
     }
 
-    @Override
-    public void onAccountBalanceUpdated(Account account) {
-        logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
-                account.getCreated().format(pattern),
-                account.getName(),
-                account.getBalance()));
-    }
-
     public void onTransaction(Transaction transaction) {
         logger.log(INFO, String.format("%s: Transaction Issued - Account Key: %s - %s - $%s",
                 transaction.getTime().toLocalTime().format(pattern),

@@ -37,10 +37,12 @@ public class FXMLInjectionModule extends AbstractModule {
         final HistoryController historyController = baseInjector.getInstance(HistoryController.class);
         final BlackjackController blackjackController = baseInjector.getInstance(BlackjackController.class);
         final BetController betController = baseInjector.getInstance(BetController.class);
+        final HomeController homeController = baseInjector.getInstance(HomeController.class);
 
         resourceMap.get(HISTORY).setControllerFactory(params -> historyController);
         resourceMap.get(GAME).setControllerFactory(params -> blackjackController);
         resourceMap.get(BET).setControllerFactory(params -> betController);
+        resourceMap.get(HOME).setControllerFactory(params -> homeController);
 
         resourceMap.keySet().forEach(k -> {
             try {

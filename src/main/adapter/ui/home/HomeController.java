@@ -1,5 +1,6 @@
 package main.adapter.ui.home;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.Account;
+import main.usecase.AccountCache;
 import main.usecase.Layout;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
@@ -61,8 +63,14 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private final static String TOP_SCROLLER = "top";
     private final static String BOTTOM_SCROLLER = "bottom";
 
+    private final AccountCache accountCache;
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<String, ImageReelAnimation> animations = new HashMap<>();
+
+    @Inject
+    public HomeController(AccountCache accountCache) {
+        this.accountCache = accountCache;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -147,12 +155,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @Override
-    public void onAccountBalanceUpdated(Account account) {
-        accountMap.put(account.getKey(), account);
-        runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
-    }
-
-    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {
         for (Account account : accounts) {
             accountMap.put(account.getKey(), account);
@@ -163,6 +165,14 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onLayoutEvent(Layout event) {
+        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+
+        if (selectedAccount.isPresent()) {
+            final Account account = selectedAccount.get();
+            accountMap.put(account.getKey(), account);
+            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
+        }
+
         if (event == HOME || event == BACK) {
             toggleAnimationsRunning(true);
             btnPlay.setDisable(true);

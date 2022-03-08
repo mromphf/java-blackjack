@@ -86,15 +86,6 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onAccountEvent(Event<Account> event) {
-        accountListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> new Thread(
-                        () -> listener.onAccountEvent(event), "Account Event Thread"
-                ).start());
-    }
-
-    @Override
     public void onAccountBalanceUpdated(Account account) {
         accountListeners.forEach(l -> l.onAccountBalanceUpdated(account));
     }

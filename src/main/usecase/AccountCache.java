@@ -3,7 +3,6 @@ package main.usecase;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
@@ -68,11 +67,6 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         selections.put(now(), account);
 
         eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
-        // No-op stub
     }
 
     @Override

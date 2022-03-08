@@ -6,7 +6,6 @@ import main.domain.Bet;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
@@ -67,11 +66,6 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
 
     @Override
     public void onAccountSelected(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
         // No-op stub
     }
 

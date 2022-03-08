@@ -35,7 +35,7 @@ public class Game extends EventConnection implements LayoutListener {
     }
 
     public void onActionTaken(Action action) {
-        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
         final LocalDateTime timestamp = now();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
@@ -55,7 +55,7 @@ public class Game extends EventConnection implements LayoutListener {
     }
 
     public void onBetEvent(Bet bet) {
-        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
         if (selectedAccount.isPresent()) {
             roundStack.add(new Round(deck, bet.getVal(), maxCards, numDecks));

@@ -52,7 +52,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
             final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
@@ -70,7 +70,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void clearFilter() {
-        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
 
         if (optionalAccount.isPresent()) {
 
@@ -91,7 +91,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
 
         if (event== HISTORY && optionalAccount.isPresent()) {
 

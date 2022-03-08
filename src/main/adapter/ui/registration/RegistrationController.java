@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import main.domain.Account;
 import main.usecase.Layout;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
@@ -19,7 +18,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Layout.REGISTRATION;
-import static main.usecase.eventing.Predicate.ACCOUNT_CREATED;
 
 public class RegistrationController extends EventConnection implements Initializable, LayoutListener {
 
@@ -53,7 +51,7 @@ public class RegistrationController extends EventConnection implements Initializ
 
         txtName.setText("");
 
-        eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_CREATED, account));
+        eventNetwork.onAccountCreated(account);
         eventNetwork.onLayoutEvent(HOME);
     }
 

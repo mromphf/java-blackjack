@@ -31,6 +31,11 @@ public class AccountMap implements AccountListener {
     }
 
     @Override
+    public void onAccountCreated(Account account) {
+        throw new RuntimeException();
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(Predicate.ACCOUNT_SELECTED)) {
             final Account account = event.getData();

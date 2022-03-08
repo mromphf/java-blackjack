@@ -1,12 +1,11 @@
 package main.usecase.eventing;
 
-import main.domain.Account;
 import main.common.Identifiable;
+import main.domain.Account;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
 
 public interface AccountListener extends Identifiable {
 

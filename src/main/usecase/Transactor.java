@@ -14,6 +14,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDateTime.now;
+import static main.domain.Evaluate.betTransaction;
 import static main.usecase.eventing.Predicate.*;
 
 public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
@@ -41,13 +43,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
             .collect(Collectors.toList());
 
         if (workingTransactions.size() > 0) {
-            final LocalDateTime timestamp = snapshot.getTimestamp();
-
-            final Event<Collection<Transaction>> event = new Event<>(
-                    key, timestamp, TRANSACTION_SERIES_ISSUED, workingTransactions
-            );
-
-            eventNetwork.onTransactionsEvent(event);
+            eventNetwork.onTransactionSeriesIssued(workingTransactions);
         }
     }
 
@@ -55,22 +51,16 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_CREATED)) {
             final UUID accountKey = event.getData().getKey();
-            final LocalDateTime timestamp = LocalDateTime.now();
+            final LocalDateTime timestamp = now();
             final String description = "SIGNING BONUS";
             final int signingBonus = 200;
-
             final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
-            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
 
-            eventNetwork.onTransactionEvent(evt);
+            eventNetwork.onTransactionIssued(transaction);
         }
     }
 
     public void onBetEvent(Bet bet) {
-        final LocalDateTime timestamp = LocalDateTime.now();
-        final Transaction transaction = Evaluate.betTransaction(timestamp, bet);
-        final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
-
-        eventNetwork.onTransactionEvent(evt);
+        eventNetwork.onTransactionIssued(betTransaction(now(), bet));
     }
 }

@@ -19,7 +19,6 @@ import main.usecase.eventing.LayoutListener;
 import java.net.URL;
 import java.util.*;
 
-import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
@@ -62,7 +61,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private final static String TOP_SCROLLER = "top";
     private final static String BOTTOM_SCROLLER = "bottom";
 
-    private final UUID key = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<String, ImageReelAnimation> animations = new HashMap<>();
 
@@ -146,11 +144,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (event.getButton() == SECONDARY) {
             animations.get(TOP_SCROLLER).switchDirection();
         }
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

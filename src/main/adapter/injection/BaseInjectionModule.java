@@ -60,10 +60,10 @@ public class BaseInjectionModule extends AbstractModule {
         bind(AccountCache.class).toInstance(new AccountCache());
 
         bind(Transactor.class)
-                .toInstance(new Transactor(randomUUID(), transactionEvaluators()));
+                .toInstance(new Transactor(transactionEvaluators()));
 
         bind(EventNetwork.class)
-                .toInstance(new EventNetwork(randomUUID()));
+                .toInstance(new EventNetwork());
 
         bind(new TypeLiteral<Collection<Handler>>() {})
                 .annotatedWith(named("logHandlers"))

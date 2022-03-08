@@ -22,7 +22,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
-import static java.util.UUID.randomUUID;
 import static main.common.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
@@ -35,7 +34,6 @@ public class HistoryController extends EventConnection implements Initializable,
     @FXML
     public GridPane chartHousing;
 
-    private final UUID key = randomUUID();
     private final TransactionCache transactionCache;
     private final AccountCache accountCache;
 
@@ -89,11 +87,6 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

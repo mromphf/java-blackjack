@@ -8,11 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
-
 public class AccountMap implements AccountListener {
 
-    private final UUID networkKey = randomUUID();
     private final Map<UUID, Account> accountMap = new HashMap<>();
 
     public Optional<Account> getAccountByKey(UUID accountKey) {
@@ -21,11 +18,6 @@ public class AccountMap implements AccountListener {
         } else {
             return Optional.empty();
         }
-    }
-
-    @Override
-    public UUID getKey() {
-        return networkKey;
     }
 
     @Override

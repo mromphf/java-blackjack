@@ -9,7 +9,6 @@ import main.usecase.Layout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.UUID;
 
 public class EventNetwork implements
         SnapshotListener,
@@ -18,16 +17,11 @@ public class EventNetwork implements
         TransactionListener,
         AlertListener {
 
-    private final UUID key;
     private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
     private final Collection<AlertListener> alertListeners = new ArrayList<>();
-
-    public EventNetwork(UUID key) {
-        this.key = key;
-    }
 
     public void registerListeners(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -51,11 +45,6 @@ public class EventNetwork implements
                 alertListeners.add((AlertListener) connection);
             }
         }
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

@@ -5,20 +5,20 @@ import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.eventing.*;
+import main.usecase.eventing.AccountListener;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.SnapshotListener;
+import main.usecase.eventing.TransactionListener;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
-import static java.util.UUID.randomUUID;
 import static java.util.logging.Level.INFO;
 
 public class GameLogger extends EventConnection implements SnapshotListener, AccountListener, TransactionListener {
 
-    private final UUID key = randomUUID();
     private final Logger logger;
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
@@ -26,11 +26,6 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     public GameLogger(@Named("logger") Logger logger, @Named("logHandlers") Collection<Handler> logHandlers) {
         this.logger = logger;
         logHandlers.forEach(logger::addHandler);
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

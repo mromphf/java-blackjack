@@ -7,14 +7,15 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import static java.time.LocalDateTime.now;
-import static java.util.UUID.randomUUID;
 
 public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
-    private final UUID networkId = randomUUID();
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
 
     public Optional<Account> getLastSelectedAccount() {
@@ -23,11 +24,6 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         } else {
             return Optional.of(selections.get(selections.lastKey()));
         }
-    }
-
-    @Override
-    public UUID getKey() {
-        return networkId;
     }
 
     @Override

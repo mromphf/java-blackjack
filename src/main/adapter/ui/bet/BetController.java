@@ -29,7 +29,6 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
-import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static main.usecase.Layout.*;
 
@@ -70,7 +69,6 @@ public class BetController extends EventConnection implements Initializable, Lay
     private final Game game;
     private final Transactor transactor;
     private final static int MAX_BET = 500;
-    private final UUID key = randomUUID();
 
     private ImageReelAnimation animation;
     private int bet = 0;
@@ -146,11 +144,6 @@ public class BetController extends EventConnection implements Initializable, Lay
     @FXML
     public void onClickScroller() {
         animation.switchDirection();
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

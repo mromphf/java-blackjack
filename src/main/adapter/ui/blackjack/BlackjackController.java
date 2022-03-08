@@ -24,7 +24,6 @@ import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
 import static main.usecase.Layout.BET;
-import static main.usecase.eventing.Predicate.ACTION_TAKEN;
 import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
@@ -147,7 +146,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     void onPlayNextHand() {
-        eventNetwork.onActionEvent(new Event<>(key, now(), ACTION_TAKEN, PLAY_NEXT_HAND));
+        game.onActionTaken(PLAY_NEXT_HAND);
     }
 
     @Override

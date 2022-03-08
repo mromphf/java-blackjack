@@ -9,14 +9,10 @@ import main.usecase.eventing.TransactionListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
-
-import static java.util.UUID.randomUUID;
 
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
-    private final UUID key = randomUUID();
     private final TransactionMemory transactionMemory;
     private final AccountMemory accountMemory;
 
@@ -34,11 +30,6 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     public void loadAllTransactions() {
         final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(new ArrayList<>());
         eventNetwork.onTransactionsLoaded(allTransactions);
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

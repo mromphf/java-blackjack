@@ -7,17 +7,18 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Stack;
 
 import static java.time.LocalDateTime.now;
-import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 
 public class Game extends EventConnection implements LayoutListener {
 
-    private final UUID key = randomUUID();
     private final Stack<Card> deck;
     private final int maxCards;
     private final int numDecks;
@@ -31,11 +32,6 @@ public class Game extends EventConnection implements LayoutListener {
         this.deck = deck;
         this.maxCards = deck.size();
         this.numDecks = numDecks;
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     public void onActionTaken(Action action) {

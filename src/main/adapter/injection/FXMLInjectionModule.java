@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.UUID.randomUUID;
 import static main.usecase.Layout.*;
 
 public class FXMLInjectionModule extends AbstractModule {
@@ -78,6 +77,6 @@ public class FXMLInjectionModule extends AbstractModule {
         bind(Scene.class).toInstance(scene);
 
         bind(LayoutManager.class)
-                .toInstance(new LayoutManager(randomUUID(), stage, scene, layoutMap));
+                .toInstance(new LayoutManager(stage, scene, layoutMap));
     }
 }

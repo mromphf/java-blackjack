@@ -29,11 +29,6 @@ public class TransactionCache extends EventConnection implements TransactionList
     }
 
     @Override
-    public UUID getKey() {
-        return key;
-    }
-
-    @Override
     public void onTransactionIssued(Transaction transaction) {
         final UUID accountKey = transaction.getAccountKey();
         final Collection<Transaction> coll = new LinkedList<>();

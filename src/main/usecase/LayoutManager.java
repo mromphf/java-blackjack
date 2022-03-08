@@ -17,14 +17,12 @@ import static main.usecase.Layout.HOME;
 
 public class LayoutManager extends EventConnection implements LayoutListener, AlertListener {
 
-    private final UUID key;
     private final Scene scene;
     private final Stage stage;
     private final Map<Layout, Parent> layoutMap;
     private final Stack<Layout> navHistory;
 
-    public LayoutManager(UUID key, Stage stage, Scene scene, Map<Layout, Parent> layoutMap) {
-        this.key = key;
+    public LayoutManager(Stage stage, Scene scene, Map<Layout, Parent> layoutMap) {
         this.scene = scene;
         this.stage = stage;
         this.layoutMap = layoutMap;
@@ -39,11 +37,6 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
         stage.setMaximized(true);
         stage.setFullScreen(true);
         stage.show();
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

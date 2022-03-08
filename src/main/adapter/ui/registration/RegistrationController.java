@@ -27,8 +27,6 @@ public class RegistrationController extends EventConnection implements Initializ
     @FXML
     private Button btnOk;
 
-    private final UUID key = randomUUID();
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -53,11 +51,6 @@ public class RegistrationController extends EventConnection implements Initializ
 
         eventNetwork.onAccountCreated(account);
         eventNetwork.onLayoutEvent(HOME);
-    }
-
-    @Override
-    public UUID getKey() {
-        return key;
     }
 
     @Override

@@ -18,7 +18,6 @@ import main.usecase.AccountCache;
 import main.usecase.Game;
 import main.usecase.Layout;
 import main.usecase.Transactor;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 import main.usecase.eventing.SnapshotListener;
@@ -33,7 +32,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static main.usecase.Layout.*;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 
 public class BetController extends EventConnection implements Initializable, LayoutListener, SnapshotListener {
@@ -103,10 +101,10 @@ public class BetController extends EventConnection implements Initializable, Lay
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
+    public void onLayoutEvent(Layout event) {
         final Optional<Account> account = accountCache.getLastSelectedAccount();
 
-        if (event.is(LAYOUT_CHANGED) && account.isPresent())  {
+        if (account.isPresent())  {
             final int balance = account.get().getBalance();
 
             runLater(() -> {
@@ -127,7 +125,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
             game.onBetEvent(betByAccount);
             transactor.onBetEvent(betByAccount);
-            eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
+            eventNetwork.onLayoutEvent(GAME);
 
             bet = 0;
         }
@@ -135,14 +133,14 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @FXML
     public void onQuit() {
-        eventNetwork.onLayoutChangedTo(HOME, key);
+        eventNetwork.onLayoutEvent(HOME);
         prgDeck.setProgress(100f);
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onLayoutEvent(HISTORY);
     }
 
     @FXML

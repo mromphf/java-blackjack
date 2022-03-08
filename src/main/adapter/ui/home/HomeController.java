@@ -9,8 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import main.domain.Account;
 import main.adapter.graphics.ImageReelAnimation;
+import main.domain.Account;
 import main.usecase.Layout;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
@@ -98,7 +98,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BET));
+        eventNetwork.onLayoutEvent(BET);
     }
 
     @FXML
@@ -122,7 +122,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onNew() {
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, REGISTRATION));
+        eventNetwork.onLayoutEvent(REGISTRATION);
     }
 
     @FXML
@@ -130,7 +130,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
         eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HISTORY));
+        eventNetwork.onLayoutEvent(HISTORY);
     }
 
     @FXML
@@ -178,13 +178,13 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME || event.getData() == BACK) {
+    public void onLayoutEvent(Layout event) {
+        if (event == HOME || event == BACK) {
             toggleAnimationsRunning(true);
             btnPlay.setDisable(true);
             btnDelete.setDisable(true);
             btnHistory.setDisable(true);
-        } else if (event.is(LAYOUT_CHANGED) && event.getData() != HOME) {
+        } else {
             toggleAnimationsRunning(false);
         }
     }

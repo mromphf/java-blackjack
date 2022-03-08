@@ -12,10 +12,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.Account;
 import main.domain.Transaction;
-import main.usecase.Layout;
 import main.usecase.AccountCache;
+import main.usecase.Layout;
 import main.usecase.TransactionCache;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
@@ -23,12 +22,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
-import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.common.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class HistoryController extends EventConnection implements Initializable, LayoutListener {
 
@@ -52,7 +49,7 @@ public class HistoryController extends EventConnection implements Initializable,
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BACK));
+        eventNetwork.onLayoutEvent(BACK);
     }
 
     @FXML
@@ -100,10 +97,10 @@ public class HistoryController extends EventConnection implements Initializable,
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
+    public void onLayoutEvent(Layout event) {
         final Optional<Account> optionalAccount = accountCache.getLastSelectedAccount();
 
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HISTORY && optionalAccount.isPresent()) {
+        if (event== HISTORY && optionalAccount.isPresent()) {
 
             final Account selectedAccount = optionalAccount.get();
             final List<Transaction> transactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());

@@ -1,5 +1,7 @@
 package main.usecase;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -10,7 +12,6 @@ import main.usecase.eventing.LayoutListener;
 
 import java.util.Map;
 import java.util.Stack;
-import java.util.UUID;
 
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
@@ -20,13 +21,13 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
     private final Scene scene;
     private final Stage stage;
     private final Map<Layout, Parent> layoutMap;
-    private final Stack<Layout> navHistory;
+    private final Stack<Layout> navHistory = new Stack<>();
 
-    public LayoutManager(Stage stage, Scene scene, Map<Layout, Parent> layoutMap) {
+    @Inject
+    public LayoutManager(Stage stage, Scene scene, @Named("layoutMap") Map<Layout, Parent> layoutMap) {
         this.scene = scene;
         this.stage = stage;
         this.layoutMap = layoutMap;
-        this.navHistory = new Stack<>();
     }
 
     public void initializeLayout() {

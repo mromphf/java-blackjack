@@ -69,6 +69,11 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
+    public void onAccountSelected(Account account) {
+        // No-op stub
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(CURRENT_BALANCE_UPDATED)) {
             final Account account = event.getData();

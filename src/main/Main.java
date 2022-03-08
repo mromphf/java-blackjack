@@ -23,7 +23,7 @@ public class Main extends Application {
         final Injector baseInjector = createInjector(new BaseInjectionModule(fileSystem));
         final Injector fxmlInjector = createInjector(new FXMLInjectionModule(stage, baseInjector, resourceMap()));
 
-        final AppRoot appRoot = new AppRoot(configInjector, baseInjector, fxmlInjector);
+        final AppRoot appRoot = new AppRoot(baseInjector, fxmlInjector);
 
         appRoot.init();
     }

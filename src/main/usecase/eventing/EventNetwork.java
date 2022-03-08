@@ -81,6 +81,11 @@ public class EventNetwork implements
     }
 
     @Override
+    public void onAccountSelected(Account account) {
+        accountListeners.forEach(a -> a.onAccountSelected(account));
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         accountListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))

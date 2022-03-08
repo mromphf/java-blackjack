@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
-import static main.usecase.eventing.Predicate.*;
 
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
@@ -61,6 +60,11 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     @Override
     public void onAccountDeleted(Account account) {
         accountMemory.closeAccount(account);
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        // No-op stub
     }
 
     @Override

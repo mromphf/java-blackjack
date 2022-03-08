@@ -11,6 +11,7 @@ public interface AccountListener extends Identifiable {
 
     void onAccountCreated(Account account);
     void onAccountDeleted(Account account);
+    void onAccountSelected(Account account);
     void onAccountEvent(Event<Account> event);
 
     default void onAccountsEvent(Event<Collection<Account>> event) {

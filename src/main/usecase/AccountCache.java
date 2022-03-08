@@ -62,10 +62,13 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     }
 
     @Override
+    public void onAccountSelected(Account account) {
+        selections.put(now(), account);
+        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, selections.get(selections.lastKey())));
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_SELECTED)) {
-            selections.put(now(), event.getData());
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, selections.get(selections.lastKey())));
-        }
+        // No-op stub
     }
 }

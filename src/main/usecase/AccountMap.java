@@ -3,7 +3,6 @@ package main.usecase;
 import main.domain.Account;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
-import main.usecase.eventing.Predicate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,15 +36,16 @@ public class AccountMap implements AccountListener {
 
     @Override
     public void onAccountDeleted(Account account) {
-        // No-op stub
+        throw new RuntimeException();
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        throw new RuntimeException();
     }
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(Predicate.ACCOUNT_SELECTED)) {
-            final Account account = event.getData();
-
-            accountMap.put(account.getKey(), account);
-        }
+        throw new RuntimeException();
     }
 }

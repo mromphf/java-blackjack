@@ -20,7 +20,6 @@ import main.usecase.eventing.LayoutListener;
 import java.net.URL;
 import java.util.*;
 
-import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableList;
@@ -28,7 +27,7 @@ import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
-import static main.usecase.eventing.Predicate.*;
+import static main.usecase.eventing.Predicate.CURRENT_BALANCE_UPDATED;
 
 public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
 
@@ -97,7 +96,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void onPlay() {
         final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onAccountSelected(selectedAccount);
         eventNetwork.onLayoutEvent(BET);
     }
 
@@ -116,7 +115,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else if (selectedAccount != null) {
-            eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
+            eventNetwork.onAccountSelected(selectedAccount);
         }
     }
 
@@ -129,7 +128,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     public void onRequestHistory() {
         final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
 
-        eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_SELECTED, selectedAccount));
+        eventNetwork.onAccountSelected(selectedAccount);
         eventNetwork.onLayoutEvent(HISTORY);
     }
 
@@ -163,6 +162,11 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onAccountDeleted(Account account) {
+        // No-op stub
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
         // No-op stub
     }
 

@@ -1,6 +1,7 @@
 package main.usecase;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
@@ -22,7 +23,7 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
     @Inject
-    public Transactor(Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+    public Transactor(@Named("evaluators") Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
         this.evaluationFunctions = evaluators;
     }
 

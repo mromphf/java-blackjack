@@ -1,5 +1,7 @@
 package main.usecase;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
@@ -10,13 +12,17 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 import static java.time.LocalDateTime.now;
 
 public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
-    private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
+    private final SortedMap<LocalDateTime, Account> selections;
+
+    @Inject
+    public AccountCache(@Named("accountMap") SortedMap<LocalDateTime, Account> selections) {
+        this.selections = selections;
+    }
 
     public Optional<Account> getCurrentlySelectedAccount() {
         if (selections.isEmpty()) {

@@ -2,6 +2,7 @@ package main.adapter.injection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,12 +13,12 @@ import main.adapter.ui.history.HistoryController;
 import main.adapter.ui.home.HomeController;
 import main.adapter.ui.registration.RegistrationController;
 import main.usecase.Layout;
-import main.usecase.LayoutManager;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.google.inject.name.Names.named;
 import static main.usecase.Layout.*;
 
 public class FXMLInjectionModule extends AbstractModule {
@@ -77,8 +78,9 @@ public class FXMLInjectionModule extends AbstractModule {
                 .toInstance(resourceMap.get(REGISTRATION).getController());
 
         bind(Scene.class).toInstance(scene);
-
-        bind(LayoutManager.class)
-                .toInstance(new LayoutManager(stage, scene, layoutMap));
+        bind(Stage.class).toInstance(stage);
+        bind(new TypeLiteral<Map<Layout, Parent>>() {})
+                .annotatedWith(named("layoutMap"))
+                .toInstance(layoutMap);
     }
 }

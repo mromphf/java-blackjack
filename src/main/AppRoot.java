@@ -17,12 +17,10 @@ import java.util.LinkedList;
 
 public class AppRoot {
 
-    private final Injector configInjector;
     private final Injector baseInjector;
     private final Injector fxmlInjector;
 
-    public AppRoot(Injector configInjector, Injector baseInjector, Injector fxmlInjector) {
-        this.configInjector = configInjector;
+    public AppRoot(Injector baseInjector, Injector fxmlInjector) {
         this.baseInjector = baseInjector;
         this.fxmlInjector = fxmlInjector;
     }

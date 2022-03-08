@@ -54,10 +54,13 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     @Override
+    public void onAccountCreated(Account account) {
+        accountMemory.openNewAccount(account);
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_CREATED)) {
-            accountMemory.openNewAccount(event.getData());
-        } else if (event.is(ACCOUNT_DELETED)) {
+        if (event.is(ACCOUNT_DELETED)) {
             accountMemory.closeAccount(event.getData());
         }
     }

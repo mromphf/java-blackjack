@@ -9,6 +9,7 @@ import static java.time.LocalDateTime.now;
 
 public interface AccountListener extends Identifiable {
 
+    void onAccountCreated(Account account);
     void onAccountEvent(Event<Account> event);
 
     default void onAccountsEvent(Event<Collection<Account>> event) {

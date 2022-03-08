@@ -1,7 +1,10 @@
 package main.usecase;
 
 import com.google.inject.Inject;
-import main.domain.*;
+import main.domain.Account;
+import main.domain.Bet;
+import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
@@ -16,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static main.domain.Evaluate.betTransaction;
-import static main.usecase.eventing.Predicate.*;
 
 public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 
@@ -48,16 +50,19 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
-    public void onAccountEvent(Event<Account> event) {
-        if (event.is(ACCOUNT_CREATED)) {
-            final UUID accountKey = event.getData().getKey();
-            final LocalDateTime timestamp = now();
-            final String description = "SIGNING BONUS";
-            final int signingBonus = 200;
-            final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
+    public void onAccountCreated(Account account) {
+        final UUID accountKey = account.getKey();
+        final LocalDateTime timestamp = now();
+        final String description = "SIGNING BONUS";
+        final int signingBonus = 200;
+        final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
 
-            eventNetwork.onTransactionIssued(transaction);
-        }
+        eventNetwork.onTransactionIssued(transaction);
+    }
+
+    @Override
+    public void onAccountEvent(Event<Account> event) {
+        // No-op stub
     }
 
     public void onBetEvent(Bet bet) {

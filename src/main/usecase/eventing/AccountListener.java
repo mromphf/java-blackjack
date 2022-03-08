@@ -10,6 +10,7 @@ import static java.time.LocalDateTime.now;
 public interface AccountListener extends Identifiable {
 
     void onAccountCreated(Account account);
+    void onAccountDeleted(Account account);
     void onAccountEvent(Event<Account> event);
 
     default void onAccountsEvent(Event<Collection<Account>> event) {
@@ -17,5 +18,5 @@ public interface AccountListener extends Identifiable {
                 onAccountEvent(new Event<>(event.getKey(), now(), event.getPredicate(), account)));
     }
 
-    default void onAccountsLoaded(Collection<Account> accounts) {};
+    default void onAccountsLoaded(Collection<Account> accounts) {}
 }

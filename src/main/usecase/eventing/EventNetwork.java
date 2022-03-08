@@ -76,6 +76,11 @@ public class EventNetwork implements
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        accountListeners.forEach(a -> a.onAccountDeleted(account));
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         accountListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))

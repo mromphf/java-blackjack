@@ -57,6 +57,11 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     }
 
     @Override
+    public void onAccountDeleted(Account account) {
+        // No-op
+    }
+
+    @Override
     public void onAccountEvent(Event<Account> event) {
         if (event.is(ACCOUNT_SELECTED)) {
             selections.put(now(), event.getData());

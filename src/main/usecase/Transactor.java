@@ -9,10 +9,8 @@ import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,11 +41,9 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
 
     @Override
     public void onAccountCreated(Account account) {
-        final UUID accountKey = account.getKey();
-        final LocalDateTime timestamp = now();
         final String description = "SIGNING BONUS";
         final int signingBonus = 200;
-        final Transaction transaction = new Transaction(timestamp, accountKey, description, signingBonus);
+        final Transaction transaction = new Transaction(now(), account.getKey(), description, signingBonus);
 
         eventNetwork.onTransactionIssued(transaction);
     }

@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 
 import static java.util.UUID.randomUUID;
 import static java.util.logging.Level.INFO;
-import static main.usecase.eventing.Predicate.*;
 
 public class GameLogger extends EventConnection implements SnapshotListener, AccountListener, TransactionListener {
 
@@ -75,13 +74,15 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE_UPDATED)) {
-            final Account account = event.getData();
-            logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
-                    event.getTimestamp().format(pattern),
-                    account.getName(),
-                    account.getBalance()));
-        }
+        // No-op stub
+    }
+
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
+        logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
+                account.getCreated().format(pattern),
+                account.getName(),
+                account.getBalance()));
     }
 
     public void onTransaction(Transaction transaction) {

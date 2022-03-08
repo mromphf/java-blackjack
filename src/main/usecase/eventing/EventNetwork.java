@@ -95,6 +95,11 @@ public class EventNetwork implements
     }
 
     @Override
+    public void onAccountBalanceUpdated(Account account) {
+        accountListeners.forEach(l -> l.onAccountBalanceUpdated(account));
+    }
+
+    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {
         accountListeners.forEach(listener -> new Thread(
                 () -> listener.onAccountsLoaded(accounts), "Accounts Event Thread"

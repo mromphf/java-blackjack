@@ -12,7 +12,6 @@ import java.util.*;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
-import static main.usecase.eventing.Predicate.*;
 
 public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
@@ -38,7 +37,8 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         final Account updatedState = currentState.updateBalance(transaction);
 
         selections.put(now(), updatedState);
-        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
+
+        eventNetwork.onAccountBalanceUpdated(updatedState);
     }
 
     @Override
@@ -47,13 +47,15 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
         final Account updatedState = currentState.updateBalance(transactions);
 
         selections.put(now(), updatedState);
-        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
+
+        eventNetwork.onAccountBalanceUpdated(updatedState);
     }
 
     @Override
     public void onAccountCreated(Account account) {
         selections.put(now(), account);
-        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, selections.get(selections.lastKey())));
+
+        eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
     }
 
     @Override
@@ -64,11 +66,17 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     @Override
     public void onAccountSelected(Account account) {
         selections.put(now(), account);
-        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, selections.get(selections.lastKey())));
+
+        eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
     }
 
     @Override
     public void onAccountEvent(Event<Account> event) {
+        // No-op stub
+    }
+
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
         // No-op stub
     }
 }

@@ -100,7 +100,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> account = accountCache.getLastSelectedAccount();
+        final Optional<Account> account = accountCache.getCurrentlySelectedAccount();
 
         if (account.isPresent())  {
             final int balance = account.get().getBalance();
@@ -115,7 +115,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @FXML
     private void onDeal() {
-        final Optional<Account> account = accountCache.getLastSelectedAccount();
+        final Optional<Account> account = accountCache.getCurrentlySelectedAccount();
 
         if (account.isPresent()) {
             final UUID accountKey = account.get().getKey();
@@ -152,7 +152,7 @@ public class BetController extends EventConnection implements Initializable, Lay
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {
-        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             this.bet = Math.min(MAX_BET, this.bet + amount);

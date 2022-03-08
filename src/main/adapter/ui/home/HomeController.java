@@ -165,7 +165,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
+        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
         if (selectedAccount.isPresent()) {
             final Account account = selectedAccount.get();

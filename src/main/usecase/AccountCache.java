@@ -18,7 +18,7 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
 
     private final SortedMap<LocalDateTime, Account> selections = new TreeMap<>();
 
-    public Optional<Account> getLastSelectedAccount() {
+    public Optional<Account> getCurrentlySelectedAccount() {
         if (selections.isEmpty()) {
             return Optional.empty();
         } else {

@@ -147,21 +147,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @Override
-    public void onAccountCreated(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountDeleted(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountSelected(Account account) {
-        // No-op stub
-    }
-
-    @Override
     public void onAccountBalanceUpdated(Account account) {
         accountMap.put(account.getKey(), account);
         runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));

@@ -51,14 +51,4 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     public void onAccountDeleted(Account account) {
         accountMemory.closeAccount(account);
     }
-
-    @Override
-    public void onAccountSelected(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountBalanceUpdated(Account account) {
-        // No-op stub
-    }
 }

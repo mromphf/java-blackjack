@@ -73,11 +73,6 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
-    public void onAccountEvent(Event<Account> event) {
-        // No-op stub
-    }
-
-    @Override
     public void onAccountBalanceUpdated(Account account) {
         logger.log(INFO, String.format("%s: Current Balance - %s - $%s",
                 account.getCreated().format(pattern),

@@ -2,7 +2,6 @@ package main.usecase;
 
 import main.domain.Account;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +40,6 @@ public class AccountMap implements AccountListener {
 
     @Override
     public void onAccountSelected(Account account) {
-        throw new RuntimeException();
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
         throw new RuntimeException();
     }
 

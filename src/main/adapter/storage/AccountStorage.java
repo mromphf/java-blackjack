@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import main.domain.Account;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
@@ -64,11 +63,6 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     @Override
     public void onAccountSelected(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
         // No-op stub
     }
 

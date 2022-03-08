@@ -13,7 +13,6 @@ import main.adapter.graphics.ImageReelAnimation;
 import main.domain.Account;
 import main.usecase.Layout;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
@@ -166,11 +165,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onAccountSelected(Account account) {
-        // No-op stub
-    }
-
-    @Override
-    public void onAccountEvent(Event<Account> event) {
         // No-op stub
     }
 

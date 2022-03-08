@@ -42,17 +42,13 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     }
 
     @Override
-    public void onTransactionEvent(Event<Transaction> event) {
-        if (event.is(TRANSACTION_ISSUED)) {
-            onTransaction(event.getData());
-        }
+    public void onTransactionIssued(Transaction transaction) {
+        onTransaction(transaction);
     }
 
     @Override
-    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTION_SERIES_ISSUED)) {
-            event.getData().forEach(this::onTransaction);
-        }
+    public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
+        transactions.forEach(this::onTransaction);
     }
 
     @Override

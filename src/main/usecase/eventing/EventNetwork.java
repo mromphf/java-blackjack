@@ -6,8 +6,10 @@ import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.Layout;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.UUID;
 
 public class EventNetwork implements
         SnapshotListener,
@@ -94,21 +96,13 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onTransactionEvent(Event<Transaction> event) {
-        transactionListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> new Thread(
-                        () -> listener.onTransactionEvent(event), "Transaction Event Thread"
-                ).start());
+    public void onTransactionIssued(Transaction transaction) {
+        transactionListeners.forEach(t -> t.onTransactionIssued(transaction));
     }
 
     @Override
-    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        final List<TransactionListener> collect = transactionListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .collect(Collectors.toList());
-
-        collect.forEach(listener -> listener.onTransactionsEvent(event));
+    public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
+        transactionListeners.forEach(t -> t.onTransactionSeriesIssued(transactions));
     }
 
     @Override

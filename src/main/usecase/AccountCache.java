@@ -33,25 +33,21 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     }
 
     @Override
-    public void onTransactionEvent(Event<Transaction> event) {
-        if (event.is(TRANSACTION_ISSUED)) {
-            final Account currentState = selections.get(selections.lastKey());
-            final Account updatedState = currentState.updateBalance(event.getData());
+    public void onTransactionIssued(Transaction transaction) {
+        final Account currentState = selections.get(selections.lastKey());
+        final Account updatedState = currentState.updateBalance(transaction);
 
-            selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
-        }
+        selections.put(now(), updatedState);
+        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
     }
 
     @Override
-    public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTION_SERIES_ISSUED)) {
-            final Account currentState = selections.get(selections.lastKey());
-            final Account updatedState = currentState.updateBalance(event.getData());
+    public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
+        final Account currentState = selections.get(selections.lastKey());
+        final Account updatedState = currentState.updateBalance(transactions);
 
-            selections.put(now(), updatedState);
-            eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
-        }
+        selections.put(now(), updatedState);
+        eventNetwork.onAccountEvent(new Event<>(networkId, now(), CURRENT_BALANCE_UPDATED, updatedState));
     }
 
     @Override

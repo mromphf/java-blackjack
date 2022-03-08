@@ -1,15 +1,10 @@
 package main.usecase;
 
 import com.google.inject.Inject;
-import main.domain.Account;
-import main.domain.Bet;
-import main.domain.Evaluate;
-import main.domain.Snapshot;
-import main.domain.Transaction;
-import main.usecase.eventing.EventConnection;
+import main.domain.*;
 import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.BetListener;
 import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.time.LocalDateTime;
@@ -21,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static main.usecase.eventing.Predicate.*;
 
-public class Transactor extends EventConnection implements SnapshotListener, BetListener, AccountListener {
+public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 
     private final UUID key;
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
@@ -71,14 +66,11 @@ public class Transactor extends EventConnection implements SnapshotListener, Bet
         }
     }
 
-    @Override
-    public void onBetEvent(Event<Bet> event) {
-        if (event.is(BET_PLACED)) {
-            final LocalDateTime timestamp = LocalDateTime.now();
-            final Transaction transaction = Evaluate.betTransaction(timestamp, event.getData());
-            final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
+    public void onBetEvent(Bet bet) {
+        final LocalDateTime timestamp = LocalDateTime.now();
+        final Transaction transaction = Evaluate.betTransaction(timestamp, bet);
+        final Event<Transaction> evt = new Event<>(key, timestamp, TRANSACTION_ISSUED, transaction);
 
-            eventNetwork.onTransactionEvent(evt);
-        }
+        eventNetwork.onTransactionEvent(evt);
     }
 }

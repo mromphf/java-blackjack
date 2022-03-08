@@ -22,4 +22,6 @@ public interface TransactionListener extends Identifiable {
 
         onTransactionsEvent(new Event<>(sourceKey, timestamp, predicate, transactions));
     }
+
+    default void onTransactionsLoaded(Collection<Transaction> transactions) {}
 }

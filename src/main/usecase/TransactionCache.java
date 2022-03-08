@@ -7,9 +7,10 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static main.usecase.eventing.Predicate.*;
+import static java.util.stream.Collectors.groupingBy;
+import static main.usecase.eventing.Predicate.TRANSACTION_ISSUED;
+import static main.usecase.eventing.Predicate.TRANSACTION_SERIES_ISSUED;
 
 public class TransactionCache extends EventConnection implements TransactionListener {
 
@@ -48,13 +49,22 @@ public class TransactionCache extends EventConnection implements TransactionList
 
     @Override
     public void onTransactionsEvent(Event<Collection<Transaction>> event) {
-        if (event.is(TRANSACTIONS_LOADED) || event.is(TRANSACTION_SERIES_ISSUED)) {
+        if (event.is(TRANSACTION_SERIES_ISSUED)) {
             final Map<UUID, List<Transaction>> grouped = event.getData()
                     .stream()
-                    .collect(Collectors.groupingBy(Transaction::getAccountKey));
+                    .collect(groupingBy(Transaction::getAccountKey));
 
             grouped.forEach(this::mapToCache);
         }
+    }
+
+    @Override
+    public void onTransactionsLoaded(Collection<Transaction> transactions) {
+        final Map<UUID, List<Transaction>> grouped = transactions
+                .stream()
+                .collect(groupingBy(Transaction::getAccountKey));
+
+        grouped.forEach(this::mapToCache);
     }
 
     private void mapToCache(UUID accountKey, Collection<Transaction> transactions) {

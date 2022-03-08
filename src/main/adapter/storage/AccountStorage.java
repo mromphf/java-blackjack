@@ -8,9 +8,10 @@ import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
-import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.usecase.eventing.Predicate.*;
 
@@ -34,8 +35,7 @@ public class AccountStorage extends EventConnection implements AccountListener, 
 
     public void loadAllTransactions() {
         final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(new ArrayList<>());
-        final Event<Collection<Transaction>> transEvent = new Event<>(key, now(), TRANSACTIONS_LOADED, allTransactions);
-        eventNetwork.onTransactionsEvent(transEvent);
+        eventNetwork.onTransactionsLoaded(allTransactions);
     }
 
     @Override

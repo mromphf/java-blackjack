@@ -112,6 +112,11 @@ public class EventNetwork implements
     }
 
     @Override
+    public void onTransactionsLoaded(Collection<Transaction> transactions) {
+        transactionListeners.forEach(t -> t.onTransactionsLoaded(transactions));
+    }
+
+    @Override
     public void onAlertEvent(Alert event) {
         alertListeners.forEach(listener -> listener.onAlertEvent(event));
     }

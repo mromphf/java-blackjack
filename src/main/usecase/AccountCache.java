@@ -54,19 +54,9 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     }
 
     @Override
-    public void onAccountDeleted(Account account) {
-        // No-op
-    }
-
-    @Override
     public void onAccountSelected(Account account) {
         selections.put(now(), account);
 
         eventNetwork.onAccountBalanceUpdated(selections.get(selections.lastKey()));
-    }
-
-    @Override
-    public void onAccountBalanceUpdated(Account account) {
-        // No-op stub
     }
 }

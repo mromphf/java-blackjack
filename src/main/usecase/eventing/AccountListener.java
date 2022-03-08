@@ -5,9 +5,9 @@ import main.domain.Account;
 import java.util.Collection;
 
 public interface AccountListener {
-    void onAccountCreated(Account account);
-    void onAccountDeleted(Account account);
-    void onAccountSelected(Account account);
-    void onAccountBalanceUpdated(Account account);
+    default void onAccountCreated(Account account) {}
+    default void onAccountDeleted(Account account) {}
+    default void onAccountSelected(Account account) {}
+    default void onAccountBalanceUpdated(Account account) {}
     default void onAccountsLoaded(Collection<Account> accounts) {}
 }

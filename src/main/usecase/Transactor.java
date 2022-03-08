@@ -75,6 +75,11 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
         // No-op stub
     }
 
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
+        // No-op stub
+    }
+
     public void onBetEvent(Bet bet) {
         eventNetwork.onTransactionIssued(betTransaction(now(), bet));
     }

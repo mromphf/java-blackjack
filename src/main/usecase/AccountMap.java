@@ -48,4 +48,9 @@ public class AccountMap implements AccountListener {
     public void onAccountEvent(Event<Account> event) {
         throw new RuntimeException();
     }
+
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
+        throw new RuntimeException();
+    }
 }

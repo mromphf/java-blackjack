@@ -27,7 +27,6 @@ import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
-import static main.usecase.eventing.Predicate.CURRENT_BALANCE_UPDATED;
 
 public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
 
@@ -172,11 +171,13 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onAccountEvent(Event<Account> event) {
-        if (event.is(CURRENT_BALANCE_UPDATED)) {
-            final Account account = event.getData();
-            accountMap.put(account.getKey(), account);
-            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
-        }
+        // No-op stub
+    }
+
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
+        accountMap.put(account.getKey(), account);
+        runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
     }
 
     @Override

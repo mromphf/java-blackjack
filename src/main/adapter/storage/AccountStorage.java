@@ -71,4 +71,9 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     public void onAccountEvent(Event<Account> event) {
         // No-op stub
     }
+
+    @Override
+    public void onAccountBalanceUpdated(Account account) {
+        // No-op stub
+    }
 }

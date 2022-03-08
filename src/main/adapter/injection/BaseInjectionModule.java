@@ -2,6 +2,7 @@ package main.adapter.injection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.storage.AccountMemory;
 import main.adapter.storage.Database;
@@ -69,7 +70,7 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named("logHandlers"))
                 .toInstance(new ArrayList<Handler>() {
                     {
-                        //add(new ConsoleLogHandler());
+                        add(new ConsoleLogHandler());
                         add(new FileLogHandler());
                     }
                 });

@@ -25,6 +25,7 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     @Inject
     public GameLogger(@Named("logger") Logger logger, @Named("logHandlers") Collection<Handler> logHandlers) {
         this.logger = logger;
+        logger.setUseParentHandlers(false);
         logHandlers.forEach(logger::addHandler);
     }
 

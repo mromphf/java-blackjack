@@ -15,7 +15,7 @@ import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.*;
 
-public class Game extends EventConnection implements BetListener, LayoutListener {
+public class Game extends EventConnection implements LayoutListener {
 
     private final UUID key = randomUUID();
     private final Stack<Card> deck;
@@ -58,15 +58,12 @@ public class Game extends EventConnection implements BetListener, LayoutListener
         }
     }
 
-    @Override
-    public void onBetEvent(Event<Bet> event) {
+    public void onBetEvent(Bet bet) {
         final Optional<Account> selectedAccount = accountCache.getLastSelectedAccount();
 
-        if (event.is(BET_PLACED) && selectedAccount.isPresent()) {
-            final Bet bet = event.getData();
-
+        if (selectedAccount.isPresent()) {
             roundStack.add(new Round(deck, bet.getVal(), maxCards, numDecks));
-            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(event.getTimestamp(), selectedAccount.get()));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
         }
     }
 

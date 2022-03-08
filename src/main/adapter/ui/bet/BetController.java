@@ -10,13 +10,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import main.adapter.graphics.ImageReelAnimation;
 import main.domain.Account;
 import main.domain.Bet;
 import main.domain.Snapshot;
-import main.adapter.graphics.ImageReelAnimation;
 import main.usecase.AccountCache;
+import main.usecase.Game;
 import main.usecase.Layout;
-import main.usecase.eventing.*;
+import main.usecase.Transactor;
+import main.usecase.eventing.Event;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.LayoutListener;
+import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
 import java.util.Optional;
@@ -28,7 +33,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static main.usecase.Layout.*;
-import static main.usecase.eventing.Predicate.*;
+import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 
 public class BetController extends EventConnection implements Initializable, LayoutListener, SnapshotListener {
@@ -64,15 +69,20 @@ public class BetController extends EventConnection implements Initializable, Lay
     public Button btnBet100;
 
     private final AccountCache accountCache;
+    private final Game game;
+    private final Transactor transactor;
     private final static int MAX_BET = 500;
     private final UUID key = randomUUID();
 
     private ImageReelAnimation animation;
     private int bet = 0;
 
+
     @Inject
-    public BetController(AccountCache accountCache) {
+    public BetController(Game game, Transactor transactor, AccountCache accountCache) {
         this.accountCache = accountCache;
+        this.game = game;
+        this.transactor = transactor;
     }
 
     @Override
@@ -115,7 +125,8 @@ public class BetController extends EventConnection implements Initializable, Lay
             final UUID accountKey = account.get().getKey();
             final Bet betByAccount = Bet.of(now(), accountKey, bet);
 
-            eventNetwork.onBetEvent(new Event<>(key, now(), BET_PLACED, betByAccount));
+            game.onBetEvent(betByAccount);
+            transactor.onBetEvent(betByAccount);
             eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, GAME));
 
             bet = 0;

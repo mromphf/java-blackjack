@@ -9,18 +9,14 @@ import java.util.stream.Collectors;
 
 public class EventNetwork implements
         SnapshotListener,
-        BetListener,
         LayoutListener,
-        ActionListener,
         AccountListener,
         TransactionListener,
         AlertListener {
 
     private final UUID key;
     private final Collection<AccountListener> accountListeners = new ArrayList<>();
-    private final Collection<BetListener> betListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
-    private final Collection<ActionListener> actionListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
     private final Collection<AlertListener> alertListeners = new ArrayList<>();
@@ -35,16 +31,8 @@ public class EventNetwork implements
                 snapshotListeners.add((SnapshotListener) connection);
             }
 
-            if (connection instanceof BetListener) {
-                betListeners.add((BetListener) connection);
-            }
-
             if (connection instanceof LayoutListener) {
                 layoutListeners.add((LayoutListener) connection);
-            }
-
-            if (connection instanceof ActionListener) {
-                actionListeners.add((ActionListener) connection);
             }
 
             if (connection instanceof AccountListener) {
@@ -74,28 +62,10 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onBetEvent(Event<Bet> event) {
-        betListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> new Thread(
-                        () -> listener.onBetEvent(event), "Bet Event Thread"
-                ).start());
-    }
-
-    @Override
     public void onLayoutEvent(Event<Layout> event) {
         layoutListeners.stream()
                 .filter(listener -> !listener.getKey().equals(event.getKey()))
                 .forEach(listener -> listener.onLayoutEvent(event));
-    }
-
-    @Override
-    public void onActionEvent(Event<Action> event) {
-        actionListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> new Thread(
-                        () -> listener.onActionEvent(event), "Action Event Thread"
-                ).start());
     }
 
     @Override

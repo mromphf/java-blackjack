@@ -215,7 +215,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private Alert initializeConfirmationAlert(Account account) {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        eventNetwork.onAlertEvent(new Event<>(key, now(), LAYOUT_ALERT, alert));
+        eventNetwork.onAlertEvent(alert);
 
         alert.setTitle("Confirm Account Closure");
         alert.setHeaderText(account.getName());

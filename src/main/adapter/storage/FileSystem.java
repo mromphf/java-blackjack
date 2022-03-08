@@ -2,27 +2,24 @@ package main.adapter.storage;
 
 import javafx.fxml.FXMLLoader;
 import main.adapter.injection.BaseInjectionModule;
-import main.common.CsvUtil;
-import main.domain.Account;
 import main.domain.Card;
-import main.domain.Transaction;
 import main.usecase.Layout;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Stack;
 
 import static java.lang.String.format;
 import static java.lang.System.exit;
-import static main.common.CsvUtil.*;
-import static main.common.JsonUtil.deckFromJson;
 import static main.adapter.storage.Directory.*;
 import static main.adapter.storage.FileFunctions.fileToJson;
-import static main.adapter.storage.FileFunctions.readCsvLines;
+import static main.common.JsonUtil.deckFromJson;
 import static main.usecase.Layout.*;
 
-public class FileSystem implements TransactionMemory, AccountMemory {
+public class FileSystem {
 
     private final Map<Directory, File> directories;
 
@@ -77,51 +74,5 @@ public class FileSystem implements TransactionMemory, AccountMemory {
             put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/home/HomeView.fxml")));
             put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/registration/RegistrationView.fxml")));
         }};
-    }
-
-    @Override
-    public void saveTransaction(Transaction transaction) {
-        final File file = inferTransactionsFile(transaction.getAccountKey());
-        appendToCsv(file, TRANSACTION_HEADER, toCsvRow(transaction));
-    }
-
-    @Override
-    public void openNewAccount(Account account) {
-        final File file = directories.get(ACCOUNTS);
-        appendToCsv(file, ACCOUNT_HEADER, toCsvRow(account));
-    }
-
-    @Override
-    public void closeAccount(Account account) {
-        final File file = directories.get(ACCOUNTS_CLOSED);
-        appendToCsv(file, ACCOUNT_CLOSURE_HEADER, accountClosureRow(account));
-    }
-
-    @Override
-    public Set<Account> loadAllAccounts(Collection<UUID> closedAccountKeys) {
-        final File accountsDir = directories.get(ACCOUNTS);
-
-        return readCsvLines(accountsDir).stream()
-                .map(line -> line.split(","))
-                .map(CsvUtil::accountFromCsvRow)
-                .filter(account -> !closedAccountKeys.contains(account.getKey()))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public List<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
-        return openAccounts.stream()
-                .map(Account::getKey)
-                .map(key -> format("%s/%s.csv", directories.get(TRANSACTIONS), key))
-                .map(File::new)
-                .map(FileFunctions::readCsvLines)
-                .flatMap(Collection::stream)
-                .map(line -> line.split(","))
-                .map(CsvUtil::transactionsFromCsvRow)
-                .collect(Collectors.toList());
-    }
-
-    private File inferTransactionsFile(UUID key) {
-        return new File(format("%s/%s.csv", directories.get(TRANSACTIONS).getPath(), key));
     }
 }

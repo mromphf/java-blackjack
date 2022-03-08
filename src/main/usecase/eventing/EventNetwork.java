@@ -105,9 +105,7 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onAlertEvent(Event<Alert> event) {
-        alertListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onAlertEvent(event));
+    public void onAlertEvent(Alert event) {
+        alertListeners.forEach(listener -> listener.onAlertEvent(event));
     }
 }

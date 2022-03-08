@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import main.usecase.eventing.AlertListener;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
@@ -15,7 +14,6 @@ import java.util.UUID;
 
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
-import static main.usecase.eventing.Predicate.LAYOUT_ALERT;
 
 public class LayoutManager extends EventConnection implements LayoutListener, AlertListener {
 
@@ -49,10 +47,8 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
     }
 
     @Override
-    public void onAlertEvent(Event<Alert> event) {
-        if (event.is(LAYOUT_ALERT)) {
-            event.getData().initOwner(stage);
-        }
+    public void onAlertEvent(Alert event) {
+        event.initOwner(stage);
     }
 
     @Override

@@ -16,7 +16,6 @@ import java.util.UUID;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
 import static main.usecase.eventing.Predicate.LAYOUT_ALERT;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class LayoutManager extends EventConnection implements LayoutListener, AlertListener {
 
@@ -57,10 +56,8 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED)) {
-            onChangeLayout(event.getData());
-        }
+    public void onLayoutEvent(Layout event) {
+        onChangeLayout(event);
     }
 
     private void onChangeLayout(Layout layout) {

@@ -1,7 +1,9 @@
 package main.usecase.eventing;
 
 import javafx.scene.control.Alert;
-import main.domain.*;
+import main.domain.Account;
+import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.usecase.Layout;
 
 import java.util.*;
@@ -62,10 +64,8 @@ public class EventNetwork implements
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        layoutListeners.stream()
-                .filter(listener -> !listener.getKey().equals(event.getKey()))
-                .forEach(listener -> listener.onLayoutEvent(event));
+    public void onLayoutEvent(Layout event) {
+        layoutListeners.forEach(listener -> listener.onLayoutEvent(event));
     }
 
     @Override

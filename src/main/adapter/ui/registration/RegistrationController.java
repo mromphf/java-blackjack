@@ -20,7 +20,6 @@ import static java.util.UUID.randomUUID;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Layout.REGISTRATION;
 import static main.usecase.eventing.Predicate.ACCOUNT_CREATED;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class RegistrationController extends EventConnection implements Initializable, LayoutListener {
 
@@ -37,7 +36,7 @@ public class RegistrationController extends EventConnection implements Initializ
 
     @FXML
     public void onCancel() {
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HOME));
+        eventNetwork.onLayoutEvent(HOME);
     }
 
     @FXML
@@ -55,7 +54,7 @@ public class RegistrationController extends EventConnection implements Initializ
         txtName.setText("");
 
         eventNetwork.onAccountEvent(new Event<>(key, now(), ACCOUNT_CREATED, account));
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, HOME));
+        eventNetwork.onLayoutEvent(HOME);
     }
 
     @Override
@@ -64,8 +63,8 @@ public class RegistrationController extends EventConnection implements Initializ
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == REGISTRATION) {
+    public void onLayoutEvent(Layout event) {
+        if (event == REGISTRATION) {
             btnOk.setDisable(true);
         }
     }

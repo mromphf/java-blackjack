@@ -3,7 +3,8 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.*;
-import main.usecase.eventing.*;
+import main.usecase.eventing.EventConnection;
+import main.usecase.eventing.LayoutListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -13,7 +14,6 @@ import static java.util.UUID.randomUUID;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
-import static main.usecase.eventing.Predicate.*;
 
 public class Game extends EventConnection implements LayoutListener {
 
@@ -68,8 +68,8 @@ public class Game extends EventConnection implements LayoutListener {
     }
 
     @Override
-    public void onLayoutEvent(Event<Layout> event) {
-        if (event.is(LAYOUT_CHANGED) && event.getData() == HOME && roundStack.size() > 0) {
+    public void onLayoutEvent(Layout event) {
+        if (event == HOME && roundStack.size() > 0) {
             deck.clear();
             deck.addAll(freshlyShuffledDeck(numDecks));
         }

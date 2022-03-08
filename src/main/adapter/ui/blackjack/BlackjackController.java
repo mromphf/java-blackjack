@@ -9,7 +9,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.Snapshot;
 import main.usecase.Game;
-import main.usecase.eventing.Event;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
@@ -17,14 +16,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static javafx.application.Platform.runLater;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
 import static main.usecase.Layout.BET;
-import static main.usecase.eventing.Predicate.LAYOUT_CHANGED;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
 
@@ -121,7 +118,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onDone() {
-        eventNetwork.onLayoutEvent(new Event<>(key, now(), LAYOUT_CHANGED, BET));
+        eventNetwork.onLayoutEvent(BET);
     }
 
     @FXML

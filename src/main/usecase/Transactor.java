@@ -3,7 +3,6 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.Account;
-import main.domain.Bet;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.eventing.AccountListener;
@@ -16,7 +15,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
-import static main.domain.Evaluate.betTransaction;
 
 public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 
@@ -47,9 +45,5 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
         final Transaction transaction = new Transaction(now(), account.getKey(), description, signingBonus);
 
         eventNetwork.onTransactionIssued(transaction);
-    }
-
-    public void onBetEvent(Bet bet) {
-        eventNetwork.onTransactionIssued(betTransaction(now(), bet));
     }
 }

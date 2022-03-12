@@ -12,12 +12,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.Account;
-import main.domain.Bet;
 import main.domain.Snapshot;
+import main.domain.Transaction;
 import main.usecase.AccountCache;
-import main.usecase.Game;
 import main.usecase.Layout;
-import main.usecase.Transactor;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 import main.usecase.eventing.SnapshotListener;
@@ -66,8 +64,6 @@ public class BetController extends EventConnection implements Initializable, Lay
     public Button btnBet100;
 
     private final AccountCache accountCache;
-    private final Game game;
-    private final Transactor transactor;
     private final static int MAX_BET = 500;
 
     private ImageReelAnimation animation;
@@ -75,10 +71,8 @@ public class BetController extends EventConnection implements Initializable, Lay
 
 
     @Inject
-    public BetController(Game game, Transactor transactor, AccountCache accountCache) {
+    public BetController(AccountCache accountCache) {
         this.accountCache = accountCache;
-        this.game = game;
-        this.transactor = transactor;
     }
 
     @Override
@@ -115,10 +109,10 @@ public class BetController extends EventConnection implements Initializable, Lay
 
         if (account.isPresent()) {
             final UUID accountKey = account.get().getKey();
-            final Bet betByAccount = Bet.of(now(), accountKey, bet);
+            final String description = "BET";
+            final int betVal = (bet * -1);
 
-            game.onBetEvent(betByAccount);
-            transactor.onBetEvent(betByAccount);
+            eventNetwork.onTransactionIssued(new Transaction(now(), accountKey, description, betVal));
             eventNetwork.onLayoutEvent(GAME);
 
             bet = 0;

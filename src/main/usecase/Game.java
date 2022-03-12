@@ -5,6 +5,7 @@ import com.google.inject.name.Named;
 import main.domain.*;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
+import main.usecase.eventing.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,12 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
 
+import static java.lang.Math.*;
 import static java.time.LocalDateTime.now;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 
-public class Game extends EventConnection implements LayoutListener {
+public class Game extends EventConnection implements LayoutListener, TransactionListener {
 
     private final Stack<Card> deck;
     private final int maxCards;
@@ -54,11 +56,12 @@ public class Game extends EventConnection implements LayoutListener {
         }
     }
 
-    public void onBetEvent(Bet bet) {
+    @Override
+    public void onTransactionIssued(Transaction transaction) {
         final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
-        if (selectedAccount.isPresent()) {
-            roundStack.add(new Round(deck, bet.getVal(), maxCards, numDecks));
+        if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
+            roundStack.add(new Round(deck, abs(transaction.getAmount()), maxCards, numDecks));
             eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
         }
     }

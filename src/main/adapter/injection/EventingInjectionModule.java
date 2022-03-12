@@ -46,6 +46,7 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(AccountStorage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(baseInjector.getInstance(TransactionCache.class));
+                    add(baseInjector.getInstance(Game.class));
                 }});
 
         bind(new TypeLiteral<Collection<AccountListener>>() {})

@@ -105,11 +105,7 @@ public class BetController extends EventConnection implements Initializable, Lay
         if (account.isPresent())  {
             final int balance = account.get().getBalance();
 
-            runLater(() -> {
-                btnDeal.setDisable(bet > balance || bet <= 0);
-                lblBet.setText(format("$%s", bet));
-                lblBalance.setText(format("Balance: $%s", balance));
-            });
+            runLater(() -> refreshUI(balance, bet));
         }
     }
 
@@ -163,8 +159,13 @@ public class BetController extends EventConnection implements Initializable, Lay
         if (selectedAccount.isPresent()) {
             final int balance = selectedAccount.get().getBalance();
 
-            btnDeal.setDisable(bet > balance || bet <= 0);
-            lblBet.setText("$" + bet);
+            refreshUI(balance, bet);
         }
+    }
+
+    private void refreshUI(int balance, int bet) {
+        btnDeal.setDisable(bet > balance || bet <= 0);
+        lblBet.setText("$" + bet);
+        lblBalance.setText(format("Balance: $%s", balance));
     }
 }

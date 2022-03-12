@@ -19,7 +19,6 @@ import main.usecase.TransactionCache;
 import main.usecase.Transactor;
 import main.usecase.eventing.EventNetwork;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Handler;
@@ -65,9 +64,9 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named("transactionMap"))
                 .toInstance(new HashMap<>());
 
-        bind(new TypeLiteral<SortedMap<LocalDateTime, Account>>() {})
-                .annotatedWith(named("accountMap"))
-                .toInstance(new TreeMap<>());
+        bind(new TypeLiteral<Stack<Account>>() {})
+                .annotatedWith(named("accountStack"))
+                .toInstance(new Stack<>());
 
         bind(Logger.class)
                 .annotatedWith(named("logger"))

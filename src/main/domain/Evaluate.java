@@ -23,14 +23,6 @@ public class Evaluate {
         return evaluators;
     }
 
-    public static Transaction betTransaction(LocalDateTime timestamp, Bet bet) {
-        final String description = "BET";
-        final int betVal = (bet.getVal() * -1);
-        final UUID accountKey = bet.getAccountKey();
-
-        return new Transaction(timestamp, accountKey, description, betVal);
-    }
-
     private static Function<Snapshot, Optional<Transaction>> insuranceTransactions() {
        return (snapshot) -> {
             final Collection<Action> actionsTaken = snapshot.getActionsTaken();

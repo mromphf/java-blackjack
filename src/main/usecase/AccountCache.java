@@ -13,12 +13,14 @@ import java.util.EmptyStackException;
 import java.util.Optional;
 import java.util.Stack;
 
+import static main.adapter.injection.Bindings.ACCOUNT_STACK;
+
 public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
     private final Stack<Account> selections;
 
     @Inject
-    public AccountCache(@Named("accountStack") Stack<Account> selections) {
+    public AccountCache(@Named(ACCOUNT_STACK) Stack<Account> selections) {
         this.selections = selections;
     }
 

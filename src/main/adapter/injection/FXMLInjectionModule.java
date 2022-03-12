@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.google.inject.name.Names.named;
+import static main.adapter.injection.Bindings.LAYOUT_MAP;
 import static main.usecase.Layout.*;
 
 public class FXMLInjectionModule extends AbstractModule {
@@ -80,7 +81,7 @@ public class FXMLInjectionModule extends AbstractModule {
         bind(Scene.class).toInstance(scene);
         bind(Stage.class).toInstance(stage);
         bind(new TypeLiteral<Map<Layout, Parent>>() {})
-                .annotatedWith(named("layoutMap"))
+                .annotatedWith(named(LAYOUT_MAP))
                 .toInstance(layoutMap);
     }
 }

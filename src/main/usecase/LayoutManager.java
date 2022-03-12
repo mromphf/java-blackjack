@@ -13,6 +13,7 @@ import main.usecase.eventing.LayoutListener;
 import java.util.Map;
 import java.util.Stack;
 
+import static main.adapter.injection.Bindings.LAYOUT_MAP;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
 
@@ -24,7 +25,7 @@ public class LayoutManager extends EventConnection implements LayoutListener, Al
     private final Stack<Layout> navHistory = new Stack<>();
 
     @Inject
-    public LayoutManager(Stage stage, Scene scene, @Named("layoutMap") Map<Layout, Parent> layoutMap) {
+    public LayoutManager(Stage stage, Scene scene, @Named(LAYOUT_MAP) Map<Layout, Parent> layoutMap) {
         this.scene = scene;
         this.stage = stage;
         this.layoutMap = layoutMap;

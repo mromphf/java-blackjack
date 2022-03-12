@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import static com.google.inject.name.Names.named;
 import static java.lang.Integer.parseInt;
+import static main.adapter.injection.Bindings.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.domain.Evaluate.transactionEvaluators;
 
@@ -53,36 +54,34 @@ public class BaseInjectionModule extends AbstractModule {
         bind(GameLogger.class).in(Singleton.class);
 
         bind(Integer.class)
-                .annotatedWith(named("numDecks"))
+                .annotatedWith(named(NUM_DECKS))
                 .toInstance(numDecks);
 
         bind(new TypeLiteral<Stack<Card>>() {})
-                .annotatedWith(named("deck"))
+                .annotatedWith(named(DECK))
                 .toInstance(deck);
 
         bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {})
-                .annotatedWith(named("transactionMap"))
+                .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
 
         bind(new TypeLiteral<Stack<Account>>() {})
-                .annotatedWith(named("accountStack"))
+                .annotatedWith(named(ACCOUNT_STACK))
                 .toInstance(new Stack<>());
 
         bind(Logger.class)
-                .annotatedWith(named("logger"))
+                .annotatedWith(named(GAME_LOGGER))
                 .toInstance(Logger.getLogger("Game Logger"));
 
         bind(new TypeLiteral<Collection<Handler>>() {})
-                .annotatedWith(named("logHandlers"))
-                .toInstance(new ArrayList<Handler>() {
-                    {
-                        add(new ConsoleLogHandler());
-                        add(new FileLogHandler());
-                    }
-                });
+                .annotatedWith(named(LOG_HANDLERS))
+                .toInstance(new ArrayList<Handler>() {{
+                    add(new ConsoleLogHandler());
+                    add(new FileLogHandler());
+                }});
 
         bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {})
-                .annotatedWith(named("evaluators"))
+                .annotatedWith(named(EVALUATORS))
                 .toInstance(transactionEvaluators());
     }
 }

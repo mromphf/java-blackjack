@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import static com.google.inject.name.Names.named;
+import static main.adapter.injection.Bindings.*;
 
 public class EventingInjectionModule extends AbstractModule {
 
@@ -34,13 +35,13 @@ public class EventingInjectionModule extends AbstractModule {
         bind(EventNetwork.class).in(Singleton.class);
 
         bind(new TypeLiteral<Collection<AlertListener>>() {})
-                .annotatedWith(named("alertListeners"))
+                .annotatedWith(named(ALERT_LISTENERS))
                 .toInstance(new LinkedList<AlertListener>() {{
                     add(fxmlInjector.getInstance(LayoutManager.class));
                 }});
 
         bind(new TypeLiteral<Collection<TransactionListener>>() {})
-                .annotatedWith(named("transactionListeners"))
+                .annotatedWith(named(TRANSACTION_LISTENERS))
                 .toInstance(new LinkedList<TransactionListener>() {{
                     add(baseInjector.getInstance(AccountCache.class));
                     add(baseInjector.getInstance(AccountStorage.class));
@@ -50,7 +51,7 @@ public class EventingInjectionModule extends AbstractModule {
                 }});
 
         bind(new TypeLiteral<Collection<AccountListener>>() {})
-                .annotatedWith(named("accountListeners"))
+                .annotatedWith(named(ACCOUNT_LISTENERS))
                 .toInstance(new LinkedList<AccountListener>() {{
                     add(baseInjector.getInstance(AccountCache.class));
                     add(baseInjector.getInstance(AccountStorage.class));
@@ -60,7 +61,7 @@ public class EventingInjectionModule extends AbstractModule {
                 }});
 
         bind(new TypeLiteral<Collection<SnapshotListener>>() {})
-                .annotatedWith(named("snapshotListeners"))
+                .annotatedWith(named(SNAPSHOT_LISTENERS))
                 .toInstance(new LinkedList<SnapshotListener>() {{
                     add(baseInjector.getInstance(GameLogger.class));
                     add(baseInjector.getInstance(Transactor.class));
@@ -69,7 +70,7 @@ public class EventingInjectionModule extends AbstractModule {
                 }});
 
         bind(new TypeLiteral<Collection<LayoutListener>>() {})
-                .annotatedWith(named("layoutListeners"))
+                .annotatedWith(named(LAYOUT_LISTENERS))
                 .toInstance(new LinkedList<LayoutListener>() {{
                     add(baseInjector.getInstance(Game.class));
                     add(fxmlInjector.getInstance(BetController.class));
@@ -80,7 +81,7 @@ public class EventingInjectionModule extends AbstractModule {
                 }});
 
         bind(new TypeLiteral<Collection<EventConnection>>() {})
-                .annotatedWith(named("eventConnections"))
+                .annotatedWith(named(EVENT_CONNECTIONS))
                 .toInstance(new LinkedList<EventConnection>() {{
                     add(baseInjector.getInstance(AccountCache.class));
                     add(fxmlInjector.getInstance(HomeController.class));

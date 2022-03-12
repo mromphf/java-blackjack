@@ -19,10 +19,12 @@ public class AppRoot {
 
     private final Injector baseInjector;
     private final Injector fxmlInjector;
+    private final Injector eventingInjection;
 
-    public AppRoot(Injector baseInjector, Injector fxmlInjector) {
+    public AppRoot(Injector baseInjector, Injector fxmlInjector, Injector eventingInjection) {
         this.baseInjector = baseInjector;
         this.fxmlInjector = fxmlInjector;
+        this.eventingInjection = eventingInjection;
     }
 
 
@@ -34,7 +36,6 @@ public class AppRoot {
         final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);
         final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
         final Transactor transactor = baseInjector.getInstance(Transactor.class);
-        final EventNetwork eventNetwork = baseInjector.getInstance(EventNetwork.class);
 
         final LayoutManager layoutManager = fxmlInjector.getInstance(LayoutManager.class);
         final HomeController homeController = fxmlInjector.getInstance(HomeController.class);
@@ -42,6 +43,8 @@ public class AppRoot {
         final BlackjackController blackjackController = fxmlInjector.getInstance(BlackjackController.class);
         final BetController betController = fxmlInjector.getInstance(BetController.class);
         final RegistrationController registrationController = fxmlInjector.getInstance(RegistrationController.class);
+
+        final EventNetwork eventNetwork = eventingInjection.getInstance(EventNetwork.class);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
             add(accountCache);

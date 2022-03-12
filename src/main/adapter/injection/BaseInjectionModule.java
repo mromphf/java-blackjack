@@ -17,7 +17,6 @@ import main.usecase.AccountCache;
 import main.usecase.Game;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
-import main.usecase.eventing.EventNetwork;
 
 import java.util.*;
 import java.util.function.Function;
@@ -48,7 +47,6 @@ public class BaseInjectionModule extends AbstractModule {
         bind(AccountMemory.class).to(Database.class);
         bind(TransactionMemory.class).to(Database.class);
         bind(AccountCache.class).in(Singleton.class);
-        bind(EventNetwork.class).in(Singleton.class);
         bind(Transactor.class).in(Singleton.class);
         bind(TransactionCache.class).in(Singleton.class);
 

@@ -3,11 +3,11 @@ package main;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import main.adapter.ui.blackjack.ImageMap;
 import main.adapter.injection.BaseInjectionModule;
-import main.adapter.injection.ConfigInjectionModule;
+import main.adapter.injection.EventingInjectionModule;
 import main.adapter.injection.FXMLInjectionModule;
 import main.adapter.storage.FileSystem;
+import main.adapter.ui.blackjack.ImageMap;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
@@ -19,11 +19,17 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         final FileSystem fileSystem = new FileSystem(directoryMap());
-        final Injector configInjector = createInjector(new ConfigInjectionModule(fileSystem));
-        final Injector baseInjector = createInjector(new BaseInjectionModule(fileSystem));
-        final Injector fxmlInjector = createInjector(new FXMLInjectionModule(stage, baseInjector, resourceMap()));
 
-        final AppRoot appRoot = new AppRoot(baseInjector, fxmlInjector);
+        final BaseInjectionModule baseInjectionModule = new BaseInjectionModule(fileSystem);
+        final Injector baseInjector = createInjector(baseInjectionModule);
+
+        final FXMLInjectionModule fxmlInjectionModule = new FXMLInjectionModule(stage, baseInjector, resourceMap());
+        final Injector fxmlInjector = createInjector(fxmlInjectionModule);
+
+        final EventingInjectionModule eventingInjectionModule = new EventingInjectionModule(baseInjector, fxmlInjector);
+        final Injector eventingInjector = createInjector(eventingInjectionModule);
+
+        final AppRoot appRoot = new AppRoot(baseInjector, fxmlInjector, eventingInjector);
 
         appRoot.init();
     }

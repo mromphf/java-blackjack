@@ -15,13 +15,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
+import static main.adapter.injection.Bindings.EVALUATORS;
 
 public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
     @Inject
-    public Transactor(@Named("evaluators") Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
+    public Transactor(@Named(EVALUATORS) Collection<Function<Snapshot, Optional<Transaction>>> evaluators) {
         this.evaluationFunctions = evaluators;
     }
 

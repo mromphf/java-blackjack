@@ -10,6 +10,8 @@ import main.usecase.Layout;
 
 import java.util.Collection;
 
+import static main.adapter.injection.Bindings.*;
+
 public class EventNetwork implements
         SnapshotListener,
         LayoutListener,
@@ -25,11 +27,11 @@ public class EventNetwork implements
 
     @Inject
     public EventNetwork(
-            @Named("accountListeners") Collection<AccountListener> accountListeners,
-            @Named("alertListeners") Collection<AlertListener> alertListeners,
-            @Named("snapshotListeners") Collection<SnapshotListener> snapshotListeners,
-            @Named("layoutListeners") Collection<LayoutListener> layoutListeners,
-            @Named("transactionListeners") Collection<TransactionListener> transactionListeners) {
+            @Named(ACCOUNT_LISTENERS) Collection<AccountListener> accountListeners,
+            @Named(ALERT_LISTENERS) Collection<AlertListener> alertListeners,
+            @Named(SNAPSHOT_LISTENERS) Collection<SnapshotListener> snapshotListeners,
+            @Named(LAYOUT_LISTENERS) Collection<LayoutListener> layoutListeners,
+            @Named(TRANSACTION_LISTENERS) Collection<TransactionListener> transactionListeners) {
         this.accountListeners = accountListeners;
         this.alertListeners = alertListeners;
         this.snapshotListeners = snapshotListeners;

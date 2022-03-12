@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
+import static main.adapter.injection.Bindings.DECK;
+import static main.adapter.injection.Bindings.NUM_DECKS;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
@@ -29,7 +31,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
     private final AccountCache accountCache;
 
     @Inject
-    public Game(@Named("deck") Stack<Card> deck, @Named("numDecks") int numDecks, AccountCache accountCache) {
+    public Game(@Named(DECK) Stack<Card> deck, @Named(NUM_DECKS) int numDecks, AccountCache accountCache) {
         this.accountCache = accountCache;
         this.deck = deck;
         this.maxCards = deck.size();

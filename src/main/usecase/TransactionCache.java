@@ -2,6 +2,7 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import main.adapter.injection.Bindings;
 import main.domain.Transaction;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
@@ -9,13 +10,14 @@ import main.usecase.eventing.TransactionListener;
 import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
+import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 
 public class TransactionCache extends EventConnection implements TransactionListener {
 
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
     @Inject
-    public TransactionCache(@Named("transactionMap") Map<UUID, Collection<Transaction>> transactionMap) {
+    public TransactionCache(@Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
     }
 

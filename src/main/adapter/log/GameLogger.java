@@ -2,6 +2,7 @@ package main.adapter.log;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import main.adapter.injection.Bindings;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
@@ -16,6 +17,7 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
+import static main.adapter.injection.Bindings.*;
 
 public class GameLogger extends EventConnection implements SnapshotListener, AccountListener, TransactionListener {
 
@@ -23,7 +25,7 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
     @Inject
-    public GameLogger(@Named("logger") Logger logger, @Named("logHandlers") Collection<Handler> logHandlers) {
+    public GameLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
         this.logger = logger;
         logger.setUseParentHandlers(false);
         logHandlers.forEach(logger::addHandler);

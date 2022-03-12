@@ -6,15 +6,14 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountStorage;
+import main.adapter.ui.bet.BetController;
+import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.home.HomeController;
 import main.usecase.AccountCache;
 import main.usecase.LayoutManager;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.AlertListener;
-import main.usecase.eventing.EventNetwork;
-import main.usecase.eventing.TransactionListener;
+import main.usecase.eventing.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -58,6 +57,15 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(GameLogger.class));
                     add(fxmlInjector.getInstance(HomeController.class));
                     add(baseInjector.getInstance(Transactor.class));
+                }});
+
+        bind(new TypeLiteral<Collection<SnapshotListener>>() {})
+                .annotatedWith(named("snapshotListeners"))
+                .toInstance(new LinkedList<SnapshotListener>() {{
+                    add(baseInjector.getInstance(GameLogger.class));
+                    add(baseInjector.getInstance(Transactor.class));
+                    add(fxmlInjector.getInstance(BetController.class));
+                    add(fxmlInjector.getInstance(BlackjackController.class));
                 }});
     }
 }

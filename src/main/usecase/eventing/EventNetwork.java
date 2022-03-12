@@ -10,7 +10,6 @@ import main.usecase.Layout;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class EventNetwork implements
         SnapshotListener,
@@ -20,7 +19,7 @@ public class EventNetwork implements
         AlertListener {
 
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
-    private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
+    private final Collection<SnapshotListener> snapshotListeners;
     private final Collection<AccountListener> accountListeners;
     private final Collection<TransactionListener> transactionListeners;
     private final Collection<AlertListener> alertListeners;
@@ -29,18 +28,16 @@ public class EventNetwork implements
     public EventNetwork(
             @Named("accountListeners") Collection<AccountListener> accountListeners,
             @Named("alertListeners") Collection<AlertListener> alertListeners,
+            @Named("snapshotListeners") Collection<SnapshotListener> snapshotListeners,
             @Named("transactionListeners") Collection<TransactionListener> transactionListeners) {
         this.accountListeners = accountListeners;
         this.alertListeners = alertListeners;
+        this.snapshotListeners = snapshotListeners;
         this.transactionListeners = transactionListeners;
     }
 
     public void registerListeners(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
-            if (connection instanceof SnapshotListener) {
-                snapshotListeners.add((SnapshotListener) connection);
-            }
-
             if (connection instanceof LayoutListener) {
                 layoutListeners.add((LayoutListener) connection);
             }

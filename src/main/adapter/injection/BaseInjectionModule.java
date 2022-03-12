@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
+import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountMemory;
 import main.adapter.storage.Database;
 import main.adapter.storage.FileSystem;
@@ -49,6 +50,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(AccountCache.class).in(Singleton.class);
         bind(Transactor.class).in(Singleton.class);
         bind(TransactionCache.class).in(Singleton.class);
+        bind(GameLogger.class).in(Singleton.class);
 
         bind(Integer.class)
                 .annotatedWith(named("numDecks"))

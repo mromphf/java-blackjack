@@ -1,5 +1,7 @@
 package main.usecase.eventing;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import javafx.scene.control.Alert;
 import main.domain.Account;
 import main.domain.Snapshot;
@@ -21,7 +23,12 @@ public class EventNetwork implements
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
     private final Collection<TransactionListener> transactionListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
-    private final Collection<AlertListener> alertListeners = new ArrayList<>();
+    private final Collection<AlertListener> alertListeners;
+
+    @Inject
+    public EventNetwork(@Named("alertListeners") Collection<AlertListener> alertListeners) {
+        this.alertListeners = alertListeners;
+    }
 
     public void registerListeners(Collection<EventConnection> connections) {
         for (EventConnection connection : connections) {
@@ -39,10 +46,6 @@ public class EventNetwork implements
 
             if (connection instanceof TransactionListener) {
                 transactionListeners.add((TransactionListener) connection);
-            }
-
-            if (connection instanceof AlertListener) {
-                alertListeners.add((AlertListener) connection);
             }
         }
     }

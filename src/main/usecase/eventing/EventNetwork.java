@@ -19,16 +19,18 @@ public class EventNetwork implements
         TransactionListener,
         AlertListener {
 
-    private final Collection<AccountListener> accountListeners = new ArrayList<>();
     private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
     private final Collection<SnapshotListener> snapshotListeners = new LinkedList<>();
+    private final Collection<AccountListener> accountListeners;
     private final Collection<TransactionListener> transactionListeners;
     private final Collection<AlertListener> alertListeners;
 
     @Inject
     public EventNetwork(
+            @Named("accountListeners") Collection<AccountListener> accountListeners,
             @Named("alertListeners") Collection<AlertListener> alertListeners,
             @Named("transactionListeners") Collection<TransactionListener> transactionListeners) {
+        this.accountListeners = accountListeners;
         this.alertListeners = alertListeners;
         this.transactionListeners = transactionListeners;
     }
@@ -41,10 +43,6 @@ public class EventNetwork implements
 
             if (connection instanceof LayoutListener) {
                 layoutListeners.add((LayoutListener) connection);
-            }
-
-            if (connection instanceof AccountListener) {
-                accountListeners.add((AccountListener) connection);
             }
         }
     }

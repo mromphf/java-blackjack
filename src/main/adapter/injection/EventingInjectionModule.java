@@ -6,9 +6,12 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountStorage;
+import main.adapter.ui.home.HomeController;
 import main.usecase.AccountCache;
 import main.usecase.LayoutManager;
 import main.usecase.TransactionCache;
+import main.usecase.Transactor;
+import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.AlertListener;
 import main.usecase.eventing.EventNetwork;
 import main.usecase.eventing.TransactionListener;
@@ -45,6 +48,16 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(AccountStorage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(baseInjector.getInstance(TransactionCache.class));
+                }});
+
+        bind(new TypeLiteral<Collection<AccountListener>>() {})
+                .annotatedWith(named("accountListeners"))
+                .toInstance(new LinkedList<AccountListener>() {{
+                    add(baseInjector.getInstance(AccountCache.class));
+                    add(baseInjector.getInstance(AccountStorage.class));
+                    add(baseInjector.getInstance(GameLogger.class));
+                    add(fxmlInjector.getInstance(HomeController.class));
+                    add(baseInjector.getInstance(Transactor.class));
                 }});
     }
 }

@@ -8,7 +8,6 @@ import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.Layout;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class EventNetwork implements
@@ -18,30 +17,24 @@ public class EventNetwork implements
         TransactionListener,
         AlertListener {
 
-    private final Collection<LayoutListener> layoutListeners = new ArrayList<>();
-    private final Collection<SnapshotListener> snapshotListeners;
     private final Collection<AccountListener> accountListeners;
-    private final Collection<TransactionListener> transactionListeners;
     private final Collection<AlertListener> alertListeners;
+    private final Collection<LayoutListener> layoutListeners;
+    private final Collection<SnapshotListener> snapshotListeners;
+    private final Collection<TransactionListener> transactionListeners;
 
     @Inject
     public EventNetwork(
             @Named("accountListeners") Collection<AccountListener> accountListeners,
             @Named("alertListeners") Collection<AlertListener> alertListeners,
             @Named("snapshotListeners") Collection<SnapshotListener> snapshotListeners,
+            @Named("layoutListeners") Collection<LayoutListener> layoutListeners,
             @Named("transactionListeners") Collection<TransactionListener> transactionListeners) {
         this.accountListeners = accountListeners;
         this.alertListeners = alertListeners;
         this.snapshotListeners = snapshotListeners;
         this.transactionListeners = transactionListeners;
-    }
-
-    public void registerListeners(Collection<EventConnection> connections) {
-        for (EventConnection connection : connections) {
-            if (connection instanceof LayoutListener) {
-                layoutListeners.add((LayoutListener) connection);
-            }
-        }
+        this.layoutListeners = layoutListeners;
     }
 
     @Override

@@ -61,7 +61,6 @@ public class AppRoot {
             add(gameLogger);
         }};
 
-        eventNetwork.registerListeners(eventConnections);
         eventConnections.forEach(lst ->lst.connectTo(eventNetwork));
 
         layoutManager.initializeLayout();

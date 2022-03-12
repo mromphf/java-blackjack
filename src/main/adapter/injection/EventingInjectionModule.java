@@ -8,11 +8,10 @@ import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountStorage;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
+import main.adapter.ui.history.HistoryController;
 import main.adapter.ui.home.HomeController;
-import main.usecase.AccountCache;
-import main.usecase.LayoutManager;
-import main.usecase.TransactionCache;
-import main.usecase.Transactor;
+import main.adapter.ui.registration.RegistrationController;
+import main.usecase.*;
 import main.usecase.eventing.*;
 
 import java.util.Collection;
@@ -66,6 +65,17 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(Transactor.class));
                     add(fxmlInjector.getInstance(BetController.class));
                     add(fxmlInjector.getInstance(BlackjackController.class));
+                }});
+
+        bind(new TypeLiteral<Collection<LayoutListener>>() {})
+                .annotatedWith(named("layoutListeners"))
+                .toInstance(new LinkedList<LayoutListener>() {{
+                    add(baseInjector.getInstance(Game.class));
+                    add(fxmlInjector.getInstance(BetController.class));
+                    add(fxmlInjector.getInstance(HomeController.class));
+                    add(fxmlInjector.getInstance(HistoryController.class));
+                    add(fxmlInjector.getInstance(RegistrationController.class));
+                    add(fxmlInjector.getInstance(LayoutManager.class));
                 }});
     }
 }

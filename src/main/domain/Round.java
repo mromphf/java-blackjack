@@ -116,13 +116,12 @@ public class Round {
         deck.addAll(freshlyShuffledDeck());
     }
 
-    public Snapshot getSnapshot(LocalDateTime timestamp, Account account, int maxCards) {
+    public Snapshot getSnapshot(LocalDateTime timestamp, Account account) {
         return new Snapshot(
                 timestamp,
                 account.getKey(),
                 account.getBalance(),
                 bet,
-                maxCards,
                 deck,
                 dealerHand,
                 currentHand,

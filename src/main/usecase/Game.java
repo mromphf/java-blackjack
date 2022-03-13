@@ -23,7 +23,6 @@ import static main.usecase.Layout.HOME;
 public class Game extends EventConnection implements LayoutListener, TransactionListener {
 
     private final Stack<Card> deck;
-    private final int maxCards;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final AccountCache accountCache;
@@ -32,7 +31,6 @@ public class Game extends EventConnection implements LayoutListener, Transaction
     public Game(@Named(DECK) Stack<Card> deck, AccountCache accountCache) {
         this.accountCache = accountCache;
         this.deck = deck;
-        this.maxCards = deck.size();
     }
 
     public void onActionTaken(Action action) {
@@ -51,7 +49,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
 
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(timestamp, selectedAccount.get(), maxCards));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(timestamp, selectedAccount.get()));
         }
     }
 
@@ -61,7 +59,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
 
         if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
             roundStack.add(new Round(deck, abs(transaction.getAmount())));
-            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get(), maxCards));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
         }
     }
 

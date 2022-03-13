@@ -1,6 +1,7 @@
 package main.adapter.ui.bet;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -11,6 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
+import main.adapter.injection.Bindings;
 import main.domain.Account;
 import main.domain.Snapshot;
 import main.domain.Transaction;
@@ -65,14 +67,16 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     private final AccountCache accountCache;
     private final static int MAX_BET = 500;
+    private final int maxCards;
 
     private ImageReelAnimation animation;
     private int bet = 0;
 
 
     @Inject
-    public BetController(AccountCache accountCache) {
+    public BetController(AccountCache accountCache, @Named(Bindings.MAX_CARDS) int maxCards) {
         this.accountCache = accountCache;
+        this.maxCards = maxCards;
     }
 
     @Override
@@ -138,7 +142,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        prgDeck.setProgress(snapshot.getDeckProgress());
+        prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {

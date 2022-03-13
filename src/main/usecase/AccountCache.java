@@ -8,55 +8,54 @@ import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
-import java.util.Collection;
-import java.util.EmptyStackException;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 
 public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
 
-    private final Stack<Account> selections;
+    private final Stack<UUID> selections;
+    private final Map<UUID, Account> accountMap;
 
     @Inject
-    public AccountCache(@Named(ACCOUNT_STACK) Stack<Account> selections) {
+    public AccountCache(@Named(ACCOUNT_STACK) Stack<UUID> selections) {
         this.selections = selections;
+        this.accountMap = new HashMap<>();
     }
 
     public Optional<Account> getCurrentlySelectedAccount() {
-        if (selections.empty()) {
-            return Optional.empty();
+        if (selections.size() > 0 && accountMap.containsKey(selections.peek())) {
+            return Optional.of(accountMap.get(selections.peek()));
         } else {
-            return Optional.of(selections.peek());
+            return Optional.empty();
         }
     }
 
     @Override
     public void onTransactionIssued(Transaction transaction) {
-        try {
-            selections.add(selections.pop().updateBalance(transaction));
-        } catch (EmptyStackException ex) {
-            ex.printStackTrace();
+        final UUID accountKey = transaction.getAccountKey();
+        if (accountMap.containsKey(accountKey)) {
+            accountMap.put(accountKey, accountMap.get(accountKey).updateBalance(transaction));
         }
     }
 
     @Override
     public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
-        try {
-            selections.add(selections.pop().updateBalance(transactions));
-        } catch (EmptyStackException ex) {
-            ex.printStackTrace();
-        }
+        transactions.forEach(this::onTransactionIssued);
     }
 
     @Override
     public void onAccountCreated(Account account) {
-        selections.add(account);
+        selections.add(account.getKey());
     }
 
     @Override
     public void onAccountSelected(Account account) {
-        selections.add(account);
+        selections.add(account.getKey());
+    }
+
+    @Override
+    public void onAccountsLoaded(Collection<Account> accounts) {
+        accounts.forEach(act -> accountMap.put(act.getKey(), act));
     }
 }

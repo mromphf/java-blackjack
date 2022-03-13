@@ -14,10 +14,7 @@ import main.domain.Account;
 import main.domain.Card;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.AccountCache;
-import main.usecase.Game;
-import main.usecase.TransactionCache;
-import main.usecase.Transactor;
+import main.usecase.*;
 
 import java.util.*;
 import java.util.function.Function;

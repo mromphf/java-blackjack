@@ -64,8 +64,8 @@ public class TableDisplay extends Canvas {
     }
 
     public void drawScores(int dealerScore, int playerScore) {
-        drawLabel(String.format("Dealer: %s", dealerScore), 100);
-        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 110);
+        drawLabel(String.format("Dealer: %s", dealerScore), 120);
+        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 130);
     }
 
     public void drawCards(Map<ImageKey, List<Image>> imageMap) {
@@ -83,7 +83,7 @@ public class TableDisplay extends Canvas {
         final Font f = new Font("Arial", 50);
         context.setFont(f);
         context.setFill(OUTCOME_COLORS.get(outcome));
-        context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 5);
+        context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 20);
     }
 
     private void drawLabel(String label, int y) {

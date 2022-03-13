@@ -11,26 +11,23 @@ import static main.domain.Rules.score;
 public class Round {
 
     private final Deck deck;
-    private final Stack<Stack<Card>> handsToPlay;
-    private final Stack<HandToSettle> handsToSettle;
-    private final Stack<Card> dealerHand;
+    private final Stack<Hand> handsToPlay = new Stack<>();
+    private final Stack<HandToSettle> handsToSettle = new Stack<>();
+    private final Hand dealerHand;
     private final int bet;
 
-    private SortedMap<LocalDateTime, Action> actionsTaken;
-    private Stack<Card> currentHand;
+    private SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
+    private Hand currentHand;
 
     public Round(Deck deck, int bet) {
         this.bet = bet;
         this.deck = deck;
-        this.handsToPlay = new Stack<>();
-        this.handsToSettle = new Stack<>();
-        this.actionsTaken = new TreeMap<>();
 
         if (deck.size() < 4) {
             refillDeck();
         }
 
-        final Map<String, Stack<Card>> openingHands = openingHand(deck);
+        final Map<String, Hand> openingHands = openingHand(deck);
 
         this.dealerHand = openingHands.get("dealer");
         this.currentHand = openingHands.get("player");
@@ -91,12 +88,12 @@ public class Round {
             refillDeck();
         }
 
-        currentHand = new Stack<Card>() {{
+        currentHand = new Hand() {{
             add(cardsInHand.next());
             add(deck.pop());
         }};
 
-        Stack<Card> pocketHand = new Stack<Card>() {{
+        Hand pocketHand = new Hand() {{
             add(cardsInHand.next());
         }};
 
@@ -131,8 +128,8 @@ public class Round {
         );
     }
 
-    private Stack<Stack<Card>> filterHands(Stack<HandToSettle> handsToSettle) {
-        Stack<Stack<Card>> result = new Stack<>();
+    private Stack<Hand> filterHands(Stack<HandToSettle> handsToSettle) {
+        Stack<Hand> result = new Stack<>();
         for (HandToSettle hand : handsToSettle) {
             result.add(hand.playerHand);
         }
@@ -141,10 +138,10 @@ public class Round {
 
 
     private static class HandToSettle {
-        public final Stack<Card> playerHand;
+        public final Hand  playerHand;
         public final SortedMap<LocalDateTime, Action> actionsTaken;
 
-        public HandToSettle(Stack<Card> playerHand, SortedMap<LocalDateTime, Action> actionsTaken) {
+        public HandToSettle(Hand playerHand, SortedMap<LocalDateTime, Action> actionsTaken) {
             this.playerHand = playerHand;
             this.actionsTaken = actionsTaken;
         }

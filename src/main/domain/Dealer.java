@@ -35,19 +35,19 @@ public class Dealer {
         return stack;
     }
 
-    public static Map<String, Stack<Card>> openingHand(Stack<Card> deck) {
+    public static Map<String, Hand> openingHand(Stack<Card> deck) {
         if (deck.size() < 4) {
             throw new IllegalArgumentException("Not enough cards to start a new round!");
         } else {
-            final Stack<Card> dealerHand = new Stack<>();
-            final Stack<Card> playerHand = new Stack<>();
+            final Hand dealerHand = new Hand();
+            final Hand playerHand = new Hand();
 
             playerHand.add(deck.pop());
             dealerHand.add(deck.pop());
             playerHand.add(deck.pop());
             dealerHand.add(deck.pop());
 
-            return new HashMap<String, Stack<Card>>() {{
+            return new HashMap<String, Hand>() {{
                 put("dealer", dealerHand);
                 put("player", playerHand);
             }};

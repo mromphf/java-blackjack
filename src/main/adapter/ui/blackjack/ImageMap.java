@@ -2,6 +2,7 @@ package main.adapter.ui.blackjack;
 
 import javafx.scene.image.Image;
 import main.domain.Card;
+import main.domain.Hand;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class ImageMap {
         }};
     }
 
-    public static List<List<Image>> ofHandsToSettle(Stack<Stack<Card>> handsToSettle) {
+    public static List<List<Image>> ofHandsToSettle(Stack<Hand> handsToSettle) {
         return handsToSettle.stream()
                 .map(cards -> cards.stream()
                         .map(ImageMap::imageByCard)

@@ -6,22 +6,22 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
-import static main.domain.Deck.*;
+import static main.domain.Dealer.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-class DeckTest {
+class DealerTest {
 
     @Test
     public void fresh_shouldProvideAStackOf52Cards() {
-        assertEquals(52, fresh().size());
+        assertEquals(52, freshDeck().size());
     }
 
     @Test
     public void fresh_shouldContain13HeartCards() {
-        Stack<Card> deck = fresh();
+        Stack<Card> deck = freshDeck();
 
         final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.HEARTS)).count();
 
@@ -30,7 +30,7 @@ class DeckTest {
 
     @Test
     public void fresh_shouldContain13ClubCards() {
-        Stack<Card> deck = fresh();
+        Stack<Card> deck = freshDeck();
 
         final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.CLUBS)).count();
 
@@ -39,7 +39,7 @@ class DeckTest {
 
     @Test
     public void fresh_shouldContain13DiamondCards() {
-        Stack<Card> deck = fresh();
+        Stack<Card> deck = freshDeck();
 
         final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.DIAMONDS)).count();
 
@@ -48,7 +48,7 @@ class DeckTest {
 
     @Test
     public void fresh_shouldContain13SpadeCards() {
-        Stack<Card> deck = fresh();
+        Stack<Card> deck = freshDeck();
 
         final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.SPADES)).count();
 

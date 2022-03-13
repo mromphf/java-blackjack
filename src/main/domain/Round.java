@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
-import static main.domain.Deck.freshlyShuffledDeck;
-import static main.domain.Deck.openingHand;
+import static main.domain.Dealer.freshlyShuffledDeck;
+import static main.domain.Dealer.openingHand;
 import static main.domain.Rules.score;
 
 public class Round {

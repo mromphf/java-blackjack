@@ -2,11 +2,11 @@ package main.domain;
 
 import java.util.*;
 
-public class Deck {
+public class Dealer {
     private static final int CARDS_PER_SUIT = 13;
     private static final int DECKS = 4;
 
-    public static Stack<Card> fresh() {
+    public static Stack<Card> freshDeck() {
         Stack<Card> result = new Stack<>();
         for (Suit suit : Suit.values()) {
             for (int i = 1; i <= DECKS ; i++) {
@@ -18,7 +18,7 @@ public class Deck {
     }
 
     public static Stack<Card> freshlyShuffledDeck() {
-        return shuffle(fresh());
+        return shuffle(freshDeck());
     }
 
     public static Stack<Card> shuffle(Stack<Card> deck) {

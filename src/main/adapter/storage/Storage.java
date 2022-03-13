@@ -10,25 +10,23 @@ import main.usecase.eventing.TransactionListener;
 import java.util.Collection;
 
 
-public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
+public class Storage extends EventConnection implements AccountListener, TransactionListener {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
     @Inject
-    public AccountStorage(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    public Storage(TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
     }
 
     public void loadAllAccounts() {
-        final Collection<Account> accounts = accountRepository.loadAllAccounts();
-        eventNetwork.onAccountsLoaded(accounts);
+        eventNetwork.onAccountsLoaded(accountRepository.loadAllAccounts());
     }
 
     public void loadAllTransactions() {
-        final Collection<Transaction> allTransactions = transactionRepository.loadAllTransactions();
-        eventNetwork.onTransactionsLoaded(allTransactions);
+        eventNetwork.onTransactionsLoaded(transactionRepository.loadAllTransactions());
     }
 
     @Override

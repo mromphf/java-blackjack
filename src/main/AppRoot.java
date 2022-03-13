@@ -2,7 +2,7 @@ package main;
 
 import com.google.inject.Injector;
 import main.adapter.log.GameLogger;
-import main.adapter.storage.AccountStorage;
+import main.adapter.storage.Storage;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.history.HistoryController;
@@ -31,7 +31,7 @@ public class AppRoot {
     public void init() {
 
         final Game game = baseInjector.getInstance(Game.class);
-        final AccountStorage accountStorage = baseInjector.getInstance(AccountStorage.class);
+        final Storage storage = baseInjector.getInstance(Storage.class);
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
         final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);
         final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
@@ -54,7 +54,7 @@ public class AppRoot {
             add(betController);
             add(registrationController);
             add(layoutManager);
-            add(accountStorage);
+            add(storage);
             add(transactor);
             add(transactionCache);
             add(game);
@@ -65,7 +65,7 @@ public class AppRoot {
 
         layoutManager.initializeLayout();
 
-        new Thread(accountStorage::loadAllAccounts, "Account Load Thread").start();
-        new Thread(accountStorage::loadAllTransactions, "Transaction Load Thread").start();
+        new Thread(storage::loadAllAccounts, "Account Load Thread").start();
+        new Thread(storage::loadAllTransactions, "Transaction Load Thread").start();
     }
 }

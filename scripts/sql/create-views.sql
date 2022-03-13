@@ -4,6 +4,15 @@ SET search_path TO 'blackjack';
 DROP VIEW IF EXISTS blackjack.account_balances;
 DROP VIEW IF EXISTS blackjack.closed_accounts;
 DROP VIEW IF EXISTS blackjack.account_stats;
+DROP VIEW IF EXISTS blackjack.active_transactions;
+
+
+CREATE VIEW blackjack.active_transactions AS
+     SELECT accountkey, description, amount, TO_CHAR(t.timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DDThh:mm:SS-06:00') AS timestamp
+      FROM transactions t
+      JOIN accounts a
+        ON t.accountKey = a.key
+    WHERE a.key NOT IN (SELECT key FROM account_closures);
 
 
 CREATE VIEW blackjack.closed_accounts AS

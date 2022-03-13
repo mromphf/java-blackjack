@@ -96,7 +96,7 @@ public class BetController extends EventConnection implements Initializable, Lay
     public void onLayoutEvent(Layout event) {
         final Optional<Account> account = accountCache.getCurrentlySelectedAccount();
 
-        if (account.isPresent())  {
+        if (account.isPresent() && event == BET)  {
             final int balance = account.get().getBalance();
 
             runLater(() -> refreshUI(balance, bet));

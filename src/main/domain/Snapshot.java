@@ -18,10 +18,10 @@ public class Snapshot {
     private final int bet;
     private final Outcome outcome;
     private final Stack<Card> deck = new Stack<>();
-    private final Stack<Card> dealerHand = new Stack<>();
-    private final Stack<Card> playerHand = new Stack<>();
-    private final Stack<Stack<Card>> handsToPlay = new Stack<>();
-    private final Stack<Stack<Card>> handsToSettle = new Stack<>();
+    private final Hand dealerHand = new Hand();
+    private final Hand playerHand = new Hand();
+    private final Stack<Hand> handsToPlay = new Stack<>();
+    private final Stack<Hand> handsToSettle = new Stack<>();
     private final SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
 
     public Snapshot(LocalDateTime timestamp,
@@ -29,10 +29,10 @@ public class Snapshot {
                     int balance,
                     int bet,
                     Stack<Card> deck,
-                    Stack<Card> dealerHand,
-                    Stack<Card> playerHand,
-                    Stack<Stack<Card>> handsToPlay,
-                    Stack<Stack<Card>> handsToSettle,
+                    Hand dealerHand,
+                    Hand playerHand,
+                    Stack<Hand> handsToPlay,
+                    Stack<Hand> handsToSettle,
                     SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
         this.accountKey = accountKey;
@@ -126,11 +126,11 @@ public class Snapshot {
         return dealerHand;
     }
 
-    public Stack<Card> getPlayerHand() {
+    public Hand getPlayerHand() {
         return playerHand;
     }
 
-    public Stack<Stack<Card>> getHandsToPlay() {
+    public Stack<Hand> getHandsToPlay() {
         return handsToPlay;
     }
 

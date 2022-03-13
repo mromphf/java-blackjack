@@ -91,7 +91,7 @@ public class Rules {
     public static Outcome determineOutcome(Collection<Action> actionsTaken,
                                            Collection<Card> playerHand,
                                            Collection<Card> dealerHand,
-                                           Stack<Stack<Card>> handsToPlay) {
+                                           Stack<Hand> handsToPlay) {
 
         final boolean standOrDouble = actionsTaken.stream()
                 .anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE));
@@ -116,7 +116,7 @@ public class Rules {
     }
 
     public static int settleBet(Snapshot snapshot) {
-        final Stack<Card> playerHand = snapshot.getPlayerHand();
+        final Hand playerHand = snapshot.getPlayerHand();
         final Collection<Action> actionsTaken = snapshot.getActionsTaken();
         final int bet = snapshot.getBet();
 

@@ -10,11 +10,13 @@ import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionRepository;
-import main.domain.Account;
 import main.domain.Card;
 import main.domain.Snapshot;
 import main.domain.Transaction;
-import main.usecase.*;
+import main.usecase.AccountCache;
+import main.usecase.Game;
+import main.usecase.TransactionCache;
+import main.usecase.Transactor;
 
 import java.util.*;
 import java.util.function.Function;
@@ -66,7 +68,7 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
 
-        bind(new TypeLiteral<Stack<Account>>() {})
+        bind(new TypeLiteral<Stack<UUID>>() {})
                 .annotatedWith(named(ACCOUNT_STACK))
                 .toInstance(new Stack<>());
 

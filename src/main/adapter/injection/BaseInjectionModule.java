@@ -40,7 +40,7 @@ public class BaseInjectionModule extends AbstractModule {
         final String deckName = (String) config.get("game.deckName");
 
         this.numDecks = parseInt((String) config.get("game.numDecks"));
-        this.deck = deckName.equals("default") ? freshlyShuffledDeck(numDecks) : fileSystem.loadDeck(deckName);
+        this.deck = deckName.equals("default") ? freshlyShuffledDeck() : fileSystem.loadDeck(deckName);
     }
 
     @Override

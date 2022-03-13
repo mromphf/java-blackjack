@@ -16,7 +16,6 @@ import java.util.Stack;
 import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
-import static main.adapter.injection.Bindings.NUM_DECKS;
 import static main.domain.Action.*;
 import static main.domain.Deck.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
@@ -25,17 +24,15 @@ public class Game extends EventConnection implements LayoutListener, Transaction
 
     private final Stack<Card> deck;
     private final int maxCards;
-    private final int numDecks;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final AccountCache accountCache;
 
     @Inject
-    public Game(@Named(DECK) Stack<Card> deck, @Named(NUM_DECKS) int numDecks, AccountCache accountCache) {
+    public Game(@Named(DECK) Stack<Card> deck, AccountCache accountCache) {
         this.accountCache = accountCache;
         this.deck = deck;
         this.maxCards = deck.size();
-        this.numDecks = numDecks;
     }
 
     public void onActionTaken(Action action) {
@@ -63,7 +60,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
         final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
         if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
-            roundStack.add(new Round(deck, abs(transaction.getAmount()), maxCards, numDecks));
+            roundStack.add(new Round(deck, abs(transaction.getAmount()), maxCards));
             eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
         }
     }
@@ -72,7 +69,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
     public void onLayoutEvent(Layout event) {
         if (event == HOME && roundStack.size() > 0) {
             deck.clear();
-            deck.addAll(freshlyShuffledDeck(numDecks));
+            deck.addAll(freshlyShuffledDeck());
         }
     }
 }

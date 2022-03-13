@@ -4,27 +4,21 @@ import java.util.*;
 
 public class Deck {
     private static final int CARDS_PER_SUIT = 13;
+    private static final int DECKS = 4;
 
     public static Stack<Card> fresh() {
         Stack<Card> result = new Stack<>();
         for (Suit suit : Suit.values()) {
-            for (int i = 1; i <= CARDS_PER_SUIT; i++) {
+            for (int i = 1; i <= DECKS ; i++) {
+                for (int j = 1; j <= CARDS_PER_SUIT; j++)
                 result.add(new Card(i, suit));
             }
         }
         return result;
     }
 
-    public static Stack<Card> fresh(int howManyDecks) {
-        Stack<Card> result = new Stack<>();
-        for (int i = 0; i < howManyDecks; i++) {
-            result.addAll(fresh());
-        }
-        return result;
-    }
-
-    public static Stack<Card> freshlyShuffledDeck(int numDecks) {
-        return shuffle(fresh(numDecks));
+    public static Stack<Card> freshlyShuffledDeck() {
+        return shuffle(fresh());
     }
 
     public static Stack<Card> shuffle(Stack<Card> deck) {

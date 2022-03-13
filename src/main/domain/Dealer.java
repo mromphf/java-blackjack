@@ -1,13 +1,16 @@
 package main.domain;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.Stack;
 
 public class Dealer {
     private static final int CARDS_PER_SUIT = 13;
     private static final int DECKS = 4;
 
-    public static Stack<Card> freshDeck() {
-        Stack<Card> result = new Stack<>();
+    public static Deck freshDeck() {
+        Deck result = new Deck();
         for (Suit suit : Suit.values()) {
             for (int i = 1; i <= DECKS ; i++) {
                 for (int j = 1; j <= CARDS_PER_SUIT; j++)
@@ -17,12 +20,12 @@ public class Dealer {
         return result;
     }
 
-    public static Stack<Card> freshlyShuffledDeck() {
+    public static Deck freshlyShuffledDeck() {
         return shuffle(freshDeck());
     }
 
-    public static Stack<Card> shuffle(Stack<Card> deck) {
-        Stack<Card> stack = new Stack<>();
+    public static Deck shuffle(Deck deck) {
+        Deck stack = new Deck();
         while(!deck.isEmpty()) {
             Random r = new Random();
             int ri = r.nextInt(deck.size());

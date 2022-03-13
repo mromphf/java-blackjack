@@ -10,7 +10,7 @@ import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionRepository;
-import main.domain.Card;
+import main.domain.Deck;
 import main.domain.Snapshot;
 import main.domain.Transaction;
 import main.usecase.AccountCache;
@@ -31,7 +31,7 @@ import static main.domain.Evaluate.transactionEvaluators;
 
 public class BaseInjectionModule extends AbstractModule {
 
-    private final Stack<Card> deck;
+    private final Deck deck;
     private final int numDecks;
 
     public BaseInjectionModule(FileSystem fileSystem) {
@@ -60,7 +60,7 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named(MAX_CARDS))
                         .toInstance(deck.size());
 
-        bind(new TypeLiteral<Stack<Card>>() {})
+        bind(new TypeLiteral<Deck>() {})
                 .annotatedWith(named(DECK))
                 .toInstance(deck);
 

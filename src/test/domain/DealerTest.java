@@ -1,6 +1,7 @@
 package test.domain;
 
 import main.domain.Card;
+import main.domain.Deck;
 import main.domain.Suit;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +58,7 @@ class DealerTest {
 
     @Test
     public void shuffle_shouldContain3Cards_whenPassedACollectionOf3Cards() {
-        Stack<Card> cards = new Stack<Card>() {{
+        Deck cards = new Deck() {{
            add(new Card(5, Suit.HEARTS));
             add(new Card(3, Suit.SPADES));
             add(new Card(12, Suit.CLUBS));
@@ -70,7 +71,7 @@ class DealerTest {
     public void shuffle_shouldContainTheSameCardAsTheStackPassedIn() {
         final Card card = new Card(5, Suit.HEARTS);
 
-        Stack<Card> cards = new Stack<Card>() {{
+        Deck cards = new Deck() {{
             add(card);
             add(new Card(3, Suit.SPADES));
             add(new Card(12, Suit.CLUBS));

@@ -2,7 +2,7 @@ package main.adapter.storage;
 
 import javafx.fxml.FXMLLoader;
 import main.adapter.injection.BaseInjectionModule;
-import main.domain.Card;
+import main.domain.Deck;
 import main.usecase.Layout;
 
 import java.io.File;
@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Stack;
 
 import static java.lang.String.format;
 import static java.lang.System.exit;
@@ -45,7 +44,7 @@ public class FileSystem {
         }
     }
 
-    public Stack<Card> loadDeck(String name) {
+    public Deck loadDeck(String name) {
         try {
             final File deckFile = new File(format("%s/%s.json", directories.get(DECKS), name));
             return deckFromJson(fileToJson(deckFile));

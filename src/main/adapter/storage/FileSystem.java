@@ -61,7 +61,7 @@ public class FileSystem {
             put(ACCOUNTS, new File("./app-data/accounts-grouped/accounts-grouped.csv"));
             put(ACCOUNTS_CLOSED, new File("./app-data/accounts-closed/account-closures-bundled.csv"));
             put(DECKS, new File("./app-data/decks/"));
-            put(LOG, new File("./app-data/log/"));
+            put(LOG, new File("./log/"));
             put(TRANSACTIONS, new File("./app-data/transactions-grouped/"));
         }};
     }

@@ -2,8 +2,13 @@ package main.domain;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
+
+import static java.util.Objects.hash;
+import static java.util.UUID.randomUUID;
 
 public class Card {
+    private final UUID key = randomUUID();
     private final int value;
     private final Suit suit;
 
@@ -45,13 +50,12 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return value == card.value &&
-                suit == card.suit;
+        return value == card.value && Objects.equals(key, card.key) && suit == card.suit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, suit);
+        return hash(key, value, suit);
     }
 
     @Override

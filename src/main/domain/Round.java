@@ -10,7 +10,7 @@ import static main.domain.Rules.score;
 
 public class Round {
 
-    private final Stack<Card> deck;
+    private final Deck deck;
     private final Stack<Stack<Card>> handsToPlay;
     private final Stack<HandToSettle> handsToSettle;
     private final Stack<Card> dealerHand;
@@ -19,7 +19,7 @@ public class Round {
     private SortedMap<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(Stack<Card> deck, int bet) {
+    public Round(Deck deck, int bet) {
         this.bet = bet;
         this.deck = deck;
         this.handsToPlay = new Stack<>();

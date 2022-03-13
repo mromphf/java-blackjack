@@ -22,13 +22,13 @@ import static main.usecase.Layout.HOME;
 
 public class Game extends EventConnection implements LayoutListener, TransactionListener {
 
-    private final Stack<Card> deck;
+    private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final AccountCache accountCache;
 
     @Inject
-    public Game(@Named(DECK) Stack<Card> deck, AccountCache accountCache) {
+    public Game(@Named(DECK) Deck deck, AccountCache accountCache) {
         this.accountCache = accountCache;
         this.deck = deck;
     }

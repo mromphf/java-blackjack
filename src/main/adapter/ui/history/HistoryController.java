@@ -22,7 +22,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
-import static main.common.ChartUtil.*;
+import static main.adapter.ui.history.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 

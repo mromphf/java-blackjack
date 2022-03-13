@@ -5,7 +5,7 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 import static java.time.LocalDateTime.now;
-import static main.common.CsvUtil.appendToFile;
+import static main.adapter.log.CsvUtil.appendToFile;
 import static main.adapter.storage.FileFunctions.dateBasedLogFileName;
 
 public class FileLogHandler extends Handler {

@@ -1,4 +1,4 @@
-package main.common;
+package main.adapter.storage;
 
 import main.domain.Account;
 import main.domain.Transaction;

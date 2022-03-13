@@ -1,4 +1,4 @@
-package main.common;
+package main.domain.util;
 
 import main.domain.Action;
 import main.domain.Card;

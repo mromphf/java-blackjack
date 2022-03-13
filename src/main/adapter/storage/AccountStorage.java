@@ -7,7 +7,6 @@ import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -23,12 +22,12 @@ public class AccountStorage extends EventConnection implements AccountListener, 
     }
 
     public void loadAllAccounts() {
-        final Collection<Account> accounts = accountRepository.loadAllAccounts(new ArrayList<>());
+        final Collection<Account> accounts = accountRepository.loadAllAccounts();
         eventNetwork.onAccountsLoaded(accounts);
     }
 
     public void loadAllTransactions() {
-        final Collection<Transaction> allTransactions = transactionRepository.loadAllTransactions(new ArrayList<>());
+        final Collection<Transaction> allTransactions = transactionRepository.loadAllTransactions();
         eventNetwork.onTransactionsLoaded(allTransactions);
     }
 

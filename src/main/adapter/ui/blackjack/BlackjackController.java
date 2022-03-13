@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.adapter.injection.Bindings;
 import main.domain.Snapshot;
 import main.usecase.Game;
 import main.usecase.eventing.EventConnection;
@@ -18,7 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
-import static main.adapter.injection.Bindings.*;
+import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;

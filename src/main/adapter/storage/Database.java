@@ -16,7 +16,7 @@ import static main.common.ResultSetUtil.accountFromResultSet;
 import static main.common.ResultSetUtil.transactionFromResultSet;
 import static main.adapter.storage.Query.*;
 
-public class Database implements AccountMemory, TransactionMemory {
+public class Database implements AccountRepository, TransactionRepository {
 
 
     @Override

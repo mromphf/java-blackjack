@@ -11,8 +11,8 @@ import java.util.Properties;
 import static java.lang.String.format;
 import static java.lang.System.getenv;
 import static java.sql.DriverManager.getConnection;
-import static main.common.ResultSetUtil.accountFromResultSet;
-import static main.common.ResultSetUtil.transactionFromResultSet;
+import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
+import static main.adapter.storage.ResultSetUtil.transactionFromResultSet;
 import static main.adapter.storage.Query.*;
 
 public class Database implements AccountRepository, TransactionRepository {

@@ -16,7 +16,7 @@ import static java.lang.String.format;
 import static java.lang.System.exit;
 import static main.adapter.storage.Directory.*;
 import static main.adapter.storage.FileFunctions.fileToJson;
-import static main.common.JsonUtil.deckFromJson;
+import static main.adapter.storage.JsonUtil.deckFromJson;
 import static main.usecase.Layout.*;
 
 public class FileSystem {

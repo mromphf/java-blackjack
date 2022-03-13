@@ -1,4 +1,4 @@
-package main.common;
+package main.adapter.ui.history;
 
 import javafx.collections.FXCollections;
 import javafx.scene.chart.Axis;

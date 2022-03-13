@@ -1,4 +1,4 @@
-package main.common;
+package main.adapter.log;
 
 import java.io.File;
 import java.io.FileWriter;

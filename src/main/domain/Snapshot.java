@@ -4,8 +4,8 @@ package main.domain;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static main.common.StringUtil.actionString;
-import static main.common.StringUtil.playerString;
+import static main.domain.util.StringUtil.actionString;
+import static main.domain.util.StringUtil.playerString;
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;

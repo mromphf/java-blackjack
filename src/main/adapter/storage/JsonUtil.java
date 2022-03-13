@@ -1,4 +1,4 @@
-package main.common;
+package main.adapter.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

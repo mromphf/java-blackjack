@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
-import static main.domain.Deck.fresh;
+import static main.domain.Dealer.freshDeck;
 import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
 import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
 
@@ -24,7 +24,7 @@ public class ImageMap {
     private static final String SYMBOL_DIAMONDS = "sym_diamonds";
 
     public static void load() {
-        for(Card c : fresh()) {
+        for(Card c : freshDeck()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getFaceValue();
             final String imagePath = format("/graphics/%s.png", imageName);
             final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());

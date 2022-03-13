@@ -6,10 +6,10 @@ import com.google.inject.TypeLiteral;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
-import main.adapter.storage.AccountMemory;
+import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.FileSystem;
-import main.adapter.storage.TransactionMemory;
+import main.adapter.storage.TransactionRepository;
 import main.domain.Account;
 import main.domain.Card;
 import main.domain.Snapshot;
@@ -46,8 +46,8 @@ public class BaseInjectionModule extends AbstractModule {
     @Override
     public void configure() {
         bind(Game.class).in(Singleton.class);
-        bind(AccountMemory.class).to(Database.class);
-        bind(TransactionMemory.class).to(Database.class);
+        bind(AccountRepository.class).to(Database.class);
+        bind(TransactionRepository.class).to(Database.class);
         bind(AccountCache.class).in(Singleton.class);
         bind(Transactor.class).in(Singleton.class);
         bind(TransactionCache.class).in(Singleton.class);

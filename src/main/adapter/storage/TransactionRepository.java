@@ -5,7 +5,7 @@ import main.domain.Transaction;
 
 import java.util.Collection;
 
-public interface TransactionMemory {
+public interface TransactionRepository {
     Collection<Transaction> loadAllTransactions(Collection<Account> openAccounts);
     void saveTransaction(Transaction transaction);
     default void saveTransactions(Collection<Transaction> transactions) {

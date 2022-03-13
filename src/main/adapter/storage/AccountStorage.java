@@ -13,42 +13,42 @@ import java.util.Collection;
 
 public class AccountStorage extends EventConnection implements AccountListener, TransactionListener {
 
-    private final TransactionMemory transactionMemory;
-    private final AccountMemory accountMemory;
+    private final TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
 
     @Inject
-    public AccountStorage(TransactionMemory transactionMemory, AccountMemory accountMemory) {
-        this.transactionMemory = transactionMemory;
-        this.accountMemory = accountMemory;
+    public AccountStorage(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+        this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
     }
 
     public void loadAllAccounts() {
-        final Collection<Account> accounts = accountMemory.loadAllAccounts(new ArrayList<>());
+        final Collection<Account> accounts = accountRepository.loadAllAccounts(new ArrayList<>());
         eventNetwork.onAccountsLoaded(accounts);
     }
 
     public void loadAllTransactions() {
-        final Collection<Transaction> allTransactions = transactionMemory.loadAllTransactions(new ArrayList<>());
+        final Collection<Transaction> allTransactions = transactionRepository.loadAllTransactions(new ArrayList<>());
         eventNetwork.onTransactionsLoaded(allTransactions);
     }
 
     @Override
     public void onTransactionIssued(Transaction transaction) {
-        transactionMemory.saveTransaction(transaction);
+        transactionRepository.saveTransaction(transaction);
     }
 
     @Override
     public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
-        transactionMemory.saveTransactions(transactions);
+        transactionRepository.saveTransactions(transactions);
     }
 
     @Override
     public void onAccountCreated(Account account) {
-        accountMemory.openNewAccount(account);
+        accountRepository.openNewAccount(account);
     }
 
     @Override
     public void onAccountDeleted(Account account) {
-        accountMemory.closeAccount(account);
+        accountRepository.closeAccount(account);
     }
 }

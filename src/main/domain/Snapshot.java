@@ -4,19 +4,18 @@ package main.domain;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static main.common.StringUtil.actionString;
+import static main.common.StringUtil.playerString;
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
-import static main.common.StringUtil.actionString;
 import static main.domain.Rules.*;
-import static main.common.StringUtil.playerString;
 
 public class Snapshot {
     private final LocalDateTime timestamp;
     private final UUID accountKey;
     private final int balance;
     private final int bet;
-    private final int maxCards;
     private final Outcome outcome;
     private final Stack<Card> deck = new Stack<>();
     private final Stack<Card> dealerHand = new Stack<>();
@@ -29,7 +28,6 @@ public class Snapshot {
                     UUID accountKey,
                     int balance,
                     int bet,
-                    int maxCards,
                     Stack<Card> deck,
                     Stack<Card> dealerHand,
                     Stack<Card> playerHand,
@@ -40,7 +38,6 @@ public class Snapshot {
         this.accountKey = accountKey;
         this.balance = balance;
         this.bet = bet;
-        this.maxCards = maxCards;
         this.deck.addAll(deck);
         this.dealerHand.addAll(dealerHand);
         this.playerHand.addAll(playerHand);
@@ -145,8 +142,8 @@ public class Snapshot {
         return accountKey;
     }
 
-    public float getDeckProgress() {
-        return (float) deck.size() / maxCards;
+    public int getDeckSize() {
+        return deck.size();
     }
 
     @Override

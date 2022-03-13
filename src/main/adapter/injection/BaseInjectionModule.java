@@ -54,6 +54,10 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named(NUM_DECKS))
                 .toInstance(numDecks);
 
+        bind(Integer.class)
+                .annotatedWith(named(MAX_CARDS))
+                        .toInstance(deck.size());
+
         bind(new TypeLiteral<Stack<Card>>() {})
                 .annotatedWith(named(DECK))
                 .toInstance(deck);

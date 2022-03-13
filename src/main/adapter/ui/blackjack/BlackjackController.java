@@ -1,12 +1,14 @@
 package main.adapter.ui.blackjack;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
+import main.adapter.injection.Bindings;
 import main.domain.Snapshot;
 import main.usecase.Game;
 import main.usecase.eventing.EventConnection;
@@ -16,6 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
+import static main.adapter.injection.Bindings.*;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
@@ -60,10 +63,12 @@ public class BlackjackController extends EventConnection implements Initializabl
     private ProgressBar prgDeck;
 
     private final Game game;
+    private final int maxCards;
 
     @Inject
-    public BlackjackController(Game game) {
+    public BlackjackController(Game game, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
+        this.maxCards = maxCards;
     }
 
     @Override
@@ -78,7 +83,7 @@ public class BlackjackController extends EventConnection implements Initializabl
             settleControls.setVisible(snapshot.readyToSettleNextHand());
             nextHandControls.setVisible(snapshot.readyToPlayNextHand());
             gameOverControls.setVisible(snapshot.allBetsSettled());
-            prgDeck.setProgress(snapshot.getDeckProgress());
+            prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
             btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore()));
             lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));

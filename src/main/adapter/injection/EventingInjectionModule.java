@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import main.adapter.log.GameLogger;
-import main.adapter.storage.AccountStorage;
+import main.adapter.storage.Storage;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.history.HistoryController;
@@ -44,7 +44,7 @@ public class EventingInjectionModule extends AbstractModule {
                 .annotatedWith(named(TRANSACTION_LISTENERS))
                 .toInstance(new LinkedList<TransactionListener>() {{
                     add(baseInjector.getInstance(AccountCache.class));
-                    add(baseInjector.getInstance(AccountStorage.class));
+                    add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(baseInjector.getInstance(TransactionCache.class));
                     add(baseInjector.getInstance(Game.class));
@@ -54,7 +54,7 @@ public class EventingInjectionModule extends AbstractModule {
                 .annotatedWith(named(ACCOUNT_LISTENERS))
                 .toInstance(new LinkedList<AccountListener>() {{
                     add(baseInjector.getInstance(AccountCache.class));
-                    add(baseInjector.getInstance(AccountStorage.class));
+                    add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(fxmlInjector.getInstance(HomeController.class));
                     add(baseInjector.getInstance(Transactor.class));
@@ -90,7 +90,7 @@ public class EventingInjectionModule extends AbstractModule {
                     add(fxmlInjector.getInstance(BetController.class));
                     add(fxmlInjector.getInstance(RegistrationController.class));
                     add(fxmlInjector.getInstance(LayoutManager.class));
-                    add(baseInjector.getInstance(AccountStorage.class));
+                    add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(Transactor.class));
                     add(baseInjector.getInstance(TransactionCache.class));
                     add(baseInjector.getInstance(Game.class));

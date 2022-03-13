@@ -45,7 +45,7 @@ public class BaseInjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        bind(Game.class).asEagerSingleton();
+        bind(Game.class).in(Singleton.class);
         bind(AccountMemory.class).to(Database.class);
         bind(TransactionMemory.class).to(Database.class);
         bind(AccountCache.class).in(Singleton.class);

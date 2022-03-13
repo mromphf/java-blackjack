@@ -51,7 +51,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
 
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();
-            eventNetwork.onGameUpdate(currentRound.getSnapshot(timestamp, selectedAccount.get()));
+            eventNetwork.onGameUpdate(currentRound.getSnapshot(timestamp, selectedAccount.get(), maxCards));
         }
     }
 
@@ -60,8 +60,8 @@ public class Game extends EventConnection implements LayoutListener, Transaction
         final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
 
         if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
-            roundStack.add(new Round(deck, abs(transaction.getAmount()), maxCards));
-            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
+            roundStack.add(new Round(deck, abs(transaction.getAmount())));
+            eventNetwork.onGameUpdate(roundStack.peek().getSnapshot(now(), selectedAccount.get(), maxCards));
         }
     }
 

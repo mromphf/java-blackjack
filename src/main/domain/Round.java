@@ -15,15 +15,13 @@ public class Round {
     private final Stack<HandToSettle> handsToSettle;
     private final Stack<Card> dealerHand;
     private final int bet;
-    private final int maxCards;
 
     private SortedMap<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(Stack<Card> deck, int bet, int maxCards) {
+    public Round(Stack<Card> deck, int bet) {
         this.bet = bet;
         this.deck = deck;
-        this.maxCards = maxCards;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
         this.actionsTaken = new TreeMap<>();
@@ -118,7 +116,7 @@ public class Round {
         deck.addAll(freshlyShuffledDeck());
     }
 
-    public Snapshot getSnapshot(LocalDateTime timestamp, Account account) {
+    public Snapshot getSnapshot(LocalDateTime timestamp, Account account, int maxCards) {
         return new Snapshot(
                 timestamp,
                 account.getKey(),

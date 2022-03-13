@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static main.domain.Action.*;
-import static main.domain.Deck.*;
-import static main.domain.Rules.*;
+import static main.domain.Deck.freshlyShuffledDeck;
+import static main.domain.Deck.openingHand;
+import static main.domain.Rules.score;
 
 public class Round {
 
@@ -15,15 +16,13 @@ public class Round {
     private final Stack<Card> dealerHand;
     private final int bet;
     private final int maxCards;
-    private final int numDecks;
 
     private SortedMap<LocalDateTime, Action> actionsTaken;
     private Stack<Card> currentHand;
 
-    public Round(Stack<Card> deck, int bet, int maxCards, int numDecks) {
+    public Round(Stack<Card> deck, int bet, int maxCards) {
         this.bet = bet;
         this.deck = deck;
-        this.numDecks = numDecks;
         this.maxCards = maxCards;
         this.handsToPlay = new Stack<>();
         this.handsToSettle = new Stack<>();
@@ -116,7 +115,7 @@ public class Round {
 
     public void refillDeck() {
         record(LocalDateTime.now(), REFILL);
-        deck.addAll(freshlyShuffledDeck(numDecks));
+        deck.addAll(freshlyShuffledDeck());
     }
 
     public Snapshot getSnapshot(LocalDateTime timestamp, Account account) {

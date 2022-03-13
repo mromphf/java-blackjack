@@ -1,5 +1,5 @@
 package main.domain;
 
-import java.util.Stack;
+import java.util.HashSet;
 
-public class Hand extends Stack<Card> {}
+public class Hand extends HashSet<Card> {}

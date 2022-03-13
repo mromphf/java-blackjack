@@ -149,19 +149,19 @@ public class Snapshot {
     @Override
     public String toString() {
         return String.format("\n\tAccount Key: %s\n\t" +
-                        "Deck: %s,\n\t" +
+                        "Balance: $%s,\n\t" +
+                        "Cards in Deck: %s,\n\t" +
                         "Outcome: %s,\n\t" +
-                        "Balance: %s,\n\t" +
-                        "Bet: %s,\n\t" +
+                        "Bet: $%s,\n\t" +
                         "Hands to Play: %s,\n\t" +
                         "Hands to Settle: %s,\n\t" +
                         "ActionsTaken: {%s\n\t},\n\t" +
                         "Player: %s,\n\t" +
                         "Dealer: %s",
                 accountKey,
+                balance,
                 deck.size(),
                 outcome,
-                balance,
                 bet,
                 handsToPlay.size(),
                 handsToSettle.size(),

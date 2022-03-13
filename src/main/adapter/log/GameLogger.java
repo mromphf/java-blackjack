@@ -10,7 +10,6 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 import main.usecase.eventing.TransactionListener;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -23,7 +22,6 @@ import static main.adapter.injection.Bindings.LOG_HANDLERS;
 public class GameLogger extends EventConnection implements SnapshotListener, AccountListener, TransactionListener {
 
     private final Logger logger;
-    private final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("kk:mm:ss");
 
     @Inject
     public GameLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
@@ -35,7 +33,7 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     @Override
     public void onGameUpdate(Snapshot snapshot) {
         logger.log(INFO, format("%s: Round Snapshot%s",
-                snapshot.getTimestamp().toLocalTime().format(pattern),
+                snapshot.getTimestamp().toLocalTime(),
                 snapshot));
     }
 
@@ -63,7 +61,7 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     public void onAccountCreated(Account account) {
         logger.log(INFO, format(
                 "%s: Account Opened - %s - %s.",
-                account.getCreated().format(pattern),
+                account.getCreated(),
                 account.getName(),
                 account.getKey()));
     }
@@ -71,14 +69,14 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
     @Override
     public void onAccountDeleted(Account account) {
         logger.log(INFO, format("%s: Account Closure Request - %s - %s.",
-                account.getCreated().format(pattern),
+                account.getCreated(),
                 account.getName(),
                 account.getKey()));
     }
 
     public void onTransaction(Transaction transaction) {
         logger.log(INFO, format("%s: Transaction Issued - Account Key: %s - %s - $%s",
-                transaction.getTime().toLocalTime().format(pattern),
+                transaction.getTime(),
                 transaction.getAccountKey(),
                 transaction.getDescription(),
                 Math.abs(transaction.getAmount())));

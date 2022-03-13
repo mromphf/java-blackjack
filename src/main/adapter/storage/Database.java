@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
-import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.lang.System.getenv;
@@ -20,7 +19,7 @@ public class Database implements AccountRepository, TransactionRepository {
 
 
     @Override
-    public Collection<Account> loadAllAccounts(Collection<UUID> closedKeys) {
+    public Collection<Account> loadAllAccounts() {
         try {
             final ArrayList<Account> accounts = new ArrayList<>();
             final Connection conn = openDbConnection();
@@ -45,7 +44,7 @@ public class Database implements AccountRepository, TransactionRepository {
     }
 
     @Override
-    public Collection<Transaction> loadAllTransactions(Collection<Account> openAccounts) {
+    public Collection<Transaction> loadAllTransactions() {
         try {
             final ArrayList<Transaction> transactions = new ArrayList<>();
             final Connection conn = openDbConnection();

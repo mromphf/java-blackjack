@@ -3,10 +3,9 @@ package main.adapter.storage;
 import main.domain.Account;
 
 import java.util.Collection;
-import java.util.UUID;
 
 public interface AccountRepository {
-    Collection<Account> loadAllAccounts(Collection<UUID> closedKeys);
+    Collection<Account> loadAllAccounts();
     void openNewAccount(Account account);
     void closeAccount(Account account);
 }

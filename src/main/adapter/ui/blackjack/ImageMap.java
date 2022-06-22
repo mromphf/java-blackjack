@@ -54,7 +54,7 @@ public class ImageMap {
         }};
     }
 
-    public static List<List<Image>> ofHandsToSettle(Stack<Hand> handsToSettle) {
+    public static List<List<Image>> ofHandsToSettle(Collection<Hand> handsToSettle) {
         return handsToSettle.stream()
                 .map(cards -> cards.stream()
                         .map(ImageMap::imageByCard)

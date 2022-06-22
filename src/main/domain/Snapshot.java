@@ -4,6 +4,7 @@ package main.domain;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.util.Collections.unmodifiableCollection;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 import static main.domain.Action.DOUBLE;
@@ -17,11 +18,11 @@ public class Snapshot {
     private final int balance;
     private final int bet;
     private final Outcome outcome;
-    private final Stack<Card> deck = new Stack<>();
-    private final Hand dealerHand = new Hand();
-    private final Hand playerHand = new Hand();
-    private final Stack<Hand> handsToPlay = new Stack<>();
-    private final Stack<Hand> handsToSettle = new Stack<>();
+    private final Collection<Card> deck;
+    private final Collection<Card> dealerHand;
+    private final Collection<Card> playerHand;
+    private final Collection<Hand> handsToPlay;
+    private final Collection<Hand> handsToSettle;
     private final SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
 
     public Snapshot(LocalDateTime timestamp,
@@ -38,11 +39,11 @@ public class Snapshot {
         this.accountKey = accountKey;
         this.balance = balance;
         this.bet = bet;
-        this.deck.addAll(deck);
-        this.dealerHand.addAll(dealerHand);
-        this.playerHand.addAll(playerHand);
-        this.handsToPlay.addAll(handsToPlay);
-        this.handsToSettle.addAll(handsToSettle);
+        this.deck = unmodifiableCollection(deck);
+        this.dealerHand = unmodifiableCollection(dealerHand);
+        this.playerHand = unmodifiableCollection(playerHand);
+        this.handsToPlay = unmodifiableCollection(handsToPlay);
+        this.handsToSettle = unmodifiableCollection(handsToSettle);
         this.actionsTaken.putAll(actionsTaken);
         this.outcome = determineOutcome(
                 getActionsTaken(),
@@ -126,11 +127,11 @@ public class Snapshot {
         return dealerHand;
     }
 
-    public Hand getPlayerHand() {
+    public Collection<Card> getPlayerHand() {
         return playerHand;
     }
 
-    public Stack<Hand> getHandsToPlay() {
+    public Collection<Hand> getHandsToPlay() {
         return handsToPlay;
     }
 
@@ -160,7 +161,7 @@ public class Snapshot {
                         "Dealer: %s",
                 accountKey,
                 balance,
-                deck.size(),
+                getDeckSize(),
                 outcome,
                 bet,
                 handsToPlay.size(),

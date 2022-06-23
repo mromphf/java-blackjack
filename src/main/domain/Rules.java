@@ -8,7 +8,10 @@ import static main.domain.Outcome.*;
 
 public class Rules {
 
-    public final static IsBust IS_BUST = new IsBust();
+    public final static Predicate<Collection<Card>> AT_LEAST_ONE_ACE = cards -> cards.stream().anyMatch(Card::isAce);
+
+    public final static Predicate<Collection<Card>> IS_BUST = cards -> score(cards) > 21;
+
     public final static IsBlackjack IS_BLACKJACK = new IsBlackjack();
     public final static IsInsuranceAvailable IS_INSURANCE_AVAILABLE = new IsInsuranceAvailable();
 
@@ -29,7 +32,7 @@ public class Rules {
     public static int score(Collection<Card> cards) {
         if (IS_BLACKJACK.test(cards)) {
             return 21;
-        } else if (atLeastOneAce(cards) && hardTotalFavorable(cards)) {
+        } else if (AT_LEAST_ONE_ACE.test(cards) && hardTotalFavorable(cards)) {
             return hardTotal(cards);
         } else {
             return softTotal(cards);
@@ -46,16 +49,12 @@ public class Rules {
         }
     }
 
-    public static boolean atLeastOneAce(Collection<Card> cards) {
-        return cards.stream().anyMatch(Card::isAce);
-    }
-
     public static boolean hardTotalFavorable(Collection<Card> cards) {
         return hardTotal(cards) <= 21;
     }
 
     public static int hardTotal(Collection<Card> cards) {
-        return atLeastOneAce(cards)
+        return AT_LEAST_ONE_ACE.test(cards)
                 ? softTotal(cards) + 10
                 : softTotal(cards);
     }
@@ -124,13 +123,6 @@ public class Rules {
                 return (bet * betMultiplier) + insurancePayout;
             default:
                 return 0;
-        }
-    }
-
-    public static class IsBust implements Predicate<Collection<Card>> {
-        @Override
-        public boolean test(Collection<Card> cards) {
-            return score(cards) > 21;
         }
     }
 

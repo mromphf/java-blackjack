@@ -8,9 +8,11 @@ import static main.domain.Outcome.*;
 
 public class Rules {
 
+    public final static int MAXIMUM_SCORE = 21;
+
     public final static Predicate<Collection<Card>> AT_LEAST_ONE_ACE = cards -> cards.stream().anyMatch(Card::isAce);
 
-    public final static Predicate<Collection<Card>> IS_BUST = cards -> score(cards) > 21;
+    public final static Predicate<Collection<Card>> IS_BUST = cards -> score(cards) > MAXIMUM_SCORE;
 
     public final static IsBlackjack IS_BLACKJACK = new IsBlackjack();
     public final static IsInsuranceAvailable IS_INSURANCE_AVAILABLE = new IsInsuranceAvailable();

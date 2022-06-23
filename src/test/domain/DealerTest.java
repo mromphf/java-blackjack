@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Stack;
 
 import static main.domain.Dealer.*;
+import static main.domain.Rank.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,9 +60,9 @@ class DealerTest {
     @Test
     public void shuffle_shouldContain3Cards_whenPassedACollectionOf3Cards() {
         Deck cards = new Deck() {{
-           add(new Card(5, Suit.HEARTS));
-            add(new Card(3, Suit.SPADES));
-            add(new Card(12, Suit.CLUBS));
+           add(new Card(FIVE, Suit.HEARTS));
+            add(new Card(THREE, Suit.SPADES));
+            add(new Card(QUEEN, Suit.CLUBS));
         }};
 
         assertEquals(3, shuffle(cards).size());
@@ -69,12 +70,12 @@ class DealerTest {
 
     @Test
     public void shuffle_shouldContainTheSameCardAsTheStackPassedIn() {
-        final Card card = new Card(5, Suit.HEARTS);
+        final Card card = new Card(FIVE, Suit.HEARTS);
 
         Deck cards = new Deck() {{
             add(card);
-            add(new Card(3, Suit.SPADES));
-            add(new Card(12, Suit.CLUBS));
+            add(new Card(THREE, Suit.SPADES));
+            add(new Card(QUEEN, Suit.CLUBS));
         }};
 
         assertTrue(shuffle(cards).contains(card));
@@ -83,9 +84,9 @@ class DealerTest {
     @Test
     public void openingHand_shouldThrowIllegalArgumentException_whenGivenACollectionOfFewerThanFourCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(5, Suit.HEARTS));
-            add(new Card(3, Suit.SPADES));
-            add(new Card(12, Suit.CLUBS));
+            add(new Card(FIVE, Suit.HEARTS));
+            add(new Card(THREE, Suit.SPADES));
+            add(new Card(QUEEN, Suit.CLUBS));
         }};
 
         assertThrows(IllegalArgumentException.class, () -> openingHand(cards));
@@ -94,10 +95,10 @@ class DealerTest {
     @Test
     public void openingHand_shouldRemoveFourCards_whenGivenAStackOfMoreThanThreeCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(5, Suit.HEARTS));
-            add(new Card(3, Suit.SPADES));
-            add(new Card(12, Suit.CLUBS));
-            add(new Card(1, Suit.CLUBS));
+            add(new Card(FIVE, Suit.HEARTS));
+            add(new Card(THREE, Suit.SPADES));
+            add(new Card(QUEEN, Suit.CLUBS));
+            add(new Card(ACE, Suit.CLUBS));
         }};
 
         openingHand(cards);

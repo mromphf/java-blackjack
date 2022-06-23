@@ -4,32 +4,31 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import static java.lang.Math.min;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
+import static main.domain.Rank.ACE;
 
 public class Card {
     private final UUID key = randomUUID();
-    private final int value;
+    private final Rank rank;
     private final Suit suit;
 
-    public Card(int value, Suit suit) throws IllegalArgumentException {
-        if (value > 13 || value < 1) {
-            throw new IllegalArgumentException("Card value must be greater than 0 and less than 14.");
-        }
-        this.value = value;
+    public Card(Rank rank, Suit suit) throws IllegalArgumentException {
+        this.rank = rank;
         this.suit = suit;
     }
 
     public boolean isAce() {
-        return value == 1;
+        return rank == ACE;
     }
 
     public int getBlackjackValue() {
-        return Math.min(10, value);
+        return min(10, rank.VALUE);
     }
 
-    public int getFaceValue() {
-        return value;
+    public Rank getRank() {
+        return rank;
     }
 
     public Suit getSuit() {
@@ -42,7 +41,7 @@ public class Card {
             put(11, "Jack");
             put(12, "Queen");
             put(13, "King");
-        }}.getOrDefault(value, String.valueOf(value));
+        }}.getOrDefault(rank.VALUE, String.valueOf(rank.VALUE));
     }
 
     @Override
@@ -50,12 +49,12 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return value == card.value && Objects.equals(key, card.key) && suit == card.suit;
+        return Objects.equals(key, card.key) && rank == card.rank && suit == card.suit;
     }
 
     @Override
     public int hashCode() {
-        return hash(key, value, suit);
+        return hash(key, rank, suit);
     }
 
     @Override

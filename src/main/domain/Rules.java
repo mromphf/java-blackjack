@@ -1,6 +1,7 @@
 package main.domain;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 import static main.domain.Action.*;
@@ -10,15 +11,13 @@ public class Rules {
 
     public final static int MAXIMUM_SCORE = 21;
 
-    public final static Predicate<Collection<Card>> AT_LEAST_ONE_ACE = cards -> cards.stream().anyMatch(Card::isAce);
-
-    public final static Predicate<Collection<Card>> IS_BUST = cards -> score(cards) > MAXIMUM_SCORE;
-
-    public final static IsBlackjack IS_BLACKJACK = new IsBlackjack();
-    public final static IsInsuranceAvailable IS_INSURANCE_AVAILABLE = new IsInsuranceAvailable();
+    public final static Predicate<Collection<Card>> atLeastOneAce = cards -> cards.stream().anyMatch(Card::isAce);
+    public final static Predicate<Collection<Card>> isBust = cards -> score(cards) > MAXIMUM_SCORE;
+    public final static IsBlackjack isBlackjack = new IsBlackjack();
+    public final static IsInsuranceAvailable isInsuranceAvailable = new IsInsuranceAvailable();
 
     public static boolean isPush(Collection<Card> playerHand, Collection<Card> dealerHand) {
-        return score(playerHand) == score(dealerHand) && !IS_BUST.test(playerHand);
+        return score(playerHand) == score(dealerHand) && !isBust.test(playerHand);
     }
 
     public static boolean canSplit(Collection<Card> cards) {
@@ -32,9 +31,9 @@ public class Rules {
     }
 
     public static int score(Collection<Card> cards) {
-        if (IS_BLACKJACK.test(cards)) {
+        if (isBlackjack.test(cards)) {
             return 21;
-        } else if (AT_LEAST_ONE_ACE.test(cards) && hardTotalFavorable(cards)) {
+        } else if (atLeastOneAce.test(cards) && hardTotalFavorable(cards)) {
             return hardTotal(cards);
         } else {
             return softTotal(cards);
@@ -56,7 +55,7 @@ public class Rules {
     }
 
     public static int hardTotal(Collection<Card> cards) {
-        return AT_LEAST_ONE_ACE.test(cards)
+        return atLeastOneAce.test(cards)
                 ? softTotal(cards) + 10
                 : softTotal(cards);
     }
@@ -66,8 +65,8 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return (IS_BUST.test(dealerCards)) && !IS_BUST.test(playerCards) ||
-                (!IS_BUST.test(playerCards) && score(playerCards) > score(dealerCards));
+        return (isBust.test(dealerCards)) && !isBust.test(playerCards) ||
+                (!isBust.test(playerCards) && score(playerCards) > score(dealerCards));
     }
 
     public static Outcome determineOutcome(Snapshot snapshot) {
@@ -85,19 +84,19 @@ public class Rules {
         final boolean standOrDouble = actionsTaken.stream()
                 .anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE));
 
-        if ((IS_BUST.test(playerHand) && !handsToPlay.isEmpty()) ||
-                (!IS_BUST.test(playerHand) &&
+        if ((isBust.test(playerHand) && !handsToPlay.isEmpty()) ||
+                (!isBust.test(playerHand) &&
                         !handsToPlay.isEmpty() && standOrDouble) ||
-                (!IS_BUST.test(playerHand) &&
+                (!isBust.test(playerHand) &&
                         (actionsTaken.isEmpty() || !standOrDouble))) {
             return UNRESOLVED;
-        } else if (playerWins(playerHand, dealerHand) && IS_BLACKJACK.test(playerHand)) {
+        } else if (playerWins(playerHand, dealerHand) && isBlackjack.test(playerHand)) {
             return BLACKJACK;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
         } else if (isPush(playerHand, dealerHand)) {
             return PUSH;
-        } else if (IS_BUST.test(playerHand)) {
+        } else if (isBust.test(playerHand)) {
             return BUST;
         } else {
             return LOSE;
@@ -110,12 +109,12 @@ public class Rules {
         final int bet = snapshot.getBet();
 
         final int insurancePayout = (actionsTaken.stream()
-                .anyMatch(a -> a.equals(BUY_INSURANCE)) && IS_BLACKJACK.test(snapshot.getDealerHand()))
+                .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack.test(snapshot.getDealerHand()))
                 ? (bet * 2) : 0;
 
         final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
-        final float blackjackMultiplier = IS_BLACKJACK.test(playerHand) ? 1.5f : 1.0f;
+        final float blackjackMultiplier = isBlackjack.test(playerHand) ? 1.5f : 1.0f;
 
         switch (determineOutcome(snapshot)) {
             case BLACKJACK:

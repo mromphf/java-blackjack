@@ -1,11 +1,12 @@
 package test.domain;
 
 import main.domain.Card;
-import main.domain.Suit;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static main.domain.Card.card;
+import static main.domain.Hand.handOf;
 import static main.domain.Rank.*;
 import static main.domain.Rules.*;
 import static main.domain.Suit.*;
@@ -15,87 +16,70 @@ class RulesTest {
 
     @Test
     public void isBlackjack_shouldReturnTrue_whenGivenAnAceAndATen() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TEN, CLUBS));
-        }};
-
-        assertTrue(isBlackjack(cards));
+        assertTrue(IS_BLACKJACK.test(handOf(
+                card(ACE, HEARTS),
+                card(TEN, CLUBS)
+        )));
     }
 
     @Test
     public void isBlackjack_shouldReturnTrue_whenGivenAnAceAndAJack() {
-        Queue<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(JACK, CLUBS));
-        }};
-
-        assertTrue(isBlackjack(cards));
+        assertTrue(IS_BLACKJACK.test(handOf(
+                card(ACE, HEARTS),
+                card(JACK, CLUBS)
+        )));
     }
 
     @Test
     public void isBlackjack_shouldReturnFalse_whenGivenAnAceAndANine() {
-        List<Card> cards = new ArrayList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(NINE, CLUBS));
-        }};
-
-        assertFalse(isBlackjack(cards));
+        assertFalse(IS_BLACKJACK.test(handOf(
+                card(ACE, HEARTS),
+                card(NINE, CLUBS)
+        )));
     }
 
     @Test
     public void isBlackjack_shouldReturnFalse_whenGivenACollectionOfThreeCards() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(NINE, CLUBS));
-            add(new Card(KING, DIAMONDS));
-        }};
-
-        assertFalse(isBlackjack(cards));
+        assertFalse(IS_BLACKJACK.test(handOf(
+                card(ACE, HEARTS),
+                card(NINE, CLUBS),
+                card(THREE, SPADES)
+        )));
     }
 
     @Test
     public void isBlackjack_shouldReturnFalse_whenGivenACollectionOfCardsWithoutAnAce() {
-        List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TEN, CLUBS));
-            add(new Card(KING, DIAMONDS));
-        }};
-
-        assertFalse(isBlackjack(cards));
+        assertFalse(IS_BLACKJACK.test(handOf(
+                card(NINE, CLUBS),
+                card(KING, HEARTS)
+        )));
     }
 
     @Test
-    public void isBust_shouldReturnTrue_whenTotalValueOfCardCollectionIsTwentyTwo() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(TEN, CLUBS));
-            add(new Card(TWO, DIAMONDS));
-        }};
-
-        assertTrue(isBust(cards));
+    public void isBust_shouldReturnTrue_whenTotalValueOfCardCollectionIsGreaterThanTwentyOne() {
+        assertTrue(IS_BUST.test(handOf(
+                card(TEN, CLUBS),
+                card(TEN, SPADES),
+                card(TWO, CLUBS)
+        )));
     }
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionIsLessThanTwentyOne() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(FIVE, CLUBS));
-            add(new Card(SIX, DIAMONDS));
-        }};
-
-        assertFalse(isBust(cards));
+        assertFalse(IS_BUST.test(handOf(
+                card(FIVE, CLUBS),
+                card(THREE, SPADES),
+                card(TWO, CLUBS)
+        )));
     }
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(JACK, CLUBS));
-            add(new Card(KING, DIAMONDS));
-        }};
-
-        assertFalse(isBust(cards));
+        assertFalse(IS_BUST.test(handOf(
+            new Card(ACE, HEARTS),
+            new Card(JACK, CLUBS),
+            new Card(KING, DIAMONDS)
+        )));
     }
 
     @Test
@@ -407,39 +391,16 @@ class RulesTest {
     }
 
     @Test
-    public void insuranceAvailable_shouldReturnTrue_whenTheFirstCardIsAnAce() {
-        List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(FOUR, DIAMONDS));
-        }};
-
-        assertTrue(insuranceAvailable(cards));
-    }
-
-    @Test
-    public void insuranceAvailable_shouldReturnFalse_whenTheSecondCardIsAnAceButTheFirstIsNot() {
-        List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FOUR, HEARTS));
-            add(new Card(ACE, DIAMONDS));
-        }};
-
-        assertFalse(insuranceAvailable(cards));
-    }
-
-    @Test
-    public void insuranceAvailable_shouldReturnFalse_whenNoAces() {
-        List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FOUR, HEARTS));
-            add(new Card(SEVEN, DIAMONDS));
-        }};
-
-        assertFalse(insuranceAvailable(cards));
+    public void insuranceAvailable_shouldReturnFalse_whenDealerHasNoAces() {
+        assertFalse(IS_INSURANCE_AVAILABLE.test(
+                handOf(
+                        card(FOUR, HEARTS),
+                        card(SEVEN, DIAMONDS)
+                )));
     }
 
     @Test
     public void insuranceAvailable_shouldReturnFalse_whenGivenEmptyCollection() {
-        List<Card> cards = new LinkedList<>();
-
-        assertFalse(insuranceAvailable(cards));
+        assertFalse(IS_INSURANCE_AVAILABLE.test(handOf()));
     }
 }

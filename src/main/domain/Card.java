@@ -1,6 +1,5 @@
 package main.domain;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,11 +9,14 @@ import static java.util.UUID.randomUUID;
 import static main.domain.Rank.ACE;
 
 public class Card {
+
+    private static final int HIGHEST_POSSIBLE_VALUE = 10;
+
     private final UUID key = randomUUID();
     private final Rank rank;
     private final Suit suit;
 
-    public Card(Rank rank, Suit suit) throws IllegalArgumentException {
+    public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
@@ -24,7 +26,7 @@ public class Card {
     }
 
     public int getBlackjackValue() {
-        return min(10, rank.VALUE);
+        return min(HIGHEST_POSSIBLE_VALUE, rank.VALUE);
     }
 
     public Rank getRank() {
@@ -40,12 +42,7 @@ public class Card {
     }
 
     public String name() {
-        return new HashMap<Integer, String>() {{
-            put(1, "Ace");
-            put(11, "Jack");
-            put(12, "Queen");
-            put(13, "King");
-        }}.getOrDefault(rank.VALUE, String.valueOf(rank.VALUE));
+        return rank.NAME;
     }
 
     @Override

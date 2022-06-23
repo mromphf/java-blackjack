@@ -77,7 +77,7 @@ public class Snapshot {
     public boolean readyToPlayNextHand() {
         return (outcome == UNRESOLVED &&
                 !handsToPlay.isEmpty() &&
-                (isBust(playerHand) ||
+                (IS_BUST.test(playerHand) ||
                         actionsTaken.values().stream().anyMatch(
                                 a -> a.equals(STAND) || a.equals(DOUBLE))));
     }
@@ -121,7 +121,7 @@ public class Snapshot {
     }
 
     public boolean isInsuranceAvailable() {
-        return insuranceAvailable(dealerHand) && actionsTaken.isEmpty();
+        return IS_INSURANCE_AVAILABLE.test(dealerHand) && actionsTaken.isEmpty();
     }
 
     public Collection<Card> getDealerHand() {

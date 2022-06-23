@@ -22,18 +22,18 @@ public class RulesTest {
     @ParameterizedTest
     @MethodSource("blackjackHands")
     public void isBlackjack_shouldReturnTrue_whenGivenAceCardsPairedWithTensAndFaceCards(Set<Card> hand) {
-        assertTrue(IS_BLACKJACK.test(hand));
+        assertTrue(isBlackjack.test(hand));
     }
 
     @ParameterizedTest
     @MethodSource("nonBlackjackHands")
     public void isBlackjack_shouldReturnFalse_whenGivenANonBlackjackHand(Set<Card> hand) {
-        assertFalse(IS_BLACKJACK.test(hand));
+        assertFalse(isBlackjack.test(hand));
     }
 
     @Test
     public void isBust_shouldReturnTrue_whenTotalValueOfCardCollectionIsGreaterThanTwentyOne() {
-        assertTrue(IS_BUST.test(handOf(
+        assertTrue(isBust.test(handOf(
                 card(TEN, CLUBS),
                 card(TEN, SPADES),
                 card(TWO, CLUBS)
@@ -42,7 +42,7 @@ public class RulesTest {
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionIsLessThanTwentyOne() {
-        assertFalse(IS_BUST.test(handOf(
+        assertFalse(isBust.test(handOf(
                 card(FIVE, CLUBS),
                 card(THREE, SPADES),
                 card(TWO, CLUBS)
@@ -51,7 +51,7 @@ public class RulesTest {
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
-        assertFalse(IS_BUST.test(handOf(
+        assertFalse(isBust.test(handOf(
                 new Card(ACE, HEARTS),
                 new Card(JACK, CLUBS),
                 new Card(KING, DIAMONDS)
@@ -142,7 +142,7 @@ public class RulesTest {
 
     @Test
     public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce() {
-        assertTrue(AT_LEAST_ONE_ACE.test(handOf(
+        assertTrue(atLeastOneAce.test(handOf(
                 card(ACE, HEARTS),
                 card(EIGHT, SPADES)
         )));
@@ -150,7 +150,7 @@ public class RulesTest {
 
     @Test
     public void atLeastOneAce_shouldReturnFalse_whenGivenNoAces() {
-        assertFalse(AT_LEAST_ONE_ACE.test(handOf(
+        assertFalse(atLeastOneAce.test(handOf(
                         card(FIVE, CLUBS),
                         card(EIGHT, DIAMONDS)
                 )
@@ -365,7 +365,7 @@ public class RulesTest {
 
     @Test
     public void insuranceAvailable_shouldReturnFalse_whenDealerHasNoAces() {
-        assertFalse(IS_INSURANCE_AVAILABLE.test(
+        assertFalse(isInsuranceAvailable.test(
                 handOf(
                         card(FOUR, HEARTS),
                         card(SEVEN, DIAMONDS)
@@ -374,7 +374,7 @@ public class RulesTest {
 
     @Test
     public void insuranceAvailable_shouldReturnFalse_whenGivenEmptyCollection() {
-        assertFalse(IS_INSURANCE_AVAILABLE.test(handOf()));
+        assertFalse(isInsuranceAvailable.test(handOf()));
     }
 
     private static Stream<Set<Card>> blackjackHands() {

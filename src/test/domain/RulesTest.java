@@ -76,9 +76,9 @@ class RulesTest {
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
         assertFalse(IS_BUST.test(handOf(
-            new Card(ACE, HEARTS),
-            new Card(JACK, CLUBS),
-            new Card(KING, DIAMONDS)
+                new Card(ACE, HEARTS),
+                new Card(JACK, CLUBS),
+                new Card(KING, DIAMONDS)
         )));
     }
 
@@ -166,22 +166,22 @@ class RulesTest {
 
     @Test
     public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce() {
-        Queue<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(EIGHT, SPADES));
-        }};
-
-        assertTrue(atLeastOneAce(cards));
+        assertTrue(AT_LEAST_ONE_ACE.test(
+                handOf(
+                        card(ACE, HEARTS),
+                        card(EIGHT, SPADES)
+                )
+        ));
     }
 
     @Test
     public void atLeastOneAce_shouldReturnFalse_whenGivenNoAces() {
-        Queue<Card> cards = new LinkedList<Card>() {{
-            add(new Card(THREE, HEARTS));
-            add(new Card(EIGHT, SPADES));
-        }};
-
-        assertFalse(atLeastOneAce(cards));
+        assertFalse(AT_LEAST_ONE_ACE.test(
+                handOf(
+                        card(FIVE, CLUBS),
+                        card(EIGHT, DIAMONDS)
+                )
+        ));
     }
 
     @Test

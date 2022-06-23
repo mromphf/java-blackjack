@@ -35,6 +35,10 @@ public class Card {
         return suit;
     }
 
+    public boolean is(Suit suit) {
+        return this.suit == suit;
+    }
+
     public String name() {
         return new HashMap<Integer, String>() {{
             put(1, "Ace");

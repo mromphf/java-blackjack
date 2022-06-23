@@ -2,19 +2,21 @@ package test.domain;
 
 import main.domain.Card;
 import main.domain.Deck;
-import main.domain.Suit;
 import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
 import static main.domain.Dealer.*;
 import static main.domain.Rank.*;
+import static main.domain.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class DealerTest {
+
+    private static final int EXPECTED_CARDS_OF_SUIT = 13;
 
     @Test
     public void fresh_shouldProvideAStackOf52Cards() {
@@ -23,46 +25,54 @@ class DealerTest {
 
     @Test
     public void fresh_shouldContain13HeartCards() {
-        Stack<Card> deck = freshDeck();
+        final Deck deck = freshDeck();
 
-        final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.HEARTS)).count();
+        final int numberHeartCards = (int) deck.stream()
+                .filter(card -> card.is(HEARTS))
+                .count();
 
-        assertEquals(13, numCards);
+        assertEquals(EXPECTED_CARDS_OF_SUIT, numberHeartCards);
     }
 
     @Test
     public void fresh_shouldContain13ClubCards() {
-        Stack<Card> deck = freshDeck();
+        final Deck deck = freshDeck();
 
-        final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.CLUBS)).count();
+        final int numberDiamondCards = (int) deck.stream()
+                .filter(card -> card.is(CLUBS))
+                .count();
 
-        assertEquals(13, numCards);
+        assertEquals(EXPECTED_CARDS_OF_SUIT, numberDiamondCards);
     }
 
     @Test
     public void fresh_shouldContain13DiamondCards() {
-        Stack<Card> deck = freshDeck();
+        final Deck deck = freshDeck();
 
-        final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.DIAMONDS)).count();
+        final int numDiamondCards = (int) deck.stream()
+                .filter(card -> card.is(DIAMONDS))
+                .count();
 
-        assertEquals(13, numCards);
+        assertEquals(EXPECTED_CARDS_OF_SUIT, numDiamondCards);
     }
 
     @Test
     public void fresh_shouldContain13SpadeCards() {
-        Stack<Card> deck = freshDeck();
+        final Deck deck = freshDeck();
 
-        final int numCards = (int) deck.stream().filter(c -> c.getSuit().equals(Suit.SPADES)).count();
+        final int numSpadeCards = (int) deck.stream()
+                .filter(card -> card.is(SPADES))
+                .count();
 
-        assertEquals(13, numCards);
+        assertEquals(EXPECTED_CARDS_OF_SUIT, numSpadeCards);
     }
 
     @Test
     public void shuffle_shouldContain3Cards_whenPassedACollectionOf3Cards() {
         Deck cards = new Deck() {{
-           add(new Card(FIVE, Suit.HEARTS));
-            add(new Card(THREE, Suit.SPADES));
-            add(new Card(QUEEN, Suit.CLUBS));
+           add(new Card(FIVE, HEARTS));
+            add(new Card(THREE, SPADES));
+            add(new Card(QUEEN, CLUBS));
         }};
 
         assertEquals(3, shuffle(cards).size());
@@ -70,12 +80,12 @@ class DealerTest {
 
     @Test
     public void shuffle_shouldContainTheSameCardAsTheStackPassedIn() {
-        final Card card = new Card(FIVE, Suit.HEARTS);
+        final Card card = new Card(FIVE, HEARTS);
 
         Deck cards = new Deck() {{
             add(card);
-            add(new Card(THREE, Suit.SPADES));
-            add(new Card(QUEEN, Suit.CLUBS));
+            add(new Card(THREE, SPADES));
+            add(new Card(QUEEN, CLUBS));
         }};
 
         assertTrue(shuffle(cards).contains(card));
@@ -84,9 +94,9 @@ class DealerTest {
     @Test
     public void openingHand_shouldThrowIllegalArgumentException_whenGivenACollectionOfFewerThanFourCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(FIVE, Suit.HEARTS));
-            add(new Card(THREE, Suit.SPADES));
-            add(new Card(QUEEN, Suit.CLUBS));
+            add(new Card(FIVE, HEARTS));
+            add(new Card(THREE, SPADES));
+            add(new Card(QUEEN, CLUBS));
         }};
 
         assertThrows(IllegalArgumentException.class, () -> openingHand(cards));
@@ -95,10 +105,10 @@ class DealerTest {
     @Test
     public void openingHand_shouldRemoveFourCards_whenGivenAStackOfMoreThanThreeCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(FIVE, Suit.HEARTS));
-            add(new Card(THREE, Suit.SPADES));
-            add(new Card(QUEEN, Suit.CLUBS));
-            add(new Card(ACE, Suit.CLUBS));
+            add(new Card(FIVE, HEARTS));
+            add(new Card(THREE, SPADES));
+            add(new Card(QUEEN, CLUBS));
+            add(new Card(ACE, CLUBS));
         }};
 
         openingHand(cards);

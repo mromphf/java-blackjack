@@ -2,8 +2,11 @@ package test.domain;
 
 import main.domain.Card;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static main.domain.Card.card;
 import static main.domain.Hand.handOf;
@@ -11,48 +14,21 @@ import static main.domain.Rank.*;
 import static main.domain.Rules.*;
 import static main.domain.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static test.domain.anonymous.Anonymous.anonCard;
+import static test.domain.anonymous.Anonymous.anonSuit;
 
-class RulesTest {
+public class RulesTest {
 
-    @Test
-    public void isBlackjack_shouldReturnTrue_whenGivenAnAceAndATen() {
-        assertTrue(IS_BLACKJACK.test(handOf(
-                card(ACE, HEARTS),
-                card(TEN, CLUBS)
-        )));
+    @ParameterizedTest
+    @MethodSource("blackjackHands")
+    public void isBlackjack_shouldReturnTrue_whenGivenAceCardsPairedWithTensAndFaceCards(Set<Card> hand) {
+        assertTrue(IS_BLACKJACK.test(hand));
     }
 
-    @Test
-    public void isBlackjack_shouldReturnTrue_whenGivenAnAceAndAJack() {
-        assertTrue(IS_BLACKJACK.test(handOf(
-                card(ACE, HEARTS),
-                card(JACK, CLUBS)
-        )));
-    }
-
-    @Test
-    public void isBlackjack_shouldReturnFalse_whenGivenAnAceAndANine() {
-        assertFalse(IS_BLACKJACK.test(handOf(
-                card(ACE, HEARTS),
-                card(NINE, CLUBS)
-        )));
-    }
-
-    @Test
-    public void isBlackjack_shouldReturnFalse_whenGivenACollectionOfThreeCards() {
-        assertFalse(IS_BLACKJACK.test(handOf(
-                card(ACE, HEARTS),
-                card(NINE, CLUBS),
-                card(THREE, SPADES)
-        )));
-    }
-
-    @Test
-    public void isBlackjack_shouldReturnFalse_whenGivenACollectionOfCardsWithoutAnAce() {
-        assertFalse(IS_BLACKJACK.test(handOf(
-                card(NINE, CLUBS),
-                card(KING, HEARTS)
-        )));
+    @ParameterizedTest
+    @MethodSource("nonBlackjackHands")
+    public void isBlackjack_shouldReturnFalse_whenGivenANonBlackjackHand(Set<Card> hand) {
+        assertFalse(IS_BLACKJACK.test(hand));
     }
 
     @Test
@@ -166,18 +142,15 @@ class RulesTest {
 
     @Test
     public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce() {
-        assertTrue(AT_LEAST_ONE_ACE.test(
-                handOf(
-                        card(ACE, HEARTS),
-                        card(EIGHT, SPADES)
-                )
-        ));
+        assertTrue(AT_LEAST_ONE_ACE.test(handOf(
+                card(ACE, HEARTS),
+                card(EIGHT, SPADES)
+        )));
     }
 
     @Test
     public void atLeastOneAce_shouldReturnFalse_whenGivenNoAces() {
-        assertFalse(AT_LEAST_ONE_ACE.test(
-                handOf(
+        assertFalse(AT_LEAST_ONE_ACE.test(handOf(
                         card(FIVE, CLUBS),
                         card(EIGHT, DIAMONDS)
                 )
@@ -402,5 +375,22 @@ class RulesTest {
     @Test
     public void insuranceAvailable_shouldReturnFalse_whenGivenEmptyCollection() {
         assertFalse(IS_INSURANCE_AVAILABLE.test(handOf()));
+    }
+
+    private static Stream<Set<Card>> blackjackHands() {
+        return Stream.of(
+                handOf(card(ACE, anonSuit()), card(TEN, anonSuit())),
+                handOf(card(ACE, anonSuit()), card(JACK, anonSuit())),
+                handOf(card(ACE, anonSuit()), card(QUEEN, anonSuit())),
+                handOf(card(ACE, anonSuit()), card(KING, anonSuit()))
+        );
+    }
+
+    private static Stream<Set<Card>> nonBlackjackHands() {
+        return Stream.of(
+                handOf(anonCard(), anonCard(), anonCard()),
+                handOf(card(ACE, anonSuit()), card(NINE, anonSuit())),
+                handOf(card(SIX, anonSuit()), card(TEN, anonSuit()))
+        );
     }
 }

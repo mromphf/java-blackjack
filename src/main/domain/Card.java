@@ -21,6 +21,10 @@ public class Card {
         this.suit = suit;
     }
 
+    public static Card card(Rank rank, Suit suit) {
+        return new Card(rank, suit);
+    }
+
     public boolean isAce() {
         return rank == ACE;
     }

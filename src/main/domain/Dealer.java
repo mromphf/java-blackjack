@@ -6,17 +6,17 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Dealer {
-    private static final int CARDS_PER_SUIT = 13;
-    private static final int DECKS = 4;
 
     public static Deck freshDeck() {
+
         Deck result = new Deck();
+
         for (Suit suit : Suit.values()) {
-            for (int i = 1; i <= DECKS ; i++) {
-                for (int j = 1; j <= CARDS_PER_SUIT; j++)
-                result.add(new Card(i, suit));
+            for (Rank rank : Rank.values()) {
+                result.add(new Card(rank, suit));
             }
         }
+
         return result;
     }
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import main.domain.Card;
 import main.domain.Deck;
+import main.domain.Rank;
 import main.domain.Suit;
 
 import java.util.Stack;
@@ -18,7 +19,7 @@ public class JsonUtil {
             final int val = obj.get("value").getAsInt();
             final Suit suit = Suit.valueOf(obj.get("suit").getAsString().toUpperCase());
 
-            result.add(new Card(val, suit));
+            result.add(new Card(Rank.of(val), suit));
         }
 
         return result;

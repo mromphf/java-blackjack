@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.util.Collections.unmodifiableCollection;
+import static java.util.Collections.unmodifiableSortedMap;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 import static main.domain.Action.DOUBLE;
@@ -23,7 +24,7 @@ public class Snapshot {
     private final Collection<Card> playerHand;
     private final Collection<Hand> handsToPlay;
     private final Collection<Hand> handsToSettle;
-    private final SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
+    private final SortedMap<LocalDateTime, Action> actionsTaken;
 
     public Snapshot(LocalDateTime timestamp,
                     UUID accountKey,
@@ -44,7 +45,7 @@ public class Snapshot {
         this.playerHand = unmodifiableCollection(playerHand);
         this.handsToPlay = unmodifiableCollection(handsToPlay);
         this.handsToSettle = unmodifiableCollection(handsToSettle);
-        this.actionsTaken.putAll(actionsTaken);
+        this.actionsTaken = unmodifiableSortedMap(actionsTaken);
         this.outcome = determineOutcome(
                 getActionsTaken(),
                 playerHand,

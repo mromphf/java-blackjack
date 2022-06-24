@@ -1,6 +1,7 @@
 package test.domain;
 
 import main.domain.Card;
+import main.domain.Snapshot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -71,7 +72,7 @@ public class RulesTest {
             add(new Card(KING, CLUBS));
         }};
 
-        assertTrue(isPush(hand1, hand2));
+        assertTrue(isPush.test(hand1, hand2));
     }
 
     @Test
@@ -86,7 +87,7 @@ public class RulesTest {
             add(new Card(KING, CLUBS));
         }};
 
-        assertFalse(isPush(hand1, hand2));
+        assertFalse(isPush.test(hand1, hand2));
     }
 
     @Test
@@ -217,7 +218,7 @@ public class RulesTest {
             add(new Card(FIVE, SPADES));
         }};
 
-        assertTrue(hardTotalFavorable(cards));
+        assertTrue(hardTotalIsFavourable.test(cards));
     }
 
     @Test
@@ -228,7 +229,7 @@ public class RulesTest {
             add(new Card(FIVE, SPADES));
         }};
 
-        assertFalse(hardTotalFavorable(cards));
+        assertFalse(hardTotalIsFavourable.test(cards));
     }
 
     @Test
@@ -320,7 +321,7 @@ public class RulesTest {
             add(new Card(FIVE, SPADES));
         }};
 
-        assertTrue(canSplit(cards));
+        assertTrue(canSplit.test(cards));
     }
 
     @Test
@@ -330,7 +331,7 @@ public class RulesTest {
             add(new Card(QUEEN, SPADES));
         }};
 
-        assertTrue(canSplit(cards));
+        assertTrue(canSplit.test(cards));
     }
 
     @Test
@@ -340,7 +341,7 @@ public class RulesTest {
             add(new Card(SIX, SPADES));
         }};
 
-        assertFalse(canSplit(cards));
+        assertFalse(canSplit.test(cards));
     }
 
     @Test
@@ -351,7 +352,7 @@ public class RulesTest {
             add(new Card(FIVE, CLUBS));
         }};
 
-        assertFalse(canSplit(cards));
+        assertFalse(canSplit.test(cards));
     }
 
     @Test
@@ -360,21 +361,7 @@ public class RulesTest {
             add(new Card(FIVE, HEARTS));
         }};
 
-        assertFalse(canSplit(cards));
-    }
-
-    @Test
-    public void insuranceAvailable_shouldReturnFalse_whenDealerHasNoAces() {
-        assertFalse(isInsuranceAvailable.test(
-                handOf(
-                        card(FOUR, HEARTS),
-                        card(SEVEN, DIAMONDS)
-                )));
-    }
-
-    @Test
-    public void insuranceAvailable_shouldReturnFalse_whenGivenEmptyCollection() {
-        assertFalse(isInsuranceAvailable.test(handOf()));
+        assertFalse(canSplit.test(cards));
     }
 
     private static Stream<Set<Card>> blackjackHands() {

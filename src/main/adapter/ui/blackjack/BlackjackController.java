@@ -21,6 +21,7 @@ import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.Action.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
+import static main.domain.Snapshot.*;
 import static main.usecase.Layout.BET;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
@@ -76,18 +77,18 @@ public class BlackjackController extends EventConnection implements Initializabl
     @Override
     public void onGameUpdate(Snapshot snapshot) {
         runLater(() -> {
-            insuranceControls.setVisible(snapshot.isInsuranceAvailable());
-            gameControls.setVisible(snapshot.isGameInProgress());
+            insuranceControls.setVisible(isInsuranceAvailable.test(snapshot));
+            gameControls.setVisible(isGameInProgress.test(snapshot));
             splitControls.setVisible(snapshot.isSplitAvailable());
-            settleControls.setVisible(snapshot.readyToSettleNextHand());
-            nextHandControls.setVisible(snapshot.readyToPlayNextHand());
+            settleControls.setVisible(readyToSettleNextHand.test(snapshot));
+            nextHandControls.setVisible(readyToPlayNextHand.test(snapshot));
             gameOverControls.setVisible(snapshot.allBetsSettled());
             prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
-            btnDouble.setDisable(snapshot.isAtLeastOneCardDrawn() || !snapshot.canAffordToSpendMore());
+            btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore()));
             lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));
 
-            if (snapshot.isRoundResolved()) {
+            if (outcomeIsResolved.test(snapshot)) {
                 renderExposedTable(snapshot);
                 tableDisplay.drawResults(snapshot.getOutcome());
             } else {

@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
+import static main.domain.Snapshot.outcomeIsResolved;
 
 public class Evaluate {
 
@@ -59,7 +60,7 @@ public class Evaluate {
 
     private static Function<Snapshot, Optional<Transaction>> outcomeTransactions() {
         return (snapshot) -> {
-            if (snapshot.isHandResolved()) {
+            if (outcomeIsResolved.test(snapshot)) {
                 final LocalDateTime timestamp = snapshot.getTimestamp();
                 final UUID accountKey = snapshot.getAccountKey();
                 final String description = snapshot.getOutcome().name();

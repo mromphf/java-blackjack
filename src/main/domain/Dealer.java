@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
+import static main.domain.Hand.emptyHand;
+
 public class Dealer {
 
     public static Deck freshDeck() {
@@ -39,8 +41,8 @@ public class Dealer {
         if (deck.size() < 4) {
             throw new IllegalArgumentException("Not enough cards to start a new round!");
         } else {
-            final Hand dealerHand = new Hand();
-            final Hand playerHand = new Hand();
+            final Hand dealerHand = emptyHand();
+            final Hand playerHand = emptyHand();
 
             playerHand.add(deck.pop());
             dealerHand.add(deck.pop());

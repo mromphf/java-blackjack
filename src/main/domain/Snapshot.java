@@ -2,16 +2,21 @@ package main.domain;
 
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.SortedMap;
+import java.util.Stack;
+import java.util.UUID;
+import java.util.function.Predicate;
 
+import static java.lang.Math.negateExact;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
-import static main.domain.util.StringUtil.actionString;
-import static main.domain.util.StringUtil.playerString;
 import static main.domain.Action.DOUBLE;
 import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
 import static main.domain.Rules.*;
+import static main.domain.util.StringUtil.actionString;
+import static main.domain.util.StringUtil.playerString;
 
 public class Snapshot {
     private final LocalDateTime timestamp;
@@ -25,6 +30,31 @@ public class Snapshot {
     private final Collection<Hand> handsToPlay;
     private final Collection<Hand> handsToSettle;
     private final SortedMap<LocalDateTime, Action> actionsTaken;
+
+    public static final Predicate<Snapshot> outcomeIsUnresolved = snapshot -> snapshot.getOutcome() == UNRESOLVED;
+    public static final Predicate<Snapshot> outcomeIsResolved = snapshot -> snapshot.getOutcome() != UNRESOLVED;
+    public static final Predicate<Snapshot> atLeastOneCardDrawn = snapshot -> snapshot.getPlayerHand().size() > 2;
+    private static final Predicate<Snapshot> handsRemainToBePlayed = snapshot -> !snapshot.getHandsToPlay().isEmpty();
+    private static final Predicate<Snapshot> handsRemainToBeSettled = snapshot -> !snapshot.getHandsToSettle().isEmpty();
+    private static final Predicate<Snapshot> playerHasBusted = snapshot -> isBust.test(snapshot.getPlayerHand());
+
+    private static final Predicate<Snapshot> stoodOrDoubledDown = snapshot -> snapshot.getActionsTaken()
+            .stream()
+            .anyMatch(action -> action == STAND || action == DOUBLE);
+
+    public static final Predicate<Snapshot> readyToSettleNextHand = snapshot ->
+            outcomeIsResolved.and(handsRemainToBeSettled).test(snapshot);
+
+    public static final Predicate<Snapshot> isInsuranceAvailable = snapshot -> {
+            final Collection<Card> dealerHand = snapshot.getDealerHand();
+            return (dealerHand.size() > 0 && dealerHand.stream().filter(Card::isAce).count() == 1);
+    };
+
+    public static final Predicate<Snapshot> readyToPlayNextHand = snapshot -> (
+            outcomeIsUnresolved.and(handsRemainToBePlayed).and((playerHasBusted.or(stoodOrDoubledDown))).test(snapshot));
+
+    public static final Predicate<Snapshot> isGameInProgress = snapshot -> (canSplit.negate().test(snapshot.getPlayerHand()) &&
+            outcomeIsUnresolved.and(isInsuranceAvailable.negate().and(readyToPlayNextHand.negate())).test(snapshot));
 
     public Snapshot(LocalDateTime timestamp,
                     UUID accountKey,
@@ -67,23 +97,11 @@ public class Snapshot {
     }
 
     public int getNegativeBet() {
-        return Math.negateExact(bet);
+        return negateExact(bet);
     }
 
     public Outcome getOutcome() {
         return outcome;
-    }
-
-    public boolean readyToPlayNextHand() {
-        return (outcome == UNRESOLVED &&
-                !handsToPlay.isEmpty() &&
-                (isBust.test(playerHand) ||
-                        actionsTaken.values().stream().anyMatch(
-                                a -> a.equals(STAND) || a.equals(DOUBLE))));
-    }
-
-    public boolean readyToSettleNextHand() {
-        return (!handsToSettle.isEmpty() && isHandResolved());
     }
 
     public boolean canAffordToSpendMore() {
@@ -91,37 +109,14 @@ public class Snapshot {
     }
 
     public boolean isSplitAvailable() {
-        return (canSplit(playerHand) &&
-                outcome.equals(UNRESOLVED) &&
-                !isInsuranceAvailable() &&
-                !readyToPlayNextHand());
-    }
-
-    public boolean isGameInProgress() {
-        return (!canSplit(playerHand) &&
-                this.outcome.equals(UNRESOLVED) &&
-                !isInsuranceAvailable() &&
-                !readyToPlayNextHand());
-    }
-
-    public boolean isHandResolved() {
-        return !outcome.equals(UNRESOLVED);
-    }
-
-    public boolean isRoundResolved() {
-        return !outcome.equals(UNRESOLVED) && handsToPlay.isEmpty();
+        return (canSplit.test(playerHand) &&
+                outcomeIsUnresolved.and(
+                        isInsuranceAvailable.negate().and(
+                                readyToPlayNextHand.negate())).test(this));
     }
 
     public boolean allBetsSettled() {
         return !outcome.equals(UNRESOLVED) && handsToPlay.isEmpty() && handsToSettle.isEmpty();
-    }
-
-    public boolean isAtLeastOneCardDrawn() {
-        return playerHand.size() > 2;
-    }
-
-    public boolean isInsuranceAvailable() {
-        return isInsuranceAvailable.test(dealerHand) && actionsTaken.isEmpty();
     }
 
     public Collection<Card> getDealerHand() {
@@ -134,6 +129,10 @@ public class Snapshot {
 
     public Collection<Hand> getHandsToPlay() {
         return handsToPlay;
+    }
+
+    public Collection<Hand> getHandsToSettle() {
+        return handsToSettle;
     }
 
     public Collection<Action> getActionsTaken() {

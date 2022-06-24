@@ -2,6 +2,7 @@ package main.domain;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static main.domain.Action.*;
@@ -11,16 +12,18 @@ public class Rules {
 
     public final static int MAXIMUM_SCORE = 21;
 
+    public final static Predicate<Collection<Card>> hardTotalIsFavourable = cards -> hardTotal(cards) <= MAXIMUM_SCORE;
+
     public final static Predicate<Collection<Card>> atLeastOneAce = cards -> cards.stream().anyMatch(Card::isAce);
+
     public final static Predicate<Collection<Card>> isBust = cards -> score(cards) > MAXIMUM_SCORE;
+
+    public final static BiPredicate<Collection<Card>, Collection<Card>> isPush = ((handA, handB) ->
+            score(handA) == score(handB) && isBust.negate().test(handA));
+
     public final static IsBlackjack isBlackjack = new IsBlackjack();
-    public final static IsInsuranceAvailable isInsuranceAvailable = new IsInsuranceAvailable();
 
-    public static boolean isPush(Collection<Card> playerHand, Collection<Card> dealerHand) {
-        return score(playerHand) == score(dealerHand) && !isBust.test(playerHand);
-    }
-
-    public static boolean canSplit(Collection<Card> cards) {
+    public final static Predicate<Collection<Card>> canSplit = cards -> {
         final Iterator<Card> iterator = cards.iterator();
         boolean twoCards = cards.size() == 2;
         if (twoCards) {
@@ -28,12 +31,12 @@ public class Rules {
         } else {
             return false;
         }
-    }
+    };
 
     public static int score(Collection<Card> cards) {
         if (isBlackjack.test(cards)) {
-            return 21;
-        } else if (atLeastOneAce.test(cards) && hardTotalFavorable(cards)) {
+            return MAXIMUM_SCORE;
+        } else if (atLeastOneAce.and(hardTotalIsFavourable).test(cards)) {
             return hardTotal(cards);
         } else {
             return softTotal(cards);
@@ -48,10 +51,6 @@ public class Rules {
         } else {
             return 0;
         }
-    }
-
-    public static boolean hardTotalFavorable(Collection<Card> cards) {
-        return hardTotal(cards) <= 21;
     }
 
     public static int hardTotal(Collection<Card> cards) {
@@ -94,7 +93,7 @@ public class Rules {
             return BLACKJACK;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
-        } else if (isPush(playerHand, dealerHand)) {
+        } else if (isPush.test(playerHand, dealerHand)) {
             return PUSH;
         } else if (isBust.test(playerHand)) {
             return BUST;
@@ -134,17 +133,6 @@ public class Rules {
             boolean tenOrHigher = cards.stream().filter(c -> c.getBlackjackValue() > 9).count() == 1;
             boolean twoCards = cards.size() == 2;
             return twoCards && oneAce && tenOrHigher;
-        }
-    }
-
-    public static class IsInsuranceAvailable implements Predicate<Collection<Card>> {
-        @Override
-        public boolean test(Collection<Card> dealerHand) {
-            if (dealerHand.size() > 0) {
-                // TODO: This is broken as long as Hand is using Set logic
-                return dealerHand.iterator().next().isAce();
-            }
-            return false;
         }
     }
 }

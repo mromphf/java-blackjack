@@ -10,6 +10,8 @@ import static main.domain.Rules.score;
 
 public class Round {
 
+    private final static int MINIMUM_DEALER_SCORE = 16;
+
     private final Deck deck;
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<HandToSettle> handsToSettle = new Stack<>();
@@ -42,7 +44,7 @@ public class Round {
             refillDeck();
         }
 
-        currentHand.add(deck.pop());
+        currentHand.add(deck.drawCard());
     }
 
     public void doubleDown() throws EmptyStackException {
@@ -50,20 +52,21 @@ public class Round {
             refillDeck();
         }
 
-        currentHand.add(deck.pop());
+        currentHand.add(deck.drawCard());
         stand();
     }
 
     public void stand() throws EmptyStackException {
         final int deckValue = deck.stream().mapToInt(Card::getBlackjackValue).sum();
+        final int deckValueRequired = deckValue - score(dealerHand);
 
-        if ((deckValue - score(dealerHand)) < 16) {
+        if (deckValueRequired < MINIMUM_DEALER_SCORE) {
             refillDeck();
         }
 
         if (handsToPlay.isEmpty()) {
-            while (score(dealerHand) < 16) {
-                dealerHand.add(deck.pop());
+            while (score(dealerHand) < MINIMUM_DEALER_SCORE) {
+                dealerHand.add(deck.drawCard());
             }
         }
     }
@@ -75,7 +78,7 @@ public class Round {
 
         handsToSettle.add(new HandToSettle(currentHand, actionsTaken));
         currentHand = handsToPlay.pop();
-        currentHand.add(deck.pop());
+        currentHand.add(deck.drawCard());
         actionsTaken.values().removeIf(a -> !(a.equals(BUY_INSURANCE) ||
                 a.equals(WAIVE_INSURANCE) ||
                 a.equals(REFILL)));
@@ -90,10 +93,10 @@ public class Round {
 
         currentHand = new Hand() {{
             add(cardsInHand.next());
-            add(deck.pop());
+            add(deck.drawCard());
         }};
 
-        Hand pocketHand = new Hand() {{
+        final Hand pocketHand = new Hand() {{
             add(cardsInHand.next());
         }};
 

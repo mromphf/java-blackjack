@@ -6,6 +6,7 @@ import java.util.*;
 import static main.domain.Action.*;
 import static main.domain.Dealer.freshlyShuffledDeck;
 import static main.domain.Dealer.openingHand;
+import static main.domain.Hand.handOf;
 import static main.domain.Rules.score;
 
 public class Round {
@@ -91,14 +92,12 @@ public class Round {
             refillDeck();
         }
 
-        currentHand = new Hand() {{
-            add(cardsInHand.next());
-            add(deck.drawCard());
-        }};
+        currentHand = handOf(
+            cardsInHand.next(),
+            deck.drawCard()
+        );
 
-        final Hand pocketHand = new Hand() {{
-            add(cardsInHand.next());
-        }};
+        final Hand pocketHand = handOf(cardsInHand.next());
 
         handsToPlay.add(pocketHand);
     }

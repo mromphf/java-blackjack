@@ -1,13 +1,25 @@
 package main.domain;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import static java.util.Arrays.asList;
 
 public class Hand extends HashSet<Card> {
 
-    public static Set<Card> handOf(Card... cards) {
-        return new HashSet<>(asList(cards));
+    private Hand() {
+        super();
+    }
+
+    private Hand(Collection<Card> cards) {
+        super(cards);
+    }
+
+    public static Hand emptyHand() {
+        return new Hand();
+    }
+
+    public static Hand handOf(Card... cards) {
+        return new Hand(asList(cards));
     }
 }

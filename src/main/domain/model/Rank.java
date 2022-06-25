@@ -1,26 +1,28 @@
 package main.domain.model;
 
 public enum Rank {
-    ACE(1, "Ace"),
-    TWO(2, "Two"),
-    THREE(3, "Three"),
-    FOUR(4, "Four"),
-    FIVE(5, "Five"),
-    SIX(6, "Six"),
-    SEVEN(7, "Seven"),
-    EIGHT(8, "Eight"),
-    NINE(9, "Nine"),
-    TEN(10, "Ten"),
-    JACK(11, "Jack"),
-    QUEEN(12, "Queen"),
-    KING(13, "King");
+    ACE(1, "Ace", 10),
+    TWO(2, "Two", 2),
+    THREE(3, "Three", 3),
+    FOUR(4, "Four", 4),
+    FIVE(5, "Five", 5),
+    SIX(6, "Six", 6),
+    SEVEN(7, "Seven", 7),
+    EIGHT(8, "Eight", 8),
+    NINE(9, "Nine", 9),
+    TEN(10, "Ten", 10),
+    JACK(11, "Jack", 10),
+    QUEEN(12, "Queen", 10),
+    KING(13, "King", 10);
 
     public final int VALUE;
     public final String NAME;
+    public final Integer BLACKJACK_VALUE;
 
-    Rank(int value, String name) {
+    Rank(int value, String name, Integer blackjackValue) {
         this.VALUE = value;
         this.NAME = name;
+        this.BLACKJACK_VALUE = blackjackValue;
     }
 
     public static Rank of(int value) throws IllegalArgumentException {

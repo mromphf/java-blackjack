@@ -1,7 +1,7 @@
 package main.domain.model;
 
 public enum Rank {
-    ACE(1, "Ace", 10),
+    ACE(1, "Ace", 1),
     TWO(2, "Two", 2),
     THREE(3, "Three", 3),
     FOUR(4, "Four", 4),

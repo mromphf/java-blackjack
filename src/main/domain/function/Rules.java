@@ -13,6 +13,7 @@ import static main.domain.model.Outcome.*;
 public class Rules {
 
     public final static int MAXIMUM_SCORE = 21;
+    public final static int ACE_HIGH_SCORE = 11;
 
     public final static Predicate<Collection<Card>> hardTotalIsFavourable = cards -> hardTotal(cards) <= MAXIMUM_SCORE;
 
@@ -46,10 +47,10 @@ public class Rules {
     }
 
     public static int concealedScore(Collection<Card> cards) {
-        Iterator<Card> cardIterator = cards.iterator();
+        final Iterator<Card> cardIterator = cards.iterator();
         if (cardIterator.hasNext()) {
-            Card c = cardIterator.next();
-            return c.isAce() ? 11 : c.getBlackjackValue();
+            final Card card = cardIterator.next();
+            return card.isAce() ? ACE_HIGH_SCORE : card.getBlackjackValue();
         } else {
             return 0;
         }

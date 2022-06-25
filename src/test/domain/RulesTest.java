@@ -52,23 +52,23 @@ public class RulesTest {
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
         assertFalse(isBust.test(handOf(
-                new Card(ACE, HEARTS),
-                new Card(JACK, CLUBS),
-                new Card(KING, DIAMONDS)
+                card(ACE, HEARTS),
+                card(JACK, CLUBS),
+                card(KING, DIAMONDS)
         )));
     }
 
     @Test
     public void isPush_shouldReturnTrue_whenTotalValueOfTwoHandsIsEqual() {
         Set<Card> hand1 = new HashSet<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(JACK, CLUBS));
+            add(card(TEN, HEARTS));
+            add(card(JACK, CLUBS));
         }};
 
         List<Card> hand2 = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(FIVE, DIAMONDS));
-            add(new Card(KING, CLUBS));
+            add(card(FIVE, HEARTS));
+            add(card(FIVE, DIAMONDS));
+            add(card(KING, CLUBS));
         }};
 
         assertTrue(isPush.test(hand1, hand2));
@@ -77,13 +77,13 @@ public class RulesTest {
     @Test
     public void isPush_shouldReturnFalse_whenTotalValueOfTwoHandsIsUnequal() {
         Queue<Card> hand1 = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(FIVE, CLUBS));
+            add(card(TEN, HEARTS));
+            add(card(FIVE, CLUBS));
         }};
 
         Set<Card> hand2 = new HashSet<Card>() {{
-            add(new Card(SEVEN, HEARTS));
-            add(new Card(KING, CLUBS));
+            add(card(SEVEN, HEARTS));
+            add(card(KING, CLUBS));
         }};
 
         assertFalse(isPush.test(hand1, hand2));
@@ -92,8 +92,8 @@ public class RulesTest {
     @Test
     public void score_shouldReturnTwenty_whenGivenAnAceAndANine() {
         Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(NINE, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(NINE, CLUBS));
         }};
 
         assertEquals(20, score(cards));
@@ -102,8 +102,8 @@ public class RulesTest {
     @Test
     public void score_shouldReturnTwentyOne_whenGivenAnAceAndKing() {
         Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(KING, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(KING, CLUBS));
         }};
 
         assertEquals(21, score(cards));
@@ -112,9 +112,9 @@ public class RulesTest {
     @Test
     public void score_shouldReturnNineteen_whenGivenAnAceAnEightAndATen() {
         Set<Card> cards = new HashSet<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(EIGHT, SPADES));
-            add(new Card(TEN, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(EIGHT, SPADES));
+            add(card(TEN, CLUBS));
         }};
 
         assertEquals(19, score(cards));
@@ -123,8 +123,8 @@ public class RulesTest {
     @Test
     public void concealedScore_shouldReturnFive_whenGivenAFiveFirst() {
         Queue<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(EIGHT, SPADES));
+            add(card(FIVE, HEARTS));
+            add(card(EIGHT, SPADES));
         }};
 
         assertEquals(5, concealedScore(cards));
@@ -133,8 +133,8 @@ public class RulesTest {
     @Test
     public void concealedScore_shouldReturnEleven_whenGivenAnAceFirst() {
         Queue<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(EIGHT, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(EIGHT, SPADES));
         }};
 
         assertEquals(11, concealedScore(cards));
@@ -160,8 +160,8 @@ public class RulesTest {
     @Test
     public void hardTotal_shouldReturnThirteen_whenGivenAnAceAndATwo() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TWO, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(TWO, SPADES));
         }};
 
         assertEquals(13, hardTotal(cards));
@@ -170,8 +170,8 @@ public class RulesTest {
     @Test
     public void hardTotal_shouldReturnTwentyOne_whenGivenAnAceAndATen() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TEN, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(TEN, SPADES));
         }};
 
         assertEquals(21, hardTotal(cards));
@@ -180,9 +180,9 @@ public class RulesTest {
     @Test
     public void hardTotal_shouldReturnTwentyFive_whenGivenAnAceAndATenAndAFour() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TEN, SPADES));
-            add(new Card(FOUR, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(TEN, SPADES));
+            add(card(FOUR, CLUBS));
         }};
 
         assertEquals(25, hardTotal(cards));
@@ -191,8 +191,8 @@ public class RulesTest {
     @Test
     public void softTotal_shouldReturnFive_whenGivenAnAceAndAFour() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(FOUR, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(FOUR, CLUBS));
         }};
 
         assertEquals(5, softTotal(cards));
@@ -201,9 +201,9 @@ public class RulesTest {
     @Test
     public void softTotal_shouldReturnFifteen_whenGivenAnAceATenAndAFour() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(TEN, SPADES));
-            add(new Card(FOUR, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(TEN, SPADES));
+            add(card(FOUR, CLUBS));
         }};
 
         assertEquals(15, softTotal(cards));
@@ -212,9 +212,9 @@ public class RulesTest {
     @Test
     public void hardTotalFavorable_shouldReturnTrue_whenTheValueOfTheHardTotalIsLessThanOrEqualToTwentyOne() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(FIVE, SPADES));
-            add(new Card(FIVE, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(FIVE, SPADES));
+            add(card(FIVE, SPADES));
         }};
 
         assertTrue(hardTotalIsFavourable.test(cards));
@@ -223,9 +223,9 @@ public class RulesTest {
     @Test
     public void hardTotalFavorable_shouldReturnTrue_whenTheValueOfTheHardTotalIsGreaterThanTwentyOne() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(SIX, SPADES));
-            add(new Card(FIVE, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(SIX, SPADES));
+            add(card(FIVE, SPADES));
         }};
 
         assertFalse(hardTotalIsFavourable.test(cards));
@@ -234,14 +234,14 @@ public class RulesTest {
     @Test
     public void playerWins_shouldReturnTrue_whenPlayerScoreIsTwentyAndDealerScoreIsNineteen() {
         List<Card> playerHand = new LinkedList<Card>() {{
-            add(new Card(ACE, HEARTS));
-            add(new Card(KING, SPADES));
+            add(card(ACE, HEARTS));
+            add(card(KING, SPADES));
         }};
 
         List<Card> dealerHand = new LinkedList<Card>() {{
-            add(new Card(FOUR, HEARTS));
-            add(new Card(SIX, CLUBS));
-            add(new Card(NINE, SPADES));
+            add(card(FOUR, HEARTS));
+            add(card(SIX, CLUBS));
+            add(card(NINE, SPADES));
         }};
 
         assertTrue(playerWins(playerHand, dealerHand));
@@ -250,14 +250,14 @@ public class RulesTest {
     @Test
     public void playerWins_shouldReturnTrue_whenDealerBusts() {
         List<Card> playerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(KING, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(KING, SPADES));
         }};
 
         List<Card> dealerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(QUEEN, CLUBS));
-            add(new Card(KING, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(QUEEN, CLUBS));
+            add(card(KING, SPADES));
         }};
 
         assertTrue(playerWins(playerHand, dealerHand));
@@ -266,14 +266,14 @@ public class RulesTest {
     @Test
     public void playerWins_shouldReturnFalse_whenPlayerBusts() {
         List<Card> playerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(KING, SPADES));
-            add(new Card(FIVE, DIAMONDS));
+            add(card(TEN, HEARTS));
+            add(card(KING, SPADES));
+            add(card(FIVE, DIAMONDS));
         }};
 
         List<Card> dealerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(NINE, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(NINE, SPADES));
         }};
 
         assertFalse(playerWins(playerHand, dealerHand));
@@ -282,15 +282,15 @@ public class RulesTest {
     @Test
     public void playerWins_shouldReturnFalse_whenPlayerBothPlayerAndDealerBust() {
         List<Card> playerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(KING, SPADES));
-            add(new Card(EIGHT, DIAMONDS));
+            add(card(TEN, HEARTS));
+            add(card(KING, SPADES));
+            add(card(EIGHT, DIAMONDS));
         }};
 
         List<Card> dealerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(TEN, SPADES));
-            add(new Card(TWO, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(TEN, SPADES));
+            add(card(TWO, SPADES));
         }};
 
         assertFalse(playerWins(playerHand, dealerHand));
@@ -299,15 +299,15 @@ public class RulesTest {
     @Test
     public void playerWins_shouldReturnFalse_whenHandsAreOfEqualValue() {
         List<Card> playerHand = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(KING, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(KING, SPADES));
         }};
 
         List<Card> dealerHand = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(FIVE, CLUBS));
-            add(new Card(ACE, HEARTS));
-            add(new Card(NINE, DIAMONDS));
+            add(card(FIVE, HEARTS));
+            add(card(FIVE, CLUBS));
+            add(card(ACE, HEARTS));
+            add(card(NINE, DIAMONDS));
         }};
 
         assertFalse(playerWins(playerHand, dealerHand));
@@ -316,8 +316,8 @@ public class RulesTest {
     @Test
     public void canSplit_shouldReturnTrue_whenGivenTwoEqualCards() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(FIVE, SPADES));
+            add(card(FIVE, HEARTS));
+            add(card(FIVE, SPADES));
         }};
 
         assertTrue(canSplit.test(cards));
@@ -326,8 +326,8 @@ public class RulesTest {
     @Test
     public void canSplit_shouldReturnTrue_whenGivenATenAndAQueen() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(TEN, HEARTS));
-            add(new Card(QUEEN, SPADES));
+            add(card(TEN, HEARTS));
+            add(card(QUEEN, SPADES));
         }};
 
         assertTrue(canSplit.test(cards));
@@ -336,8 +336,8 @@ public class RulesTest {
     @Test
     public void canSplit_shouldReturnFalse_whenGivenTwoUnequalCards() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(SIX, SPADES));
+            add(card(FIVE, HEARTS));
+            add(card(SIX, SPADES));
         }};
 
         assertFalse(canSplit.test(cards));
@@ -346,9 +346,9 @@ public class RulesTest {
     @Test
     public void canSplit_shouldReturnFalse_whenGivenMoreThanTwoCards() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(FIVE, SPADES));
-            add(new Card(FIVE, CLUBS));
+            add(card(FIVE, HEARTS));
+            add(card(FIVE, SPADES));
+            add(card(FIVE, CLUBS));
         }};
 
         assertFalse(canSplit.test(cards));
@@ -357,7 +357,7 @@ public class RulesTest {
     @Test
     public void canSplit_shouldReturnFalse_whenGivenFewerThanTwoCards() {
         List<Card> cards = new LinkedList<Card>() {{
-            add(new Card(FIVE, HEARTS));
+            add(card(FIVE, HEARTS));
         }};
 
         assertFalse(canSplit.test(cards));

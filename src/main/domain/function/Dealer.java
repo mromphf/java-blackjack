@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
+import static main.domain.model.Card.card;
 import static main.domain.model.Hand.emptyHand;
 
 public class Dealer {
@@ -17,7 +18,7 @@ public class Dealer {
 
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                result.add(new Card(rank, suit));
+                result.add(card(rank, suit));
             }
         }
 

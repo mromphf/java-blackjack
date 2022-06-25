@@ -20,7 +20,7 @@ import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.domain.Transaction.transaction;
 
-public class Transactor extends EventConnection implements SnapshotListener, AccountListener, Observer {
+public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
 
@@ -49,10 +49,5 @@ public class Transactor extends EventConnection implements SnapshotListener, Acc
         final Transaction transaction = transaction(now(), account.getKey(), description, signingBonus);
 
         eventNetwork.onTransactionIssued(transaction);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }

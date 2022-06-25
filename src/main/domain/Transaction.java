@@ -11,11 +11,15 @@ public class Transaction implements Comparable<Transaction> {
     private final String description;
     private final int amount;
 
-    public Transaction(LocalDateTime time, UUID accountKey, String description, int amount) {
+    private Transaction(LocalDateTime time, UUID accountKey, String description, int amount) {
         this.time = time;
         this.accountKey = accountKey;
         this.description = description;
         this.amount = amount;
+    }
+
+    public static Transaction transaction(LocalDateTime time, UUID accountKey, String description, Integer amount) {
+        return new Transaction(time, accountKey, description, amount);
     }
 
     public LocalDateTime getTime() {

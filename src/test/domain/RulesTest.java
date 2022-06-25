@@ -1,6 +1,7 @@
 package test.domain;
 
 import main.domain.model.Card;
+import main.domain.model.Hand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,13 +22,13 @@ public class RulesTest {
 
     @ParameterizedTest
     @MethodSource("blackjackHands")
-    public void isBlackjack_shouldReturnTrue_whenGivenAceCardsPairedWithTensAndFaceCards(Set<Card> hand) {
+    public void isBlackjack_shouldReturnTrue_whenGivenABlackjackHand(Hand hand) {
         assertTrue(isBlackjack.test(hand));
     }
 
     @ParameterizedTest
     @MethodSource("nonBlackjackHands")
-    public void isBlackjack_shouldReturnFalse_whenGivenANonBlackjackHand(Set<Card> hand) {
+    public void isBlackjack_shouldReturnFalse_whenGivenANonBlackjackHand(Hand hand) {
         assertFalse(isBlackjack.test(hand));
     }
 
@@ -363,7 +364,7 @@ public class RulesTest {
         assertFalse(canSplit.test(cards));
     }
 
-    private static Stream<Set<Card>> blackjackHands() {
+    private static Stream<Hand> blackjackHands() {
         return Stream.of(
                 handOf(card(ACE, anonSuit()), card(TEN, anonSuit())),
                 handOf(card(ACE, anonSuit()), card(JACK, anonSuit())),
@@ -372,7 +373,7 @@ public class RulesTest {
         );
     }
 
-    private static Stream<Set<Card>> nonBlackjackHands() {
+    private static Stream<Hand> nonBlackjackHands() {
         return Stream.of(
                 handOf(anonCard(), anonCard(), anonCard()),
                 handOf(card(ACE, anonSuit()), card(NINE, anonSuit())),

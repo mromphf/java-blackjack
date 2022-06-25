@@ -50,7 +50,7 @@ public class Dealer {
             playerHand.add(deck.pop());
             dealerHand.add(deck.pop());
             playerHand.add(deck.pop());
-            dealerHand.add(deck.pop());
+            dealerHand.add(deck.pop().faceDown());
 
             return new HashMap<String, Hand>() {{
                 put("dealer", dealerHand);

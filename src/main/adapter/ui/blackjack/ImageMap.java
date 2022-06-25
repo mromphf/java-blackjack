@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
-import static main.domain.Dealer.freshDeck;
+import static main.domain.function.Dealer.freshDeck;
 import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
 import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
 

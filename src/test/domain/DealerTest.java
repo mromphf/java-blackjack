@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
-import static main.domain.Dealer.*;
+import static main.domain.function.Dealer.*;
 import static main.domain.Rank.*;
 import static main.domain.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

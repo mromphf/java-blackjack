@@ -32,7 +32,8 @@ public class RoundPredicate {
             outcomeIsResolved.and(handsRemainToBeSettled).test(snapshot);
 
     public static final Predicate<Snapshot> isInsuranceAvailable = snapshot ->
-            snapshot.getDealerHand().stream().filter(Card::isFaceUp).limit(1).allMatch(Card::isAce);
+            snapshot.getDealerHand().stream().filter(Card::isFaceUp).limit(1).allMatch(Card::isAce) &&
+                    snapshot.getActionsTaken().size() == 0;
 
     public static final Predicate<Snapshot> readyToPlayNextHand = snapshot -> (
             outcomeIsUnresolved.and(handsRemainToBePlayed).and((playerHasBusted.or(turnEnded))).test(snapshot));

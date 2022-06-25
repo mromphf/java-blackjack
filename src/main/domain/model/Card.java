@@ -4,14 +4,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.Boolean.*;
-import static java.lang.Math.min;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
 import static main.domain.model.Rank.ACE;
 
 public class Card {
-
-    private static final int HIGHEST_POSSIBLE_VALUE = 10;
 
     private final Boolean isFaceUp;
     private final UUID key;
@@ -53,7 +50,7 @@ public class Card {
     }
 
     public int getBlackjackValue() {
-        return min(HIGHEST_POSSIBLE_VALUE, rank.VALUE);
+        return rank.BLACKJACK_VALUE;
     }
 
     public Rank getRank() {

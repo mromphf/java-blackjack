@@ -6,9 +6,9 @@ import main.domain.model.Snapshot;
 
 import java.util.function.Predicate;
 
+import static main.domain.function.Rules.isBust;
 import static main.domain.model.Outcome.UNRESOLVED;
 import static main.domain.function.Rules.canSplit;
-import static main.domain.function.Rules.isBust;
 import static main.domain.util.LessCode.not;
 
 public class RoundPredicate {
@@ -23,7 +23,7 @@ public class RoundPredicate {
 
     private static final Predicate<Snapshot> handsRemainToBeSettled = snapshot -> !snapshot.getHandsToSettle().isEmpty();
 
-    private static final Predicate<Snapshot> playerHasBusted = snapshot -> isBust.test(snapshot.getPlayerHand());
+    private static final Predicate<Snapshot> playerHasBusted = snapshot -> isBust(snapshot.getPlayerHand());
 
     private static final Predicate<Snapshot> turnEnded = snapshot ->
             snapshot.getActionsTaken().stream().anyMatch(Action::turnEnded);

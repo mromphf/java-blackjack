@@ -19,10 +19,8 @@ public class Rules {
 
     public final static Predicate<Collection<Card>> atLeastOneAce = cards -> cards.stream().anyMatch(Card::isAce);
 
-    public final static Predicate<Collection<Card>> isBust = cards -> score(cards) > MAXIMUM_SCORE;
-
     public final static BiPredicate<Collection<Card>, Collection<Card>> isPush = ((handA, handB) ->
-            score(handA) == score(handB) && isBust.negate().test(handA));
+            score(handA) == score(handB) && !isBust(handA));
 
     public final static IsBlackjack isBlackjack = new IsBlackjack();
 
@@ -34,6 +32,10 @@ public class Rules {
             return false;
         }
     };
+
+    public static Boolean isBust(Collection<Card> cards)  {
+        return score(cards) > MAXIMUM_SCORE;
+    }
 
     public static int score(Collection<Card> cards) {
         if (isBlackjack.test(cards)) {
@@ -66,8 +68,8 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return (isBust.test(dealerCards)) && !isBust.test(playerCards) ||
-                (!isBust.test(playerCards) && score(playerCards) > score(dealerCards));
+        return (isBust(dealerCards) && !isBust(playerCards) ||
+                (!isBust(playerCards) && score(playerCards) > score(dealerCards)));
     }
 
     public static Outcome determineOutcome(Snapshot snapshot) {
@@ -85,10 +87,10 @@ public class Rules {
         final boolean standOrDouble = actionsTaken.stream()
                 .anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE));
 
-        if ((isBust.test(playerHand) && !handsToPlay.isEmpty()) ||
-                (!isBust.test(playerHand) &&
+        if ((isBust(playerHand) && !handsToPlay.isEmpty()) ||
+                (!isBust(playerHand) &&
                         !handsToPlay.isEmpty() && standOrDouble) ||
-                (!isBust.test(playerHand) &&
+                (!isBust(playerHand) &&
                         (actionsTaken.isEmpty() || !standOrDouble))) {
             return UNRESOLVED;
         } else if (playerWins(playerHand, dealerHand) && isBlackjack.test(playerHand)) {
@@ -97,7 +99,7 @@ public class Rules {
             return WIN;
         } else if (isPush.test(playerHand, dealerHand)) {
             return PUSH;
-        } else if (isBust.test(playerHand)) {
+        } else if (isBust(playerHand)) {
             return BUST;
         } else {
             return LOSE;

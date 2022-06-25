@@ -11,7 +11,6 @@ import static java.lang.Math.negateExact;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
 import static main.domain.function.Rules.determineOutcome;
-import static main.domain.model.Outcome.UNRESOLVED;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 
@@ -78,10 +77,6 @@ public class Snapshot {
 
     public boolean canAffordToSpendMore() {
         return balance >= bet;
-    }
-
-    public boolean allBetsSettled() {
-        return !outcome.equals(UNRESOLVED) && handsToPlay.isEmpty() && handsToSettle.isEmpty();
     }
 
     public Collection<Card> getDealerHand() {

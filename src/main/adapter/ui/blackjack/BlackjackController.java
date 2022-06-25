@@ -82,7 +82,7 @@ public class BlackjackController extends EventConnection implements Initializabl
             splitControls.setVisible(isSplitAvailable.test(snapshot));
             settleControls.setVisible(readyToSettleNextHand.test(snapshot));
             nextHandControls.setVisible(readyToPlayNextHand.test(snapshot));
-            gameOverControls.setVisible(snapshot.allBetsSettled());
+            gameOverControls.setVisible(allBetsSettled.test(snapshot));
             prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
             btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));

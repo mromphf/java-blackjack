@@ -11,7 +11,7 @@ import static java.lang.Math.negateExact;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
 import static main.domain.Outcome.UNRESOLVED;
-import static main.domain.Rules.determineOutcome;
+import static main.domain.function.Rules.determineOutcome;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 

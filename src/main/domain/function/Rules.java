@@ -1,4 +1,6 @@
-package main.domain;
+package main.domain.function;
+
+import main.domain.*;
 
 import java.util.Collection;
 import java.util.Iterator;

@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 import static java.util.Optional.empty;
 import static main.domain.Action.*;
+import static main.domain.RoundPredicate.outcomeIsResolved;
 import static main.domain.Rules.settleBet;
-import static main.domain.Snapshot.outcomeIsResolved;
 import static main.domain.Transaction.transaction;
 
 public class Evaluate {

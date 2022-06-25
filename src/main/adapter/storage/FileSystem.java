@@ -2,7 +2,7 @@ package main.adapter.storage;
 
 import javafx.fxml.FXMLLoader;
 import main.adapter.injection.BaseInjectionModule;
-import main.domain.Deck;
+import main.domain.model.Deck;
 import main.usecase.Layout;
 
 import java.io.File;

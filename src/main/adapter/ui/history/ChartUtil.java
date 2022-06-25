@@ -5,7 +5,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
-import main.domain.Transaction;
+import main.domain.model.Transaction;
 
 import java.time.LocalDate;
 import java.util.Collection;

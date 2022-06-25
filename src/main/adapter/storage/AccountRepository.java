@@ -1,6 +1,6 @@
 package main.adapter.storage;
 
-import main.domain.Account;
+import main.domain.model.Account;
 
 import java.util.Collection;
 

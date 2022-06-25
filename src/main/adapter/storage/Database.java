@@ -1,7 +1,7 @@
 package main.adapter.storage;
 
-import main.domain.Account;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;

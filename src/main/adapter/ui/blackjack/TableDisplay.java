@@ -6,7 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import main.domain.Outcome;
+import main.domain.model.Outcome;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static javafx.scene.paint.Color.*;
 import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
 import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
-import static main.domain.Outcome.*;
+import static main.domain.model.Outcome.*;
 
 public class TableDisplay extends Canvas {
 

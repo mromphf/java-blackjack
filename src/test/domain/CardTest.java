@@ -2,9 +2,9 @@ package test.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static main.domain.Card.card;
-import static main.domain.Suit.*;
-import static main.domain.Rank.*;
+import static main.domain.model.Card.card;
+import static main.domain.model.Suit.*;
+import static main.domain.model.Rank.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardTest {

@@ -1,6 +1,6 @@
 package main.usecase.eventing;
 
-import main.domain.Transaction;
+import main.domain.model.Transaction;
 
 import java.util.Collection;
 

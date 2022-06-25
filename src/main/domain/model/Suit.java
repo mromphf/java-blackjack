@@ -1,4 +1,4 @@
-package main.domain;
+package main.domain.model;
 
 public enum Suit {
     HEARTS,

@@ -1,13 +1,13 @@
 package main.domain.function;
 
-import main.domain.*;
+import main.domain.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
-import static main.domain.Hand.emptyHand;
+import static main.domain.model.Hand.emptyHand;
 
 public class Dealer {
 

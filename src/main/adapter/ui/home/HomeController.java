@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.domain.Account;
+import main.domain.model.Account;
 import main.usecase.AccountCache;
 import main.usecase.Layout;
 import main.usecase.eventing.AccountListener;

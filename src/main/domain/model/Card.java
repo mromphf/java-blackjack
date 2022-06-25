@@ -1,4 +1,4 @@
-package main.domain;
+package main.domain.model;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import java.util.UUID;
 import static java.lang.Math.min;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
-import static main.domain.Rank.ACE;
+import static main.domain.model.Rank.ACE;
 
 public class Card {
 

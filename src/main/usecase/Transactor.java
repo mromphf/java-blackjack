@@ -2,23 +2,21 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.Account;
-import main.domain.Snapshot;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Snapshot;
+import main.domain.model.Transaction;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 
 import java.util.Collection;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.EVALUATORS;
-import static main.domain.Transaction.transaction;
+import static main.domain.model.Transaction.transaction;
 
 public class Transactor extends EventConnection implements SnapshotListener, AccountListener {
 

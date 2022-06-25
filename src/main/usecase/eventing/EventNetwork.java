@@ -3,9 +3,9 @@ package main.usecase.eventing;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import javafx.scene.control.Alert;
-import main.domain.Account;
-import main.domain.Snapshot;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Snapshot;
+import main.domain.model.Transaction;
 import main.usecase.Layout;
 
 import java.util.Collection;

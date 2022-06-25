@@ -1,14 +1,14 @@
 package test.domain;
 
-import main.domain.Card;
-import main.domain.Deck;
+import main.domain.model.Card;
+import main.domain.model.Deck;
 import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
 import static main.domain.function.Dealer.*;
-import static main.domain.Rank.*;
-import static main.domain.Suit.*;
+import static main.domain.model.Rank.*;
+import static main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

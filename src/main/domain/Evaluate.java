@@ -7,9 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static java.util.Optional.empty;
 import static main.domain.Action.*;
 import static main.domain.Rules.settleBet;
 import static main.domain.Snapshot.outcomeIsResolved;
+import static main.domain.Transaction.transaction;
 
 public class Evaluate {
 
@@ -34,9 +36,9 @@ public class Evaluate {
             final int bet = snapshot.getNegativeBet();
 
            if (insurancePurchased) {
-                return Optional.of(new Transaction(timestamp, accountKey, description, bet));
+                return Optional.of(transaction(timestamp, accountKey, description, bet));
             } else {
-                return Optional.empty();
+                return empty();
             }
         };
     }
@@ -51,9 +53,9 @@ public class Evaluate {
                 final String description = DOUBLE.name();
                 final int bet = snapshot.getNegativeBet();
 
-                return Optional.of(new Transaction(timestamp, accountKey, description, bet));
+                return Optional.of(transaction(timestamp, accountKey, description, bet));
             } else {
-                return Optional.empty();
+                return empty();
             }
         };
     }
@@ -66,9 +68,9 @@ public class Evaluate {
                 final String description = snapshot.getOutcome().name();
                 final int payout = settleBet(snapshot);
 
-                return Optional.of(new Transaction(timestamp, accountKey, description, payout));
+                return Optional.of(transaction(timestamp, accountKey, description, payout));
             } else {
-                return Optional.empty();
+                return empty();
             }
         };
     }
@@ -87,12 +89,12 @@ public class Evaluate {
                             a.equals(DOUBLE) ||
                             a.equals(STAND)));
 
-            final Transaction transaction = new Transaction(timestamp, accountKey, description, bet);
+            final Transaction transaction = transaction(timestamp, accountKey, description, bet);
 
             if (chargeForSplit) {
                 return Optional.of(transaction);
             } else {
-                return Optional.empty();
+                return empty();
             }
         };
     }

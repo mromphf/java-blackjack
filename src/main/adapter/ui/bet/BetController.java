@@ -30,6 +30,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static javafx.application.Platform.runLater;
+import static main.domain.Transaction.transaction;
 import static main.usecase.Layout.*;
 
 
@@ -116,7 +117,7 @@ public class BetController extends EventConnection implements Initializable, Lay
             final String description = "BET";
             final int betVal = (bet * -1);
 
-            eventNetwork.onTransactionIssued(new Transaction(now(), accountKey, description, betVal));
+            eventNetwork.onTransactionIssued(transaction(now(), accountKey, description, betVal));
             eventNetwork.onLayoutEvent(GAME);
 
             bet = 0;

@@ -14,11 +14,19 @@ public class Card {
     private static final int HIGHEST_POSSIBLE_VALUE = 10;
 
     private final Boolean isFaceUp;
-    private final UUID key = randomUUID();
+    private final UUID key;
     private final Rank rank;
     private final Suit suit;
 
+    private Card(UUID key, Rank rank, Suit suit, Boolean isFaceUp) {
+        this.key = key;
+        this.rank = rank;
+        this.suit = suit;
+        this.isFaceUp = isFaceUp;
+    }
+
     private Card(Rank rank, Suit suit, Boolean isFaceUp) {
+        this.key = randomUUID();
         this.rank = rank;
         this.suit = suit;
         this.isFaceUp = isFaceUp;
@@ -33,7 +41,7 @@ public class Card {
     }
 
     public Card faceDown() {
-        return new Card(rank, suit, FALSE);
+        return new Card(key, rank, suit, FALSE);
     }
 
     public Boolean isFaceUp() {

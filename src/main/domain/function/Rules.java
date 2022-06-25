@@ -28,8 +28,8 @@ public class Rules {
 
     public final static Predicate<Collection<Card>> canSplit = cards -> {
         if (cards.size() == 2) {
-            final Rank rank = cards.stream().findFirst().get().getRank();
-            return cards.stream().allMatch(card -> card.getRank() == rank);
+            final int blackjackValue = cards.stream().findFirst().get().getBlackjackValue();
+            return cards.stream().allMatch(card -> card.getBlackjackValue() == blackjackValue);
         } else {
             return false;
         }

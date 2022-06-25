@@ -17,7 +17,7 @@ import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
 import static main.domain.Action.*;
-import static main.domain.Dealer.freshlyShuffledDeck;
+import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.usecase.Layout.HOME;
 
 public class Game extends EventConnection implements LayoutListener, TransactionListener {

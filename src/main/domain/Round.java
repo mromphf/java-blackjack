@@ -5,8 +5,8 @@ import java.util.*;
 
 import static java.time.LocalDateTime.now;
 import static main.domain.Action.*;
-import static main.domain.Dealer.freshlyShuffledDeck;
-import static main.domain.Dealer.openingHand;
+import static main.domain.function.Dealer.freshlyShuffledDeck;
+import static main.domain.function.Dealer.openingHand;
 import static main.domain.Hand.handOf;
 import static main.domain.function.Rules.score;
 

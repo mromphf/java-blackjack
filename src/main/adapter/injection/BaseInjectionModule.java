@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import static com.google.inject.name.Names.named;
 import static java.lang.Integer.parseInt;
 import static main.adapter.injection.Bindings.*;
-import static main.domain.Dealer.freshlyShuffledDeck;
+import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
 
 public class BaseInjectionModule extends AbstractModule {

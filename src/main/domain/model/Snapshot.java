@@ -36,7 +36,7 @@ public class Snapshot {
                     Hand dealerHand,
                     Hand playerHand,
                     Stack<Hand> handsToPlay,
-                    Stack<Hand> handsToSettle,
+                    Collection<Hand> handsToSettle,
                     SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
         this.accountKey = accountKey;

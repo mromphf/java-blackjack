@@ -8,6 +8,7 @@ import java.util.Stack;
 import java.util.UUID;
 
 import static java.lang.Math.negateExact;
+import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
 import static main.domain.function.Rules.determineOutcome;
@@ -57,6 +58,10 @@ public class Snapshot {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public String balanceText() {
+        return format("Balance $%s", balance);
     }
 
     public int getBet() {
@@ -113,7 +118,7 @@ public class Snapshot {
 
     @Override
     public String toString() {
-        return String.format("\n\tAccount Key: %s\n\t" +
+        return format("\n\tAccount Key: %s\n\t" +
                         "Balance: $%s,\n\t" +
                         "Cards in Deck: %s,\n\t" +
                         "Outcome: %s,\n\t" +

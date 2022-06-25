@@ -86,7 +86,7 @@ public class BlackjackController extends EventConnection implements Initializabl
             prgDeck.setProgress(snapshot.deckProgress(maxDeckSize));
             btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));
-            lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));
+            lblBalance.setText(snapshot.balanceText());
 
             if (outcomeIsResolved.test(snapshot)) {
                 renderExposedTable(snapshot);

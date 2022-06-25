@@ -33,7 +33,7 @@ public class RulesTest {
 
     @Test
     public void isBust_shouldReturnTrue_whenTotalValueOfCardCollectionIsGreaterThanTwentyOne() {
-        assertTrue(isBust.test(handOf(
+        assertTrue(isBust(handOf(
                 card(TEN, CLUBS),
                 card(TEN, SPADES),
                 card(TWO, CLUBS)
@@ -42,7 +42,7 @@ public class RulesTest {
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionIsLessThanTwentyOne() {
-        assertFalse(isBust.test(handOf(
+        assertFalse(isBust(handOf(
                 card(FIVE, CLUBS),
                 card(THREE, SPADES),
                 card(TWO, CLUBS)
@@ -51,7 +51,7 @@ public class RulesTest {
 
     @Test
     public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
-        assertFalse(isBust.test(handOf(
+        assertFalse(isBust(handOf(
                 card(ACE, HEARTS),
                 card(JACK, CLUBS),
                 card(KING, DIAMONDS)

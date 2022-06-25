@@ -63,12 +63,12 @@ public class BlackjackController extends EventConnection implements Initializabl
     private ProgressBar prgDeck;
 
     private final Game game;
-    private final int maxCards;
+    private final float maxDeckSize;
 
     @Inject
     public BlackjackController(Game game, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
-        this.maxCards = maxCards;
+        this.maxDeckSize = maxCards;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BlackjackController extends EventConnection implements Initializabl
             settleControls.setVisible(readyToSettleNextHand.test(snapshot));
             nextHandControls.setVisible(readyToPlayNextHand.test(snapshot));
             gameOverControls.setVisible(allBetsSettled.test(snapshot));
-            prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
+            prgDeck.setProgress(snapshot.deckProgress(maxDeckSize));
             btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
             btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));
             lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));

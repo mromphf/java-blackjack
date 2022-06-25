@@ -107,6 +107,10 @@ public class Snapshot {
         return deck.size();
     }
 
+    public double deckProgress(float maxDeckSize) {
+        return deck.size() / maxDeckSize;
+    }
+
     @Override
     public String toString() {
         return String.format("\n\tAccount Key: %s\n\t" +

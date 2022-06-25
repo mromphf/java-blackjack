@@ -19,9 +19,9 @@ import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.Action.*;
+import static main.domain.RoundPredicate.*;
 import static main.domain.Rules.concealedScore;
 import static main.domain.Rules.score;
-import static main.domain.Snapshot.*;
 import static main.usecase.Layout.BET;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
@@ -79,13 +79,13 @@ public class BlackjackController extends EventConnection implements Initializabl
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(snapshot));
             gameControls.setVisible(isGameInProgress.test(snapshot));
-            splitControls.setVisible(snapshot.isSplitAvailable());
+            splitControls.setVisible(isSplitAvailable.test(snapshot));
             settleControls.setVisible(readyToSettleNextHand.test(snapshot));
             nextHandControls.setVisible(readyToPlayNextHand.test(snapshot));
             gameOverControls.setVisible(snapshot.allBetsSettled());
             prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
             btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
-            btnSplit.setDisable(!(snapshot.isSplitAvailable() && snapshot.canAffordToSpendMore()));
+            btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));
             lblBalance.setText(String.format("Balance $%s", snapshot.getBalance()));
 
             if (outcomeIsResolved.test(snapshot)) {

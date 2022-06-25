@@ -6,15 +6,12 @@ import java.util.Collection;
 import java.util.SortedMap;
 import java.util.Stack;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 import static java.lang.Math.negateExact;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
-import static main.domain.Action.DOUBLE;
-import static main.domain.Action.STAND;
 import static main.domain.Outcome.UNRESOLVED;
-import static main.domain.Rules.*;
+import static main.domain.Rules.determineOutcome;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 
@@ -30,31 +27,6 @@ public class Snapshot {
     private final Collection<Hand> handsToPlay;
     private final Collection<Hand> handsToSettle;
     private final SortedMap<LocalDateTime, Action> actionsTaken;
-
-    public static final Predicate<Snapshot> outcomeIsUnresolved = snapshot -> snapshot.getOutcome() == UNRESOLVED;
-    public static final Predicate<Snapshot> outcomeIsResolved = snapshot -> snapshot.getOutcome() != UNRESOLVED;
-    public static final Predicate<Snapshot> atLeastOneCardDrawn = snapshot -> snapshot.getPlayerHand().size() > 2;
-    private static final Predicate<Snapshot> handsRemainToBePlayed = snapshot -> !snapshot.getHandsToPlay().isEmpty();
-    private static final Predicate<Snapshot> handsRemainToBeSettled = snapshot -> !snapshot.getHandsToSettle().isEmpty();
-    private static final Predicate<Snapshot> playerHasBusted = snapshot -> isBust.test(snapshot.getPlayerHand());
-
-    private static final Predicate<Snapshot> stoodOrDoubledDown = snapshot -> snapshot.getActionsTaken()
-            .stream()
-            .anyMatch(action -> action == STAND || action == DOUBLE);
-
-    public static final Predicate<Snapshot> readyToSettleNextHand = snapshot ->
-            outcomeIsResolved.and(handsRemainToBeSettled).test(snapshot);
-
-    public static final Predicate<Snapshot> isInsuranceAvailable = snapshot -> {
-            final Collection<Card> dealerHand = snapshot.getDealerHand();
-            return (dealerHand.size() > 0 && dealerHand.stream().filter(Card::isAce).count() == 1);
-    };
-
-    public static final Predicate<Snapshot> readyToPlayNextHand = snapshot -> (
-            outcomeIsUnresolved.and(handsRemainToBePlayed).and((playerHasBusted.or(stoodOrDoubledDown))).test(snapshot));
-
-    public static final Predicate<Snapshot> isGameInProgress = snapshot -> (canSplit.negate().test(snapshot.getPlayerHand()) &&
-            outcomeIsUnresolved.and(isInsuranceAvailable.negate().and(readyToPlayNextHand.negate())).test(snapshot));
 
     public Snapshot(LocalDateTime timestamp,
                     UUID accountKey,
@@ -106,13 +78,6 @@ public class Snapshot {
 
     public boolean canAffordToSpendMore() {
         return balance >= bet;
-    }
-
-    public boolean isSplitAvailable() {
-        return (canSplit.test(playerHand) &&
-                outcomeIsUnresolved.and(
-                        isInsuranceAvailable.negate().and(
-                                readyToPlayNextHand.negate())).test(this));
     }
 
     public boolean allBetsSettled() {

@@ -3,6 +3,7 @@ package main.domain;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.now;
 import static main.domain.Action.*;
 import static main.domain.Dealer.freshlyShuffledDeck;
 import static main.domain.Dealer.openingHand;
@@ -111,7 +112,7 @@ public class Round {
     }
 
     public void refillDeck() {
-        record(LocalDateTime.now(), REFILL);
+        record(now(), REFILL);
         deck.addAll(freshlyShuffledDeck());
     }
 

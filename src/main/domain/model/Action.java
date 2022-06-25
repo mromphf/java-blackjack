@@ -10,4 +10,9 @@ public enum Action {
     SPLIT,
     STAND,
     WAIVE_INSURANCE
+    ;
+
+    public boolean turnEnded() {
+        return this == DOUBLE || this == STAND;
+    }
 }

@@ -42,7 +42,8 @@ public class RoundPredicate {
             not(canSplit).test(snapshot.getPlayerHand()) &&
             outcomeIsUnresolved.and(isInsuranceAvailable.negate().and(readyToPlayNextHand.negate())).test(snapshot));
 
-    public static final Predicate<Snapshot> isSplitAvailable = (snapshot) -> (canSplit.test(snapshot.getPlayerHand()) &&
+    public static final Predicate<Snapshot> isSplitAvailable = (snapshot) -> (
+            canSplit.test(snapshot.getPlayerHand()) &&
             outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(snapshot));
 
     public static final Predicate<Snapshot> allBetsSettled = (snapshot) -> (

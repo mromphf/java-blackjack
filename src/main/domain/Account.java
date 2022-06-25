@@ -39,17 +39,6 @@ public class Account {
         return new Account(key, name, balance + transaction.getAmount(), created);
     }
 
-    public Account updateBalance(Collection<Transaction> transactions) {
-        return new Account(key, name, balance + deriveBalance(transactions), created);
-    }
-
-    private int deriveBalance(Collection<Transaction> transactions) {
-        return transactions.stream()
-                .filter(t -> t.getAccountKey().equals(key))
-                .mapToInt(Transaction::getAmount)
-                .sum();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

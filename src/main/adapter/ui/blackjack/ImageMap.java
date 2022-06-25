@@ -1,8 +1,8 @@
 package main.adapter.ui.blackjack;
 
 import javafx.scene.image.Image;
-import main.domain.Card;
-import main.domain.Hand;
+import main.domain.model.Card;
+import main.domain.model.Hand;
 
 import java.util.*;
 import java.util.stream.Collectors;

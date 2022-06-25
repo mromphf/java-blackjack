@@ -1,7 +1,7 @@
 package main.domain.util;
 
-import main.domain.Action;
-import main.domain.Card;
+import main.domain.model.Action;
+import main.domain.model.Card;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

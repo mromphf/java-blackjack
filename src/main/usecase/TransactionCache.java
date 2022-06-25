@@ -2,8 +2,7 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.adapter.injection.Bindings;
-import main.domain.Transaction;
+import main.domain.model.Transaction;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 

@@ -2,12 +2,10 @@ package main.adapter.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import main.domain.Card;
-import main.domain.Deck;
-import main.domain.Rank;
-import main.domain.Suit;
-
-import java.util.Stack;
+import main.domain.model.Card;
+import main.domain.model.Deck;
+import main.domain.model.Rank;
+import main.domain.model.Suit;
 
 public class JsonUtil {
 

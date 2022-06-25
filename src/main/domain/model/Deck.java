@@ -1,4 +1,4 @@
-package main.domain;
+package main.domain.model;
 
 import java.util.Stack;
 

@@ -13,9 +13,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.adapter.injection.Bindings;
-import main.domain.Account;
-import main.domain.Snapshot;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Snapshot;
 import main.usecase.AccountCache;
 import main.usecase.Layout;
 import main.usecase.eventing.EventConnection;
@@ -30,7 +29,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static javafx.application.Platform.runLater;
-import static main.domain.Transaction.transaction;
+import static main.domain.model.Transaction.transaction;
 import static main.usecase.Layout.*;
 
 

@@ -1,7 +1,7 @@
 package main.adapter.storage;
 
-import main.domain.Account;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Transaction;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static java.time.ZonedDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-import static main.domain.Transaction.transaction;
+import static main.domain.model.Transaction.transaction;
 
 public class ResultSetUtil {
 

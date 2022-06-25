@@ -1,6 +1,6 @@
 package test.domain;
 
-import main.domain.Card;
+import main.domain.model.Card;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static main.domain.Card.card;
-import static main.domain.Hand.handOf;
-import static main.domain.Rank.*;
+import static main.domain.model.Card.card;
+import static main.domain.model.Hand.handOf;
+import static main.domain.model.Rank.*;
 import static main.domain.function.Rules.*;
-import static main.domain.Suit.*;
+import static main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static test.domain.anonymous.Anonymous.anonCard;
 import static test.domain.anonymous.Anonymous.anonSuit;

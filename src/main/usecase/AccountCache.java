@@ -2,8 +2,8 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.Account;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Transaction;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;

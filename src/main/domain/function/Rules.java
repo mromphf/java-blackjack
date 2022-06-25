@@ -1,14 +1,14 @@
 package main.domain.function;
 
-import main.domain.*;
+import main.domain.model.*;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import static main.domain.Action.*;
-import static main.domain.Outcome.*;
+import static main.domain.model.Action.*;
+import static main.domain.model.Outcome.*;
 
 public class Rules {
 

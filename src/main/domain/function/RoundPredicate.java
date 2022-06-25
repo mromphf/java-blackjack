@@ -1,14 +1,14 @@
 package main.domain.function;
 
-import main.domain.Card;
-import main.domain.Snapshot;
+import main.domain.model.Card;
+import main.domain.model.Snapshot;
 
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import static main.domain.Action.DOUBLE;
-import static main.domain.Action.STAND;
-import static main.domain.Outcome.UNRESOLVED;
+import static main.domain.model.Action.DOUBLE;
+import static main.domain.model.Action.STAND;
+import static main.domain.model.Outcome.UNRESOLVED;
 import static main.domain.function.Rules.canSplit;
 import static main.domain.function.Rules.isBust;
 import static main.domain.util.LessCode.not;

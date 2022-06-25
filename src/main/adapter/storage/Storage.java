@@ -1,8 +1,8 @@
 package main.adapter.storage;
 
 import com.google.inject.Inject;
-import main.domain.Account;
-import main.domain.Transaction;
+import main.domain.model.Account;
+import main.domain.model.Transaction;
 import main.usecase.eventing.AccountListener;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;

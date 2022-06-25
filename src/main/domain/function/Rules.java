@@ -27,10 +27,9 @@ public class Rules {
     public final static IsBlackjack isBlackjack = new IsBlackjack();
 
     public final static Predicate<Collection<Card>> canSplit = cards -> {
-        final Iterator<Card> iterator = cards.iterator();
-        boolean twoCards = cards.size() == 2;
-        if (twoCards) {
-            return iterator.next().getBlackjackValue() == iterator.next().getBlackjackValue();
+        if (cards.size() == 2) {
+            final Rank rank = cards.stream().findFirst().get().getRank();
+            return cards.stream().allMatch(card -> card.getRank() == rank);
         } else {
             return false;
         }

@@ -7,6 +7,8 @@ import main.domain.model.Deck;
 import main.domain.model.Rank;
 import main.domain.model.Suit;
 
+import static main.domain.model.Card.card;
+
 public class JsonUtil {
 
     public static Deck deckFromJson(String jsonString) {
@@ -17,7 +19,7 @@ public class JsonUtil {
             final int val = obj.get("value").getAsInt();
             final Suit suit = Suit.valueOf(obj.get("suit").getAsString().toUpperCase());
 
-            result.add(new Card(Rank.of(val), suit));
+            result.add(card(Rank.of(val), suit));
         }
 
         return result;

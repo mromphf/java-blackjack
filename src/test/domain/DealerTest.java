@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Stack;
 
 import static main.domain.function.Dealer.*;
+import static main.domain.model.Card.card;
 import static main.domain.model.Rank.*;
 import static main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,9 +71,9 @@ class DealerTest {
     @Test
     public void shuffle_shouldContain3Cards_whenPassedACollectionOf3Cards() {
         Deck cards = new Deck() {{
-           add(new Card(FIVE, HEARTS));
-            add(new Card(THREE, SPADES));
-            add(new Card(QUEEN, CLUBS));
+           add(card(FIVE, HEARTS));
+            add(card(THREE, SPADES));
+            add(card(QUEEN, CLUBS));
         }};
 
         assertEquals(3, shuffle(cards).size());
@@ -80,12 +81,12 @@ class DealerTest {
 
     @Test
     public void shuffle_shouldContainTheSameCardAsTheStackPassedIn() {
-        final Card card = new Card(FIVE, HEARTS);
+        final Card card = card(FIVE, HEARTS);
 
         Deck cards = new Deck() {{
             add(card);
-            add(new Card(THREE, SPADES));
-            add(new Card(QUEEN, CLUBS));
+            add(card(THREE, SPADES));
+            add(card(QUEEN, CLUBS));
         }};
 
         assertTrue(shuffle(cards).contains(card));
@@ -94,9 +95,9 @@ class DealerTest {
     @Test
     public void openingHand_shouldThrowIllegalArgumentException_whenGivenACollectionOfFewerThanFourCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(THREE, SPADES));
-            add(new Card(QUEEN, CLUBS));
+            add(card(FIVE, HEARTS));
+            add(card(THREE, SPADES));
+            add(card(QUEEN, CLUBS));
         }};
 
         assertThrows(IllegalArgumentException.class, () -> openingHand(cards));
@@ -105,10 +106,10 @@ class DealerTest {
     @Test
     public void openingHand_shouldRemoveFourCards_whenGivenAStackOfMoreThanThreeCards() {
         Stack<Card> cards = new Stack<Card>() {{
-            add(new Card(FIVE, HEARTS));
-            add(new Card(THREE, SPADES));
-            add(new Card(QUEEN, CLUBS));
-            add(new Card(ACE, CLUBS));
+            add(card(FIVE, HEARTS));
+            add(card(THREE, SPADES));
+            add(card(QUEEN, CLUBS));
+            add(card(ACE, CLUBS));
         }};
 
         openingHand(cards);

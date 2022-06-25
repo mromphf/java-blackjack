@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
-import static main.domain.model.Action.*;
+import static java.util.stream.Collectors.toList;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Dealer.openingHand;
-import static main.domain.model.Hand.handOf;
 import static main.domain.function.Rules.score;
+import static main.domain.model.Action.*;
+import static main.domain.model.Hand.handOf;
 
 public class Round {
 
@@ -128,27 +129,28 @@ public class Round {
                 dealerHand,
                 currentHand,
                 handsToPlay,
-                filterHands(handsToSettle),
+                fetchHandsToSettle(handsToSettle),
                 actionsTaken
         );
     }
 
-    private Stack<Hand> filterHands(Stack<HandToSettle> handsToSettle) {
-        Stack<Hand> result = new Stack<>();
-        for (HandToSettle hand : handsToSettle) {
-            result.add(hand.playerHand);
-        }
-        return result;
+    private Collection<Hand> fetchHandsToSettle(Stack<HandToSettle> handsToSettle) {
+        return handsToSettle.stream()
+                .map(HandToSettle::playerHand)
+                .collect(toList());
     }
 
-
     private static class HandToSettle {
-        public final Hand  playerHand;
+        public final Hand playerHand;
         public final SortedMap<LocalDateTime, Action> actionsTaken;
 
         public HandToSettle(Hand playerHand, SortedMap<LocalDateTime, Action> actionsTaken) {
             this.playerHand = playerHand;
             this.actionsTaken = actionsTaken;
+        }
+
+        public Hand playerHand() {
+            return playerHand;
         }
     }
 }

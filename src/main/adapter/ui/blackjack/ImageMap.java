@@ -5,10 +5,10 @@ import main.domain.model.Card;
 import main.domain.model.Hand;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 import static main.domain.function.Dealer.freshDeck;
 import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
 import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
@@ -42,15 +42,15 @@ public class ImageMap {
 
     public static Map<ImageKey, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
         return new HashMap<ImageKey, List<Image>>() {{
-            put(DEALER_CARDS, dealer.stream().map(ImageMap::imageByCard).collect(Collectors.toList()));
-            put(PLAYER_CARDS, player.stream().map(ImageMap::imageByCard).collect(Collectors.toList()));
+            put(DEALER_CARDS, dealer.stream().map(ImageMap::imageByCard).collect(toList()));
+            put(PLAYER_CARDS, player.stream().map(ImageMap::imageByCard).collect(toList()));
         }};
     }
 
     public static Map<ImageKey, List<Image>> ofConcealed(Collection<Card> dealer, Collection<Card> player) {
         return new HashMap<ImageKey, List<Image>>() {{
             put(DEALER_CARDS, conceal(dealer));
-            put(PLAYER_CARDS, player.stream().map(ImageMap::imageByCard).collect(Collectors.toList()));
+            put(PLAYER_CARDS, player.stream().map(ImageMap::imageByCard).collect(toList()));
         }};
     }
 
@@ -58,8 +58,8 @@ public class ImageMap {
         return handsToSettle.stream()
                 .map(cards -> cards.stream()
                         .map(ImageMap::imageByCard)
-                        .collect(Collectors.toList()))
-                .collect(Collectors.toList());
+                        .collect(toList()))
+                .collect(toList());
     }
 
     public static Image blankCard() {
@@ -87,14 +87,7 @@ public class ImageMap {
     }
 
     private static List<Image> conceal(Collection<Card> cards) {
-        if (cards.isEmpty()) {
-            return new LinkedList<>();
-        } else {
-            return new LinkedList<Image>() {{
-                add(imageByCard(cards.iterator().next()));
-                add(blankCard());
-            }};
-        }
+        return cards.stream().map(card -> card.isFaceUp () ? imageByCard(card) : blankCard()).collect(toList());
     }
 
     private static Image imageByCard(Card c) {

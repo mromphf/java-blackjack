@@ -8,7 +8,7 @@ import static main.domain.Action.*;
 import static main.domain.Dealer.freshlyShuffledDeck;
 import static main.domain.Dealer.openingHand;
 import static main.domain.Hand.handOf;
-import static main.domain.Rules.score;
+import static main.domain.function.Rules.score;
 
 public class Round {
 

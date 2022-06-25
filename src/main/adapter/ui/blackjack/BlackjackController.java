@@ -19,9 +19,9 @@ import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.Action.*;
-import static main.domain.RoundPredicate.*;
-import static main.domain.Rules.concealedScore;
-import static main.domain.Rules.score;
+import static main.domain.function.RoundPredicate.*;
+import static main.domain.function.Rules.concealedScore;
+import static main.domain.function.Rules.score;
 import static main.usecase.Layout.BET;
 
 public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {

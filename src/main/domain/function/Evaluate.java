@@ -1,4 +1,8 @@
-package main.domain;
+package main.domain.function;
+
+import main.domain.Action;
+import main.domain.Snapshot;
+import main.domain.Transaction;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -7,8 +11,8 @@ import java.util.function.Function;
 
 import static java.util.Optional.empty;
 import static main.domain.Action.*;
-import static main.domain.RoundPredicate.outcomeIsResolved;
-import static main.domain.Rules.settleBet;
+import static main.domain.function.RoundPredicate.outcomeIsResolved;
+import static main.domain.function.Rules.settleBet;
 import static main.domain.Transaction.transaction;
 
 public class Evaluate {

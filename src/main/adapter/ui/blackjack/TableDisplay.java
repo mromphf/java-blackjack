@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static javafx.scene.paint.Color.*;
-import static main.adapter.ui.blackjack.ImageKey.DEALER_CARDS;
-import static main.adapter.ui.blackjack.ImageKey.PLAYER_CARDS;
+import static main.adapter.ui.blackjack.OLD_IMAGE_KEY.DEALER_CARDS;
+import static main.adapter.ui.blackjack.OLD_IMAGE_KEY.PLAYER_CARDS;
 import static main.domain.model.Outcome.*;
 
 public class TableDisplay extends Canvas {
@@ -68,7 +68,7 @@ public class TableDisplay extends Canvas {
         drawLabel(String.format("You: %s", playerScore), VER_CENTER + 130);
     }
 
-    public void drawCards(Map<ImageKey, List<Image>> imageMap) {
+    public void drawCards(Map<OLD_IMAGE_KEY, List<Image>> imageMap) {
         drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
         drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 110);
     }

@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.*;
 import static main.domain.function.Rules.*;
 import static main.domain.model.Card.card;
 import static main.domain.model.Hand.handOf;
@@ -60,35 +61,12 @@ public class RulesTest {
         ));
     }
 
-    @Test
-    public void score_shouldReturnTwenty_whenGivenAnAceAndANine() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(card(ACE, HEARTS));
-            add(card(NINE, CLUBS));
-        }};
-
-        assertEquals(20, score(cards));
-    }
-
-    @Test
-    public void score_shouldReturnTwentyOne_whenGivenAnAceAndKing() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(card(ACE, HEARTS));
-            add(card(KING, CLUBS));
-        }};
-
-        assertEquals(21, score(cards));
-    }
-
-    @Test
-    public void score_shouldReturnNineteen_whenGivenAnAceAnEightAndATen() {
-        Set<Card> cards = new HashSet<Card>() {{
-            add(card(ACE, HEARTS));
-            add(card(EIGHT, SPADES));
-            add(card(TEN, CLUBS));
-        }};
-
-        assertEquals(19, score(cards));
+    @ParameterizedTest
+    @MethodSource("scoreEvaluations")
+    public void score_shouldEvaluateCorrectly_whenGivenACollectionOfHandsAndScores(Map<Integer, Collection<Hand>> scoresToHands) {
+        for (Map.Entry<Integer, Collection<Hand>> scoresToHand : scoresToHands.entrySet()) {
+            scoresToHand.getValue().forEach(hand -> assertEquals(scoresToHand.getKey(), score(hand)));
+        }
     }
 
     @Test
@@ -365,5 +343,31 @@ public class RulesTest {
                 handOf(card(ACE, anonSuit()), card(NINE, anonSuit())),
                 handOf(card(SIX, anonSuit()), card(TEN, anonSuit()))
         );
+    }
+
+    private static Stream<Map<Integer, Collection<Hand>>> scoreEvaluations() {
+        final Map<Integer, Collection<Hand>> result = new HashMap<>();
+
+        result.put(21, Stream.of(
+                handOf(card(TEN, anonSuit()), card(JACK, anonSuit()), card(ACE, anonSuit())),
+                handOf(card(JACK, anonSuit()), card(ACE, anonSuit())),
+                handOf(card(TEN, anonSuit()), card(ACE, anonSuit()))
+        ).collect(toList()));
+
+        result.put(20, Stream.of(
+                handOf(card(TEN, anonSuit()), card(TEN, anonSuit())),
+                handOf(card(FIVE, anonSuit()), card(FIVE, anonSuit()), card(FIVE, anonSuit()), card(FIVE, anonSuit())),
+                handOf(card(QUEEN, anonSuit()), card(JACK, anonSuit())),
+                handOf(card(KING, anonSuit()), card(TEN, anonSuit())),
+                handOf(card(JACK, anonSuit()), card(FIVE, anonSuit()), card(FIVE, anonSuit()))
+        ).collect(toList()));
+
+        result.put(19, Stream.of(
+                handOf(card(TEN, anonSuit()), card(NINE, anonSuit())),
+                handOf(card(JACK, anonSuit()), card(FIVE, anonSuit()), card(FOUR, anonSuit())),
+                handOf(card(NINE, anonSuit()), card(NINE, anonSuit()), card(ACE, anonSuit()))
+        ).collect(toList()));
+
+        return Stream.of(result);
     }
 }

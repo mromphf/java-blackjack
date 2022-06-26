@@ -12,7 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.AccountCache;
+import main.usecase.AccountService;
 import main.usecase.Layout;
 import main.usecase.TransactionCache;
 import main.usecase.eventing.EventConnection;
@@ -35,12 +35,12 @@ public class HistoryController extends EventConnection implements Initializable,
     public GridPane chartHousing;
 
     private final TransactionCache transactionCache;
-    private final AccountCache accountCache;
+    private final AccountService accountService;
 
     @Inject
-    public HistoryController(TransactionCache transactionCache, AccountCache accountCache) {
+    public HistoryController(TransactionCache transactionCache, AccountService accountService) {
         this.transactionCache = transactionCache;
-        this.accountCache = accountCache;
+        this.accountService = accountService;
     }
 
     @FXML
@@ -52,7 +52,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void onDateSelected() {
-        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
             final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
@@ -70,7 +70,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @FXML
     public void clearFilter() {
-        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
 
         if (optionalAccount.isPresent()) {
 
@@ -91,7 +91,7 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> optionalAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
 
         if (event== HISTORY && optionalAccount.isPresent()) {
 

@@ -13,7 +13,7 @@ import main.adapter.storage.TransactionRepository;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.AccountCache;
+import main.usecase.AccountService;
 import main.usecase.Game;
 import main.usecase.TransactionCache;
 import main.usecase.Transactor;
@@ -47,7 +47,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(Game.class).in(Singleton.class);
         bind(AccountRepository.class).to(Database.class);
         bind(TransactionRepository.class).to(Database.class);
-        bind(AccountCache.class).in(Singleton.class);
+        bind(AccountService.class).in(Singleton.class);
         bind(Transactor.class).in(Singleton.class);
         bind(TransactionCache.class).in(Singleton.class);
         bind(GameLogger.class).in(Singleton.class);

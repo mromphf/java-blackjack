@@ -33,7 +33,7 @@ public class AppRoot {
         final Game game = baseInjector.getInstance(Game.class);
         final Storage storage = baseInjector.getInstance(Storage.class);
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
-        final AccountCache accountCache = baseInjector.getInstance(AccountCache.class);
+        final AccountService accountService = baseInjector.getInstance(AccountService.class);
         final TransactionCache transactionCache = baseInjector.getInstance(TransactionCache.class);
         final Transactor transactor = baseInjector.getInstance(Transactor.class);
 
@@ -47,7 +47,7 @@ public class AppRoot {
         final EventNetwork eventNetwork = eventingInjection.getInstance(EventNetwork.class);
 
         final Collection<EventConnection> eventConnections = new LinkedList<EventConnection>() {{
-            add(accountCache);
+            add(accountService);
             add(homeController);
             add(historyController);
             add(blackjackController);

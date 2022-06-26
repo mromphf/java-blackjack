@@ -29,16 +29,16 @@ public class Game extends EventConnection implements LayoutListener, Transaction
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
-    private final AccountCache accountCache;
+    private final AccountService accountService;
 
     @Inject
-    public Game(@Named(DECK) Deck deck, AccountCache accountCache) {
-        this.accountCache = accountCache;
+    public Game(@Named(DECK) Deck deck, AccountService accountService) {
+        this.accountService = accountService;
         this.deck = deck;
     }
 
     public void onActionTaken(Action action) {
-        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
         final LocalDateTime timestamp = now();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
@@ -59,7 +59,7 @@ public class Game extends EventConnection implements LayoutListener, Transaction
 
     @Override
     public void onTransactionIssued(Transaction transaction) {
-        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
 
         if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
             roundStack.add(new Round(deck, abs(transaction.getAmount())));

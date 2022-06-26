@@ -21,7 +21,7 @@ public class ImageMap {
 
     public static void load() {
         for(Card c : freshDeck()) {
-            final String imageName = c.getSuit().name().toLowerCase() + c.getRank().VALUE;
+            final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
             final String imagePath = format("/graphics/%s.png", imageName);
             final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());
             imageMap.put(imageName, image);
@@ -87,7 +87,7 @@ public class ImageMap {
     }
 
     private static Image imageByCard(Card c) {
-        return imageMap.get(c.getSuit().name().toLowerCase() + c.getRank().VALUE);
+        return imageMap.get(c.getSuit().name().toLowerCase() + c.getRank().ORDINAL);
     }
 
     private static Image getImage(String blueCard) {

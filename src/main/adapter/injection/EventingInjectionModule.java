@@ -46,7 +46,7 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(AccountService.class));
                     add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
-                    add(baseInjector.getInstance(TransactionCache.class));
+                    add(baseInjector.getInstance(TransactionService.class));
                     add(baseInjector.getInstance(Game.class));
                 }});
 
@@ -92,7 +92,7 @@ public class EventingInjectionModule extends AbstractModule {
                     add(fxmlInjector.getInstance(LayoutManager.class));
                     add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(Transactor.class));
-                    add(baseInjector.getInstance(TransactionCache.class));
+                    add(baseInjector.getInstance(TransactionService.class));
                     add(baseInjector.getInstance(Game.class));
                     add(baseInjector.getInstance(GameLogger.class));
                 }});

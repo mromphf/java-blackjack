@@ -15,7 +15,7 @@ import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
 import main.usecase.Game;
-import main.usecase.TransactionCache;
+import main.usecase.TransactionService;
 import main.usecase.Transactor;
 
 import java.util.*;
@@ -49,7 +49,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(TransactionRepository.class).to(Database.class);
         bind(AccountService.class).in(Singleton.class);
         bind(Transactor.class).in(Singleton.class);
-        bind(TransactionCache.class).in(Singleton.class);
+        bind(TransactionService.class).in(Singleton.class);
         bind(GameLogger.class).in(Singleton.class);
 
         bind(Integer.class)

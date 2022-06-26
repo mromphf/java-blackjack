@@ -14,7 +14,7 @@ import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
 import main.usecase.Layout;
-import main.usecase.TransactionCache;
+import main.usecase.TransactionService;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
@@ -34,12 +34,12 @@ public class HistoryController extends EventConnection implements Initializable,
     @FXML
     public GridPane chartHousing;
 
-    private final TransactionCache transactionCache;
+    private final TransactionService transactionService;
     private final AccountService accountService;
 
     @Inject
-    public HistoryController(TransactionCache transactionCache, AccountService accountService) {
-        this.transactionCache = transactionCache;
+    public HistoryController(TransactionService transactionService, AccountService accountService) {
+        this.transactionService = transactionService;
         this.accountService = accountService;
     }
 
@@ -55,7 +55,7 @@ public class HistoryController extends EventConnection implements Initializable,
         final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
             final LocalDate date = datePicker.getValue();
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
@@ -75,7 +75,7 @@ public class HistoryController extends EventConnection implements Initializable,
         if (optionalAccount.isPresent()) {
 
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = dateAxis(accountTransactions);
 
@@ -96,7 +96,7 @@ public class HistoryController extends EventConnection implements Initializable,
         if (event== HISTORY && optionalAccount.isPresent()) {
 
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> transactions = transactionCache.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
 
             drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }

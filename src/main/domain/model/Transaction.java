@@ -22,6 +22,10 @@ public class Transaction implements Comparable<Transaction> {
         return new Transaction(time, accountKey, description, amount);
     }
 
+    public static Transaction signingBonus(Account account) {
+        return new Transaction(account.getCreated(), account.getKey(), "SIGNING BONUS", 200);
+    }
+
     public LocalDateTime getTime() {
         return time;
     }

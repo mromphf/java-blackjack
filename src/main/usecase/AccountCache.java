@@ -35,7 +35,7 @@ public class AccountCache extends EventConnection implements AccountListener, Tr
     public void onTransactionIssued(Transaction transaction) {
         final UUID accountKey = transaction.getAccountKey();
         if (accountMap.containsKey(accountKey)) {
-            accountMap.put(accountKey, accountMap.get(accountKey).updateBalance(transaction));
+            accountMap.put(accountKey, accountMap.get(accountKey).apply(transaction));
         }
     }
 

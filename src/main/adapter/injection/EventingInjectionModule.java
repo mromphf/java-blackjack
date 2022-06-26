@@ -43,7 +43,7 @@ public class EventingInjectionModule extends AbstractModule {
         bind(new TypeLiteral<Collection<TransactionListener>>() {})
                 .annotatedWith(named(TRANSACTION_LISTENERS))
                 .toInstance(new LinkedList<TransactionListener>() {{
-                    add(baseInjector.getInstance(AccountCache.class));
+                    add(baseInjector.getInstance(AccountService.class));
                     add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(baseInjector.getInstance(TransactionCache.class));
@@ -53,7 +53,7 @@ public class EventingInjectionModule extends AbstractModule {
         bind(new TypeLiteral<Collection<AccountListener>>() {})
                 .annotatedWith(named(ACCOUNT_LISTENERS))
                 .toInstance(new LinkedList<AccountListener>() {{
-                    add(baseInjector.getInstance(AccountCache.class));
+                    add(baseInjector.getInstance(AccountService.class));
                     add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(fxmlInjector.getInstance(HomeController.class));
@@ -83,7 +83,7 @@ public class EventingInjectionModule extends AbstractModule {
         bind(new TypeLiteral<Collection<EventConnection>>() {})
                 .annotatedWith(named(EVENT_CONNECTIONS))
                 .toInstance(new LinkedList<EventConnection>() {{
-                    add(baseInjector.getInstance(AccountCache.class));
+                    add(baseInjector.getInstance(AccountService.class));
                     add(fxmlInjector.getInstance(HomeController.class));
                     add(fxmlInjector.getInstance(HistoryController.class));
                     add(fxmlInjector.getInstance(BlackjackController.class));

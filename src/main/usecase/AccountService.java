@@ -12,13 +12,13 @@ import java.util.*;
 
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 
-public class AccountCache extends EventConnection implements AccountListener, TransactionListener {
+public class AccountService extends EventConnection implements AccountListener, TransactionListener {
 
     private final Stack<UUID> selections;
     private final Map<UUID, Account> accountMap;
 
     @Inject
-    public AccountCache(@Named(ACCOUNT_STACK) Stack<UUID> selections) {
+    public AccountService(@Named(ACCOUNT_STACK) Stack<UUID> selections) {
         this.selections = selections;
         this.accountMap = new HashMap<>();
     }

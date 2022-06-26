@@ -15,7 +15,7 @@ import main.adapter.graphics.ImageReelAnimation;
 import main.adapter.injection.Bindings;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
-import main.usecase.AccountCache;
+import main.usecase.AccountService;
 import main.usecase.Layout;
 import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
@@ -65,7 +65,7 @@ public class BetController extends EventConnection implements Initializable, Lay
     @FXML
     public Button btnBet100;
 
-    private final AccountCache accountCache;
+    private final AccountService accountService;
     private final static int MAX_BET = 500;
     private final int maxCards;
 
@@ -74,8 +74,8 @@ public class BetController extends EventConnection implements Initializable, Lay
 
 
     @Inject
-    public BetController(AccountCache accountCache, @Named(Bindings.MAX_CARDS) int maxCards) {
-        this.accountCache = accountCache;
+    public BetController(AccountService accountService, @Named(Bindings.MAX_CARDS) int maxCards) {
+        this.accountService = accountService;
         this.maxCards = maxCards;
     }
 
@@ -98,7 +98,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> account = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> account = accountService.getCurrentlySelectedAccount();
 
         if (account.isPresent() && event == BET)  {
             final int balance = account.get().getBalance();
@@ -109,7 +109,7 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @FXML
     private void onDeal() {
-        final Optional<Account> account = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> account = accountService.getCurrentlySelectedAccount();
 
         if (account.isPresent()) {
             final UUID accountKey = account.get().getKey();
@@ -146,7 +146,7 @@ public class BetController extends EventConnection implements Initializable, Lay
     }
 
     private void onBet(MouseEvent mouseEvent, int amount) {
-        final Optional<Account> selectedAccount = accountCache.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
 
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             this.bet = Math.min(MAX_BET, this.bet + amount);

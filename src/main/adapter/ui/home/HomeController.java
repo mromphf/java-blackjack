@@ -155,6 +155,13 @@ public class HomeController extends EventConnection implements Initializable, Ac
     }
 
     @Override
+    public void onAccountCreated(Account account) {
+        accountMap.put(account.getKey(), account);
+
+        tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
+    }
+
+    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {
         for (Account account : accounts) {
             accountMap.put(account.getKey(), account);

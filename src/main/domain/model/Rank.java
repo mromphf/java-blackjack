@@ -15,12 +15,12 @@ public enum Rank {
     QUEEN(12, "Queen", 10),
     KING(13, "King", 10);
 
-    public final int VALUE;
+    public final int ORDINAL;
     public final String NAME;
     public final Integer BLACKJACK_VALUE;
 
     Rank(int value, String name, Integer blackjackValue) {
-        this.VALUE = value;
+        this.ORDINAL = value;
         this.NAME = name;
         this.BLACKJACK_VALUE = blackjackValue;
     }

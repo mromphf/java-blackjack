@@ -7,8 +7,11 @@ import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
+import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 
 public class TransactionService extends EventConnection implements TransactionListener {
@@ -24,33 +27,27 @@ public class TransactionService extends EventConnection implements TransactionLi
         if (transactionMap.containsKey(accountKey)) {
             return new ArrayList<>(transactionMap.get(accountKey));
         } else {
-            return new ArrayList<>();
+            return emptyList();
         }
     }
 
     @Override
     public void onTransactionIssued(Transaction transaction) {
-        final UUID accountKey = transaction.getAccountKey();
-        final Collection<Transaction> coll = new LinkedList<>();
-
-        coll.add(transaction);
-        mapToCache(accountKey, coll);
+        mapToCache(transaction.getAccountKey(), Stream.of(transaction).collect(toList()));
     }
 
     @Override
     public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
-        final Map<UUID, List<Transaction>> grouped = transactions.stream()
-                .collect(groupingBy(Transaction::getAccountKey));
-
-        grouped.forEach(this::mapToCache);
+        transactions.stream()
+                .collect(groupingBy(Transaction::getAccountKey))
+                .forEach(this::mapToCache);
     }
 
     @Override
     public void onTransactionsLoaded(Collection<Transaction> transactions) {
-        final Map<UUID, List<Transaction>> grouped = transactions.stream()
-                .collect(groupingBy(Transaction::getAccountKey));
-
-        grouped.forEach(this::mapToCache);
+        transactions.stream()
+                .collect(groupingBy(Transaction::getAccountKey))
+                .forEach(this::mapToCache);
     }
 
     private void mapToCache(UUID key, Collection<Transaction> transactions) {

@@ -11,12 +11,12 @@ import java.util.*;
 import static java.util.stream.Collectors.groupingBy;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 
-public class TransactionCache extends EventConnection implements TransactionListener {
+public class TransactionService extends EventConnection implements TransactionListener {
 
     public final Map<UUID, Collection<Transaction>> transactionMap;
 
     @Inject
-    public TransactionCache(@Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
+    public TransactionService(@Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
     }
 
@@ -53,11 +53,11 @@ public class TransactionCache extends EventConnection implements TransactionList
         grouped.forEach(this::mapToCache);
     }
 
-    private void mapToCache(UUID accountKey, Collection<Transaction> transactions) {
-        if (transactionMap.containsKey(accountKey)) {
-            transactionMap.get(accountKey).addAll(transactions);
+    private void mapToCache(UUID key, Collection<Transaction> transactions) {
+        if (transactionMap.containsKey(key)) {
+            transactionMap.get(key).addAll(transactions);
         } else {
-            transactionMap.put(accountKey, transactions);
+            transactionMap.put(key, transactions);
         }
     }
 }

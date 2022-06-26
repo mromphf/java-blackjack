@@ -21,11 +21,13 @@ public class RoundPredicate {
 
     private static final Predicate<Snapshot> handsRemainToBePlayed = snapshot -> !snapshot.getHandsToPlay().isEmpty();
 
+    public static final Predicate<Snapshot> noActionsTaken = snapshot -> snapshot.getActionsTaken().isEmpty();
+
     private static final Predicate<Snapshot> handsRemainToBeSettled = snapshot -> !snapshot.getHandsToSettle().isEmpty();
 
     private static final Predicate<Snapshot> playerHasBusted = snapshot -> isBust(snapshot.getPlayerHand());
 
-    private static final Predicate<Snapshot> turnEnded = snapshot ->
+        public static final Predicate<Snapshot> turnEnded = snapshot ->
             snapshot.getActionsTaken().stream().anyMatch(Action::turnEnded);
 
     public static final Predicate<Snapshot> readyToSettleNextHand = snapshot ->
@@ -48,4 +50,9 @@ public class RoundPredicate {
 
     public static final Predicate<Snapshot> allBetsSettled = (snapshot) -> (
             outcomeIsResolved.and(not(handsRemainToBePlayed)).and(not(handsRemainToBeSettled))).test(snapshot);
+
+    public static final Predicate<Snapshot> roundNotResolved = (snapshot) -> (
+            (playerHasBusted.and(handsRemainToBePlayed)).or(
+                not(playerHasBusted).and(handsRemainToBePlayed).and(turnEnded)).or(
+                       not(playerHasBusted).and(noActionsTaken.or(not(turnEnded)))).test(snapshot));
 }

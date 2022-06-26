@@ -95,6 +95,12 @@ public class RulesTest {
         assertTrue(atLeastOneAce(hand));
     }
 
+    private static Stream<Hand> aceHands() {
+        return Stream.of(
+                handOf(card(ACE, anonSuit()), card(THREE, anonSuit()))
+        );
+    }
+
     @Test
     public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce() {
         assertTrue(atLeastOneAce(handOf(

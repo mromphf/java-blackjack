@@ -63,7 +63,8 @@ public class EventingInjectionModule extends AbstractModule {
                 .annotatedWith(named(SNAPSHOT_LISTENERS))
                 .toInstance(new LinkedList<SnapshotListener>() {{
                     add(baseInjector.getInstance(GameLogger.class));
-                    add(baseInjector.getInstance(Transactor.class));
+                    add(baseInjector.getInstance(GameLogger.class));
+                    add(baseInjector.getInstance(TransactionService.class));
                     add(fxmlInjector.getInstance(BetController.class));
                     add(fxmlInjector.getInstance(BlackjackController.class));
                 }});
@@ -90,7 +91,6 @@ public class EventingInjectionModule extends AbstractModule {
                     add(fxmlInjector.getInstance(RegistrationController.class));
                     add(fxmlInjector.getInstance(LayoutManager.class));
                     add(baseInjector.getInstance(Storage.class));
-                    add(baseInjector.getInstance(Transactor.class));
                     add(baseInjector.getInstance(TransactionService.class));
                     add(baseInjector.getInstance(Game.class));
                     add(baseInjector.getInstance(GameLogger.class));

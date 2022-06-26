@@ -35,7 +35,6 @@ public class AppRoot {
         final GameLogger gameLogger = baseInjector.getInstance(GameLogger.class);
         final AccountService accountService = baseInjector.getInstance(AccountService.class);
         final TransactionService transactionService = baseInjector.getInstance(TransactionService.class);
-        final Transactor transactor = baseInjector.getInstance(Transactor.class);
 
         final LayoutManager layoutManager = fxmlInjector.getInstance(LayoutManager.class);
         final HomeController homeController = fxmlInjector.getInstance(HomeController.class);
@@ -55,7 +54,6 @@ public class AppRoot {
             add(registrationController);
             add(layoutManager);
             add(storage);
-            add(transactor);
             add(transactionService);
             add(game);
             add(gameLogger);

@@ -89,9 +89,15 @@ public class RulesTest {
         assertEquals(11, concealedScore(cards));
     }
 
+    @ParameterizedTest
+    @MethodSource("aceHands")
+    public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce(Hand hand) {
+        assertTrue(atLeastOneAce(hand));
+    }
+
     @Test
     public void atLeastOneAce_shouldReturnTrue_whenGivenAtLeastOneAce() {
-        assertTrue(atLeastOneAce.test(handOf(
+        assertTrue(atLeastOneAce(handOf(
                 card(ACE, HEARTS),
                 card(EIGHT, SPADES)
         )));
@@ -99,7 +105,7 @@ public class RulesTest {
 
     @Test
     public void atLeastOneAce_shouldReturnFalse_whenGivenNoAces() {
-        assertFalse(atLeastOneAce.test(handOf(
+        assertFalse(atLeastOneAce(handOf(
                         card(FIVE, CLUBS),
                         card(EIGHT, DIAMONDS)
                 )
@@ -166,7 +172,7 @@ public class RulesTest {
             add(card(FIVE, SPADES));
         }};
 
-        assertTrue(hardTotalIsFavourable.test(cards));
+        assertTrue(hardTotalIsFavourable(cards));
     }
 
     @Test
@@ -177,7 +183,7 @@ public class RulesTest {
             add(card(FIVE, SPADES));
         }};
 
-        assertFalse(hardTotalIsFavourable.test(cards));
+        assertFalse(hardTotalIsFavourable(cards));
     }
 
     @Test

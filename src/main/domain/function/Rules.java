@@ -15,9 +15,9 @@ public class Rules {
     public final static int MAXIMUM_SCORE = 21;
     public final static int ACE_HIGH_SCORE = 11;
 
-    public final static Predicate<Collection<Card>> hardTotalIsFavourable = cards -> hardTotal(cards) <= MAXIMUM_SCORE;
-
-    public final static Predicate<Collection<Card>> atLeastOneAce = cards -> cards.stream().anyMatch(Card::isAce);
+    public static Boolean atLeastOneAce(Collection<Card> hand) {
+        return hand.stream().anyMatch(Card::isAce);
+    }
 
     public static Boolean isPush(Hand... hands) {
         if (hands.length > 0) {
@@ -46,7 +46,7 @@ public class Rules {
     public static int score(Collection<Card> cards) {
         if (isBlackjack.test(cards)) {
             return MAXIMUM_SCORE;
-        } else if (atLeastOneAce.and(hardTotalIsFavourable).test(cards)) {
+        } else if (atLeastOneAce(cards) && hardTotalIsFavourable(cards)) {
             return hardTotal(cards);
         } else {
             return softTotal(cards);
@@ -64,9 +64,13 @@ public class Rules {
     }
 
     public static int hardTotal(Collection<Card> cards) {
-        return atLeastOneAce.test(cards)
+        return atLeastOneAce(cards)
                 ? softTotal(cards) + 10
                 : softTotal(cards);
+    }
+
+    public static Boolean hardTotalIsFavourable(Collection<Card> cards) {
+        return hardTotal(cards) <= MAXIMUM_SCORE;
     }
 
     public static int softTotal(Collection<Card> cards) {

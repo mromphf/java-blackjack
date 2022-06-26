@@ -1,13 +1,16 @@
 package main.domain.function;
 
-import main.domain.model.*;
+import main.domain.model.Action;
+import main.domain.model.Card;
+import main.domain.model.Snapshot;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-import static main.domain.model.Action.*;
-import static main.domain.model.Outcome.*;
+import static main.domain.function.RoundPredicate.determineOutcome;
+import static main.domain.model.Action.BUY_INSURANCE;
+import static main.domain.model.Action.DOUBLE;
 
 public class Rules {
 
@@ -72,42 +75,9 @@ public class Rules {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return (isBust(dealerCards) && !isBust(playerCards) ||
+        return (!isPush(playerCards, dealerCards) &&
+                isBust(dealerCards) && !isBust(playerCards) ||
                 (!isBust(playerCards) && score(playerCards) > score(dealerCards)));
-    }
-
-    public static Outcome determineOutcome(Snapshot snapshot) {
-        return determineOutcome(snapshot.getActionsTaken(),
-                snapshot.getPlayerHand(),
-                snapshot.getDealerHand(),
-                snapshot.getHandsToPlay());
-    }
-
-    public static Outcome determineOutcome(Collection<Action> actionsTaken,
-                                           Collection<Card> playerHand,
-                                           Collection<Card> dealerHand,
-                                           Collection<Hand> handsToPlay) {
-
-        final boolean standOrDouble = actionsTaken.stream()
-                .anyMatch(a -> a.equals(STAND) || a.equals(DOUBLE));
-
-        if ((isBust(playerHand) && !handsToPlay.isEmpty()) ||
-                (!isBust(playerHand) &&
-                        !handsToPlay.isEmpty() && standOrDouble) ||
-                (!isBust(playerHand) &&
-                        (actionsTaken.isEmpty() || !standOrDouble))) {
-            return UNRESOLVED;
-        } else if (playerWins(playerHand, dealerHand) && isBlackjack.test(playerHand)) {
-            return BLACKJACK;
-        } else if (playerWins(playerHand, dealerHand)) {
-            return WIN;
-        } else if (isPush(playerHand, dealerHand)) {
-            return PUSH;
-        } else if (isBust(playerHand)) {
-            return BUST;
-        } else {
-            return LOSE;
-        }
     }
 
     public static int settleBet(Snapshot snapshot) {

@@ -11,7 +11,7 @@ import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
-import static main.domain.function.Rules.determineOutcome;
+import static main.domain.function.RoundPredicate.determineOutcome;
 import static main.domain.util.StringUtil.actionString;
 import static main.domain.util.StringUtil.playerString;
 
@@ -48,12 +48,7 @@ public class Snapshot {
         this.handsToPlay = unmodifiableCollection(handsToPlay);
         this.handsToSettle = unmodifiableCollection(handsToSettle);
         this.actionsTaken = unmodifiableSortedMap(actionsTaken);
-        this.outcome = determineOutcome(
-                getActionsTaken(),
-                playerHand,
-                dealerHand,
-                handsToPlay
-        );
+        this.outcome = determineOutcome(this);
     }
 
     public LocalDateTime getTimestamp() {

@@ -46,6 +46,7 @@ public class AccountService extends EventConnection implements AccountListener, 
 
     @Override
     public void onAccountCreated(Account account) {
+        accountMap.put(account.getKey(), account);
         selections.add(account.getKey());
     }
 

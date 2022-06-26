@@ -57,7 +57,6 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(Storage.class));
                     add(baseInjector.getInstance(GameLogger.class));
                     add(fxmlInjector.getInstance(HomeController.class));
-                    add(baseInjector.getInstance(Transactor.class));
                 }});
 
         bind(new TypeLiteral<Collection<SnapshotListener>>() {})

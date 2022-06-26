@@ -98,12 +98,13 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> account = accountService.getCurrentlySelectedAccount();
+        if (event == BET)  {
+            final Optional<Account> account = accountService.getCurrentlySelectedAccount();
 
-        if (account.isPresent() && event == BET)  {
-            final int balance = account.get().getBalance();
-
-            runLater(() -> refreshUI(balance, bet));
+            if (account.isPresent()) {
+                final int balance = account.get().getBalance();
+                runLater(() -> refreshUI(balance, bet));
+            }
         }
     }
 

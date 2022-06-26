@@ -91,14 +91,14 @@ public class HistoryController extends EventConnection implements Initializable,
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
+        if (event== HISTORY) {
+            final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
+            if (optionalAccount.isPresent()) {
+                final Account selectedAccount = optionalAccount.get();
+                final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
 
-        if (event== HISTORY && optionalAccount.isPresent()) {
-
-            final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
-
-            drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
+                drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
+            }
         }
     }
 

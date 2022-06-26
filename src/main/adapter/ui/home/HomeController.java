@@ -172,15 +172,14 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @Override
     public void onLayoutEvent(Layout event) {
-        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
-
-        if (selectedAccount.isPresent()) {
-            final Account account = selectedAccount.get();
-            accountMap.put(account.getKey(), account);
-            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
-        }
-
         if (event == HOME || event == BACK) {
+            final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
+
+            if (selectedAccount.isPresent()) {
+                final Account account = selectedAccount.get();
+                accountMap.put(account.getKey(), account);
+                runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
+            }
             toggleAnimationsRunning(true);
             btnPlay.setDisable(true);
             btnDelete.setDisable(true);

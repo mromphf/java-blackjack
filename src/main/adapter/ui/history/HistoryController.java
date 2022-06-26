@@ -14,19 +14,22 @@ import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
 import main.usecase.Layout;
+import main.usecase.LayoutManager;
 import main.usecase.TransactionService;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static main.adapter.ui.history.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 
-public class HistoryController extends EventConnection implements Initializable, LayoutListener {
+public class HistoryController implements Initializable, LayoutListener {
 
     @FXML
     public DatePicker datePicker;
@@ -36,18 +39,22 @@ public class HistoryController extends EventConnection implements Initializable,
 
     private final TransactionService transactionService;
     private final AccountService accountService;
+    private final LayoutManager layoutManager;
 
     @Inject
-    public HistoryController(TransactionService transactionService, AccountService accountService) {
+    public HistoryController(TransactionService transactionService,
+                             AccountService accountService,
+                             LayoutManager layoutManager) {
         this.transactionService = transactionService;
         this.accountService = accountService;
+        this.layoutManager = layoutManager;
     }
 
     @FXML
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        eventNetwork.onLayoutEvent(BACK);
+        layoutManager.onLayoutEvent(BACK);
     }
 
     @FXML
@@ -86,8 +93,7 @@ public class HistoryController extends EventConnection implements Initializable,
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
     public void onLayoutEvent(Layout event) {

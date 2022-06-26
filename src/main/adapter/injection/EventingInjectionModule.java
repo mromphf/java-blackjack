@@ -16,9 +16,11 @@ import main.usecase.eventing.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static com.google.inject.name.Names.named;
 import static main.adapter.injection.Bindings.*;
+import static main.usecase.Layout.*;
 
 public class EventingInjectionModule extends AbstractModule {
 
@@ -67,17 +69,6 @@ public class EventingInjectionModule extends AbstractModule {
                     add(baseInjector.getInstance(TransactionService.class));
                     add(fxmlInjector.getInstance(BetController.class));
                     add(fxmlInjector.getInstance(BlackjackController.class));
-                }});
-
-        bind(new TypeLiteral<Collection<LayoutListener>>() {})
-                .annotatedWith(named(LAYOUT_LISTENERS))
-                .toInstance(new LinkedList<LayoutListener>() {{
-                    add(baseInjector.getInstance(Game.class));
-                    add(fxmlInjector.getInstance(BetController.class));
-                    add(fxmlInjector.getInstance(HomeController.class));
-                    add(fxmlInjector.getInstance(HistoryController.class));
-                    add(fxmlInjector.getInstance(RegistrationController.class));
-                    add(fxmlInjector.getInstance(LayoutManager.class));
                 }});
 
         bind(new TypeLiteral<Collection<EventConnection>>() {})

@@ -11,12 +11,11 @@ public class Bindings {
     public static final String EVALUATORS = "evaluators";
 
     public static final String LAYOUT_MAP = "layoutMap";
+    public static final String SCREEN_MAP = "screenMap";
 
-    public static final String ALERT_LISTENERS = "alertListeners";
+    public static final String SCREEN_QUEUE = "screenQueue";
+
     public static final String ACCOUNT_LISTENERS = "accountListeners";
     public static final String SNAPSHOT_LISTENERS = "snapshotListeners";
-    public static final String LAYOUT_LISTENERS = "layoutListeners";
     public static final String TRANSACTION_LISTENERS = "transactionListeners";
-
-    public static final String EVENT_CONNECTIONS = "eventConnections";
 }

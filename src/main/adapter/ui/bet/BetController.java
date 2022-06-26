@@ -17,7 +17,8 @@ import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.usecase.AccountService;
 import main.usecase.Layout;
-import main.usecase.eventing.EventConnection;
+import main.usecase.LayoutManager;
+import main.usecase.TransactionService;
 import main.usecase.eventing.LayoutListener;
 import main.usecase.eventing.SnapshotListener;
 
@@ -33,7 +34,7 @@ import static main.domain.model.Transaction.transaction;
 import static main.usecase.Layout.*;
 
 
-public class BetController extends EventConnection implements Initializable, LayoutListener, SnapshotListener {
+public class BetController implements Initializable, LayoutListener, SnapshotListener {
 
     @FXML
     private Canvas cvsScroller;
@@ -66,17 +67,24 @@ public class BetController extends EventConnection implements Initializable, Lay
     public Button btnBet100;
 
     private final AccountService accountService;
+    private final TransactionService transactionService;
     private final static int MAX_BET = 500;
     private final int maxCards;
+    private final LayoutManager layoutManager;
 
     private ImageReelAnimation animation;
     private int bet = 0;
 
 
     @Inject
-    public BetController(AccountService accountService, @Named(Bindings.MAX_CARDS) int maxCards) {
+    public BetController(AccountService accountService,
+                         TransactionService transactionService,
+                         LayoutManager layoutManger,
+                         @Named(Bindings.MAX_CARDS) int maxCards) {
         this.accountService = accountService;
         this.maxCards = maxCards;
+        this.layoutManager = layoutManger;
+        this.transactionService = transactionService;
     }
 
     @Override
@@ -117,8 +125,8 @@ public class BetController extends EventConnection implements Initializable, Lay
             final String description = "BET";
             final int betVal = (bet * -1);
 
-            eventNetwork.onTransactionIssued(transaction(now(), accountKey, description, betVal));
-            eventNetwork.onLayoutEvent(GAME);
+            transactionService.onTransactionIssued(transaction(now(), accountKey, description, betVal));
+            layoutManager.onLayoutEvent(GAME);
 
             bet = 0;
         }
@@ -126,14 +134,14 @@ public class BetController extends EventConnection implements Initializable, Lay
 
     @FXML
     public void onQuit() {
-        eventNetwork.onLayoutEvent(HOME);
+        layoutManager.onLayoutEvent(HOME);
         prgDeck.setProgress(100f);
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        eventNetwork.onLayoutEvent(HISTORY);
+        layoutManager.onLayoutEvent(HOME);
     }
 
     @FXML

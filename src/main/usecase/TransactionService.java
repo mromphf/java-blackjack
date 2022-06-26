@@ -2,9 +2,9 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import main.adapter.storage.TransactionRepository;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
 import main.usecase.eventing.TransactionListener;
 
@@ -19,17 +19,20 @@ import static java.util.stream.Collectors.toList;
 import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 
-public class TransactionService extends EventConnection implements TransactionListener, SnapshotListener {
+public class TransactionService implements TransactionListener, SnapshotListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
     public final Map<UUID, Collection<Transaction>> transactionMap;
+    private final TransactionRepository transactionRepository;
 
     @Inject
     public TransactionService(
+            TransactionRepository transactionRepository,
             @Named(EVALUATORS) Collection<Function<Snapshot, Optional<Transaction>>> evaluators,
             @Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
         this.evaluationFunctions = evaluators;
+        this.transactionRepository = transactionRepository;
     }
 
     public List<Transaction> getTransactionsByKey(UUID accountKey) {
@@ -43,13 +46,15 @@ public class TransactionService extends EventConnection implements TransactionLi
     @Override
     public void onTransactionIssued(Transaction transaction) {
         mapToCache(transaction.getAccountKey(), Stream.of(transaction).collect(toList()));
+        transactionRepository.saveTransaction(transaction);
     }
 
-    @Override
-    public void onTransactionsLoaded(Collection<Transaction> transactions) {
+    public Collection<Transaction> loadAll() {
+        final Collection<Transaction> transactions = transactionRepository.loadAllTransactions();
         transactions.stream()
                 .collect(groupingBy(Transaction::getAccountKey))
                 .forEach(this::mapToCache);
+        return transactions;
     }
 
     private void mapToCache(UUID key, Collection<Transaction> transactions) {
@@ -73,7 +78,7 @@ public class TransactionService extends EventConnection implements TransactionLi
                 .forEach(this::mapToCache);
 
         if (workingTransactions.size() > 0) {
-            eventNetwork.onTransactionSeriesIssued(workingTransactions);
+            //TODO: Rewrite this part of the event chain
         }
     }
 }

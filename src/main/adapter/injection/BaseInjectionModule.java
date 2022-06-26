@@ -3,6 +3,7 @@ package main.adapter.injection;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
+import javafx.stage.Stage;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
@@ -10,12 +11,19 @@ import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionRepository;
+import main.adapter.ui.bet.BetController;
+import main.adapter.ui.blackjack.BlackjackController;
+import main.adapter.ui.history.HistoryController;
+import main.adapter.ui.home.HomeController;
+import main.adapter.ui.registration.RegistrationController;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
 import main.usecase.Game;
+import main.usecase.LayoutManager;
 import main.usecase.TransactionService;
+import main.usecase.eventing.SnapshotListener;
 
 import java.util.*;
 import java.util.function.Function;
@@ -43,12 +51,6 @@ public class BaseInjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        bind(Game.class).in(Singleton.class);
-        bind(AccountRepository.class).to(Database.class);
-        bind(TransactionRepository.class).to(Database.class);
-        bind(AccountService.class).in(Singleton.class);
-        bind(TransactionService.class).in(Singleton.class);
-        bind(GameLogger.class).in(Singleton.class);
 
         bind(Integer.class)
                 .annotatedWith(named(NUM_DECKS))
@@ -56,13 +58,15 @@ public class BaseInjectionModule extends AbstractModule {
 
         bind(Integer.class)
                 .annotatedWith(named(MAX_CARDS))
-                        .toInstance(deck.size());
+                .toInstance(deck.size());
 
-        bind(new TypeLiteral<Deck>() {})
+        bind(new TypeLiteral<Deck>() {
+        })
                 .annotatedWith(named(DECK))
                 .toInstance(deck);
 
-        bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {})
+        bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {
+        })
                 .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
 
@@ -74,15 +78,36 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named(GAME_LOGGER))
                 .toInstance(Logger.getLogger("Game Logger"));
 
-        bind(new TypeLiteral<Collection<Handler>>() {})
+        bind(new TypeLiteral<Collection<Handler>>() {
+        })
                 .annotatedWith(named(LOG_HANDLERS))
                 .toInstance(new ArrayList<Handler>() {{
                     add(new ConsoleLogHandler());
                     add(new FileLogHandler());
                 }});
 
-        bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {})
+        bind(new TypeLiteral<Collection<SnapshotListener>>() {
+        })
+                .annotatedWith(named(SNAPSHOT_LISTENERS))
+                .toInstance(new LinkedList<>());
+
+        bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {
+        })
                 .annotatedWith(named(EVALUATORS))
                 .toInstance(transactionEvaluators());
+
+        bind(AccountRepository.class).to(Database.class);
+        bind(AccountService.class).in(Singleton.class);
+        bind(BetController.class).in(Singleton.class);
+        bind(BlackjackController.class).in(Singleton.class);
+        bind(Game.class).in(Singleton.class);
+        bind(GameLogger.class).in(Singleton.class);
+        bind(HistoryController.class).in(Singleton.class);
+        bind(HomeController.class).in(Singleton.class);
+        bind(LayoutManager.class).in(Singleton.class);
+        bind(RegistrationController.class).in(Singleton.class);
+        bind(Stage.class).in(Singleton.class);
+        bind(TransactionRepository.class).to(Database.class);
+        bind(TransactionService.class).in(Singleton.class);
     }
 }

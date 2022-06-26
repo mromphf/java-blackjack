@@ -9,10 +9,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static main.domain.function.Rules.*;
 import static main.domain.model.Card.card;
 import static main.domain.model.Hand.handOf;
 import static main.domain.model.Rank.*;
-import static main.domain.function.Rules.*;
 import static main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static test.domain.anonymous.Anonymous.anonCard;
@@ -32,31 +32,16 @@ public class RulesTest {
         assertFalse(isBlackjack.test(hand));
     }
 
-    @Test
-    public void isBust_shouldReturnTrue_whenTotalValueOfCardCollectionIsGreaterThanTwentyOne() {
-        assertTrue(isBust(handOf(
-                card(TEN, CLUBS),
-                card(TEN, SPADES),
-                card(TWO, CLUBS)
-        )));
+    @ParameterizedTest
+    @MethodSource("bustedHands")
+    public void isBusted_shouldReturnTrue_whenGivenABustedHand(Hand hand) {
+        assertTrue(isBust(hand));
     }
 
-    @Test
-    public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionIsLessThanTwentyOne() {
-        assertFalse(isBust(handOf(
-                card(FIVE, CLUBS),
-                card(THREE, SPADES),
-                card(TWO, CLUBS)
-        )));
-    }
-
-    @Test
-    public void isBust_shouldReturnFalse_whenTotalValueOfCardCollectionHasAnAce() {
-        assertFalse(isBust(handOf(
-                card(ACE, HEARTS),
-                card(JACK, CLUBS),
-                card(KING, DIAMONDS)
-        )));
+    @ParameterizedTest
+    @MethodSource("nonBustedHands")
+    public void isBusted_shouldReturnFalse_whenGivenANonBustedHand(Hand hand) {
+        assertFalse(isBust(hand));
     }
 
     @Test
@@ -362,6 +347,22 @@ public class RulesTest {
         }};
 
         assertFalse(canSplit.test(cards));
+    }
+
+    private static Stream<Hand> bustedHands() {
+        return Stream.of(
+                handOf(card(TEN, anonSuit()), card(TEN, anonSuit()), card(TEN, anonSuit())),
+                handOf(card(TEN, anonSuit()), card(TEN, anonSuit()), card(TWO, anonSuit())),
+                handOf(card(SEVEN, anonSuit()), card(SEVEN, anonSuit()), card(EIGHT, anonSuit()))
+        );
+    }
+
+    private static Stream<Hand> nonBustedHands() {
+        return Stream.of(
+                handOf(card(TEN, anonSuit()), card(TEN, anonSuit()), card(ACE, anonSuit())),
+                handOf(card(SEVEN, anonSuit()), card(SEVEN, anonSuit()), card(SIX, anonSuit())),
+                handOf(card(TEN, anonSuit()), card(NINE, anonSuit()), card(TWO, anonSuit()))
+        );
     }
 
     private static Stream<Hand> blackjackHands() {

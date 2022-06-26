@@ -5,7 +5,6 @@ import main.domain.model.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static main.domain.model.Action.*;
 import static main.domain.model.Outcome.*;
@@ -19,13 +18,8 @@ public class Rules {
         return hand.stream().anyMatch(Card::isAce);
     }
 
-    public static Boolean isPush(Hand... hands) {
-        if (hands.length > 0) {
-            final int topScore = score(hands[0]);
-            return Stream.of(hands).allMatch(cards -> (score(cards) == topScore) && !isBust(cards));
-        } else {
-            return false;
-        }
+    public static Boolean isPush(Collection<Card> handA, Collection<Card> handB) {
+        return (score(handA) == score(handB)) && !isBust(handA) && !isBust(handB);
     }
 
     public final static IsBlackjack isBlackjack = new IsBlackjack();
@@ -84,14 +78,14 @@ public class Rules {
 
     public static Outcome determineOutcome(Snapshot snapshot) {
         return determineOutcome(snapshot.getActionsTaken(),
-                (Hand) snapshot.getPlayerHand(),
-                (Hand) snapshot.getDealerHand(),
+                snapshot.getPlayerHand(),
+                snapshot.getDealerHand(),
                 snapshot.getHandsToPlay());
     }
 
     public static Outcome determineOutcome(Collection<Action> actionsTaken,
-                                           Hand playerHand,
-                                           Hand dealerHand,
+                                           Collection<Card> playerHand,
+                                           Collection<Card> dealerHand,
                                            Collection<Hand> handsToPlay) {
 
         final boolean standOrDouble = actionsTaken.stream()

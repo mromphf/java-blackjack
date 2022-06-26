@@ -16,10 +16,10 @@ public class JsonUtil {
         final JsonObject[] jsonObjects = new Gson().fromJson(jsonString, JsonObject[].class);
 
         for (JsonObject obj : jsonObjects) {
-            final int val = obj.get("value").getAsInt();
+            final Rank rank = Rank.of(obj.get("value").getAsInt());
             final Suit suit = Suit.valueOf(obj.get("suit").getAsString().toUpperCase());
 
-            result.add(card(Rank.of(val), suit));
+            result.add(card(rank, suit));
         }
 
         return result;

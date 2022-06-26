@@ -2,10 +2,11 @@ package main.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 
 import static java.time.format.DateTimeFormatter.*;
 
-public class Account {
+public class Account implements Function<Transaction, Account> {
 
     private final UUID key;
     private final String name;
@@ -35,8 +36,9 @@ public class Account {
         return balance;
     }
 
-    public Account updateBalance(Transaction transaction) {
-        return new Account(key, name, balance + transaction.getAmount(), created);
+    @Override
+    public Account apply(Transaction transaction) {
+        return new Account(key, name, (balance + transaction.getAmount()), created);
     }
 
     @Override

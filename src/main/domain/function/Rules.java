@@ -4,8 +4,8 @@ import main.domain.model.*;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static main.domain.model.Action.*;
 import static main.domain.model.Outcome.*;
@@ -19,8 +19,14 @@ public class Rules {
 
     public final static Predicate<Collection<Card>> atLeastOneAce = cards -> cards.stream().anyMatch(Card::isAce);
 
-    public final static BiPredicate<Collection<Card>, Collection<Card>> isPush = ((handA, handB) ->
-            score(handA) == score(handB) && !isBust(handA));
+    public static Boolean isPush(Hand... hands) {
+        if (hands.length > 0) {
+            final int topScore = score(hands[0]);
+            return Stream.of(hands).allMatch(cards -> (score(cards) == topScore) && !isBust(cards));
+        } else {
+            return false;
+        }
+    }
 
     public final static IsBlackjack isBlackjack = new IsBlackjack();
 
@@ -74,14 +80,14 @@ public class Rules {
 
     public static Outcome determineOutcome(Snapshot snapshot) {
         return determineOutcome(snapshot.getActionsTaken(),
-                snapshot.getPlayerHand(),
-                snapshot.getDealerHand(),
+                (Hand) snapshot.getPlayerHand(),
+                (Hand) snapshot.getDealerHand(),
                 snapshot.getHandsToPlay());
     }
 
     public static Outcome determineOutcome(Collection<Action> actionsTaken,
-                                           Collection<Card> playerHand,
-                                           Collection<Card> dealerHand,
+                                           Hand playerHand,
+                                           Hand dealerHand,
                                            Collection<Hand> handsToPlay) {
 
         final boolean standOrDouble = actionsTaken.stream()
@@ -97,7 +103,7 @@ public class Rules {
             return BLACKJACK;
         } else if (playerWins(playerHand, dealerHand)) {
             return WIN;
-        } else if (isPush.test(playerHand, dealerHand)) {
+        } else if (isPush(playerHand, dealerHand)) {
             return PUSH;
         } else if (isBust(playerHand)) {
             return BUST;

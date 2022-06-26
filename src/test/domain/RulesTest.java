@@ -46,33 +46,18 @@ public class RulesTest {
 
     @Test
     public void isPush_shouldReturnTrue_whenTotalValueOfTwoHandsIsEqual() {
-        Set<Card> hand1 = new HashSet<Card>() {{
-            add(card(TEN, HEARTS));
-            add(card(JACK, CLUBS));
-        }};
-
-        List<Card> hand2 = new LinkedList<Card>() {{
-            add(card(FIVE, HEARTS));
-            add(card(FIVE, DIAMONDS));
-            add(card(KING, CLUBS));
-        }};
-
-        assertTrue(isPush.test(hand1, hand2));
+        assertTrue(isPush(
+                handOf(card(TEN, anonSuit()), card(JACK, anonSuit())),
+                handOf(card(FIVE, HEARTS), card(FIVE, DIAMONDS), card(KING, CLUBS))
+        ));
     }
 
     @Test
     public void isPush_shouldReturnFalse_whenTotalValueOfTwoHandsIsUnequal() {
-        Queue<Card> hand1 = new LinkedList<Card>() {{
-            add(card(TEN, HEARTS));
-            add(card(FIVE, CLUBS));
-        }};
-
-        Set<Card> hand2 = new HashSet<Card>() {{
-            add(card(SEVEN, HEARTS));
-            add(card(KING, CLUBS));
-        }};
-
-        assertFalse(isPush.test(hand1, hand2));
+        assertFalse(isPush(
+                handOf(card(TEN, HEARTS), card(FIVE, CLUBS)),
+                handOf(card(SEVEN, HEARTS), card(KING, CLUBS))
+        ));
     }
 
     @Test

@@ -1,13 +1,16 @@
 package main.adapter.ui.registration;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
+import main.usecase.AccountService;
 import main.usecase.Layout;
-import main.usecase.eventing.EventConnection;
+import main.usecase.LayoutManager;
+import main.usecase.TransactionService;
 import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
@@ -16,10 +19,9 @@ import java.util.ResourceBundle;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
-import static main.usecase.Layout.HOME;
-import static main.usecase.Layout.REGISTRATION;
+import static main.usecase.Layout.*;
 
-public class RegistrationController extends EventConnection implements Initializable, LayoutListener {
+public class RegistrationController implements Initializable, LayoutListener {
 
     @FXML
     public TextField txtName;
@@ -27,12 +29,26 @@ public class RegistrationController extends EventConnection implements Initializ
     @FXML
     private Button btnOk;
 
+    final private LayoutManager layoutManager;
+    final private AccountService accountService;
+    final private TransactionService transactionService;
+
+    @Inject
+    public RegistrationController(
+            final LayoutManager layoutManager,
+            final AccountService accountService,
+            final TransactionService transactionService) {
+        this.layoutManager  = layoutManager;
+        this.accountService = accountService;
+        this.transactionService = transactionService;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
     public void onCancel() {
-        eventNetwork.onLayoutEvent(HOME);
+        layoutManager.onLayoutEvent(BACK);
     }
 
     @FXML
@@ -47,9 +63,9 @@ public class RegistrationController extends EventConnection implements Initializ
         final Transaction signingBonus = Transaction.signingBonus(account);
 
         txtName.setText("");
-        eventNetwork.onAccountCreated(account);
-        eventNetwork.onTransactionIssued(signingBonus);
-        eventNetwork.onLayoutEvent(HOME);
+        accountService.onAccountCreated(account);
+        transactionService.onTransactionIssued(signingBonus);
+        layoutManager.onLayoutEvent(HOME);
     }
 
     @Override

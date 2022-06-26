@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Snapshot;
 import main.usecase.Game;
-import main.usecase.eventing.EventConnection;
+import main.usecase.LayoutManager;
 import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
@@ -18,13 +18,13 @@ import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.model.Action.*;
 import static main.domain.function.RoundPredicate.*;
 import static main.domain.function.Rules.concealedScore;
 import static main.domain.function.Rules.score;
+import static main.domain.model.Action.*;
 import static main.usecase.Layout.BET;
 
-public class BlackjackController extends EventConnection implements Initializable, SnapshotListener {
+public class BlackjackController implements Initializable, SnapshotListener {
 
     @FXML
     private Label lblBet;
@@ -64,11 +64,13 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     private final Game game;
     private final float maxDeckSize;
+    private final LayoutManager layoutManager;
 
     @Inject
-    public BlackjackController(Game game, @Named(MAX_CARDS) int maxCards) {
+    public BlackjackController(Game game, LayoutManager layoutManager, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -120,7 +122,7 @@ public class BlackjackController extends EventConnection implements Initializabl
 
     @FXML
     private void onDone() {
-        eventNetwork.onLayoutEvent(BET);
+        layoutManager.onLayoutEvent(BET);
         tableDisplay.reset();
     }
 

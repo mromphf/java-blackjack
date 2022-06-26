@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.Layout;
 
 import java.util.Collection;
 
@@ -14,14 +13,12 @@ import static main.adapter.injection.Bindings.*;
 
 public class EventNetwork implements
         SnapshotListener,
-        LayoutListener,
         AccountListener,
         TransactionListener,
         AlertListener {
 
     private final Collection<AccountListener> accountListeners;
     private final Collection<AlertListener> alertListeners;
-    private final Collection<LayoutListener> layoutListeners;
     private final Collection<SnapshotListener> snapshotListeners;
     private final Collection<TransactionListener> transactionListeners;
 
@@ -30,13 +27,11 @@ public class EventNetwork implements
             @Named(ACCOUNT_LISTENERS) Collection<AccountListener> accountListeners,
             @Named(ALERT_LISTENERS) Collection<AlertListener> alertListeners,
             @Named(SNAPSHOT_LISTENERS) Collection<SnapshotListener> snapshotListeners,
-            @Named(LAYOUT_LISTENERS) Collection<LayoutListener> layoutListeners,
             @Named(TRANSACTION_LISTENERS) Collection<TransactionListener> transactionListeners) {
         this.accountListeners = accountListeners;
         this.alertListeners = alertListeners;
         this.snapshotListeners = snapshotListeners;
         this.transactionListeners = transactionListeners;
-        this.layoutListeners = layoutListeners;
     }
 
     @Override
@@ -44,11 +39,6 @@ public class EventNetwork implements
         snapshotListeners.forEach(listener -> new Thread(
                 () -> listener.onGameUpdate(snapshot), "Snapshot Thread"
         ).start());
-    }
-
-    @Override
-    public void onLayoutEvent(Layout event) {
-        layoutListeners.forEach(listener -> listener.onLayoutEvent(event));
     }
 
     @Override

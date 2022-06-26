@@ -5,10 +5,7 @@ import com.google.inject.name.Named;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.EventConnection;
 import main.usecase.eventing.SnapshotListener;
-import main.usecase.eventing.TransactionListener;
 
 import java.util.Collection;
 import java.util.logging.Handler;
@@ -19,7 +16,7 @@ import static java.util.logging.Level.INFO;
 import static main.adapter.injection.Bindings.GAME_LOGGER;
 import static main.adapter.injection.Bindings.LOG_HANDLERS;
 
-public class GameLogger extends EventConnection implements SnapshotListener, AccountListener, TransactionListener {
+public class GameLogger implements SnapshotListener {
 
     private final Logger logger;
 
@@ -37,27 +34,18 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
                 snapshot));
     }
 
-    @Override
     public void onTransactionIssued(Transaction transaction) {
         onTransaction(transaction);
     }
 
-    @Override
-    public void onTransactionSeriesIssued(Collection<Transaction> transactions) {
-        transactions.forEach(this::onTransaction);
-    }
-
-    @Override
     public void onTransactionsLoaded(Collection<Transaction> transactions) {
         logger.log(INFO, format("Loaded %s transactions.", transactions.size()));
     }
 
-    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {
         logger.log(INFO, format("Loaded %s accounts.", accounts.size()));
     }
 
-    @Override
     public void onAccountCreated(Account account) {
         logger.log(INFO, format(
                 "%s: Account Opened - %s - %s.",
@@ -66,7 +54,6 @@ public class GameLogger extends EventConnection implements SnapshotListener, Acc
                 account.getKey()));
     }
 
-    @Override
     public void onAccountDeleted(Account account) {
         logger.log(INFO, format("%s: Account Closure Request - %s - %s.",
                 account.getCreated(),

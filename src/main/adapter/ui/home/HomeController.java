@@ -14,8 +14,7 @@ import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
 import main.usecase.AccountService;
 import main.usecase.Layout;
-import main.usecase.eventing.AccountListener;
-import main.usecase.eventing.EventConnection;
+import main.usecase.LayoutManager;
 import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
@@ -28,7 +27,7 @@ import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 
-public class HomeController extends EventConnection implements Initializable, AccountListener, LayoutListener {
+public class HomeController implements Initializable, LayoutListener {
 
     @FXML
     Canvas cvsTopScroller;
@@ -67,9 +66,14 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<String, ImageReelAnimation> animations = new HashMap<>();
 
+    private final LayoutManager layoutManager;
+
     @Inject
-    public HomeController(AccountService accountService) {
+    public HomeController(
+            AccountService accountService,
+            LayoutManager layoutManager) {
         this.accountService = accountService;
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -98,10 +102,8 @@ public class HomeController extends EventConnection implements Initializable, Ac
 
     @FXML
     public void onPlay() {
-        final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
-
-        eventNetwork.onAccountSelected(selectedAccount);
-        eventNetwork.onLayoutEvent(BET);
+        accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        layoutManager.onLayoutEvent(BET);
     }
 
     @FXML
@@ -119,21 +121,19 @@ public class HomeController extends EventConnection implements Initializable, Ac
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else if (selectedAccount != null) {
-            eventNetwork.onAccountSelected(selectedAccount);
+            accountService.onAccountSelected(selectedAccount);
         }
     }
 
     @FXML
     public void onNew() {
-        eventNetwork.onLayoutEvent(REGISTRATION);
+        layoutManager.onLayoutEvent(REGISTRATION);
     }
 
     @FXML
     public void onRequestHistory() {
-        final Account selectedAccount = tblAccounts.getSelectionModel().getSelectedItem();
-
-        eventNetwork.onAccountSelected(selectedAccount);
-        eventNetwork.onLayoutEvent(HISTORY);
+        accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        layoutManager.onLayoutEvent(HISTORY);
     }
 
     @FXML
@@ -154,14 +154,6 @@ public class HomeController extends EventConnection implements Initializable, Ac
         }
     }
 
-    @Override
-    public void onAccountCreated(Account account) {
-        accountMap.put(account.getKey(), account);
-
-        tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
-    }
-
-    @Override
     public void onAccountsLoaded(Collection<Account> accounts) {
         for (Account account : accounts) {
             accountMap.put(account.getKey(), account);
@@ -207,7 +199,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
                 accountMap.remove(selectedAccount.getKey());
                 tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
-                eventNetwork.onAccountDeleted(selectedAccount);
+                accountService.onAccountDeleted(selectedAccount);
             }
         };
     }
@@ -215,7 +207,7 @@ public class HomeController extends EventConnection implements Initializable, Ac
     private Alert initializeConfirmationAlert(Account account) {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        eventNetwork.onAlertEvent(alert);
+        layoutManager.onAlertEvent(alert);
 
         alert.setTitle("Confirm Account Closure");
         alert.setHeaderText(account.getName());

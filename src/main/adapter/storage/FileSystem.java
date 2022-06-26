@@ -1,12 +1,14 @@
 package main.adapter.storage;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import main.adapter.injection.BaseInjectionModule;
 import main.domain.model.Deck;
 import main.usecase.Layout;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -21,6 +23,8 @@ import static main.usecase.Layout.*;
 public class FileSystem {
 
     private final Map<Directory, File> directories;
+
+    public static Map<Layout, Parent> resourceMap = new HashMap<>();
 
     public FileSystem(Map<Directory, File> directories) {
         this.directories = directories;
@@ -40,7 +44,7 @@ public class FileSystem {
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             exit(1);
-            return null;
+            return new Properties();
         }
     }
 
@@ -51,8 +55,12 @@ public class FileSystem {
         } catch (IOException e) {
             e.printStackTrace();
             exit(1);
-            return null;
+            return new Deck();
         }
+    }
+
+    public static void loadFXML(Map<Layout, Object> controllerMap) {
+        controllerMap.forEach(FileSystem::loadControllerFXML);
     }
 
     public static Map<Directory, File> directoryMap() {
@@ -65,13 +73,26 @@ public class FileSystem {
         }};
     }
 
-    public static Map<Layout, FXMLLoader> resourceMap() {
-        return new HashMap<Layout, FXMLLoader>() {{
-            put(BET, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/bet/BetView.fxml")));
-            put(GAME, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/blackjack/BlackjackView.fxml")));
-            put(HISTORY, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/history/HistoryView.fxml")));
-            put(HOME, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/home/HomeView.fxml")));
-            put(REGISTRATION, new FXMLLoader(BaseInjectionModule.class.getResource("../ui/registration/RegistrationView.fxml")));
+    public static Map<Layout, String> resourcePathMap() {
+        return new HashMap<Layout, String>() {{
+            put(BET, "../ui/bet/BetView.fxml");
+            put(GAME, "../ui/blackjack/BlackjackView.fxml");
+            put(HISTORY, "../ui/history/HistoryView.fxml");
+            put(HOME, "../ui/home/HomeView.fxml");
+            put(REGISTRATION, "../ui/registration/RegistrationView.fxml");
         }};
+    }
+
+
+    private static void loadControllerFXML(Layout layout, Object controller) {
+        try {
+            final URL resource = BaseInjectionModule.class.getResource(resourcePathMap().get(layout));
+            final FXMLLoader loader = new FXMLLoader(resource);
+            loader.setControllerFactory(params -> controller);
+            loader.load();
+            resourceMap.put(layout, loader.getRoot());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

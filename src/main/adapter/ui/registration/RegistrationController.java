@@ -12,10 +12,10 @@ import main.usecase.eventing.LayoutListener;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
+import static main.domain.model.Transaction.signingBonus;
 import static main.usecase.Layout.HOME;
 import static main.usecase.Layout.REGISTRATION;
 
@@ -42,14 +42,11 @@ public class RegistrationController extends EventConnection implements Initializ
 
     @FXML
     public void onCreate() {
-        final UUID uuid = randomUUID();
-        final String name = txtName.getText();
         final LocalDateTime now = now();
-        final Account account = new Account(uuid, name, 0, now);
+        final Account account = new Account(randomUUID(), txtName.getText(), 0, now);
 
         txtName.setText("");
-
-        eventNetwork.onAccountCreated(account);
+        eventNetwork.onAccountCreated(account.apply(signingBonus(account)));
         eventNetwork.onLayoutEvent(HOME);
     }
 

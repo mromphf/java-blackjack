@@ -10,4 +10,11 @@ public interface TransactionRepository {
     default void saveTransactions(Collection<Transaction> transactions) {
         transactions.forEach(this::saveTransaction);
     }
+
+    /*
+        It would be performant to save a collection of transactions in one
+        query, but for now most use-cases should only yield an average of one
+        transaction every few seconds.
+        - MR June 28 2022
+     */
 }

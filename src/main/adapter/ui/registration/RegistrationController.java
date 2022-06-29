@@ -63,7 +63,7 @@ public class RegistrationController implements Initializable, LayoutListener {
         final Transaction signingBonus = Transaction.signingBonus(account);
 
         txtName.setText("");
-        accountService.onAccountCreated(account);
+        accountService.onAccountCreated(account.apply(signingBonus));
         transactionService.onTransactionIssued(signingBonus);
         layoutManager.onLayoutEvent(HOME);
     }

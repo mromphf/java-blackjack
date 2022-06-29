@@ -10,7 +10,6 @@ import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
@@ -49,6 +48,16 @@ public class TransactionService implements TransactionListener, SnapshotListener
         transactionRepository.saveTransaction(transaction);
     }
 
+    @Override
+    public void onGameUpdate(Snapshot snapshot) {
+        evaluationFunctions.stream()
+                .map(function -> function.apply(snapshot))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(groupingBy(Transaction::getAccountKey))
+                .forEach(this::save);
+    }
+
     public Collection<Transaction> loadAll() {
         final Collection<Transaction> transactions = transactionRepository.loadAllTransactions();
         transactions.stream()
@@ -57,28 +66,16 @@ public class TransactionService implements TransactionListener, SnapshotListener
         return transactions;
     }
 
+    private void save(UUID key, Collection<Transaction> transactions) {
+        mapToCache(key, transactions);
+        transactionRepository.saveTransactions(transactions);
+    }
+
     private void mapToCache(UUID key, Collection<Transaction> transactions) {
         if (transactionMap.containsKey(key)) {
             transactionMap.get(key).addAll(transactions);
         } else {
             transactionMap.put(key, transactions);
-        }
-    }
-
-    @Override
-    public void onGameUpdate(Snapshot snapshot) {
-        final Collection<Transaction> workingTransactions = evaluationFunctions.stream()
-                .map(f -> f.apply(snapshot))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-
-        workingTransactions.stream()
-                .collect(groupingBy(Transaction::getAccountKey))
-                .forEach(this::mapToCache);
-
-        if (workingTransactions.size() > 0) {
-            //TODO: Rewrite this part of the event chain
         }
     }
 }

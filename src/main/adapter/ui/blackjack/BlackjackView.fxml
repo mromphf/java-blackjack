@@ -77,7 +77,7 @@
 
             <Button GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="100" minHeight="50"
                     onAction="#onWaiveInsurance">
-                No Insurance
+                Waive Insurance
             </Button>
         </GridPane>
 

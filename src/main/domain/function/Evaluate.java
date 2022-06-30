@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.Optional.empty;
+import static main.domain.function.RoundPredicate.*;
 import static main.domain.model.Action.*;
-import static main.domain.function.RoundPredicate.outcomeIsResolved;
 import static main.domain.function.Rules.settleBet;
 import static main.domain.model.Transaction.transaction;
 
@@ -24,8 +24,23 @@ public class Evaluate {
         evaluators.add(Evaluate.insuranceTransactions());
         evaluators.add(Evaluate.outcomeTransactions());
         evaluators.add(Evaluate.splitTransactions());
+        evaluators.add(Evaluate.betTransactions());
 
         return evaluators;
+    }
+
+    private static Function<Snapshot, Optional<Transaction>> betTransactions() {
+        return (snapshot) -> {
+            if (noActionsTaken.and(outcomeIsUnresolved).test(snapshot)) {
+                return Optional.of(transaction(
+                        snapshot.getTimestamp(),
+                        snapshot.getAccountKey(),
+                        "BET",
+                        snapshot.getNegativeBet()));
+            } else {
+                return empty();
+            }
+        };
     }
 
     private static Function<Snapshot, Optional<Transaction>> insuranceTransactions() {

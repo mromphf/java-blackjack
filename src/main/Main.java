@@ -16,7 +16,7 @@ import main.adapter.ui.registration.RegistrationController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.*;
-import main.usecase.eventing.LayoutListener;
+import main.usecase.LayoutListener;
 
 import java.util.Collection;
 import java.util.HashMap;

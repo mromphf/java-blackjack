@@ -5,8 +5,6 @@ import com.google.inject.name.Named;
 import main.adapter.storage.TransactionRepository;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.eventing.SnapshotListener;
-import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
 import java.util.function.Function;

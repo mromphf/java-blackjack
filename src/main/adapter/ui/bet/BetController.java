@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
 import main.usecase.*;
-import main.usecase.eventing.LayoutListener;
+import main.usecase.LayoutListener;
 
 import java.net.URL;
 import java.util.Optional;

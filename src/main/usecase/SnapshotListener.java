@@ -1,4 +1,4 @@
-package main.usecase.eventing;
+package main.usecase;
 
 import main.domain.model.Snapshot;
 

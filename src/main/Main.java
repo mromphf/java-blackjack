@@ -58,7 +58,7 @@ public class Main extends Application {
 
         final Map<Layout, LayoutListener> layoutListenerMap = new HashMap<Layout, LayoutListener>() {{
             put(BET, betController);
-            put(GAME, injector.getInstance(Game.class));
+            put(GAME, blackjackController);
             put(HISTORY, historyController);
             put(HOME, homeController);
             put(REGISTRATION, registrationController);

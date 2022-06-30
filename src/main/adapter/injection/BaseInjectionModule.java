@@ -19,11 +19,7 @@ import main.adapter.ui.registration.RegistrationController;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.AccountService;
-import main.usecase.Game;
-import main.usecase.LayoutManager;
-import main.usecase.TransactionService;
-import main.usecase.eventing.SnapshotListener;
+import main.usecase.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -86,17 +82,15 @@ public class BaseInjectionModule extends AbstractModule {
                     add(new FileLogHandler());
                 }});
 
-        bind(new TypeLiteral<Collection<SnapshotListener>>() {
-        })
-                .annotatedWith(named(SNAPSHOT_LISTENERS))
-                .toInstance(new LinkedList<>());
-
         bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {
         })
                 .annotatedWith(named(EVALUATORS))
                 .toInstance(transactionEvaluators());
 
         bind(AccountRepository.class).to(Database.class);
+        bind(TransactionRepository.class).to(Database.class);
+        bind(SelectionService.class).to(AccountService.class);
+
         bind(AccountService.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);
@@ -107,7 +101,6 @@ public class BaseInjectionModule extends AbstractModule {
         bind(LayoutManager.class).in(Singleton.class);
         bind(RegistrationController.class).in(Singleton.class);
         bind(Stage.class).in(Singleton.class);
-        bind(TransactionRepository.class).to(Database.class);
         bind(TransactionService.class).in(Singleton.class);
     }
 }

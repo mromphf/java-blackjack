@@ -1,7 +1,6 @@
 package main.adapter.ui.bet;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -9,32 +8,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.adapter.injection.Bindings;
 import main.domain.model.Account;
-import main.domain.model.Snapshot;
-import main.usecase.AccountService;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
-import main.usecase.TransactionService;
+import main.usecase.*;
 import main.usecase.eventing.LayoutListener;
-import main.usecase.eventing.SnapshotListener;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
 import static javafx.application.Platform.runLater;
-import static main.domain.model.Transaction.transaction;
+import static javafx.scene.input.MouseButton.PRIMARY;
 import static main.usecase.Layout.*;
 
 
-public class BetController implements Initializable, LayoutListener, SnapshotListener {
+public class BetController implements Initializable, LayoutListener {
 
     @FXML
     private Canvas cvsScroller;
@@ -66,25 +58,23 @@ public class BetController implements Initializable, LayoutListener, SnapshotLis
     @FXML
     public Button btnBet100;
 
-    private final AccountService accountService;
-    private final TransactionService transactionService;
+    private final SelectionService selectionService;
     private final static int MAX_BET = 500;
-    private final int maxCards;
     private final LayoutManager layoutManager;
 
+    private final Game game;
     private ImageReelAnimation animation;
     private int bet = 0;
 
 
     @Inject
-    public BetController(AccountService accountService,
-                         TransactionService transactionService,
-                         LayoutManager layoutManger,
-                         @Named(Bindings.MAX_CARDS) int maxCards) {
-        this.accountService = accountService;
-        this.maxCards = maxCards;
+    public BetController(
+                         SelectionService selectionService,
+                         Game game,
+                         LayoutManager layoutManger) {
+        this.selectionService = selectionService;
         this.layoutManager = layoutManger;
-        this.transactionService = transactionService;
+        this.game = game;
     }
 
     @Override
@@ -107,28 +97,27 @@ public class BetController implements Initializable, LayoutListener, SnapshotLis
     @Override
     public void onLayoutEvent(Layout event) {
         if (event == BET)  {
-            final Optional<Account> account = accountService.getCurrentlySelectedAccount();
+            final Optional<Account> account = selectionService.getCurrentlySelectedAccount();
 
             if (account.isPresent()) {
                 final int balance = account.get().getBalance();
-                runLater(() -> refreshUI(balance, bet));
+                runLater(() -> refreshUI(balance));
             }
+        } else {
+            throw new IllegalStateException();
         }
     }
 
     @FXML
     private void onDeal() {
-        final Optional<Account> account = accountService.getCurrentlySelectedAccount();
+        final Optional<Account> account = selectionService.getCurrentlySelectedAccount();
 
         if (account.isPresent()) {
-            final UUID accountKey = account.get().getKey();
-            final String description = "BET";
-            final int betVal = (bet * -1);
-
-            transactionService.onTransactionIssued(transaction(now(), accountKey, description, betVal));
+            game.placeBet(bet);
             layoutManager.onLayoutEvent(GAME);
-
             bet = 0;
+        } else {
+            throw new IllegalStateException();
         }
     }
 
@@ -149,30 +138,21 @@ public class BetController implements Initializable, LayoutListener, SnapshotLis
         animation.switchDirection();
     }
 
-    @Override
-    public void onGameUpdate(Snapshot snapshot) {
-        prgDeck.setProgress((float) snapshot.getDeckSize() / maxCards);
-    }
-
     private void onBet(MouseEvent mouseEvent, int amount) {
-        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
-
-        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            this.bet = Math.min(MAX_BET, this.bet + amount);
+        if (mouseEvent.getButton() == PRIMARY) {
+            bet = min(MAX_BET, bet + amount);
         } else {
-            this.bet = Math.max(0, this.bet - amount);
+            bet = max(0, bet - amount);
         }
 
-        if (selectedAccount.isPresent()) {
-            final int balance = selectedAccount.get().getBalance();
-
-            refreshUI(balance, bet);
-        }
+        selectionService.getCurrentlySelectedAccount()
+                .ifPresent(account -> refreshUI(account.getBalance()));
     }
 
-    private void refreshUI(int balance, int bet) {
+    private void refreshUI(int balance) {
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(format("Balance: $%s", balance));
+        prgDeck.setProgress(game.deckProgress());
     }
 }

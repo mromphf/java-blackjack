@@ -5,7 +5,7 @@ import com.google.inject.name.Named;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.eventing.SnapshotListener;
+import main.usecase.SnapshotListener;
 
 import java.util.Collection;
 import java.util.logging.Handler;

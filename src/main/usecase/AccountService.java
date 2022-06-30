@@ -6,7 +6,6 @@ import main.adapter.storage.AccountRepository;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
-import main.usecase.eventing.TransactionListener;
 
 import java.util.*;
 import java.util.function.Function;

@@ -12,7 +12,7 @@ import main.domain.model.Snapshot;
 import main.usecase.Game;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
-import main.usecase.eventing.LayoutListener;
+import main.usecase.LayoutListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;

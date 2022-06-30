@@ -15,7 +15,7 @@ import main.domain.model.Account;
 import main.usecase.AccountService;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
-import main.usecase.eventing.LayoutListener;
+import main.usecase.LayoutListener;
 
 import java.net.URL;
 import java.util.*;

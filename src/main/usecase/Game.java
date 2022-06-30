@@ -7,7 +7,6 @@ import main.domain.model.Account;
 import main.domain.model.Action;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
-import main.usecase.eventing.SnapshotListener;
 
 import java.time.LocalDateTime;
 import java.util.*;

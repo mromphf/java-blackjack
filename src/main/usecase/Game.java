@@ -2,11 +2,12 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.*;
-import main.domain.model.*;
-import main.usecase.eventing.LayoutListener;
+import main.domain.Round;
+import main.domain.model.Account;
+import main.domain.model.Action;
+import main.domain.model.Deck;
+import main.domain.model.Snapshot;
 import main.usecase.eventing.SnapshotListener;
-import main.usecase.eventing.TransactionListener;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -14,30 +15,50 @@ import java.util.*;
 import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
-import static main.adapter.injection.Bindings.SNAPSHOT_LISTENERS;
+import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.model.Action.*;
-import static main.domain.function.Dealer.freshlyShuffledDeck;
-import static main.usecase.Layout.HOME;
 
-public class Game implements LayoutListener, TransactionListener {
+public class Game {
+
+    private final int maxCards;
 
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final AccountService accountService;
+    private final TransactionService transactionService;
     private final Collection<SnapshotListener> snapshotListeners;
+    private final SelectionService selectionService;
 
     @Inject
-    public Game(@Named(SNAPSHOT_LISTENERS) Collection<SnapshotListener> snapshotListeners,
+    public Game(
+                SelectionService selectionService,
                 AccountService accountService,
-                @Named(DECK) Deck deck) {
+                TransactionService transactionService,
+                @Named(DECK) Deck deck,
+                @Named(MAX_CARDS) int maxCards) {
+        this.selectionService = selectionService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
         this.deck = deck;
-        this.snapshotListeners = snapshotListeners;
+        this.maxCards = maxCards;
+        this.snapshotListeners = new HashSet<>();
     }
 
-    public void onActionTaken(Action action) {
-        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
+    public Snapshot start() throws IllegalStateException {
+        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
+
+        if (roundStack.size() > 0 && selectedAccount.isPresent()) {
+            final Snapshot snapshot = roundStack.peek().getSnapshot(now(), selectedAccount.get());
+            notifyListeners(snapshot);
+            return snapshot;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public Snapshot onActionTaken(Action action) {
+        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
         final LocalDateTime timestamp = now();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
@@ -52,32 +73,36 @@ public class Game implements LayoutListener, TransactionListener {
 
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();
-            notifyListeners(currentRound.getSnapshot(timestamp, selectedAccount.get()));
+
+            final Snapshot snapshot = currentRound.getSnapshot(timestamp, selectedAccount.get());
+            return notifyListeners(snapshot);
+        } else {
+            throw new IllegalStateException();
         }
     }
 
-    @Override
-    public void onTransactionIssued(Transaction transaction) {
-        final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
+    public float deckProgress() {
+        return (float) (deck.size() / maxCards);
+    }
 
-        if (transaction.getDescription().equals("BET") && selectedAccount.isPresent()) {
-            roundStack.add(new Round(deck, abs(transaction.getAmount())));
+    public void placeBet(int bet) {
+        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
 
+        if (selectedAccount.isPresent()) {
+            roundStack.add(new Round(deck, abs(bet)));
             notifyListeners(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
+        } else {
+            throw new IllegalStateException();
         }
     }
 
-    @Override
-    public void onLayoutEvent(Layout event) {
-        if (event == HOME && roundStack.size() > 0) {
-            deck.clear();
-            deck.addAll(freshlyShuffledDeck());
-        }
-    }
+    private Snapshot notifyListeners(final Snapshot snapshot) {
+        accountService.onGameUpdate(snapshot);
+        transactionService.onGameUpdate(snapshot);
 
-    private void notifyListeners(final Snapshot snapshot) {
         for (SnapshotListener listener : snapshotListeners ) {
             listener.onGameUpdate(snapshot);
         }
+        return snapshot;
     }
 }

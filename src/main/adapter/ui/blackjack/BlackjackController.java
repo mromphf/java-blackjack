@@ -10,8 +10,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Snapshot;
 import main.usecase.Game;
+import main.usecase.Layout;
 import main.usecase.LayoutManager;
-import main.usecase.eventing.SnapshotListener;
+import main.usecase.eventing.LayoutListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,7 +25,7 @@ import static main.domain.function.Rules.score;
 import static main.domain.model.Action.*;
 import static main.usecase.Layout.BET;
 
-public class BlackjackController implements Initializable, SnapshotListener {
+public class BlackjackController implements Initializable, LayoutListener {
 
     @FXML
     private Label lblBet;
@@ -77,6 +78,62 @@ public class BlackjackController implements Initializable, SnapshotListener {
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
+    public void onLayoutEvent(Layout event) {
+        onGameUpdate(game.start());
+    }
+
+    @FXML
+    public void onSplit() {
+        onGameUpdate(game.onActionTaken(SPLIT));
+    }
+
+    @FXML
+    public void onNoSplit() {
+        splitControls.setVisible(false);
+        gameControls.setVisible(true);
+    }
+
+    @FXML
+    private void onStand() {
+        onGameUpdate(game.onActionTaken(STAND));
+    }
+
+    @FXML
+    private void onSettleNextHand() {
+        onGameUpdate(game.onActionTaken(SETTLE));
+    }
+
+    @FXML
+    private void onDone() {
+        layoutManager.onLayoutEvent(BET);
+        tableDisplay.reset();
+    }
+
+    @FXML
+    private void onHit() {
+        onGameUpdate(game.onActionTaken(HIT));
+    }
+
+    @FXML
+    private void onDouble() {
+        onGameUpdate(game.onActionTaken(DOUBLE));
+    }
+
+    @FXML
+    private void onTakeInsurance() {
+        onGameUpdate(game.onActionTaken(BUY_INSURANCE));
+    }
+
+    @FXML
+    private void onWaiveInsurance() {
+        onGameUpdate(game.onActionTaken(WAIVE_INSURANCE));
+    }
+
+    @FXML
+    void onPlayNextHand() {
+        onGameUpdate(game.onActionTaken(PLAY_NEXT_HAND));
+    }
+
     public void onGameUpdate(Snapshot snapshot) {
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(snapshot));
@@ -97,58 +154,6 @@ public class BlackjackController implements Initializable, SnapshotListener {
                 renderConcealedTable(snapshot);
             }
         });
-    }
-
-    @FXML
-    public void onSplit() {
-        game.onActionTaken(SPLIT);
-    }
-
-    @FXML
-    public void onNoSplit() {
-        splitControls.setVisible(false);
-        gameControls.setVisible(true);
-    }
-
-    @FXML
-    private void onStand() {
-        game.onActionTaken(STAND);
-    }
-
-    @FXML
-    private void onSettleNextHand() {
-        game.onActionTaken(SETTLE);
-    }
-
-    @FXML
-    private void onDone() {
-        layoutManager.onLayoutEvent(BET);
-        tableDisplay.reset();
-    }
-
-    @FXML
-    private void onHit() {
-        game.onActionTaken(HIT);
-    }
-
-    @FXML
-    private void onDouble() {
-        game.onActionTaken(DOUBLE);
-    }
-
-    @FXML
-    private void onTakeInsurance() {
-        game.onActionTaken(BUY_INSURANCE);
-    }
-
-    @FXML
-    private void onWaiveInsurance() {
-        game.onActionTaken(WAIVE_INSURANCE);
-    }
-
-    @FXML
-    void onPlayNextHand() {
-        game.onActionTaken(PLAY_NEXT_HAND);
     }
 
     private void renderExposedTable(Snapshot snapshot) {

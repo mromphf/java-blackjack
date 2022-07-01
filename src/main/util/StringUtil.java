@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-import static main.domain.function.Rules.score;
+import static main.domain.function.CardFunctions.score;
 
 public class StringUtil {
     public static String playerString(Collection<Card> hand) {

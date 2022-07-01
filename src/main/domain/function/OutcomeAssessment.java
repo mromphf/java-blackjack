@@ -8,7 +8,7 @@ import main.domain.model.Transaction;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
-import static main.domain.function.Rules.settleBet;
+import static main.domain.function.CardFunctions.settleBet;
 import static main.domain.model.Action.STAND;
 import static main.domain.model.Transaction.transaction;
 import static main.domain.predicate.RoundPredicate.outcomeIsResolved;

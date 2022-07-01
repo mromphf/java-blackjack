@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
-import static main.domain.function.Rules.*;
+import static main.domain.function.CardFunctions.*;
 import static main.domain.model.Card.card;
 import static main.domain.model.Hand.handOf;
 import static main.domain.model.Rank.*;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static test.domain.anonymous.Anonymous.anonCard;
 import static test.domain.anonymous.Anonymous.anonSuit;
 
-public class RulesTest {
+public class CardFunctionsTest {
 
     @ParameterizedTest
     @MethodSource("blackjackHands")

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static main.domain.function.Rules.*;
+import static main.domain.function.CardFunctions.*;
 import static main.domain.model.Outcome.*;
 import static main.util.LessCode.not;
 

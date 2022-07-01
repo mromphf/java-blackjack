@@ -20,8 +20,8 @@ import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.predicate.RoundPredicate.*;
-import static main.domain.function.Rules.concealedScore;
-import static main.domain.function.Rules.score;
+import static main.domain.function.CardFunctions.concealedScore;
+import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
 import static main.usecase.Layout.BET;
 

@@ -38,7 +38,7 @@ public class GameLogger implements SnapshotListener, AccountRegistrar {
     @Override
     public void createNew(Account account) {
         logger.log(INFO, format(
-                "%s: Account Opened - %s - %s.",
+                "%s: Account Opened - %s [%s]",
                 account.getCreated(),
                 account.getName(),
                 account.getKey()));
@@ -53,7 +53,7 @@ public class GameLogger implements SnapshotListener, AccountRegistrar {
     }
 
     public void onAccountDeleted(Account account) {
-        logger.log(INFO, format("%s: Account Closure Request - %s - %s.",
+        logger.log(INFO, format("%s: Account Closure Request - %s [%s]",
                 account.getCreated(),
                 account.getName(),
                 account.getKey()));

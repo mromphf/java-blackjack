@@ -54,6 +54,9 @@ public class RoundPredicate {
     public static final Predicate<Snapshot> allBetsSettled = (snapshot) -> (
             outcomeIsResolved.and(not(handsRemainToBePlayed)).and(not(handsRemainToBeSettled))).test(snapshot);
 
+    public static final Predicate<Snapshot> startOfRound = (snapshot) -> (
+                outcomeIsUnresolved.and(noActionsTaken).test(snapshot));
+
     public static final Predicate<Snapshot> unresolvedOutcome = (snapshot) -> (
             (outcomeIsUnresolved.and(playerHasBusted).and(handsRemainToBePlayed)).or(
                     not(playerHasBusted).and(handsRemainToBePlayed).and(turnEnded)).or(

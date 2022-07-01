@@ -11,14 +11,13 @@ import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
+import static main.domain.function.CardFunctions.settleBet;
 import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 
 public class Snapshot {
     private final LocalDateTime timestamp;
-    private final UUID accountKey;
-    private final int balance;
     private final int bet;
     private final Outcome outcome;
     private final Collection<Card> deck;
@@ -27,10 +26,10 @@ public class Snapshot {
     private final Collection<Hand> handsToPlay;
     private final Collection<Hand> handsToSettle;
     private final SortedMap<LocalDateTime, Action> actionsTaken;
+    private final Account account;
 
     public Snapshot(LocalDateTime timestamp,
-                    UUID accountKey,
-                    int balance,
+                    Account account,
                     int bet,
                     Stack<Card> deck,
                     Hand dealerHand,
@@ -39,8 +38,7 @@ public class Snapshot {
                     Collection<Hand> handsToSettle,
                     SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
-        this.accountKey = accountKey;
-        this.balance = balance;
+        this.account = account;
         this.bet = bet;
         this.deck = unmodifiableCollection(deck);
         this.dealerHand = unmodifiableCollection(dealerHand);
@@ -56,7 +54,7 @@ public class Snapshot {
     }
 
     public String balanceText() {
-        return format("Balance $%s", balance);
+        return format("Balance $%s", getBalance());
     }
 
     public int getBet() {
@@ -64,7 +62,7 @@ public class Snapshot {
     }
 
     public int getBalance() {
-        return balance;
+        return account.getBalance() + settleBet(this, outcome);
     }
 
     public int getNegativeBet() {
@@ -76,7 +74,7 @@ public class Snapshot {
     }
 
     public boolean canAffordToSpendMore() {
-        return balance >= bet;
+        return account.getBalance() >= bet;
     }
 
     public Collection<Card> getDealerHand() {
@@ -100,7 +98,7 @@ public class Snapshot {
     }
 
     public UUID getAccountKey() {
-        return accountKey;
+        return account.getKey();
     }
 
     public int getDeckSize() {
@@ -123,8 +121,8 @@ public class Snapshot {
                         "ActionsTaken: {%s\n\t},\n\t" +
                         "Player: %s,\n\t" +
                         "Dealer: %s",
-                accountKey,
-                balance,
+                getAccountKey(),
+                getBalance(),
                 getDeckSize(),
                 outcome,
                 bet,

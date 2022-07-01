@@ -31,7 +31,7 @@ public class OutcomeAssessment implements Assessment {
                     snapshot.getTimestamp(),
                     snapshot.getAccountKey(),
                     snapshot.getOutcome().name(),
-                    settleBet(snapshot)));
+                    settleBet(snapshot, snapshot.getOutcome())));
         } else {
             return empty();
         }

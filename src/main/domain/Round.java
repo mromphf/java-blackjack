@@ -17,6 +17,7 @@ public class Round {
 
     private final static int MINIMUM_DEALER_SCORE = 16;
 
+    private final Account player;
     private final Deck deck;
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<HandToSettle> handsToSettle = new Stack<>();
@@ -26,9 +27,14 @@ public class Round {
     private SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
     private Hand currentHand;
 
-    public Round(Deck deck, int bet) {
+    public static Round newRound(Account player, Deck deck, int bet) {
+        return new Round(player, deck, bet);
+    }
+
+    private Round(Account player, Deck deck, int bet) {
         this.bet = bet;
         this.deck = deck;
+        this.player = player;
 
         if (deck.size() < 4) {
             refillDeck();
@@ -119,11 +125,10 @@ public class Round {
         deck.addAll(freshlyShuffledDeck());
     }
 
-    public Snapshot getSnapshot(LocalDateTime timestamp, Account account) {
+    public Snapshot getSnapshot(LocalDateTime timestamp) {
         return new Snapshot(
                 timestamp,
-                account.getKey(),
-                account.getBalance(),
+                player,
                 bet,
                 deck,
                 dealerHand,

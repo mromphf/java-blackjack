@@ -59,7 +59,7 @@ public class HistoryController implements Initializable, LayoutListener {
 
     @FXML
     public void onDateSelected() {
-        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
+        final Optional<Account> optionalAccount = accountService.selectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
             final List<Transaction> accountTransactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
@@ -77,7 +77,7 @@ public class HistoryController implements Initializable, LayoutListener {
 
     @FXML
     public void clearFilter() {
-        final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
+        final Optional<Account> optionalAccount = accountService.selectedAccount();
 
         if (optionalAccount.isPresent()) {
 
@@ -98,7 +98,7 @@ public class HistoryController implements Initializable, LayoutListener {
     @Override
     public void onLayoutEvent(Layout event) {
         if (event== HISTORY) {
-            final Optional<Account> optionalAccount = accountService.getCurrentlySelectedAccount();
+            final Optional<Account> optionalAccount = accountService.selectedAccount();
             if (optionalAccount.isPresent()) {
                 final Account selectedAccount = optionalAccount.get();
                 final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());

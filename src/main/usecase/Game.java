@@ -40,7 +40,7 @@ public class Game {
     }
 
     public Snapshot start() throws IllegalStateException {
-        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = selectionService.selectedAccount();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
             return roundStack.peek().getSnapshot(now(), selectedAccount.get());
@@ -50,7 +50,7 @@ public class Game {
     }
 
     public Snapshot onActionTaken(Action action) {
-        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = selectionService.selectedAccount();
         final LocalDateTime timestamp = now();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
@@ -78,7 +78,7 @@ public class Game {
     }
 
     public void placeBet(int bet) {
-        final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
+        final Optional<Account> selectedAccount = selectionService.selectedAccount();
 
         if (selectedAccount.isPresent()) {
             roundStack.add(new Round(deck, abs(bet)));

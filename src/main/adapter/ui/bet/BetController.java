@@ -97,7 +97,7 @@ public class BetController implements Initializable, LayoutListener {
     @Override
     public void onLayoutEvent(Layout event) {
         if (event == BET)  {
-            final Optional<Account> account = selectionService.getCurrentlySelectedAccount();
+            final Optional<Account> account = selectionService.selectedAccount();
 
             if (account.isPresent()) {
                 final int balance = account.get().getBalance();
@@ -110,7 +110,7 @@ public class BetController implements Initializable, LayoutListener {
 
     @FXML
     private void onDeal() {
-        final Optional<Account> account = selectionService.getCurrentlySelectedAccount();
+        final Optional<Account> account = selectionService.selectedAccount();
 
         if (account.isPresent()) {
             game.placeBet(bet);
@@ -145,7 +145,7 @@ public class BetController implements Initializable, LayoutListener {
             bet = max(0, bet - amount);
         }
 
-        selectionService.getCurrentlySelectedAccount()
+        selectionService.selectedAccount()
                 .ifPresent(account -> refreshUI(account.getBalance()));
     }
 

@@ -5,5 +5,5 @@ import java.util.Optional;
 
 public interface SelectionService {
 
-    Optional<Account> getCurrentlySelectedAccount();
+    Optional<Account> selectedAccount();
 }

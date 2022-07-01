@@ -32,7 +32,7 @@ public class AccountService implements SelectionService, AccountRegistrar, Snaps
     }
 
     @Override
-    public Optional<Account> getCurrentlySelectedAccount() {
+    public Optional<Account> selectedAccount() {
         if (selections.size() > 0 && accountMap.containsKey(selections.peek())) {
             return Optional.of(accountMap.get(selections.peek()));
         } else {

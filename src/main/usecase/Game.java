@@ -24,24 +24,19 @@ public class Game {
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
-    private final AccountService accountService;
-    private final TransactionService transactionService;
     private final Collection<SnapshotListener> snapshotListeners;
     private final SelectionService selectionService;
 
     @Inject
     public Game(
                 SelectionService selectionService,
-                AccountService accountService,
-                TransactionService transactionService,
+                Collection<SnapshotListener> snapshotListeners,
                 @Named(DECK) Deck deck,
                 @Named(MAX_CARDS) int maxCards) {
         this.selectionService = selectionService;
-        this.accountService = accountService;
-        this.transactionService = transactionService;
         this.deck = deck;
         this.maxCards = maxCards;
-        this.snapshotListeners = new HashSet<>();
+        this.snapshotListeners = snapshotListeners;
     }
 
     public Snapshot start() throws IllegalStateException {
@@ -96,9 +91,6 @@ public class Game {
     }
 
     private Snapshot notifyListeners(final Snapshot snapshot) {
-        accountService.onGameUpdate(snapshot);
-        transactionService.onGameUpdate(snapshot);
-
         for (SnapshotListener listener : snapshotListeners ) {
             listener.onGameUpdate(snapshot);
         }

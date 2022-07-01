@@ -43,9 +43,7 @@ public class Game {
         final Optional<Account> selectedAccount = selectionService.getCurrentlySelectedAccount();
 
         if (roundStack.size() > 0 && selectedAccount.isPresent()) {
-            final Snapshot snapshot = roundStack.peek().getSnapshot(now(), selectedAccount.get());
-            notifyListeners(snapshot);
-            return snapshot;
+            return roundStack.peek().getSnapshot(now(), selectedAccount.get());
         } else {
             throw new IllegalStateException();
         }

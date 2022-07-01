@@ -28,7 +28,7 @@ public class Round {
     private Hand currentHand;
 
     public static Round newRound(Account player, Deck deck, int bet) {
-        return new Round(player, deck, bet);
+        return new Round(player.debit(bet), deck, bet);
     }
 
     private Round(Account player, Deck deck, int bet) {

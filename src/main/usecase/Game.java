@@ -74,7 +74,7 @@ public class Game {
     }
 
     public void placeBet(Account account, int bet) {
-        final Round newRound = newRound(account.debit(bet), deck, abs(bet));
+        final Round newRound = newRound(account, deck, abs(bet));
 
         roundStack.add(newRound);
 

@@ -20,7 +20,7 @@ import static main.domain.model.Transaction.signingBonus;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
 
-public class RegistrationController implements Initializable, LayoutListener {
+public class RegistrationController implements Initializable, ScreenObserver {
 
     @FXML
     public TextField txtName;

@@ -13,21 +13,21 @@ import java.util.Stack;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HOME;
 
-public class LayoutManager implements LayoutListener {
+public class LayoutManager implements ScreenObserver {
 
     private Scene scene;
 
     private final Stage stage;
     private final Stack<Layout> navHistory = new Stack<>();
     private final Map<Layout, Parent> sceneMap = new HashMap<>();
-    private final Map<Layout, LayoutListener> listenerMap = new HashMap<>();
+    private final Map<Layout, ScreenObserver> listenerMap = new HashMap<>();
 
     @Inject
     public LayoutManager(Stage stage) {
         this.stage = stage;
     }
 
-    public void initializeListeners(Map<Layout, LayoutListener> listenerMap) {
+    public void initializeListeners(Map<Layout, ScreenObserver> listenerMap) {
         this.listenerMap.putAll(listenerMap);
     }
 

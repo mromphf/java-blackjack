@@ -15,7 +15,7 @@ import main.domain.model.Account;
 import main.usecase.AccountService;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
-import main.usecase.LayoutListener;
+import main.usecase.ScreenObserver;
 
 import java.net.URL;
 import java.util.*;
@@ -27,7 +27,7 @@ import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.usecase.Layout.*;
 
-public class HomeController implements Initializable, LayoutListener {
+public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     Canvas cvsTopScroller;

@@ -16,7 +16,7 @@ import main.adapter.ui.registration.RegistrationController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.*;
-import main.usecase.LayoutListener;
+import main.usecase.ScreenObserver;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class Main extends Application {
             put(REGISTRATION, registrationController);
         }};
 
-        final Map<Layout, LayoutListener> layoutListenerMap = new HashMap<Layout, LayoutListener>() {{
+        final Map<Layout, ScreenObserver> layoutListenerMap = new HashMap<Layout, ScreenObserver>() {{
             put(BET, betController);
             put(GAME, blackjackController);
             put(HISTORY, historyController);

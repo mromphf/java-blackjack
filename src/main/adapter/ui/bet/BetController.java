@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
 import main.usecase.*;
-import main.usecase.LayoutListener;
+import main.usecase.ScreenObserver;
 
 import java.net.URL;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import static javafx.scene.input.MouseButton.PRIMARY;
 import static main.usecase.Layout.*;
 
 
-public class BetController implements Initializable, LayoutListener {
+public class BetController implements Initializable, ScreenObserver {
 
     @FXML
     private Canvas cvsScroller;

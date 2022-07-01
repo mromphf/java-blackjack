@@ -16,7 +16,7 @@ import main.usecase.AccountService;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
 import main.usecase.TransactionService;
-import main.usecase.LayoutListener;
+import main.usecase.ScreenObserver;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ import static main.adapter.ui.history.ChartUtil.*;
 import static main.usecase.Layout.BACK;
 import static main.usecase.Layout.HISTORY;
 
-public class HistoryController implements Initializable, LayoutListener {
+public class HistoryController implements Initializable, ScreenObserver {
 
     @FXML
     public DatePicker datePicker;

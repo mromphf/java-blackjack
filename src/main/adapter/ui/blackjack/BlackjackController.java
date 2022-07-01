@@ -12,7 +12,7 @@ import main.domain.model.Snapshot;
 import main.usecase.Game;
 import main.usecase.Layout;
 import main.usecase.LayoutManager;
-import main.usecase.LayoutListener;
+import main.usecase.ScreenObserver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +25,7 @@ import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
 import static main.usecase.Layout.BET;
 
-public class BlackjackController implements Initializable, LayoutListener {
+public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private Label lblBet;

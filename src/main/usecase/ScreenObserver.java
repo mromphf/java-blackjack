@@ -1,7 +1,5 @@
 package main.usecase;
 
-import main.usecase.Layout;
-
-public interface LayoutListener {
+public interface ScreenObserver {
     void onLayoutEvent(Layout event);
 }

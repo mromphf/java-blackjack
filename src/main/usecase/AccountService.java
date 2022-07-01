@@ -3,30 +3,31 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.adapter.storage.AccountRepository;
+import main.domain.Assessment;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 import static main.adapter.injection.Bindings.EVALUATORS;
+import static main.domain.model.Action.BET;
 
 public class AccountService implements SelectionService, AccountRegistrar, SnapshotListener  {
 
     private final Stack<UUID> selections;
     private final Map<UUID, Account> accountMap;
     private final AccountRepository accountRepository;
-    private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
+    private final Collection<Assessment> assessments;
 
     @Inject
     public AccountService(AccountRepository accountRepository,
-                          @Named(EVALUATORS) Collection<Function<Snapshot, Optional<Transaction>>> evaluators,
+                          @Named(EVALUATORS) Collection<Assessment> evaluators,
                           @Named(ACCOUNT_STACK) Stack<UUID> selections) {
         this.selections = selections;
-        this.evaluationFunctions = evaluators;
+        this.assessments = evaluators;
         this.accountMap = new HashMap<>();
         this.accountRepository = accountRepository;
     }
@@ -42,7 +43,7 @@ public class AccountService implements SelectionService, AccountRegistrar, Snaps
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        evaluationFunctions.stream()
+        assessments.stream()
                 .map(function -> function.apply(snapshot))
                 .filter(Optional::isPresent)
                 .map(Optional::get)

@@ -3,12 +3,12 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.adapter.storage.TransactionRepository;
+import main.domain.Assessment;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
@@ -20,17 +20,17 @@ import static main.domain.model.Transaction.signingBonus;
 
 public class TransactionService implements AccountRegistrar, SnapshotListener {
 
-    private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
-    public final Map<UUID, Collection<Transaction>> transactionMap;
+    private final Collection<Assessment> assessments;
+    private final Map<UUID, Collection<Transaction>> transactionMap;
     private final TransactionRepository transactionRepository;
 
     @Inject
     public TransactionService(
             TransactionRepository transactionRepository,
-            @Named(EVALUATORS) Collection<Function<Snapshot, Optional<Transaction>>> evaluators,
+            @Named(EVALUATORS) Collection<Assessment> evaluators,
             @Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
-        this.evaluationFunctions = evaluators;
+        this.assessments = evaluators;
         this.transactionRepository = transactionRepository;
     }
 
@@ -44,7 +44,7 @@ public class TransactionService implements AccountRegistrar, SnapshotListener {
 
     @Override
     public void onGameUpdate(Snapshot snapshot) {
-        evaluationFunctions.stream()
+        assessments.stream()
                 .map(function -> function.apply(snapshot))
                 .filter(Optional::isPresent)
                 .map(Optional::get)

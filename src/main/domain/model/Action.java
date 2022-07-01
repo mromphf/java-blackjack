@@ -1,6 +1,7 @@
 package main.domain.model;
 
 public enum Action {
+    BET,
     BUY_INSURANCE,
     DOUBLE,
     HIT,

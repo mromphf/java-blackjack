@@ -14,7 +14,7 @@ import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 import static main.adapter.injection.Bindings.EVALUATORS;
 
-public class AccountService implements SelectionService, AccountRegistrar, SnapshotListener  {
+public class AccountService implements SelectionService, AccountRegistrar, GameObserver {
 
     private final Stack<UUID> selections;
     private final Map<UUID, Account> accountMap;
@@ -41,7 +41,7 @@ public class AccountService implements SelectionService, AccountRegistrar, Snaps
     }
 
     @Override
-    public void onGameUpdate(Snapshot snapshot) {
+    public void onUpdate(Snapshot snapshot) {
         assessments.stream()
                 .map(function -> function.apply(snapshot))
                 .filter(Optional::isPresent)

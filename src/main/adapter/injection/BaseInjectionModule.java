@@ -107,9 +107,9 @@ public class BaseInjectionModule extends AbstractModule {
     }
 
     @Provides
-    public Collection<SnapshotListener> snapshotListeners(AccountService accountService,
-                                                          TransactionService transactionService,
-                                                          GameLogger gameLogger) {
+    public Collection<GameObserver> snapshotListeners(AccountService accountService,
+                                                      TransactionService transactionService,
+                                                      GameLogger gameLogger) {
         return of(accountService, transactionService, gameLogger).collect(toSet());
     }
 

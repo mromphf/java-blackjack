@@ -6,7 +6,7 @@ import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 import main.usecase.AccountRegistrar;
-import main.usecase.SnapshotListener;
+import main.usecase.GameObserver;
 
 import java.util.Collection;
 import java.util.logging.Handler;
@@ -17,7 +17,7 @@ import static java.util.logging.Level.INFO;
 import static main.adapter.injection.Bindings.GAME_LOGGER;
 import static main.adapter.injection.Bindings.LOG_HANDLERS;
 
-public class GameLogger implements SnapshotListener, AccountRegistrar {
+public class GameLogger implements GameObserver, AccountRegistrar {
 
     private final Logger logger;
 
@@ -29,7 +29,7 @@ public class GameLogger implements SnapshotListener, AccountRegistrar {
     }
 
     @Override
-    public void onGameUpdate(Snapshot snapshot) {
+    public void onUpdate(Snapshot snapshot) {
         logger.log(INFO, format("%s: Round Snapshot%s",
                 snapshot.getTimestamp().toLocalTime(),
                 snapshot));

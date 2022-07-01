@@ -6,7 +6,7 @@ import main.domain.model.Account;
 import main.domain.model.Action;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
-import main.usecase.SnapshotListener;
+import main.usecase.GameObserver;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -28,15 +28,15 @@ public class Game {
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
-    private final Collection<SnapshotListener> snapshotListeners;
+    private final Collection<GameObserver> gameObservers;
 
     @Inject
-    public Game(Collection<SnapshotListener> snapshotListeners,
+    public Game(Collection<GameObserver> gameObservers,
                 @Named(DECK) Deck deck,
                 @Named(MAX_CARDS) int maxCards) {
         this.deck = deck;
         this.maxCards = maxCards;
-        this.snapshotListeners = snapshotListeners;
+        this.gameObservers = gameObservers;
     }
 
     public Snapshot start() throws IllegalStateException {
@@ -82,8 +82,8 @@ public class Game {
     }
 
     private Snapshot notifyListeners(final Snapshot snapshot) {
-        for (SnapshotListener listener : snapshotListeners ) {
-            listener.onGameUpdate(snapshot);
+        for (GameObserver listener : gameObservers) {
+            listener.onUpdate(snapshot);
         }
         return snapshot;
     }

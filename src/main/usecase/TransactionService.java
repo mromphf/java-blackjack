@@ -18,7 +18,7 @@ import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 import static main.domain.model.Transaction.signingBonus;
 
-public class TransactionService implements AccountRegistrar, SnapshotListener {
+public class TransactionService implements AccountRegistrar, GameObserver {
 
     private final Collection<Assessment> assessments;
     private final Map<UUID, Collection<Transaction>> transactionMap;
@@ -43,7 +43,7 @@ public class TransactionService implements AccountRegistrar, SnapshotListener {
     }
 
     @Override
-    public void onGameUpdate(Snapshot snapshot) {
+    public void onUpdate(Snapshot snapshot) {
         assessments.stream()
                 .map(function -> function.apply(snapshot))
                 .filter(Optional::isPresent)

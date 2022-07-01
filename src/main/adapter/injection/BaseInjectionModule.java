@@ -17,13 +17,12 @@ import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.history.HistoryController;
 import main.adapter.ui.home.HomeController;
 import main.adapter.ui.registration.RegistrationController;
+import main.domain.Assessment;
 import main.domain.model.Deck;
-import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 import main.usecase.*;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
@@ -86,15 +85,8 @@ public class BaseInjectionModule extends AbstractModule {
                     add(new FileLogHandler());
                 }});
 
-        bind(new TypeLiteral<Collection<SnapshotListener>>() {
-        })
-                .annotatedWith(named(SNAPSHOT_LISTENERS))
-                .toInstance(new ArrayList<>());
-
-        bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {
-        })
-                .annotatedWith(named(EVALUATORS))
-                .toInstance(transactionEvaluators());
+        bind(new TypeLiteral<Collection<Assessment>>() {
+        }).annotatedWith(named(EVALUATORS)).toInstance(transactionEvaluators());
 
         bind(AccountRepository.class).to(Database.class);
         bind(TransactionRepository.class).to(Database.class);

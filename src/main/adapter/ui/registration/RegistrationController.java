@@ -17,8 +17,8 @@ import java.util.ResourceBundle;
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.domain.model.Transaction.signingBonus;
-import static main.usecase.Layout.BACK;
-import static main.usecase.Layout.HOME;
+import static main.usecase.Screen.BACK;
+import static main.usecase.Screen.HOME;
 
 public class RegistrationController implements Initializable, ScreenObserver {
 
@@ -28,14 +28,14 @@ public class RegistrationController implements Initializable, ScreenObserver {
     @FXML
     private Button btnOk;
 
-    final private LayoutManager layoutManager;
+    final private ScreenSupervisor screenSupervisor;
     final private Collection<AccountRegistrar> accountRegistrars;
 
     @Inject
     public RegistrationController(
             final Collection<AccountRegistrar> accountRegistrars,
-            final LayoutManager layoutManager) {
-        this.layoutManager  = layoutManager;
+            final ScreenSupervisor screenSupervisor) {
+        this.screenSupervisor = screenSupervisor;
         this.accountRegistrars = accountRegistrars;
     }
 
@@ -44,7 +44,7 @@ public class RegistrationController implements Initializable, ScreenObserver {
 
     @FXML
     public void onCancel() {
-        layoutManager.onLayoutEvent(BACK);
+        screenSupervisor.switchTo(BACK);
     }
 
     @FXML
@@ -62,12 +62,12 @@ public class RegistrationController implements Initializable, ScreenObserver {
             registrar.createNew(account.apply(signingBonus));
         }
 
-        layoutManager.onLayoutEvent(HOME);
+        screenSupervisor.switchTo(HOME);
         txtName.setText("");
     }
 
     @Override
-    public void onLayoutEvent(Layout event) {
+    public void onScreenChanged() {
         btnOk.setDisable(true);
     }
 }

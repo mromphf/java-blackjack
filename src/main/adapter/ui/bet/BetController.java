@@ -23,7 +23,7 @@ import static java.lang.Math.min;
 import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.input.MouseButton.PRIMARY;
-import static main.usecase.Layout.*;
+import static main.usecase.Screen.*;
 
 
 public class BetController implements Initializable, ScreenObserver {
@@ -60,7 +60,7 @@ public class BetController implements Initializable, ScreenObserver {
 
     private final SelectionService selectionService;
     private final static int MAX_BET = 500;
-    private final LayoutManager layoutManager;
+    private final ScreenSupervisor screenSupervisor;
 
     private final Game game;
     private ImageReelAnimation animation;
@@ -71,9 +71,9 @@ public class BetController implements Initializable, ScreenObserver {
     public BetController(
                          SelectionService selectionService,
                          Game game,
-                         LayoutManager layoutManger) {
+                         ScreenSupervisor layoutManger) {
         this.selectionService = selectionService;
-        this.layoutManager = layoutManger;
+        this.screenSupervisor = layoutManger;
         this.game = game;
     }
 
@@ -95,17 +95,9 @@ public class BetController implements Initializable, ScreenObserver {
     }
 
     @Override
-    public void onLayoutEvent(Layout event) {
-        if (event == BET)  {
-            final Optional<Account> account = selectionService.selectedAccount();
-
-            if (account.isPresent()) {
-                final int balance = account.get().getBalance();
-                runLater(() -> refreshUI(balance));
-            }
-        } else {
-            throw new IllegalStateException();
-        }
+    public void onScreenChanged() {
+        selectionService.selectedAccount()
+                .ifPresent(value -> runLater(() -> refreshUI(value.getBalance())));
     }
 
     @FXML
@@ -114,7 +106,7 @@ public class BetController implements Initializable, ScreenObserver {
 
         if (account.isPresent()) {
             game.placeBet(account.get(), bet);
-            layoutManager.onLayoutEvent(GAME);
+            screenSupervisor.switchTo(GAME);
             bet = 0;
         } else {
             throw new IllegalStateException();
@@ -123,14 +115,14 @@ public class BetController implements Initializable, ScreenObserver {
 
     @FXML
     public void onQuit() {
-        layoutManager.onLayoutEvent(HOME);
+        screenSupervisor.switchTo(HOME);
         prgDeck.setProgress(100f);
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        layoutManager.onLayoutEvent(HOME);
+        screenSupervisor.switchTo(HISTORY);
     }
 
     @FXML

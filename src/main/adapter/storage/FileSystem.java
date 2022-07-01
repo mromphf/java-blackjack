@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import main.adapter.injection.BaseInjectionModule;
 import main.domain.model.Deck;
-import main.usecase.Layout;
+import main.usecase.Screen;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,13 +18,13 @@ import static java.lang.System.exit;
 import static main.adapter.storage.Directory.*;
 import static main.adapter.storage.FileFunctions.fileToJson;
 import static main.adapter.storage.JsonUtil.deckFromJson;
-import static main.usecase.Layout.*;
+import static main.usecase.Screen.*;
 
 public class FileSystem {
 
     private final Map<Directory, File> directories;
 
-    public static Map<Layout, Parent> resourceMap = new HashMap<>();
+    public static Map<Screen, Parent> resourceMap = new HashMap<>();
 
     public FileSystem(Map<Directory, File> directories) {
         this.directories = directories;
@@ -59,7 +59,7 @@ public class FileSystem {
         }
     }
 
-    public static void loadFXML(Map<Layout, Object> controllerMap) {
+    public static void loadFXML(Map<Screen, Object> controllerMap) {
         controllerMap.forEach(FileSystem::loadControllerFXML);
     }
 
@@ -73,8 +73,8 @@ public class FileSystem {
         }};
     }
 
-    public static Map<Layout, String> resourcePathMap() {
-        return new HashMap<Layout, String>() {{
+    public static Map<Screen, String> resourcePathMap() {
+        return new HashMap<Screen, String>() {{
             put(BET, "../ui/bet/BetView.fxml");
             put(GAME, "../ui/blackjack/BlackjackView.fxml");
             put(HISTORY, "../ui/history/HistoryView.fxml");
@@ -84,7 +84,7 @@ public class FileSystem {
     }
 
 
-    private static void loadControllerFXML(Layout layout, Object controller) {
+    private static void loadControllerFXML(Screen layout, Object controller) {
         try {
             final URL resource = BaseInjectionModule.class.getResource(resourcePathMap().get(layout));
             final FXMLLoader loader = new FXMLLoader(resource);

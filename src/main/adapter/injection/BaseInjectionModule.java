@@ -99,7 +99,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(GameLogger.class).in(Singleton.class);
         bind(HistoryController.class).in(Singleton.class);
         bind(HomeController.class).in(Singleton.class);
-        bind(LayoutManager.class).in(Singleton.class);
+        bind(ScreenSupervisor.class).in(Singleton.class);
         bind(RegistrationController.class).in(Singleton.class);
         bind(Stage.class).in(Singleton.class);
         bind(TransactionService.class).in(Singleton.class);

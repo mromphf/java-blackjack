@@ -25,7 +25,7 @@ import java.util.Map;
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
 import static main.adapter.storage.FileSystem.*;
-import static main.usecase.Layout.*;
+import static main.usecase.Screen.*;
 
 public class Main extends Application {
 
@@ -37,7 +37,7 @@ public class Main extends Application {
         final Injector injector = createInjector(baseInjectionModule);
         final TransactionService transactionService = injector.getInstance(TransactionService.class);
         final AccountService accountService = injector.getInstance(AccountService.class);
-        final LayoutManager layoutManager = injector.getInstance(LayoutManager.class);
+        final ScreenSupervisor screenSupervisor = injector.getInstance(ScreenSupervisor.class);
 
         final Collection<Account> accounts = accountService.loadAll();
         final Collection<Transaction> transactions = transactionService.loadAll();
@@ -48,7 +48,7 @@ public class Main extends Application {
         final BlackjackController blackjackController = injector.getInstance(BlackjackController.class);
         final RegistrationController registrationController = injector.getInstance(RegistrationController.class);
 
-        final Map<Layout, Object> controllerMap = new HashMap<Layout, Object>() {{
+        final Map<Screen, Object> controllerMap = new HashMap<Screen, Object>() {{
             put(BET, betController);
             put(GAME, blackjackController);
             put(HISTORY, historyController);
@@ -56,7 +56,7 @@ public class Main extends Application {
             put(REGISTRATION, registrationController);
         }};
 
-        final Map<Layout, ScreenObserver> layoutListenerMap = new HashMap<Layout, ScreenObserver>() {{
+        final Map<Screen, ScreenObserver> layoutListenerMap = new HashMap<Screen, ScreenObserver>() {{
             put(BET, betController);
             put(GAME, blackjackController);
             put(HISTORY, historyController);
@@ -70,8 +70,8 @@ public class Main extends Application {
         gameLogger.onAccountsLoaded(accounts);
         gameLogger.onTransactionsLoaded(transactions);
 
-        layoutManager.initializeListeners(layoutListenerMap);
-        layoutManager.initializeLayout(resourceMap);
+        screenSupervisor.initializeListeners(layoutListenerMap);
+        screenSupervisor.initializeLayout(resourceMap);
     }
 
     public static void main(String[] args) {

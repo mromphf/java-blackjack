@@ -13,8 +13,7 @@ import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
 import main.usecase.AccountService;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
+import main.usecase.ScreenSupervisor;
 import main.usecase.ScreenObserver;
 
 import java.net.URL;
@@ -25,7 +24,7 @@ import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
-import static main.usecase.Layout.*;
+import static main.usecase.Screen.*;
 
 public class HomeController implements Initializable, ScreenObserver {
 
@@ -66,14 +65,14 @@ public class HomeController implements Initializable, ScreenObserver {
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<String, ImageReelAnimation> animations = new HashMap<>();
 
-    private final LayoutManager layoutManager;
+    private final ScreenSupervisor screenSupervisor;
 
     @Inject
     public HomeController(
             AccountService accountService,
-            LayoutManager layoutManager) {
+            ScreenSupervisor screenSupervisor) {
         this.accountService = accountService;
-        this.layoutManager = layoutManager;
+        this.screenSupervisor = screenSupervisor;
     }
 
     @Override
@@ -103,7 +102,7 @@ public class HomeController implements Initializable, ScreenObserver {
     @FXML
     public void onPlay() {
         accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
-        layoutManager.onLayoutEvent(BET);
+        screenSupervisor.switchTo(BET);
     }
 
     @FXML
@@ -127,13 +126,14 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onNew() {
-        layoutManager.onLayoutEvent(REGISTRATION);
+        screenSupervisor.switchTo(REGISTRATION);
     }
 
     @FXML
     public void onRequestHistory() {
         accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
-        layoutManager.onLayoutEvent(HISTORY);
+        screenSupervisor.switchTo(HISTORY);
+        toggleAnimationsRunning((false));
     }
 
     @FXML
@@ -163,22 +163,19 @@ public class HomeController implements Initializable, ScreenObserver {
     }
 
     @Override
-    public void onLayoutEvent(Layout event) {
-        if (event == HOME || event == BACK) {
-            final Optional<Account> selectedAccount = accountService.selectedAccount();
+    public void onScreenChanged() {
+        final Optional<Account> selectedAccount = accountService.selectedAccount();
 
-            if (selectedAccount.isPresent()) {
-                final Account account = selectedAccount.get();
-                accountMap.put(account.getKey(), account);
-                runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
-            }
-            toggleAnimationsRunning(true);
-            btnPlay.setDisable(true);
-            btnDelete.setDisable(true);
-            btnHistory.setDisable(true);
-        } else {
-            toggleAnimationsRunning(false);
+        if (selectedAccount.isPresent()) {
+            final Account account = selectedAccount.get();
+            accountMap.put(account.getKey(), account);
+            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
         }
+
+        toggleAnimationsRunning((true));
+        btnPlay.setDisable(true);
+        btnDelete.setDisable(true);
+        btnHistory.setDisable(true);
     }
 
     private void toggleAnimationsRunning(boolean isRunning) {
@@ -207,7 +204,7 @@ public class HomeController implements Initializable, ScreenObserver {
     private Alert initializeConfirmationAlert(Account account) {
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        layoutManager.onAlertEvent(alert);
+        screenSupervisor.onAlertEvent(alert);
 
         alert.setTitle("Confirm Account Closure");
         alert.setHeaderText(account.getName());

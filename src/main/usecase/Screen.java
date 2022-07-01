@@ -1,6 +1,6 @@
 package main.usecase;
 
-public enum Layout {
+public enum Screen {
     BACK,
     BET,
     GAME,

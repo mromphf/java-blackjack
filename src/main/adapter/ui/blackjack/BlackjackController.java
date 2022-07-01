@@ -10,8 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Snapshot;
 import main.usecase.Game;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
+import main.usecase.ScreenSupervisor;
 import main.usecase.ScreenObserver;
 
 import java.net.URL;
@@ -19,11 +18,11 @@ import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.predicate.RoundPredicate.*;
 import static main.domain.function.CardFunctions.concealedScore;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
-import static main.usecase.Layout.BET;
+import static main.domain.predicate.RoundPredicate.*;
+import static main.usecase.Screen.BET;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 
@@ -65,19 +64,20 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     private final Game game;
     private final float maxDeckSize;
-    private final LayoutManager layoutManager;
-@Inject
-    public BlackjackController(Game game, LayoutManager layoutManager, @Named(MAX_CARDS) int maxCards) {
+    private final ScreenSupervisor screenSupervisor;
+
+    @Inject
+    public BlackjackController(Game game, ScreenSupervisor screenSupervisor, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;
-        this.layoutManager = layoutManager;
+        this.screenSupervisor = screenSupervisor;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onLayoutEvent(Layout event) {
+    public void onScreenChanged() {
         onGameUpdate(game.start());
     }
 
@@ -104,7 +104,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private void onDone() {
-        layoutManager.onLayoutEvent(BET);
+        screenSupervisor.switchTo(BET);
         tableDisplay.reset();
     }
 

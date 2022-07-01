@@ -13,10 +13,9 @@ import javafx.scene.layout.GridPane;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
-import main.usecase.TransactionService;
+import main.usecase.ScreenSupervisor;
 import main.usecase.ScreenObserver;
+import main.usecase.TransactionService;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -26,8 +25,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static main.adapter.ui.history.ChartUtil.*;
-import static main.usecase.Layout.BACK;
-import static main.usecase.Layout.HISTORY;
+import static main.usecase.Screen.BACK;
 
 public class HistoryController implements Initializable, ScreenObserver {
 
@@ -39,22 +37,22 @@ public class HistoryController implements Initializable, ScreenObserver {
 
     private final TransactionService transactionService;
     private final AccountService accountService;
-    private final LayoutManager layoutManager;
+    private final ScreenSupervisor screenSupervisor;
 
     @Inject
     public HistoryController(TransactionService transactionService,
                              AccountService accountService,
-                             LayoutManager layoutManager) {
+                             ScreenSupervisor screenSupervisor) {
         this.transactionService = transactionService;
         this.accountService = accountService;
-        this.layoutManager = layoutManager;
+        this.screenSupervisor = screenSupervisor;
     }
 
     @FXML
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        layoutManager.onLayoutEvent(BACK);
+        screenSupervisor.switchTo(BACK);
     }
 
     @FXML
@@ -96,15 +94,14 @@ public class HistoryController implements Initializable, ScreenObserver {
     public void initialize(URL location, ResourceBundle resources) {}
 
     @Override
-    public void onLayoutEvent(Layout event) {
-        if (event== HISTORY) {
-            final Optional<Account> optionalAccount = accountService.selectedAccount();
-            if (optionalAccount.isPresent()) {
-                final Account selectedAccount = optionalAccount.get();
-                final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
+    public void onScreenChanged() {
+        final Optional<Account> optionalAccount = accountService.selectedAccount();
 
-                drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
-            }
+        if (optionalAccount.isPresent()) {
+            final Account selectedAccount = optionalAccount.get();
+            final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
+
+            drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }
     }
 

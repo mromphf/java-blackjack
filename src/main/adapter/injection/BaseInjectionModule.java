@@ -1,6 +1,7 @@
 package main.adapter.injection;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import javafx.stage.Stage;
@@ -25,9 +26,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.inject.name.Names.named;
 import static java.lang.Integer.parseInt;
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.*;
 import static main.adapter.injection.Bindings.*;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
@@ -66,7 +71,8 @@ public class BaseInjectionModule extends AbstractModule {
                 .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
 
-        bind(new TypeLiteral<Stack<UUID>>() {})
+        bind(new TypeLiteral<Stack<UUID>>() {
+        })
                 .annotatedWith(named(ACCOUNT_STACK))
                 .toInstance(new Stack<>());
 
@@ -81,6 +87,11 @@ public class BaseInjectionModule extends AbstractModule {
                     add(new ConsoleLogHandler());
                     add(new FileLogHandler());
                 }});
+
+        bind(new TypeLiteral<Collection<SnapshotListener>>() {
+        })
+                .annotatedWith(named(SNAPSHOT_LISTENERS))
+                .toInstance(new ArrayList<>());
 
         bind(new TypeLiteral<Collection<Function<Snapshot, Optional<Transaction>>>>() {
         })
@@ -102,5 +113,12 @@ public class BaseInjectionModule extends AbstractModule {
         bind(RegistrationController.class).in(Singleton.class);
         bind(Stage.class).in(Singleton.class);
         bind(TransactionService.class).in(Singleton.class);
+    }
+
+    @Provides
+    public Collection<SnapshotListener> snapshotListeners(AccountService accountService,
+                                                          TransactionService transactionService,
+                                                          GameLogger gameLogger) {
+        return of(accountService, transactionService, gameLogger).collect(toSet());
     }
 }

@@ -6,6 +6,6 @@ import java.util.Collection;
 
 public interface AccountRepository {
     Collection<Account> loadAllAccounts();
-    void openNewAccount(Account account);
+    void createNew(Account account);
     void closeAccount(Account account);
 }

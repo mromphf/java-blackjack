@@ -5,6 +5,7 @@ import com.google.inject.name.Named;
 import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
+import main.usecase.AccountRegistrar;
 import main.usecase.SnapshotListener;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ import static java.util.logging.Level.INFO;
 import static main.adapter.injection.Bindings.GAME_LOGGER;
 import static main.adapter.injection.Bindings.LOG_HANDLERS;
 
-public class GameLogger implements SnapshotListener {
+public class GameLogger implements SnapshotListener, AccountRegistrar {
 
     private final Logger logger;
 
@@ -34,8 +35,13 @@ public class GameLogger implements SnapshotListener {
                 snapshot));
     }
 
-    public void onTransactionIssued(Transaction transaction) {
-        onTransaction(transaction);
+    @Override
+    public void createNew(Account account) {
+        logger.log(INFO, format(
+                "%s: Account Opened - %s - %s.",
+                account.getCreated(),
+                account.getName(),
+                account.getKey()));
     }
 
     public void onTransactionsLoaded(Collection<Transaction> transactions) {
@@ -44,14 +50,6 @@ public class GameLogger implements SnapshotListener {
 
     public void onAccountsLoaded(Collection<Account> accounts) {
         logger.log(INFO, format("Loaded %s accounts.", accounts.size()));
-    }
-
-    public void onAccountCreated(Account account) {
-        logger.log(INFO, format(
-                "%s: Account Opened - %s - %s.",
-                account.getCreated(),
-                account.getName(),
-                account.getKey()));
     }
 
     public void onAccountDeleted(Account account) {

@@ -26,13 +26,11 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.google.inject.name.Names.named;
 import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.toSet;
-import static java.util.stream.Stream.*;
+import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
@@ -117,6 +115,13 @@ public class BaseInjectionModule extends AbstractModule {
 
     @Provides
     public Collection<SnapshotListener> snapshotListeners(AccountService accountService,
+                                                          TransactionService transactionService,
+                                                          GameLogger gameLogger) {
+        return of(accountService, transactionService, gameLogger).collect(toSet());
+    }
+
+    @Provides
+    public Collection<AccountRegistrar> accountRegistrars(AccountService accountService,
                                                           TransactionService transactionService,
                                                           GameLogger gameLogger) {
         return of(accountService, transactionService, gameLogger).collect(toSet());

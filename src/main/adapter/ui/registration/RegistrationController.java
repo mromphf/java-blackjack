@@ -7,19 +7,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.AccountService;
-import main.usecase.Layout;
-import main.usecase.LayoutManager;
-import main.usecase.TransactionService;
-import main.usecase.LayoutListener;
+import main.usecase.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
-import static main.usecase.Layout.*;
+import static main.domain.model.Transaction.signingBonus;
+import static main.usecase.Layout.BACK;
+import static main.usecase.Layout.HOME;
 
 public class RegistrationController implements Initializable, LayoutListener {
 
@@ -30,17 +29,14 @@ public class RegistrationController implements Initializable, LayoutListener {
     private Button btnOk;
 
     final private LayoutManager layoutManager;
-    final private AccountService accountService;
-    final private TransactionService transactionService;
+    final private Collection<AccountRegistrar> accountRegistrars;
 
     @Inject
     public RegistrationController(
-            final LayoutManager layoutManager,
-            final AccountService accountService,
-            final TransactionService transactionService) {
+            final Collection<AccountRegistrar> accountRegistrars,
+            final LayoutManager layoutManager) {
         this.layoutManager  = layoutManager;
-        this.accountService = accountService;
-        this.transactionService = transactionService;
+        this.accountRegistrars = accountRegistrars;
     }
 
     @Override
@@ -60,18 +56,18 @@ public class RegistrationController implements Initializable, LayoutListener {
     public void onCreate() {
         final LocalDateTime now = now();
         final Account account = new Account(randomUUID(), txtName.getText(), 0, now);
-        final Transaction signingBonus = Transaction.signingBonus(account);
+        final Transaction signingBonus = signingBonus(account);
 
-        txtName.setText("");
-        accountService.onAccountCreated(account.apply(signingBonus));
-        transactionService.onTransactionIssued(signingBonus);
+        for (AccountRegistrar registrar : accountRegistrars) {
+            registrar.createNew(account.apply(signingBonus));
+        }
+
         layoutManager.onLayoutEvent(HOME);
+        txtName.setText("");
     }
 
     @Override
     public void onLayoutEvent(Layout event) {
-        if (event == REGISTRATION) {
-            btnOk.setDisable(true);
-        }
+        btnOk.setDisable(true);
     }
 }

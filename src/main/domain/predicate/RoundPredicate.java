@@ -1,4 +1,4 @@
-package main.domain.function;
+package main.domain.predicate;
 
 import main.domain.model.Action;
 import main.domain.model.Card;

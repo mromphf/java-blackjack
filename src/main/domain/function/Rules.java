@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-import static main.domain.function.RoundPredicate.determineOutcome;
+import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Action.DOUBLE;
 

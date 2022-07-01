@@ -74,7 +74,7 @@ public class Snapshot {
     }
 
     public boolean canAffordToSpendMore() {
-        return account.getBalance() >= bet;
+        return getBalance() >= bet;
     }
 
     public Collection<Card> getDealerHand() {

@@ -31,7 +31,7 @@ public class Evaluate {
 
     private static Function<Snapshot, Optional<Transaction>> betTransactions() {
         return (snapshot) -> {
-            if (noActionsTaken.and(outcomeIsUnresolved).test(snapshot)) {
+            if (startOfRound.test(snapshot)) {
                 return Optional.of(transaction(
                         snapshot.getTimestamp(),
                         snapshot.getAccountKey(),

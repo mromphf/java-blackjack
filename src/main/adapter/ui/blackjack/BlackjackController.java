@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Snapshot;
-import main.usecase.Game;
+import main.domain.Game;
 import main.usecase.ScreenSupervisor;
 import main.usecase.ScreenObserver;
 

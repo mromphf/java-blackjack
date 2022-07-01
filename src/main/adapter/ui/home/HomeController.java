@@ -165,7 +165,7 @@ public class HomeController implements Initializable, LayoutListener {
     @Override
     public void onLayoutEvent(Layout event) {
         if (event == HOME || event == BACK) {
-            final Optional<Account> selectedAccount = accountService.getCurrentlySelectedAccount();
+            final Optional<Account> selectedAccount = accountService.selectedAccount();
 
             if (selectedAccount.isPresent()) {
                 final Account account = selectedAccount.get();

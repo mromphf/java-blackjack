@@ -12,7 +12,7 @@ import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Action.DOUBLE;
 
-public class Rules {
+public class CardFunctions {
 
     public final static int MAXIMUM_SCORE = 21;
     public final static int ACE_HIGH_SCORE = 11;

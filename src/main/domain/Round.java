@@ -9,7 +9,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Dealer.openingHand;
-import static main.domain.function.Rules.score;
+import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
 import static main.domain.model.Hand.handOf;
 

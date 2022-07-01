@@ -13,7 +13,6 @@ import java.util.*;
 import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 import static main.adapter.injection.Bindings.EVALUATORS;
-import static main.domain.model.Action.BET;
 
 public class AccountService implements SelectionService, AccountRegistrar, SnapshotListener  {
 

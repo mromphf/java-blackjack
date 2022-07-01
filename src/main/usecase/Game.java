@@ -9,12 +9,16 @@ import main.domain.model.Deck;
 import main.domain.model.Snapshot;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
 import static main.adapter.injection.Bindings.MAX_CARDS;
+import static main.domain.Round.newRound;
 import static main.domain.model.Action.*;
 
 public class Game {
@@ -25,35 +29,27 @@ public class Game {
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final Collection<SnapshotListener> snapshotListeners;
-    private final SelectionService selectionService;
 
     @Inject
-    public Game(
-                SelectionService selectionService,
-                Collection<SnapshotListener> snapshotListeners,
+    public Game(Collection<SnapshotListener> snapshotListeners,
                 @Named(DECK) Deck deck,
                 @Named(MAX_CARDS) int maxCards) {
-        this.selectionService = selectionService;
         this.deck = deck;
         this.maxCards = maxCards;
         this.snapshotListeners = snapshotListeners;
     }
 
     public Snapshot start() throws IllegalStateException {
-        final Optional<Account> selectedAccount = selectionService.selectedAccount();
-
-        if (roundStack.size() > 0 && selectedAccount.isPresent()) {
-            return roundStack.peek().getSnapshot(now(), selectedAccount.get());
+        if (roundStack.size() > 0) {
+            return roundStack.peek().getSnapshot(now());
         } else {
             throw new IllegalStateException();
         }
     }
 
     public Snapshot onActionTaken(Action action) {
-        final Optional<Account> selectedAccount = selectionService.selectedAccount();
-        final LocalDateTime timestamp = now();
-
-        if (roundStack.size() > 0 && selectedAccount.isPresent()) {
+        if (roundStack.size() > 0) {
+            final LocalDateTime timestamp = now();
             final Round currentRound = roundStack.peek();
 
             runnableMap.put(HIT, currentRound::hit);
@@ -66,7 +62,7 @@ public class Game {
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();
 
-            final Snapshot snapshot = currentRound.getSnapshot(timestamp, selectedAccount.get());
+            final Snapshot snapshot = currentRound.getSnapshot(timestamp);
             return notifyListeners(snapshot);
         } else {
             throw new IllegalStateException();
@@ -77,15 +73,12 @@ public class Game {
         return (float) (deck.size() / maxCards);
     }
 
-    public void placeBet(int bet) {
-        final Optional<Account> selectedAccount = selectionService.selectedAccount();
+    public void placeBet(Account account, int bet) {
+        final Round newRound = newRound(account.debit(bet), deck, abs(bet));
 
-        if (selectedAccount.isPresent()) {
-            roundStack.add(new Round(deck, abs(bet)));
-            notifyListeners(roundStack.peek().getSnapshot(now(), selectedAccount.get()));
-        } else {
-            throw new IllegalStateException();
-        }
+        roundStack.add(newRound);
+
+        notifyListeners(roundStack.peek().getSnapshot(now()));
     }
 
     private Snapshot notifyListeners(final Snapshot snapshot) {

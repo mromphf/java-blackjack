@@ -2,13 +2,13 @@ package main.domain.function;
 
 import main.domain.model.Action;
 import main.domain.model.Card;
+import main.domain.model.Outcome;
 import main.domain.model.Snapshot;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Action.DOUBLE;
 
@@ -80,7 +80,7 @@ public class CardFunctions {
                 (!isBust(playerCards) && score(playerCards) > score(dealerCards)));
     }
 
-    public static int settleBet(Snapshot snapshot) {
+    public static int settleBet(Snapshot snapshot, Outcome outcome ) {
         final Collection<Card> playerHand = snapshot.getPlayerHand();
         final Collection<Action> actionsTaken = snapshot.getActionsTaken();
         final int bet = snapshot.getBet();
@@ -93,7 +93,7 @@ public class CardFunctions {
 
         final float blackjackMultiplier = isBlackjack.test(playerHand) ? 1.5f : 1.0f;
 
-        switch (determineOutcome(snapshot)) {
+        switch (outcome) {
             case BLACKJACK:
             case WIN:
                 return (((int) (bet * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;

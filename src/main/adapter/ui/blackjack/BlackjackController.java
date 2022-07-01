@@ -66,8 +66,7 @@ public class BlackjackController implements Initializable, LayoutListener {
     private final Game game;
     private final float maxDeckSize;
     private final LayoutManager layoutManager;
-
-    @Inject
+@Inject
     public BlackjackController(Game game, LayoutManager layoutManager, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;

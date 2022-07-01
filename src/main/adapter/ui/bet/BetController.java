@@ -113,7 +113,7 @@ public class BetController implements Initializable, LayoutListener {
         final Optional<Account> account = selectionService.selectedAccount();
 
         if (account.isPresent()) {
-            game.placeBet(bet);
+            game.placeBet(account.get(), bet);
             layoutManager.onLayoutEvent(GAME);
             bet = 0;
         } else {

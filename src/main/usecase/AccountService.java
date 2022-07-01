@@ -10,10 +10,11 @@ import main.domain.model.Transaction;
 import java.util.*;
 import java.util.function.Function;
 
+import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 import static main.adapter.injection.Bindings.EVALUATORS;
 
-public class AccountService implements SelectionService, SnapshotListener  {
+public class AccountService implements SelectionService, AccountRegistrar, SnapshotListener  {
 
     private final Stack<UUID> selections;
     private final Map<UUID, Account> accountMap;
@@ -32,9 +33,8 @@ public class AccountService implements SelectionService, SnapshotListener  {
 
     @Override
     public Optional<Account> getCurrentlySelectedAccount() {
-        final UUID peek = selections.peek();
-        if (selections.size() > 0 && accountMap.containsKey(peek)) {
-            return Optional.of(accountMap.get(peek));
+        if (selections.size() > 0 && accountMap.containsKey(selections.peek())) {
+            return Optional.of(accountMap.get(selections.peek()));
         } else {
             return empty();
         }
@@ -49,14 +49,16 @@ public class AccountService implements SelectionService, SnapshotListener  {
                 .forEach(this::apply);
     }
 
-    public void onAccountCreated(Account account) {
-        accountRepository.openNewAccount(account);
+    @Override
+    public void createNew(Account account) {
+        accountRepository.createNew(account);
         accountMap.put(account.getKey(), account);
         selections.add(account.getKey());
     }
 
     public void onAccountDeleted(Account account) {
         accountRepository.closeAccount(account);
+        accountMap.remove(account.getKey());
     }
 
     public void onAccountSelected(Account account) {

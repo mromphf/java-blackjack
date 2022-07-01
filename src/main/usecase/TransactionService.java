@@ -3,20 +3,22 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.adapter.storage.TransactionRepository;
+import main.domain.model.Account;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
+import static main.domain.model.Transaction.signingBonus;
 
-public class TransactionService implements TransactionListener, SnapshotListener {
+public class TransactionService implements AccountRegistrar, SnapshotListener {
 
     private final Collection<Function<Snapshot, Optional<Transaction>>> evaluationFunctions;
     public final Map<UUID, Collection<Transaction>> transactionMap;
@@ -41,12 +43,6 @@ public class TransactionService implements TransactionListener, SnapshotListener
     }
 
     @Override
-    public void onTransactionIssued(Transaction transaction) {
-        mapToCache(transaction.getAccountKey(), Stream.of(transaction).collect(toList()));
-        transactionRepository.saveTransaction(transaction);
-    }
-
-    @Override
     public void onGameUpdate(Snapshot snapshot) {
         evaluationFunctions.stream()
                 .map(function -> function.apply(snapshot))
@@ -54,6 +50,13 @@ public class TransactionService implements TransactionListener, SnapshotListener
                 .map(Optional::get)
                 .collect(groupingBy(Transaction::getAccountKey))
                 .forEach(this::save);
+    }
+
+    @Override
+    public void createNew(Account account) {
+        final Transaction signingBonus = signingBonus(account);
+        mapToCache(signingBonus.getAccountKey(), of(signingBonus).collect(toList()));
+        transactionRepository.saveTransaction(signingBonus);
     }
 
     public Collection<Transaction> loadAll() {

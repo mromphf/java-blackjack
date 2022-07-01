@@ -70,7 +70,7 @@ public class Database implements AccountRepository, TransactionRepository {
     }
 
     @Override
-    public void openNewAccount(Account account) {
+    public void createNew(Account account) {
         final String sql = format(INSERT_NEW_ACCOUNT.sql,
                 account.getKey(),
                 account.getName(),

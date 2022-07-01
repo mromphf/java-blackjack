@@ -32,10 +32,11 @@ public class AccountService implements SelectionService, SnapshotListener  {
 
     @Override
     public Optional<Account> getCurrentlySelectedAccount() {
-        if (selections.size() > 0 && accountMap.containsKey(selections.peek())) {
-            return Optional.of(accountMap.get(selections.peek()));
+        final UUID peek = selections.peek();
+        if (selections.size() > 0 && accountMap.containsKey(peek)) {
+            return Optional.of(accountMap.get(peek));
         } else {
-            return Optional.empty();
+            return empty();
         }
     }
 

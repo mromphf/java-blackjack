@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 import static main.domain.function.Rules.*;
 import static main.domain.model.Outcome.*;
-import static main.domain.util.LessCode.not;
+import static main.util.LessCode.not;
 
 public class RoundPredicate {
     public static final Predicate<Snapshot> outcomeIsUnresolved = snapshot ->

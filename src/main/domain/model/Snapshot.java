@@ -11,7 +11,7 @@ import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
-import static main.domain.function.RoundPredicate.determineOutcome;
+import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 

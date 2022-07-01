@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.Optional.empty;
-import static main.domain.function.RoundPredicate.*;
+import static main.domain.predicate.RoundPredicate.*;
 import static main.domain.model.Action.*;
 import static main.domain.function.Rules.settleBet;
 import static main.domain.model.Transaction.transaction;

@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.function.RoundPredicate.*;
+import static main.domain.predicate.RoundPredicate.*;
 import static main.domain.function.Rules.concealedScore;
 import static main.domain.function.Rules.score;
 import static main.domain.model.Action.*;

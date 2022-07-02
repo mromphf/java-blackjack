@@ -19,7 +19,7 @@ public class ImageMap {
     private static final Map<String, Image> imageMap = new HashMap<>();
     private static final Map<main.adapter.graphics.ImageKey, Image> imageMap2 = new HashMap<>();
 
-    public static void load() {
+    public static void loadImageMap() {
         for(Card c : freshDeck()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
             final String imagePath = format("/graphics/%s.png", imageName);

@@ -11,9 +11,9 @@ import static main.domain.model.Rank.ACE;
 public class Card {
 
     private final Boolean isFaceUp;
-    private final UUID key;
-    private final Rank rank;
-    private final Suit suit;
+    protected final UUID key;
+    protected final Rank rank;
+    protected final Suit suit;
 
     private Card(UUID key, Rank rank, Suit suit, Boolean isFaceUp) {
         this.key = key;
@@ -22,7 +22,7 @@ public class Card {
         this.isFaceUp = isFaceUp;
     }
 
-    private Card(Rank rank, Suit suit, Boolean isFaceUp) {
+    protected Card(Rank rank, Suit suit, Boolean isFaceUp) {
         this.key = randomUUID();
         this.rank = rank;
         this.suit = suit;

@@ -32,6 +32,8 @@ import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
+import static main.usecase.Screen.*;
+import static main.usecase.Screen.HOME;
 
 public class BaseInjectionModule extends AbstractModule {
 
@@ -121,11 +123,11 @@ public class BaseInjectionModule extends AbstractModule {
                                                        HistoryController historyController) {
         final Map<Screen, ScreenObserver> screenMap = new HashMap<>();
 
-        screenMap.put(Screen.HOME, homeController);
-        screenMap.put(Screen.BET, betController);
-        screenMap.put(Screen.REGISTRATION, registrationController);
-        screenMap.put(Screen.HISTORY, historyController);
-        screenMap.put(Screen.GAME, blackjackController);
+        screenMap.put(HOME, homeController);
+        screenMap.put(BET, betController);
+        screenMap.put(REGISTRATION, registrationController);
+        screenMap.put(HISTORY, historyController);
+        screenMap.put(GAME, blackjackController);
 
         return screenMap;
     }

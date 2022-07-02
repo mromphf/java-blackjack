@@ -57,6 +57,10 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
             throw new IllegalStateException();
         }
 
+        if (sceneMap.isEmpty()) {
+            throw new IllegalStateException();
+        }
+
         if (screen == BACK) {
             navHistory.pop();
             final Screen previousScreen = navHistory.peek();

@@ -8,12 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.adapter.ui.AlertService;
 import main.adapter.ui.ScreenManagement;
 import main.adapter.ui.ScreenObserver;
+import main.adapter.ui.blackjack.ImageMap;
 import main.domain.model.Account;
 import main.usecase.AccountService;
 
@@ -26,7 +28,6 @@ import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.Screen.*;
-import static main.adapter.ui.blackjack.ImageMap.symbolImage;
 import static main.domain.model.Suit.*;
 
 public class HomeController implements Initializable, ScreenObserver {
@@ -70,15 +71,18 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private final ScreenManagement screen;
     private final AlertService alertService;
+    private final ImageMap imageMap;
 
     @Inject
     public HomeController(
+            ImageMap imageMap,
             AlertService alertService,
             AccountService accountService,
             ScreenManagement screen) {
         this.alertService = alertService;
         this.accountService = accountService;
         this.screen = screen;
+        this.imageMap = imageMap;
     }
 
     @Override
@@ -87,15 +91,24 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        animations.put(TOP_SCROLLER, new ImageReelAnimation(topScrollerGraphics, true));
-        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(bottomScrollerGraphics, false));
+        final Image[] images = new Image[] {
+                imageMap.symbolImage(HEARTS),
+                imageMap.symbolImage(CLUBS),
+                imageMap.symbolImage(DIAMONDS),
+                imageMap.symbolImage(SPADES),
+        };
+
+        animations.put(TOP_SCROLLER, new ImageReelAnimation(images, topScrollerGraphics, true));
+        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(images, bottomScrollerGraphics, false));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
+
         btnDelete.setOnAction(handler);
-        img1.imageProperty().setValue(symbolImage(SPADES));
-        img2.imageProperty().setValue(symbolImage(DIAMONDS));
-        img3.imageProperty().setValue(symbolImage(CLUBS));
-        img4.imageProperty().setValue(symbolImage(HEARTS));
+
+        img1.imageProperty().setValue(imageMap.symbolImage(SPADES));
+        img2.imageProperty().setValue(imageMap.symbolImage(DIAMONDS));
+        img3.imageProperty().setValue(imageMap.symbolImage(CLUBS));
+        img4.imageProperty().setValue(imageMap.symbolImage(HEARTS));
 
         toggleAnimationsRunning(true);
     }

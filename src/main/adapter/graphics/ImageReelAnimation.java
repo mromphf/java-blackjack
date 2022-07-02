@@ -5,33 +5,18 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static main.adapter.ui.blackjack.ImageMap.*;
-import static main.domain.model.Suit.*;
-import static main.domain.model.Suit.HEARTS;
-
 public class ImageReelAnimation extends AnimationTimer {
 
     private final GraphicsContext graphics;
-    private final Collection<MovingImage> images = new ArrayList<>();
+    private final MovingImage[] imageReel = new MovingImage[23];
 
-    public ImageReelAnimation(GraphicsContext graphics, boolean isMovingLeft) {
+    public ImageReelAnimation(Image[] images, GraphicsContext graphics, boolean isMovingLeft) {
         this.graphics = graphics;
 
-        final Image[] images = {
-            symbolImage(SPADES),
-            symbolImage(DIAMONDS),
-            symbolImage(CLUBS),
-            symbolImage(HEARTS),
-        };
-
-        // Assemble the image reel
         for (int i = 0, x = 0, imageIndex = 0; i < 23; i++, x += 40) {
             final Rectangle2D rectangle = new Rectangle2D(x, 0, 40, 40);
 
-            this.images.add(new MovingImage(images[imageIndex], rectangle, 1, isMovingLeft));
+            imageReel[i] = new MovingImage(images[imageIndex], rectangle, 1, isMovingLeft);
 
             imageIndex++;
 
@@ -44,11 +29,16 @@ public class ImageReelAnimation extends AnimationTimer {
     @Override
     public void handle(long now) {
         graphics.clearRect(0, 0, 840, 40);
-        images.forEach(MovingImage::move);
-        images.forEach(img -> img.draw(graphics));
+        for (MovingImage movingImage : imageReel) {
+            movingImage.move();
+            movingImage.draw(graphics);
+        }
     }
 
     public void switchDirection() {
-        images.forEach(MovingImage::switchDirection);
+        graphics.clearRect(0, 0, 840, 40);
+        for (MovingImage movingImage : imageReel) {
+            movingImage.switchDirection();
+        }
     }
 }

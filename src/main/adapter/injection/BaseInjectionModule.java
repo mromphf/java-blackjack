@@ -14,6 +14,7 @@ import main.adapter.storage.TransactionRepository;
 import main.adapter.ui.*;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
+import main.adapter.ui.blackjack.ImageMap;
 import main.adapter.ui.history.HistoryController;
 import main.adapter.ui.home.HomeController;
 import main.adapter.ui.registration.RegistrationController;
@@ -89,6 +90,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
 
+        bind(ImageMap.class).in(Singleton.class);
         bind(AccountService.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);

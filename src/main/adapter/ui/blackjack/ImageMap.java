@@ -17,12 +17,12 @@ import static main.domain.function.Dealer.anonymousDeck;
 
 public class ImageMap {
 
-    private static final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
+    private final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
 
-    private static final Map<AnonymousCard, Image> cardImages = new HashMap<>();
-    private static final Map<Symbol, Image> symbolImages = new HashMap<>();
+    private final Map<AnonymousCard, Image> cardImages = new HashMap<>();
+    private final Map<Symbol, Image> symbolImages = new HashMap<>();
 
-    public static void loadImageMap() {
+    public void loadImageMap() {
         for(AnonymousCard c : anonymousDeck()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
             final String imagePath = format("/graphics/%s.png", imageName);
@@ -41,7 +41,7 @@ public class ImageMap {
         }
     }
 
-    public static Image[] imageArray(Collection<Card> cards, boolean outcomeResolved) {
+    public Image[] imageArray(Collection<Card> cards, boolean outcomeResolved) {
         final Image[] arr = new Image[cards.size()];
         final Iterator<Card> iter = cards.iterator();
 
@@ -62,7 +62,7 @@ public class ImageMap {
         return arr;
     }
 
-    public static List<List<Image>> ofHandsToSettle(Collection<Hand> handsToSettle) {
+    public List<List<Image>> ofHandsToSettle(Collection<Hand> handsToSettle) {
         return handsToSettle.stream()
                 .map(cards -> cards.stream()
                         .map(c -> c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard())
@@ -70,15 +70,15 @@ public class ImageMap {
                 .collect(toList());
     }
 
-    public static Image blankCard() {
-        if (ImageMap.useBlueDeck) {
+    public Image blankCard() {
+        if (useBlueDeck) {
             return symbolImages.get(BLUE_CARD);
         } else {
             return symbolImages.get(RED_CARD);
         }
     }
 
-    public static Image symbolImage(Suit suit) {
+    public Image symbolImage(Suit suit) {
         switch (suit) {
             case SPADES:
                 return symbolImages.get(SYMBOL_SPADES);

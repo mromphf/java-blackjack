@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.adapter.ui.blackjack.ImageMap.imageArray;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.RoundPredicate.*;
 import static main.adapter.ui.Screen.BET;
@@ -64,12 +63,17 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final Game game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
+    private final ImageMap imageMap;
 
     @Inject
-    public BlackjackController(Game game, ScreenManagement screenSupervisor, @Named(MAX_CARDS) int maxCards) {
+    public BlackjackController(Game game,
+                               ScreenManagement screenSupervisor,
+                               ImageMap imageMap,
+                               @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;
         this.screenSupervisor = screenSupervisor;
+        this.imageMap = imageMap;
     }
 
     @Override
@@ -154,11 +158,11 @@ public class BlackjackController implements Initializable, ScreenObserver {
                     snapshot.playerScore());
 
             tableDisplay.drawCards(
-                    imageArray(snapshot.getDealerHand(), outcomeIsResolved.test(snapshot)),
-                    imageArray(snapshot.getPlayerHand(), outcomeIsResolved.test(snapshot)));
+                    imageMap.imageArray(snapshot.getDealerHand(), outcomeIsResolved.test(snapshot)),
+                    imageMap.imageArray(snapshot.getPlayerHand(), outcomeIsResolved.test(snapshot)));
 
             tableDisplay.drawHandsToPlay(
-                    ImageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
+                    imageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
             tableDisplay.drawResults(snapshot.getOutcome());
         });
     }

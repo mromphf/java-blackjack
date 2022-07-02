@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import main.adapter.injection.BaseInjectionModule;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.FileSystem;
+import main.adapter.ui.blackjack.ImageMap;
 import main.adapter.ui.home.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
@@ -21,7 +22,6 @@ import java.util.Map;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
-import static main.adapter.ui.blackjack.ImageMap.loadImageMap;
 
 public class Main extends Application {
 
@@ -36,12 +36,12 @@ public class Main extends Application {
         final FileSystem fileSystem = injector.getInstance(FileSystem.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
         final HomeController homeController = injector.getInstance(HomeController.class);
-
+        final ImageMap imageMap = injector.getInstance(ImageMap.class);
         final Collection<Account> accounts = accountService.loadAll();
         final Collection<Transaction> transactions = transactionService.loadAll();
 
         System.out.println("INFO: Loading image files...");
-        loadImageMap();
+        imageMap.loadImageMap();
 
         final Map<Screen, Parent> nodeMap = fileSystem.loadFXMLDocuments();
 

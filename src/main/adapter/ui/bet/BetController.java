@@ -8,13 +8,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.adapter.ui.ScreenManagement;
+import main.adapter.ui.ScreenObserver;
+import main.adapter.ui.blackjack.ImageMap;
 import main.domain.Game;
 import main.domain.model.Account;
-import main.usecase.*;
-import main.adapter.ui.ScreenObserver;
+import main.usecase.SelectionService;
 
 import java.net.URL;
 import java.util.Optional;
@@ -26,6 +28,7 @@ import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static main.adapter.ui.Screen.*;
+import static main.domain.model.Suit.*;
 
 
 public class BetController implements Initializable, ScreenObserver {
@@ -65,23 +68,31 @@ public class BetController implements Initializable, ScreenObserver {
     private final ScreenManagement screen;
 
     private final Game game;
+    private final ImageMap imageMap;
     private ImageReelAnimation animation;
     private int bet = 0;
 
 
     @Inject
-    public BetController(
+    public BetController(ImageMap imageMap,
                          SelectionService selectionService,
                          Game game,
                          ScreenManagement screen) {
         this.selectionService = selectionService;
         this.screen = screen;
         this.game = game;
+        this.imageMap = imageMap;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final GraphicsContext graphics = cvsScroller.getGraphicsContext2D();
+        final Image[] images = new Image[] {
+                imageMap.symbolImage(HEARTS),
+                imageMap.symbolImage(CLUBS),
+                imageMap.symbolImage(DIAMONDS),
+                imageMap.symbolImage(SPADES),
+        };
 
         prgDeck.setProgress(100);
 
@@ -91,7 +102,7 @@ public class BetController implements Initializable, ScreenObserver {
         btnBet25.setOnMouseClicked(event -> onBet(event, 25));
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
 
-        animation = new ImageReelAnimation(graphics, true);
+        animation = new ImageReelAnimation(images, graphics, true);
 
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }

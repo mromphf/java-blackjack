@@ -2,7 +2,6 @@ package main.adapter.graphics;
 
 public enum Symbol {
     BLUE_CARD("card_blue"),
-    CARD("card"),
     RED_CARD("card_red"),
     SYMBOL_CLUBS("sym_clubs"),
     SYMBOL_DIAMONDS("sym_diamonds"),

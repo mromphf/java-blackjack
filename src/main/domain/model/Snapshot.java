@@ -11,6 +11,7 @@ import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
+import static main.domain.function.CardFunctions.score;
 import static main.domain.function.CardFunctions.settleBet;
 import static main.domain.predicate.RoundPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
@@ -107,6 +108,14 @@ public class Snapshot {
 
     public double deckProgress(float maxDeckSize) {
         return deck.size() / maxDeckSize;
+    }
+
+    public int dealerScore() {
+        return score(dealerHand);
+    }
+
+    public int playerScore() {
+        return score(playerHand);
     }
 
     @Override

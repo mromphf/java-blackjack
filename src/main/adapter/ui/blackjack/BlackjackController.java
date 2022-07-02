@@ -18,8 +18,7 @@ import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.function.CardFunctions.concealedScore;
-import static main.domain.function.CardFunctions.score;
+import static main.adapter.ui.blackjack.ImageMap.imageArray;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.RoundPredicate.*;
 import static main.adapter.ui.Screen.BET;
@@ -146,28 +145,21 @@ public class BlackjackController implements Initializable, ScreenObserver {
             btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));
             lblBalance.setText(snapshot.balanceText());
 
-            if (outcomeIsResolved.test(snapshot)) {
-                renderExposedTable(snapshot);
-                tableDisplay.drawResults(snapshot.getOutcome());
-            } else {
-                renderConcealedTable(snapshot);
-            }
+            lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
+
+            tableDisplay.reset();
+
+            tableDisplay.drawScores(
+                    snapshot.dealerScore(),
+                    snapshot.playerScore());
+
+            tableDisplay.drawCards(
+                    imageArray(snapshot.getDealerHand(), outcomeIsResolved.test(snapshot)),
+                    imageArray(snapshot.getPlayerHand(), outcomeIsResolved.test(snapshot)));
+
+            tableDisplay.drawHandsToPlay(
+                    ImageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
+            tableDisplay.drawResults(snapshot.getOutcome());
         });
-    }
-
-    private void renderExposedTable(Snapshot snapshot) {
-        lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
-        tableDisplay.reset();
-        tableDisplay.drawScores(score(snapshot.getDealerHand()), score(snapshot.getPlayerHand()));
-        tableDisplay.drawCards(ImageMap.of(snapshot.getDealerHand(), snapshot.getPlayerHand()));
-        tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
-    }
-
-    private void renderConcealedTable(Snapshot snapshot) {
-        lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
-        tableDisplay.reset();
-        tableDisplay.drawScores(concealedScore(snapshot.getDealerHand()), score(snapshot.getPlayerHand()));
-        tableDisplay.drawCards(ImageMap.ofConcealed(snapshot.getDealerHand(), snapshot.getPlayerHand()));
-        tableDisplay.drawHandsToPlay(ImageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
     }
 }

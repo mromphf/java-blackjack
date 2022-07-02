@@ -1,12 +1,11 @@
 package main.domain.function;
 
+import main.domain.model.AnonymousCard;
 import main.domain.model.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
+import static main.domain.model.AnonymousCard.anonymousCard;
 import static main.domain.model.Card.card;
 import static main.domain.model.Hand.emptyHand;
 
@@ -19,6 +18,19 @@ public class Dealer {
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
                 result.add(card(rank, suit));
+            }
+        }
+
+        return result;
+    }
+
+    public static Collection<AnonymousCard> anonymousDeck() {
+
+        Collection<AnonymousCard> result = new ArrayList<>();
+
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                result.add(anonymousCard(suit, rank));
             }
         }
 

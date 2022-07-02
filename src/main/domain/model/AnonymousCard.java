@@ -1,10 +1,4 @@
-package main.adapter.ui;
-
-import main.domain.model.Card;
-import main.domain.model.Rank;
-import main.domain.model.Suit;
-
-import java.util.Objects;
+package main.domain.model;
 
 import static java.util.Objects.hash;
 

@@ -68,6 +68,11 @@ public class TableDisplay extends Canvas {
         drawLabel(String.format("You: %s", playerScore), VER_CENTER + 130);
     }
 
+    public void drawCards(Image[] dealerCards, Image[] playerCards) {
+        drawLineOfCards(dealerCards, 100);
+        drawLineOfCards(playerCards, VER_CENTER + 110);
+    }
+
     public void drawCards(Map<OLD_IMAGE_KEY, List<Image>> imageMap) {
         drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
         drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 110);
@@ -91,6 +96,15 @@ public class TableDisplay extends Canvas {
         context.setFont(f);
         context.setFill(WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
+    }
+
+
+    private void drawLineOfCards(Image[] cards, int y) {
+        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.length) + (CARD_WIDTH / 2);
+
+        for (int i = 0, x = START_POS; i < cards.length; i++, x += GAP_BETWEEN_CARDS) {
+            context.drawImage(cards[i], x, y, CARD_WIDTH, CARD_HEIGHT);
+        }
     }
 
     private void drawLineOfCards(List<Image> cards, int y) {

@@ -3,9 +3,11 @@ package main.domain.model;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.lang.Boolean.*;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
+import static main.domain.model.AnonymousCard.anonymousCard;
 import static main.domain.model.Rank.ACE;
 
 public class Card {
@@ -63,6 +65,10 @@ public class Card {
 
     public boolean is(Suit suit) {
         return this.suit == suit;
+    }
+
+    public AnonymousCard anonymize() {
+        return anonymousCard(suit, rank);
     }
 
     @Override

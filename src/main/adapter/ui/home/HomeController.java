@@ -90,11 +90,6 @@ public class HomeController implements Initializable, ScreenObserver {
         animations.put(TOP_SCROLLER, new ImageReelAnimation(topScrollerGraphics, true));
         animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(bottomScrollerGraphics, false));
 
-        cvsTopScroller.setHeight(40);
-        cvsTopScroller.setWidth(840);
-        cvsBottomScroller.setHeight(40);
-        cvsBottomScroller.setWidth(840);
-
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
         btnDelete.setOnAction(handler);
         img1.imageProperty().setValue(symbolImage(SPADES));
@@ -172,16 +167,17 @@ public class HomeController implements Initializable, ScreenObserver {
     public void onScreenChanged() {
         final Optional<Account> selectedAccount = accountService.selectedAccount();
 
-        if (selectedAccount.isPresent()) {
-            final Account account = selectedAccount.get();
-            accountMap.put(account.getKey(), account);
-            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
-        }
-
         toggleAnimationsRunning((true));
         btnPlay.setDisable(true);
         btnDelete.setDisable(true);
         btnHistory.setDisable(true);
+
+        if (selectedAccount.isPresent()) {
+            final Account account = selectedAccount.get();
+
+            accountMap.put(account.getKey(), account);
+            runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
+        }
     }
 
     private void toggleAnimationsRunning(boolean isRunning) {

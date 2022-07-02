@@ -24,7 +24,7 @@
             GridPane.columnIndex="0"
             alignment="CENTER"
             style="-fx-padding: 50 0 0 0">
-        <Canvas fx:id="cvsTopScroller" onMouseClicked="#onClickTopScroller"/>
+        <Canvas fx:id="cvsTopScroller" onMouseClicked="#onClickTopScroller" height="40" width="800"/>
     </GridPane>
 
     <GridPane
@@ -75,7 +75,7 @@
             GridPane.columnIndex="0"
             alignment="CENTER"
             style="-fx-padding: 0 0 20 0">
-        <Canvas fx:id="cvsBottomScroller" onMouseClicked="#onClickBottomScroller"/>
+        <Canvas fx:id="cvsBottomScroller" onMouseClicked="#onClickBottomScroller" height="40" width="800"/>
     </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">

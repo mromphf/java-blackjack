@@ -48,11 +48,14 @@ public class ImageMap {
         int i = 0;
 
         while (iter.hasNext()) {
+            final Card c = iter.next();
+
             if (outcomeResolved) {
-                arr[i] = cardImages.get(iter.next().anonymize());
+                arr[i] = cardImages.get(c.anonymize());
             } else {
-                arr[i] = imageByCard(iter.next());
+                arr[i] = c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard();
             }
+
             i++;
         }
 
@@ -62,7 +65,7 @@ public class ImageMap {
     public static List<List<Image>> ofHandsToSettle(Collection<Hand> handsToSettle) {
         return handsToSettle.stream()
                 .map(cards -> cards.stream()
-                        .map(ImageMap::imageByCard)
+                        .map(c -> c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard())
                         .collect(toList()))
                 .collect(toList());
     }
@@ -86,9 +89,5 @@ public class ImageMap {
             default:
                 return symbolImages.get(SYMBOL_HEARTS);
         }
-    }
-
-    private static Image imageByCard(Card c) {
-        return c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard();
     }
 }

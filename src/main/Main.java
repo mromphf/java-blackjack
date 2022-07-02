@@ -54,21 +54,12 @@ public class Main extends Application {
             put(REGISTRATION, registrationController);
         }};
 
-        final Map<Screen, ScreenObserver> layoutListenerMap = new HashMap<Screen, ScreenObserver>() {{
-            put(BET, betController);
-            put(GAME, blackjackController);
-            put(HISTORY, historyController);
-            put(HOME, homeController);
-            put(REGISTRATION, registrationController);
-        }};
-
         loadFXML(controllerMap);
 
         homeController.onAccountsLoaded(accounts);
         gameLogger.onAccountsLoaded(accounts);
         gameLogger.onTransactionsLoaded(transactions);
 
-        screenSupervisor.initializeListeners(layoutListenerMap);
         screenSupervisor.initializeLayout(resourceMap);
     }
 

@@ -13,22 +13,19 @@ import java.util.Stack;
 import static main.usecase.Screen.BACK;
 import static main.usecase.Screen.HOME;
 
-public class ScreenSupervisor {
+public class ScreenSupervisor implements ScreenManagement, AlertService {
 
     private Scene scene;
 
     private final Stage stage;
     private final Stack<Screen> navHistory = new Stack<>();
     private final Map<Screen, Parent> sceneMap = new HashMap<>();
-    private final Map<Screen, ScreenObserver> observerMap = new HashMap<>();
+    private final Map<Screen, ScreenObserver> screenObservers;
 
     @Inject
-    public ScreenSupervisor(Stage stage) {
+    public ScreenSupervisor(Stage stage, Map<Screen, ScreenObserver> screenMap) {
         this.stage = stage;
-    }
-
-    public void initializeListeners(Map<Screen, ScreenObserver> listenerMap) {
-        this.observerMap.putAll(listenerMap);
+        this.screenObservers = screenMap;
     }
 
     public void initializeLayout(Map<Screen, Parent> sceneMap) {
@@ -45,23 +42,32 @@ public class ScreenSupervisor {
         switchToScreen(HOME);
     }
 
-    public void onAlertEvent(Alert event) {
+    @Override
+    public void issueAlert(Alert event) {
         event.initOwner(stage);
     }
 
+    @Override
     public void switchTo(Screen screen) {
         switchToScreen(screen);
     }
 
     private void switchToScreen(Screen screen) {
+        if (screen == BACK && navHistory.size() < 1) {
+            throw new IllegalStateException();
+        }
+
         if (screen == BACK) {
-            final Screen previousScreen = navHistory.pop();
+            navHistory.pop();
+            final Screen previousScreen = navHistory.peek();
+
             scene.setRoot(sceneMap.get(previousScreen));
-            observerMap.get(previousScreen).onScreenChanged();
+            screenObservers.get(previousScreen).onScreenChanged();
+
         } else {
             navHistory.add(screen);
             scene.setRoot(sceneMap.get(screen));
-            observerMap.get(screen).onScreenChanged();
+            screenObservers.get(screen).onScreenChanged();
         }
     }
 }

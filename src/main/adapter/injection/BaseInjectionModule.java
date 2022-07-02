@@ -83,6 +83,8 @@ public class BaseInjectionModule extends AbstractModule {
         bind(AccountRepository.class).to(Database.class);
         bind(TransactionRepository.class).to(Database.class);
         bind(SelectionService.class).to(AccountService.class);
+        bind(ScreenManagement.class).to(ScreenSupervisor.class);
+        bind(AlertService.class).to(ScreenSupervisor.class);
 
         bind(AccountService.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
@@ -109,5 +111,22 @@ public class BaseInjectionModule extends AbstractModule {
                                                           TransactionService transactionService,
                                                           GameLogger gameLogger) {
         return of(accountService, transactionService, gameLogger).collect(toSet());
+    }
+
+    @Provides
+    public Map<Screen, ScreenObserver> screenObservers(HomeController homeController,
+                                                       RegistrationController registrationController,
+                                                       BlackjackController blackjackController,
+                                                       BetController betController,
+                                                       HistoryController historyController) {
+        final Map<Screen, ScreenObserver> screenMap = new HashMap<>();
+
+        screenMap.put(Screen.HOME, homeController);
+        screenMap.put(Screen.BET, betController);
+        screenMap.put(Screen.REGISTRATION, registrationController);
+        screenMap.put(Screen.HISTORY, historyController);
+        screenMap.put(Screen.GAME, blackjackController);
+
+        return screenMap;
     }
 }

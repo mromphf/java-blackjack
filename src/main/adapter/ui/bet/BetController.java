@@ -61,7 +61,7 @@ public class BetController implements Initializable, ScreenObserver {
 
     private final SelectionService selectionService;
     private final static int MAX_BET = 500;
-    private final ScreenSupervisor screenSupervisor;
+    private final ScreenManagement screen;
 
     private final Game game;
     private ImageReelAnimation animation;
@@ -72,9 +72,9 @@ public class BetController implements Initializable, ScreenObserver {
     public BetController(
                          SelectionService selectionService,
                          Game game,
-                         ScreenSupervisor layoutManger) {
+                         ScreenManagement screen) {
         this.selectionService = selectionService;
-        this.screenSupervisor = layoutManger;
+        this.screen = screen;
         this.game = game;
     }
 
@@ -107,7 +107,7 @@ public class BetController implements Initializable, ScreenObserver {
 
         if (account.isPresent()) {
             game.placeBet(account.get(), bet);
-            screenSupervisor.switchTo(GAME);
+            screen.switchTo(GAME);
             bet = 0;
         } else {
             throw new IllegalStateException();
@@ -116,14 +116,14 @@ public class BetController implements Initializable, ScreenObserver {
 
     @FXML
     public void onQuit() {
-        screenSupervisor.switchTo(HOME);
+        screen.switchTo(HOME);
         prgDeck.setProgress(100f);
         bet = 0;
     }
 
     @FXML
     public void onHistory() {
-        screenSupervisor.switchTo(HISTORY);
+        screen.switchTo(HISTORY);
     }
 
     @FXML

@@ -13,7 +13,8 @@ import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
 import main.usecase.AccountService;
-import main.usecase.ScreenSupervisor;
+import main.usecase.AlertService;
+import main.usecase.ScreenManagement;
 import main.usecase.ScreenObserver;
 
 import java.net.URL;
@@ -21,6 +22,7 @@ import java.util.*;
 
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableList;
+import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.blackjack.ImageMap.*;
@@ -65,14 +67,17 @@ public class HomeController implements Initializable, ScreenObserver {
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<String, ImageReelAnimation> animations = new HashMap<>();
 
-    private final ScreenSupervisor screenSupervisor;
+    private final ScreenManagement screen;
+    private final AlertService alertService;
 
     @Inject
     public HomeController(
+            AlertService alertService,
             AccountService accountService,
-            ScreenSupervisor screenSupervisor) {
+            ScreenManagement screen) {
+        this.alertService = alertService;
         this.accountService = accountService;
-        this.screenSupervisor = screenSupervisor;
+        this.screen = screen;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class HomeController implements Initializable, ScreenObserver {
     @FXML
     public void onPlay() {
         accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
-        screenSupervisor.switchTo(BET);
+        screen.switchTo(BET);
     }
 
     @FXML
@@ -126,13 +131,13 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onNew() {
-        screenSupervisor.switchTo(REGISTRATION);
+        screen.switchTo(REGISTRATION);
     }
 
     @FXML
     public void onRequestHistory() {
         accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
-        screenSupervisor.switchTo(HISTORY);
+        screen.switchTo(HISTORY);
         toggleAnimationsRunning((false));
     }
 
@@ -202,9 +207,9 @@ public class HomeController implements Initializable, ScreenObserver {
     }
 
     private Alert initializeConfirmationAlert(Account account) {
-        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        final Alert alert = new Alert(CONFIRMATION);
 
-        screenSupervisor.onAlertEvent(alert);
+        alertService.issueAlert(alert);
 
         alert.setTitle("Confirm Account Closure");
         alert.setHeaderText(account.getName());

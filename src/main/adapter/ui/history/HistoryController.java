@@ -12,10 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.AccountService;
-import main.usecase.ScreenSupervisor;
-import main.usecase.ScreenObserver;
-import main.usecase.TransactionService;
+import main.usecase.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -37,22 +34,22 @@ public class HistoryController implements Initializable, ScreenObserver {
 
     private final TransactionService transactionService;
     private final AccountService accountService;
-    private final ScreenSupervisor screenSupervisor;
+    private final ScreenManagement screen;
 
     @Inject
     public HistoryController(TransactionService transactionService,
                              AccountService accountService,
-                             ScreenSupervisor screenSupervisor) {
+                             ScreenManagement screen) {
         this.transactionService = transactionService;
         this.accountService = accountService;
-        this.screenSupervisor = screenSupervisor;
+        this.screen = screen;
     }
 
     @FXML
     public void onBack() {
         chartHousing.getChildren().clear();
         datePicker.setValue(null);
-        screenSupervisor.switchTo(BACK);
+        screen.switchTo(BACK);
     }
 
     @FXML

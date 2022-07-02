@@ -28,14 +28,14 @@ public class RegistrationController implements Initializable, ScreenObserver {
     @FXML
     private Button btnOk;
 
-    final private ScreenSupervisor screenSupervisor;
+    final private ScreenManagement screen;
     final private Collection<AccountRegistrar> accountRegistrars;
 
     @Inject
     public RegistrationController(
             final Collection<AccountRegistrar> accountRegistrars,
-            final ScreenSupervisor screenSupervisor) {
-        this.screenSupervisor = screenSupervisor;
+            final ScreenManagement screen) {
+        this.screen = screen;
         this.accountRegistrars = accountRegistrars;
     }
 
@@ -44,7 +44,8 @@ public class RegistrationController implements Initializable, ScreenObserver {
 
     @FXML
     public void onCancel() {
-        screenSupervisor.switchTo(BACK);
+        txtName.clear();
+        screen.switchTo(BACK);
     }
 
     @FXML
@@ -62,8 +63,8 @@ public class RegistrationController implements Initializable, ScreenObserver {
             registrar.createNew(account.apply(signingBonus));
         }
 
-        screenSupervisor.switchTo(HOME);
-        txtName.setText("");
+        txtName.clear();
+        screen.switchTo(HOME);
     }
 
     @Override

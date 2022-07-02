@@ -8,9 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.domain.model.Snapshot;
 import main.domain.Game;
-import main.usecase.ScreenSupervisor;
+import main.domain.model.Snapshot;
+import main.usecase.ScreenManagement;
 import main.usecase.ScreenObserver;
 
 import java.net.URL;
@@ -64,10 +64,10 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     private final Game game;
     private final float maxDeckSize;
-    private final ScreenSupervisor screenSupervisor;
+    private final ScreenManagement screenSupervisor;
 
     @Inject
-    public BlackjackController(Game game, ScreenSupervisor screenSupervisor, @Named(MAX_CARDS) int maxCards) {
+    public BlackjackController(Game game, ScreenManagement screenSupervisor, @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;
         this.screenSupervisor = screenSupervisor;

@@ -9,7 +9,8 @@ import java.util.*;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
-import static main.adapter.graphics.ImageKey.ofSymbol;
+import static main.adapter.graphics.ImageKey.keyFromCard;
+import static main.adapter.graphics.ImageKey.keyFromSymbol;
 import static main.adapter.graphics.Symbol.*;
 import static main.domain.function.Dealer.freshDeck;
 
@@ -24,16 +25,17 @@ public class ImageMap {
             final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
             final String imagePath = format("/graphics/%s.png", imageName);
             final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());
+
             imageMap.put(imageName, image);
-            imageMap2.put(main.adapter.graphics.ImageKey.ofCard(c), image);
+            imageMap2.put(keyFromCard(c), image);
         }
 
-        imageMap2.put(ofSymbol(BLUE_CARD), getImage(BLUE_CARD.VALUE));
-        imageMap2.put(ofSymbol(RED_CARD), getImage(RED_CARD.VALUE));
-        imageMap2.put(ofSymbol(SYMBOL_CLUBS), getImage(SYMBOL_CLUBS.VALUE));
-        imageMap2.put(ofSymbol(SYMBOL_DIAMONDS), getImage(SYMBOL_DIAMONDS.VALUE));
-        imageMap2.put(ofSymbol(SYMBOL_HEARTS), getImage(SYMBOL_HEARTS.VALUE));
-        imageMap2.put(ofSymbol(SYMBOL_SPADES), getImage(SYMBOL_SPADES.VALUE));
+        imageMap2.put(keyFromSymbol(BLUE_CARD), getImage(BLUE_CARD.VALUE));
+        imageMap2.put(keyFromSymbol(RED_CARD), getImage(RED_CARD.VALUE));
+        imageMap2.put(keyFromSymbol(SYMBOL_CLUBS), getImage(SYMBOL_CLUBS.VALUE));
+        imageMap2.put(keyFromSymbol(SYMBOL_DIAMONDS), getImage(SYMBOL_DIAMONDS.VALUE));
+        imageMap2.put(keyFromSymbol(SYMBOL_HEARTS), getImage(SYMBOL_HEARTS.VALUE));
+        imageMap2.put(keyFromSymbol(SYMBOL_SPADES), getImage(SYMBOL_SPADES.VALUE));
     }
 
     public static Map<OLD_IMAGE_KEY, List<Image>> of(Collection<Card> dealer, Collection<Card> player) {
@@ -60,26 +62,26 @@ public class ImageMap {
 
     public static Image blankCard() {
         if (ImageMap.useBlueDeck) {
-            return imageMap2.get(ofSymbol(BLUE_CARD));
+            return imageMap2.get(keyFromSymbol(BLUE_CARD));
         } else {
-            return imageMap2.get(ofSymbol(RED_CARD));
+            return imageMap2.get(keyFromSymbol(RED_CARD));
         }
     }
 
     public static Image symSpades() {
-        return imageMap2.get(ofSymbol(SYMBOL_SPADES));
+        return imageMap2.get(keyFromSymbol(SYMBOL_SPADES));
     }
 
     public static Image symHearts() {
-        return imageMap2.get(ofSymbol(SYMBOL_HEARTS));
+        return imageMap2.get(keyFromSymbol(SYMBOL_HEARTS));
     }
 
     public static Image symClubs() {
-        return imageMap2.get(ofSymbol(SYMBOL_CLUBS));
+        return imageMap2.get(keyFromSymbol(SYMBOL_CLUBS));
     }
 
     public static Image symDiamonds() {
-        return imageMap2.get(ofSymbol(SYMBOL_DIAMONDS));
+        return imageMap2.get(keyFromSymbol(SYMBOL_DIAMONDS));
     }
 
     private static List<Image> conceal(Collection<Card> cards) {

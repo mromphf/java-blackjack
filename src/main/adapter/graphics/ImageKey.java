@@ -22,8 +22,12 @@ public class ImageKey {
         this.symbol = symbol;
     }
 
-    public static ImageKey ofCard(Card card) {
+    public static ImageKey keyFromCard(Card card) {
         return new ImageKey(card.getRank(), card.getSuit(), CARD);
+    }
+
+    public static ImageKey keyFromSymbol(Symbol symbol) {
+        return new ImageKey(ACE, HEARTS, symbol);
     }
 
     @Override
@@ -37,9 +41,5 @@ public class ImageKey {
     @Override
     public int hashCode() {
         return Objects.hash(symbol, rank, suit);
-    }
-
-    public static ImageKey ofSymbol(Symbol symbol) {
-        return new ImageKey(ACE, HEARTS, symbol);
     }
 }

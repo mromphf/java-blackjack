@@ -12,8 +12,8 @@ import main.adapter.ui.home.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.AccountService;
-import main.usecase.Screen;
-import main.usecase.ScreenSupervisor;
+import main.adapter.ui.Screen;
+import main.adapter.ui.ScreenSupervisor;
 import main.usecase.TransactionService;
 
 import java.util.Collection;

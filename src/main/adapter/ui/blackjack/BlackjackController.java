@@ -10,8 +10,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.Game;
 import main.domain.model.Snapshot;
-import main.usecase.ScreenManagement;
-import main.usecase.ScreenObserver;
+import main.adapter.ui.ScreenManagement;
+import main.adapter.ui.ScreenObserver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,7 +22,7 @@ import static main.domain.function.CardFunctions.concealedScore;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.RoundPredicate.*;
-import static main.usecase.Screen.BET;
+import static main.adapter.ui.Screen.BET;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 

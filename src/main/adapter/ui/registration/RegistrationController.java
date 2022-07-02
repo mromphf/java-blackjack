@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import main.adapter.ui.ScreenManagement;
+import main.adapter.ui.ScreenObserver;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.*;
@@ -17,8 +19,8 @@ import java.util.ResourceBundle;
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static main.domain.model.Transaction.signingBonus;
-import static main.usecase.Screen.BACK;
-import static main.usecase.Screen.HOME;
+import static main.adapter.ui.Screen.BACK;
+import static main.adapter.ui.Screen.HOME;
 
 public class RegistrationController implements Initializable, ScreenObserver {
 

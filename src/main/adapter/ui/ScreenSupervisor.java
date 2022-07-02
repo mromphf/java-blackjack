@@ -1,4 +1,4 @@
-package main.usecase;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import javafx.scene.Parent;
@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static main.usecase.Screen.BACK;
-import static main.usecase.Screen.HOME;
+import static main.adapter.ui.Screen.BACK;
+import static main.adapter.ui.Screen.HOME;
 
 public class ScreenSupervisor implements ScreenManagement, AlertService {
 
@@ -20,12 +20,12 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
     private final Stage stage;
     private final Stack<Screen> navHistory = new Stack<>();
     private final Map<Screen, Parent> sceneMap = new HashMap<>();
-    private final Map<Screen, ScreenObserver> screenObservers;
+    private final Map<Screen, ScreenObserver> screenMap;
 
     @Inject
     public ScreenSupervisor(Stage stage, Map<Screen, ScreenObserver> screenMap) {
         this.stage = stage;
-        this.screenObservers = screenMap;
+        this.screenMap = screenMap;
     }
 
     public void initializeLayout(Map<Screen, Parent> sceneMap) {
@@ -66,12 +66,12 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
             final Screen previousScreen = navHistory.peek();
 
             scene.setRoot(sceneMap.get(previousScreen));
-            screenObservers.get(previousScreen).onScreenChanged();
+            screenMap.get(previousScreen).onScreenChanged();
 
         } else {
             navHistory.add(screen);
             scene.setRoot(sceneMap.get(screen));
-            screenObservers.get(screen).onScreenChanged();
+            screenMap.get(screen).onScreenChanged();
         }
     }
 }

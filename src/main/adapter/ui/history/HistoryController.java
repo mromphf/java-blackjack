@@ -10,6 +10,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
+import main.adapter.ui.ScreenManagement;
+import main.adapter.ui.ScreenObserver;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.*;
@@ -22,7 +24,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static main.adapter.ui.history.ChartUtil.*;
-import static main.usecase.Screen.BACK;
+import static main.adapter.ui.Screen.BACK;
 
 public class HistoryController implements Initializable, ScreenObserver {
 

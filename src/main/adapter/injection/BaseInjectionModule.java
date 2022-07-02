@@ -11,6 +11,7 @@ import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.TransactionRepository;
+import main.adapter.ui.*;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.history.HistoryController;
@@ -32,8 +33,8 @@ import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
-import static main.usecase.Screen.*;
-import static main.usecase.Screen.HOME;
+import static main.adapter.ui.Screen.*;
+import static main.adapter.ui.Screen.HOME;
 
 public class BaseInjectionModule extends AbstractModule {
 

@@ -1,4 +1,4 @@
-package main.usecase;
+package main.adapter.ui;
 
 import javafx.scene.control.Alert;
 

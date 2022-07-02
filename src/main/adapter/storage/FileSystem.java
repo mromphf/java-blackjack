@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import main.adapter.injection.BaseInjectionModule;
-import main.usecase.Screen;
-import main.usecase.ScreenObserver;
+import main.adapter.ui.Screen;
+import main.adapter.ui.ScreenObserver;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.System.exit;
-import static main.usecase.Screen.screensWithPaths;
+import static main.adapter.ui.Screen.screensWithPaths;
 
 public class FileSystem {
 

@@ -10,10 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
+import main.adapter.ui.ScreenManagement;
 import main.domain.Game;
 import main.domain.model.Account;
 import main.usecase.*;
-import main.usecase.ScreenObserver;
+import main.adapter.ui.ScreenObserver;
 
 import java.net.URL;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import static java.lang.Math.min;
 import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.input.MouseButton.PRIMARY;
-import static main.usecase.Screen.*;
+import static main.adapter.ui.Screen.*;
 
 
 public class BetController implements Initializable, ScreenObserver {

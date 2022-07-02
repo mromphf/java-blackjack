@@ -42,7 +42,7 @@ public class Main extends Application {
 
         ImageMap.load();
 
-        final Map<Screen, Parent> nodeMap = fileSystem.loadFXML();
+        final Map<Screen, Parent> nodeMap = fileSystem.loadFXMLDocuments();
 
 
         homeController.onAccountsLoaded(accounts);

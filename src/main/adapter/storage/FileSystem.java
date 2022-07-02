@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.System.exit;
-import static main.usecase.Screen.*;
+import static main.usecase.Screen.screensWithPaths;
 
 public class FileSystem {
 
@@ -24,11 +24,15 @@ public class FileSystem {
     public FileSystem(Map<Screen, ScreenObserver> screenObservers) {
 
         for (Directory directory : Directory.values()) {
+
             final File file = new File(directory.path());
+
             if (file.exists()) {
                 System.out.printf("INFO: %s directory exists\n", file.getPath());
+
             } else if (file.mkdir()) {
-                System.out.printf("Created new directory: %s\n", file.getPath());
+                System.out.printf("Created new directory %s\n", file.getPath());
+
             } else {
                 throw new RuntimeException();
             }
@@ -37,32 +41,18 @@ public class FileSystem {
         this.screenObservers = screenObservers;
     }
 
-    public Map<Screen, Parent> loadFXML() {
-        return loadControllerFXML();
-    }
-
-    private Map<Screen, String> resourcePathMap() {
-        return new HashMap<Screen, String>() {{
-            put(BET, "../ui/bet/BetView.fxml");
-            put(GAME, "../ui/blackjack/BlackjackView.fxml");
-            put(HISTORY, "../ui/history/HistoryView.fxml");
-            put(HOME, "../ui/home/HomeView.fxml");
-            put(REGISTRATION, "../ui/registration/RegistrationView.fxml");
-        }};
-    }
-
-    private Map<Screen, Parent> loadControllerFXML() {
+    public Map<Screen, Parent> loadFXMLDocuments() {
         final Map<Screen, Parent> nodeMap = new HashMap<>();
 
-        for (Map.Entry<Screen, String> path : resourcePathMap().entrySet()) {
+        for (Screen screen: screensWithPaths()) {
 
             try {
-                final URL resource = BaseInjectionModule.class.getResource(resourcePathMap().get(path.getKey()));
+                final URL resource = BaseInjectionModule.class.getResource(screen.path());
                 final FXMLLoader loader = new FXMLLoader(resource);
 
-                loader.setControllerFactory(params -> screenObservers.get(path.getKey()));
+                loader.setControllerFactory(params -> screenObservers.get(screen));
                 loader.load();
-                nodeMap.put(path.getKey(), loader.getRoot());
+                nodeMap.put(screen, loader.getRoot());
 
             } catch (IOException e) {
                 e.printStackTrace();

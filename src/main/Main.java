@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import main.adapter.injection.BaseInjectionModule;
 import main.adapter.log.GameLogger;
-import main.adapter.storage.FileSystem;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
 import main.adapter.ui.blackjack.ImageMap;
@@ -16,7 +15,6 @@ import main.adapter.ui.registration.RegistrationController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 import main.usecase.*;
-import main.usecase.ScreenObserver;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,15 +22,15 @@ import java.util.Map;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Thread.currentThread;
-import static main.adapter.storage.FileSystem.*;
+import static main.adapter.storage.FileSystem.loadFXML;
+import static main.adapter.storage.FileSystem.resourceMap;
 import static main.usecase.Screen.*;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        final FileSystem fileSystem = new FileSystem(directoryMap());
-        final Module baseInjectionModule = new BaseInjectionModule(fileSystem);
+        final Module baseInjectionModule = new BaseInjectionModule();
 
         final Injector injector = createInjector(baseInjectionModule);
         final TransactionService transactionService = injector.getInstance(TransactionService.class);

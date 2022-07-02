@@ -1,9 +1,15 @@
 package main.adapter.storage;
 
 public enum Directory {
-    ACCOUNTS,
-    ACCOUNTS_CLOSED,
-    DECKS,
-    LOG,
-    TRANSACTIONS
+    LOG("./log");
+
+    private final String path;
+
+    Directory(String path) {
+        this.path = path;
+    }
+
+    public String path() {
+        return this.path;
+    }
 }

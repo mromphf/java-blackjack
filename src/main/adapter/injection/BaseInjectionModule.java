@@ -10,7 +10,6 @@ import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
-import main.adapter.storage.FileSystem;
 import main.adapter.storage.TransactionRepository;
 import main.adapter.ui.bet.BetController;
 import main.adapter.ui.blackjack.BlackjackController;
@@ -28,7 +27,6 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import static com.google.inject.name.Names.named;
-import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
@@ -38,14 +36,9 @@ import static main.domain.function.Evaluate.transactionEvaluators;
 public class BaseInjectionModule extends AbstractModule {
 
     private final Deck deck;
-    private final int numDecks;
 
-    public BaseInjectionModule(FileSystem fileSystem) {
-        final Properties config = fileSystem.loadConfig();
-        final String deckName = (String) config.get("game.deckName");
-
-        this.numDecks = parseInt((String) config.get("game.numDecks"));
-        this.deck = deckName.equals("default") ? freshlyShuffledDeck() : fileSystem.loadDeck(deckName);
+    public BaseInjectionModule() {
+        this.deck = freshlyShuffledDeck();
     }
 
     @Override
@@ -53,16 +46,14 @@ public class BaseInjectionModule extends AbstractModule {
 
         bind(Integer.class)
                 .annotatedWith(named(NUM_DECKS))
-                .toInstance(numDecks);
+                .toInstance((4));
 
         bind(Integer.class)
                 .annotatedWith(named(MAX_CARDS))
                 .toInstance(deck.size());
 
         bind(new TypeLiteral<Deck>() {
-        })
-                .annotatedWith(named(DECK))
-                .toInstance(deck);
+        }).annotatedWith(named(DECK)).toInstance(deck);
 
         bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {
         })

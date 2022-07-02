@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static main.adapter.ui.blackjack.ImageMap.*;
+import static main.domain.model.Suit.*;
+import static main.domain.model.Suit.HEARTS;
 
 public class ImageReelAnimation extends AnimationTimer {
 
@@ -18,7 +20,12 @@ public class ImageReelAnimation extends AnimationTimer {
     public ImageReelAnimation(GraphicsContext graphics, boolean isMovingLeft) {
         this.graphics = graphics;
 
-        final Image[] images = {symClubs(), symHearts(), symSpades(), symDiamonds()};
+        final Image[] images = {
+            symbolImage(SPADES),
+            symbolImage(DIAMONDS),
+            symbolImage(CLUBS),
+            symbolImage(HEARTS),
+        };
 
         // Assemble the image reel
         for (int i = 0, x = 0, imageIndex = 0; i < 23; i++, x += 40) {

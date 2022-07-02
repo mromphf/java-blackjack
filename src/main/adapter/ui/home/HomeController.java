@@ -11,11 +11,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.domain.model.Account;
-import main.usecase.AccountService;
 import main.adapter.ui.AlertService;
 import main.adapter.ui.ScreenManagement;
 import main.adapter.ui.ScreenObserver;
+import main.domain.model.Account;
+import main.usecase.AccountService;
 
 import java.net.URL;
 import java.util.*;
@@ -25,8 +25,9 @@ import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
-import static main.adapter.ui.blackjack.ImageMap.*;
 import static main.adapter.ui.Screen.*;
+import static main.adapter.ui.blackjack.ImageMap.symbolImage;
+import static main.domain.model.Suit.*;
 
 public class HomeController implements Initializable, ScreenObserver {
 
@@ -96,10 +97,10 @@ public class HomeController implements Initializable, ScreenObserver {
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
         btnDelete.setOnAction(handler);
-        img1.imageProperty().setValue(symSpades());
-        img2.imageProperty().setValue(symDiamonds());
-        img3.imageProperty().setValue(symHearts());
-        img4.imageProperty().setValue(symClubs());
+        img1.imageProperty().setValue(symbolImage(SPADES));
+        img2.imageProperty().setValue(symbolImage(DIAMONDS));
+        img3.imageProperty().setValue(symbolImage(CLUBS));
+        img4.imageProperty().setValue(symbolImage(HEARTS));
 
         toggleAnimationsRunning(true);
     }

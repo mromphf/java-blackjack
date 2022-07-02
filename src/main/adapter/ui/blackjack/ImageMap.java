@@ -5,6 +5,7 @@ import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
 import main.domain.model.Hand;
+import main.domain.model.Suit;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ import static main.domain.function.Dealer.anonymousDeck;
 public class ImageMap {
 
     private static final boolean useBlueDeck = new Random().nextInt(10) % 2 == 0;
+
     private static final Map<AnonymousCard, Image> cardImages = new HashMap<>();
     private static final Map<Symbol, Image> symbolImages = new HashMap<>();
 
@@ -24,6 +26,7 @@ public class ImageMap {
         for(AnonymousCard c : anonymousDeck()) {
             final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
             final String imagePath = format("/graphics/%s.png", imageName);
+
             final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());
 
             cardImages.put(c, image);
@@ -72,20 +75,17 @@ public class ImageMap {
         }
     }
 
-    public static Image symSpades() {
-        return symbolImages.get(SYMBOL_SPADES);
-    }
-
-    public static Image symHearts() {
-        return symbolImages.get(SYMBOL_HEARTS);
-    }
-
-    public static Image symClubs() {
-        return symbolImages.get(SYMBOL_CLUBS);
-    }
-
-    public static Image symDiamonds() {
-        return symbolImages.get(SYMBOL_DIAMONDS);
+    public static Image symbolImage(Suit suit) {
+        switch (suit) {
+            case SPADES:
+                return symbolImages.get(SYMBOL_SPADES);
+            case CLUBS:
+                return symbolImages.get(SYMBOL_CLUBS);
+            case DIAMONDS:
+                return symbolImages.get(SYMBOL_DIAMONDS);
+            default:
+                return symbolImages.get(SYMBOL_HEARTS);
+        }
     }
 
     private static Image imageByCard(Card c) {

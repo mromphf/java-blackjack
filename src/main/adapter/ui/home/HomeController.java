@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
@@ -91,24 +90,17 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        final Image[] images = new Image[] {
-                imageMap.symbolImage(HEARTS),
-                imageMap.symbolImage(CLUBS),
-                imageMap.symbolImage(DIAMONDS),
-                imageMap.symbolImage(SPADES),
-        };
-
-        animations.put(TOP_SCROLLER, new ImageReelAnimation(images, topScrollerGraphics, true));
-        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(images, bottomScrollerGraphics, false));
+        animations.put(TOP_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), topScrollerGraphics, true));
+        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), bottomScrollerGraphics, false));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 
         btnDelete.setOnAction(handler);
 
-        img1.imageProperty().setValue(imageMap.symbolImage(SPADES));
-        img2.imageProperty().setValue(imageMap.symbolImage(DIAMONDS));
-        img3.imageProperty().setValue(imageMap.symbolImage(CLUBS));
-        img4.imageProperty().setValue(imageMap.symbolImage(HEARTS));
+        img1.imageProperty().setValue(imageMap.symbolImage(HEARTS));
+        img2.imageProperty().setValue(imageMap.symbolImage(CLUBS));
+        img3.imageProperty().setValue(imageMap.symbolImage(DIAMONDS));
+        img4.imageProperty().setValue(imageMap.symbolImage(SPADES));
 
         toggleAnimationsRunning(true);
     }

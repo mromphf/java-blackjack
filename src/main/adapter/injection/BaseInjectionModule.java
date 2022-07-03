@@ -32,10 +32,9 @@ import static com.google.inject.name.Names.named;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
+import static main.adapter.ui.Screen.*;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
 import static main.domain.function.Evaluate.transactionEvaluators;
-import static main.adapter.ui.Screen.*;
-import static main.adapter.ui.Screen.HOME;
 
 public class BaseInjectionModule extends AbstractModule {
 

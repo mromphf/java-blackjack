@@ -14,6 +14,8 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static main.adapter.graphics.Symbol.*;
 import static main.domain.function.Dealer.anonymousDeck;
+import static main.domain.model.Suit.*;
+import static main.domain.model.Suit.SPADES;
 
 public class ImageMap {
 
@@ -33,7 +35,7 @@ public class ImageMap {
         }
 
         for (int i = 0; i < Symbol.values().length ; i++) {
-            final Symbol symbol = values()[i];
+            final Symbol symbol = Symbol.values()[i];
 
             symbolImages.put(symbol, new Image(requireNonNull(
                     ImageMap.class.getResource(format("/graphics/%s.png", symbol.VALUE))).toString()
@@ -76,6 +78,15 @@ public class ImageMap {
         } else {
             return symbolImages.get(RED_CARD);
         }
+    }
+
+    public Image[] symbolImages() {
+        return new Image[] {
+                symbolImage(HEARTS),
+                symbolImage(CLUBS),
+                symbolImage(DIAMONDS),
+                symbolImage(SPADES),
+        };
     }
 
     public Image symbolImage(Suit suit) {

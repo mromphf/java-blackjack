@@ -25,6 +25,11 @@ import static java.lang.Thread.currentThread;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+        currentThread().setName("Main Thread");
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         final Module baseInjectionModule = new BaseInjectionModule();
@@ -50,10 +55,5 @@ public class Main extends Application {
         gameLogger.onTransactionsLoaded(transactions);
 
         screenSupervisor.initializeLayout(nodeMap);
-    }
-
-    public static void main(String[] args) {
-        currentThread().setName("Main Thread");
-        launch(args);
     }
 }

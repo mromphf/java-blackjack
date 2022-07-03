@@ -1,4 +1,4 @@
-package main.adapter.ui.blackjack;
+package main.adapter.ui;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static javafx.scene.paint.Color.*;
-import static main.adapter.ui.blackjack.OLD_IMAGE_KEY.DEALER_CARDS;
-import static main.adapter.ui.blackjack.OLD_IMAGE_KEY.PLAYER_CARDS;
 import static main.domain.model.Outcome.*;
 
 public class TableDisplay extends Canvas {
@@ -73,11 +71,6 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(playerCards, VER_CENTER + 110);
     }
 
-    public void drawCards(Map<OLD_IMAGE_KEY, List<Image>> imageMap) {
-        drawLineOfCards(imageMap.get(DEALER_CARDS), 100);
-        drawLineOfCards(imageMap.get(PLAYER_CARDS), VER_CENTER + 110);
-    }
-
     public void drawHandsToPlay(List<List<Image>> cards) {
         for (int i = 0, y = BOTTOM - 100; i < cards.size(); i++, y -= 120) {
             drawSmallLineOfCards(cards.get(i), y);
@@ -104,14 +97,6 @@ public class TableDisplay extends Canvas {
 
         for (int i = 0, x = START_POS; i < cards.length; i++, x += GAP_BETWEEN_CARDS) {
             context.drawImage(cards[i], x, y, CARD_WIDTH, CARD_HEIGHT);
-        }
-    }
-
-    private void drawLineOfCards(List<Image> cards, int y) {
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.size()) + (CARD_WIDTH / 2);
-
-        for (int i = 0, x = START_POS; i < cards.size(); i++, x += GAP_BETWEEN_CARDS) {
-            context.drawImage(cards.get(i), x, y, CARD_WIDTH, CARD_HEIGHT);
         }
     }
 

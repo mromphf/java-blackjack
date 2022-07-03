@@ -1,4 +1,4 @@
-package main.adapter.ui.history;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import javafx.application.Platform;
@@ -10,11 +10,10 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
-import main.adapter.ui.ScreenManagement;
-import main.adapter.ui.ScreenObserver;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.*;
+import main.usecase.AccountService;
+import main.usecase.TransactionService;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -23,8 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static main.adapter.ui.history.ChartUtil.*;
 import static main.adapter.ui.Screen.BACK;
+import static main.util.ChartUtil.*;
 
 public class HistoryController implements Initializable, ScreenObserver {
 

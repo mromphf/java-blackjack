@@ -1,15 +1,13 @@
-package main.adapter.ui.registration;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import main.adapter.ui.ScreenManagement;
-import main.adapter.ui.ScreenObserver;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.*;
+import main.usecase.AccountRegistrar;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -18,9 +16,9 @@ import java.util.ResourceBundle;
 
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
-import static main.domain.model.Transaction.signingBonus;
 import static main.adapter.ui.Screen.BACK;
 import static main.adapter.ui.Screen.HOME;
+import static main.domain.model.Transaction.signingBonus;
 
 public class RegistrationController implements Initializable, ScreenObserver {
 

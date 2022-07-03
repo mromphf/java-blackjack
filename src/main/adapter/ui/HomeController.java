@@ -1,4 +1,4 @@
-package main.adapter.ui.home;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
@@ -11,10 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.adapter.ui.AlertService;
-import main.adapter.ui.ScreenManagement;
-import main.adapter.ui.ScreenObserver;
-import main.adapter.ui.blackjack.ImageMap;
 import main.domain.model.Account;
 import main.usecase.AccountService;
 

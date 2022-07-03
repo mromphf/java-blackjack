@@ -12,6 +12,10 @@ public class AnonymousCard extends Card {
         return new AnonymousCard(suit, rank);
     }
 
+    public String shortName() {
+        return suit.name().toLowerCase() + getRank().ORDINAL;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

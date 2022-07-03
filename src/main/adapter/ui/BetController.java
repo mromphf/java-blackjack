@@ -1,4 +1,4 @@
-package main.adapter.ui.bet;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
@@ -10,9 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.adapter.ui.ScreenManagement;
-import main.adapter.ui.ScreenObserver;
-import main.adapter.ui.blackjack.ImageMap;
 import main.domain.Game;
 import main.domain.model.Account;
 import main.usecase.SelectionService;

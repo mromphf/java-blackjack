@@ -9,14 +9,14 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <GridPane
-        fx:controller="main.adapter.ui.home.HomeController"
+        fx:controller="main.adapter.ui.HomeController"
         xmlns:fx="http://javafx.com/fxml"
         alignment="BASELINE_CENTER"
         styleClass="background"
         vgap="20">
 
     <stylesheets>
-        <URL value="@Home.css"/>
+        <URL value="@../css/Home.css"/>
     </stylesheets>
 
     <GridPane

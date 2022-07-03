@@ -1,6 +1,7 @@
-package main.adapter.ui.blackjack;
+package main.adapter.ui;
 
 import javafx.scene.image.Image;
+import main.Main;
 import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
@@ -26,10 +27,11 @@ public class ImageMap {
 
     public void loadImageMap() {
         for(AnonymousCard c : anonymousDeck()) {
-            final String imageName = c.getSuit().name().toLowerCase() + c.getRank().ORDINAL;
-            final String imagePath = format("/graphics/%s.png", imageName);
+            final String imageName = c.shortName();
+            final String imagePath = format("/png/%s.png", imageName);
 
-            final Image image = new Image(requireNonNull(ImageMap.class.getResource(imagePath)).toString());
+            final Image image = new Image(requireNonNull(
+                    Main.class.getResource(imagePath)).toString());
 
             cardImages.put(c, image);
         }
@@ -38,7 +40,7 @@ public class ImageMap {
             final Symbol symbol = Symbol.values()[i];
 
             symbolImages.put(symbol, new Image(requireNonNull(
-                    ImageMap.class.getResource(format("/graphics/%s.png", symbol.VALUE))).toString()
+                    Main.class.getResource(format("/png/%s.png", symbol.VALUE))).toString()
             ));
         }
     }

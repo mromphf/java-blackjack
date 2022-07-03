@@ -1,4 +1,4 @@
-package main.adapter.ui.blackjack;
+package main.adapter.ui;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -10,8 +10,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.domain.Game;
 import main.domain.model.Snapshot;
-import main.adapter.ui.ScreenManagement;
-import main.adapter.ui.ScreenObserver;
 
 import java.net.URL;
 import java.util.ResourceBundle;

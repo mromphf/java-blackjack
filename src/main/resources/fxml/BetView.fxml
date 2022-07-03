@@ -8,11 +8,11 @@
 <?import java.net.URL?>
 
 <?import javafx.scene.canvas.Canvas?>
-<GridPane fx:controller="main.adapter.ui.bet.BetController"
+<GridPane fx:controller="main.adapter.ui.BetController"
           xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" vgap="50" styleClass="background">
 
     <stylesheets>
-        <URL value="@Bet.css"/>
+        <URL value="@../css/Bet.css"/>
     </stylesheets>
 
     <GridPane styleClass="upper-hud" GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" hgap="20" minHeight="100">

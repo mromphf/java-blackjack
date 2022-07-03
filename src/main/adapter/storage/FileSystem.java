@@ -3,7 +3,7 @@ package main.adapter.storage;
 import com.google.inject.Inject;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import main.adapter.injection.BaseInjectionModule;
+import main.Main;
 import main.adapter.ui.Screen;
 import main.adapter.ui.ScreenObserver;
 
@@ -47,7 +47,7 @@ public class FileSystem {
         for (Screen screen: screensWithPaths()) {
 
             try {
-                final URL resource = BaseInjectionModule.class.getResource(screen.path());
+                final URL resource = Main.class.getResource("/fxml/" + screen.path());
                 final FXMLLoader loader = new FXMLLoader(resource);
 
                 loader.setControllerFactory(params -> screenObservers.get(screen));

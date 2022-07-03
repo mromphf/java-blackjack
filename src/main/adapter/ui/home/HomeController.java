@@ -32,10 +32,10 @@ import static main.domain.model.Suit.*;
 public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
-    Canvas cvsTopScroller;
+    public Canvas cvsTopScroller;
 
     @FXML
-    Canvas cvsBottomScroller;
+    public Canvas cvsBottomScroller;
 
     @FXML
     public ImageView img1;

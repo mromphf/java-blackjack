@@ -25,14 +25,6 @@ public enum Rank {
         this.BLACKJACK_VALUE = blackjackValue;
     }
 
-    public static Rank of(int value) throws IllegalArgumentException {
-        if (value > 0 && value < 14) {
-            return values()[value];
-        } else {
-            throw new IllegalArgumentException("Rank Value must be greater than 0 and less than 14.");
-        }
-    }
-
     @Override
     public String toString() {
         return NAME;

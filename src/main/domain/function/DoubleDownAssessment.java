@@ -1,7 +1,6 @@
 package main.domain.function;
 
 import main.domain.Assessment;
-import main.domain.model.Action;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 
@@ -15,11 +14,6 @@ public class DoubleDownAssessment implements Assessment {
 
     public static DoubleDownAssessment doubleDownAssessment() {
         return new DoubleDownAssessment();
-    }
-
-    @Override
-    public Action action() {
-        return DOUBLE;
     }
 
     @Override

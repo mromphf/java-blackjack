@@ -19,11 +19,6 @@ public class InsuranceAssessment implements Assessment {
     }
 
     @Override
-    public Action action() {
-        return BUY_INSURANCE;
-    }
-
-    @Override
     public Optional<Transaction> apply(Snapshot snapshot) {
         final Collection<Action> actionsTaken = snapshot.getActionsTaken();
         final boolean insurancePurchased = actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE);

@@ -37,8 +37,4 @@ public class SplitAssessment implements Assessment {
         }
     }
 
-    @Override
-    public Action action() {
-        return SPLIT;
-    }
 }

@@ -34,7 +34,7 @@ public class FileSystem {
                 System.out.printf("Created new directory %s\n", file.getPath());
 
             } else {
-                throw new RuntimeException();
+                throw new IllegalStateException();
             }
         }
 

@@ -35,19 +35,18 @@
             styleClass="header-panel"
             alignment="CENTER">
         <ImageView
-                fx:id="img1"
                 fitHeight="70"
                 fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="0">
-            <Image url="@../png/sym_spades.png"/>
+            <Image url="@../png/sym_hearts.png"/>
         </ImageView>
         <ImageView
-                fx:id="img2"
                 fitHeight="70"
                 fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="1">
+            <Image url="@../png/sym_spades.png"/>
         </ImageView>
         <Text
                 GridPane.rowIndex="0"
@@ -57,18 +56,18 @@
             Blackjack
         </Text>
         <ImageView
-                fx:id="img3"
                 fitHeight="70"
                 fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="3">
+            <Image url="@../png/sym_diamonds.png"/>
         </ImageView>
         <ImageView
-                fx:id="img4"
                 fitHeight="70"
                 fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="4">
+            <Image url="@../png/sym_clubs.png"/>
         </ImageView>
     </GridPane>
 

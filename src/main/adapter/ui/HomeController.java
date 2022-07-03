@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
 import main.domain.model.Account;
@@ -23,7 +22,6 @@ import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
 import static main.adapter.ui.Screen.*;
-import static main.domain.model.Suit.*;
 
 public class HomeController implements Initializable, ScreenObserver {
 
@@ -32,18 +30,6 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public Canvas cvsBottomScroller;
-
-    @FXML
-    public ImageView img1;
-
-    @FXML
-    public ImageView img2;
-
-    @FXML
-    public ImageView img3;
-
-    @FXML
-    public ImageView img4;
 
     @FXML
     private TableView<Account> tblAccounts;
@@ -92,11 +78,6 @@ public class HomeController implements Initializable, ScreenObserver {
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 
         btnDelete.setOnAction(handler);
-
-        img1.imageProperty().setValue(imageMap.symbolImage(HEARTS));
-        img2.imageProperty().setValue(imageMap.symbolImage(CLUBS));
-        img3.imageProperty().setValue(imageMap.symbolImage(DIAMONDS));
-        img4.imageProperty().setValue(imageMap.symbolImage(SPADES));
 
         toggleAnimationsRunning(true);
     }

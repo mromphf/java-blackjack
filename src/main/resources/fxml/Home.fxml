@@ -8,6 +8,7 @@
 
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.image.Image?>
 <GridPane
         fx:controller="main.adapter.ui.HomeController"
         xmlns:fx="http://javafx.com/fxml"
@@ -39,6 +40,7 @@
                 fitWidth="70"
                 GridPane.rowIndex="0"
                 GridPane.columnIndex="0">
+            <Image url="@../png/sym_spades.png"/>
         </ImageView>
         <ImageView
                 fx:id="img2"

@@ -7,11 +7,11 @@ import static java.util.stream.Stream.of;
 
 public enum Screen {
     BACK("NO PATH"),
-    BET("betView.fxml"),
-    GAME("blackjackView.fxml"),
-    HOME("homeView.fxml"),
-    HISTORY("historyView.fxml"),
-    REGISTRATION("registrationView.fxml"),
+    BET("Bet.fxml"),
+    GAME("Blackjack.fxml"),
+    HOME("Home.fxml"),
+    HISTORY("History.fxml"),
+    REGISTRATION("Registration.fxml"),
     ;
 
     private final String path;

@@ -39,7 +39,7 @@ public class Game {
         this.gameObservers = gameObservers;
     }
 
-    public Snapshot start() throws IllegalStateException {
+    public Snapshot peek() throws IllegalStateException {
         if (roundStack.size() > 0) {
             return roundStack.peek().getSnapshot(now());
         } else {

@@ -81,7 +81,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @Override
     public void onScreenChanged() {
-        onGameUpdate(game.start());
+        onGameUpdate(game.peek());
     }
 
     @FXML

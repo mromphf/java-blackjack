@@ -21,6 +21,8 @@ import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.ButtonType.OK;
 import static javafx.scene.input.MouseButton.SECONDARY;
+import static main.adapter.ui.Direction.LEFT;
+import static main.adapter.ui.Direction.RIGHT;
 import static main.adapter.ui.Screen.*;
 
 public class HomeController implements Initializable, ScreenObserver {
@@ -72,8 +74,8 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
 
-        animations.put(TOP_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), topScrollerGraphics, true));
-        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), bottomScrollerGraphics, false));
+        animations.put(TOP_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), topScrollerGraphics, LEFT));
+        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), bottomScrollerGraphics, RIGHT));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 

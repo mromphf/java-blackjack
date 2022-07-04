@@ -23,6 +23,7 @@ import static java.lang.Math.min;
 import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.input.MouseButton.PRIMARY;
+import static main.adapter.ui.Direction.LEFT;
 import static main.adapter.ui.Screen.*;
 
 
@@ -91,7 +92,7 @@ public class BetController implements Initializable, ScreenObserver {
         btnBet25.setOnMouseClicked(event -> onBet(event, 25));
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
 
-        animation = new ImageReelAnimation(imageMap.symbolImages(), graphics, true);
+        animation = new ImageReelAnimation(imageMap.symbolImages(), graphics, LEFT);
 
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }

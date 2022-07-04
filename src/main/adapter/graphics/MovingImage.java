@@ -3,6 +3,10 @@ package main.adapter.graphics;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import main.adapter.ui.Direction;
+
+import static main.adapter.ui.Direction.LEFT;
+import static main.adapter.ui.Direction.RIGHT;
 
 public class MovingImage {
 
@@ -12,13 +16,13 @@ public class MovingImage {
     private final double height;
     private final double y;
 
-    private boolean isMovingLeft;
+    private Direction direction;
     private double x;
 
-    public MovingImage(Image img, Rectangle2D rectangle, float velocity, boolean isMovingLeft) {
+    public MovingImage(Image img, Rectangle2D rectangle, Direction direction, float velocity ) {
         this.img = img;
         this.velocity = velocity;
-        this.isMovingLeft = isMovingLeft;
+        this.direction = direction;
         this.x = rectangle.getMinX();
         this.y = rectangle.getMinY();
         this.height = rectangle.getHeight();
@@ -26,13 +30,13 @@ public class MovingImage {
     }
 
     public void move() {
-        if (isMovingLeft) {
+        if (direction == LEFT) {
             x -= velocity;
         } else {
             x += velocity;
         }
 
-        if (isMovingLeft && x + width < 0) {
+        if ((direction == LEFT) && x + width < 0) {
             x = 880;
         } else if (x - width >= 840){
             x = -40;
@@ -40,7 +44,7 @@ public class MovingImage {
     }
 
     public void switchDirection() {
-        isMovingLeft = !isMovingLeft;
+        direction = direction == LEFT ? RIGHT : LEFT;
     }
 
     public void draw(GraphicsContext graphics) {

@@ -18,7 +18,7 @@
 
     <stylesheets>
         <URL value="@../css/Home.css"/>
-        <URL value="@../css/Debug.css"/>
+<!--        <URL value="@../css/Debug.css"/>-->
     </stylesheets>
 
     <GridPane

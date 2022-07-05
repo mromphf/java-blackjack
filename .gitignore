@@ -1,6 +1,5 @@
 /app-data
 /target
-/scripts/sql/queries.sql
 /log
 *.class
 *.swp

@@ -28,10 +28,10 @@ import static main.adapter.ui.Screen.*;
 public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
-    public Canvas cvsTopScroller;
+    public Canvas topScroller;
 
     @FXML
-    public Canvas cvsBottomScroller;
+    public Canvas bottomScroller;
 
     @FXML
     private TableView<Account> tblAccounts;
@@ -45,12 +45,9 @@ public class HomeController implements Initializable, ScreenObserver {
     @FXML
     private Button btnHistory;
 
-    private final static String TOP_SCROLLER = "top";
-    private final static String BOTTOM_SCROLLER = "bottom";
-
     private final AccountService accountService;
     private final Map<UUID, Account> accountMap = new HashMap<>();
-    private final Map<String, ImageReelAnimation> animations = new HashMap<>();
+    private final Map<Canvas, ImageReelAnimation> animations = new HashMap<>();
 
     private final ScreenManagement screen;
     private final AlertService alertService;
@@ -71,11 +68,11 @@ public class HomeController implements Initializable, ScreenObserver {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final EventHandler<ActionEvent> handler = onDeleteEvent();
-        final GraphicsContext topScrollerGraphics = cvsTopScroller.getGraphicsContext2D();
-        final GraphicsContext bottomScrollerGraphics = cvsBottomScroller.getGraphicsContext2D();
+        final GraphicsContext topScrollerGraphics = topScroller.getGraphicsContext2D();
+        final GraphicsContext bottomScrollerGraphics = bottomScroller.getGraphicsContext2D();
 
-        animations.put(TOP_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), topScrollerGraphics, LEFT));
-        animations.put(BOTTOM_SCROLLER, new ImageReelAnimation(imageMap.symbolImages(), bottomScrollerGraphics, RIGHT));
+        animations.put(topScroller, new ImageReelAnimation(imageMap.symbolImages(), topScrollerGraphics, LEFT));
+        animations.put(bottomScroller, new ImageReelAnimation(imageMap.symbolImages(), bottomScrollerGraphics, RIGHT));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 
@@ -123,19 +120,19 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onClickTopScroller(MouseEvent event) {
-        animations.get(TOP_SCROLLER).switchDirection();
+        animations.get(topScroller).switchDirection();
 
         if (event.getButton() == SECONDARY) {
-            animations.get(BOTTOM_SCROLLER).switchDirection();
+            animations.get(bottomScroller).switchDirection();
         }
     }
 
     @FXML
     public void onClickBottomScroller(MouseEvent event) {
-        animations.get(BOTTOM_SCROLLER).switchDirection();
+        animations.get(bottomScroller).switchDirection();
 
         if (event.getButton() == SECONDARY) {
-            animations.get(TOP_SCROLLER).switchDirection();
+            animations.get(topScroller).switchDirection();
         }
     }
 

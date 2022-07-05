@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.domain.Game;
+import main.usecase.Game;
 import main.domain.model.Snapshot;
 
 import java.net.URL;

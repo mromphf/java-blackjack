@@ -19,7 +19,7 @@ import main.adapter.ui.HistoryController;
 import main.adapter.ui.HomeController;
 import main.adapter.ui.RegistrationController;
 import main.domain.Assessment;
-import main.domain.Game;
+import main.usecase.Game;
 import main.domain.model.Deck;
 import main.domain.model.Transaction;
 import main.usecase.*;

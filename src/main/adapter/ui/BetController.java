@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.ImageReelAnimation;
-import main.domain.Game;
+import main.usecase.Game;
 import main.domain.model.Account;
 import main.usecase.SelectionService;
 

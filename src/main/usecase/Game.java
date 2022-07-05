@@ -1,12 +1,12 @@
-package main.domain;
+package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import main.domain.Round;
 import main.domain.model.Account;
 import main.domain.model.Action;
 import main.domain.model.Deck;
 import main.domain.model.Snapshot;
-import main.usecase.GameObserver;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

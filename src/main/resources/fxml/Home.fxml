@@ -24,8 +24,7 @@
     <GridPane
             GridPane.rowIndex="0"
             GridPane.columnIndex="0"
-            alignment="CENTER"
-            style="-fx-padding: 50 0 0 0">
+            alignment="CENTER">
         <Canvas fx:id="topScroller" onMouseClicked="#onClickTopScroller" height="40" width="800"/>
     </GridPane>
 
@@ -67,8 +66,7 @@
     <GridPane
             GridPane.rowIndex="2"
             GridPane.columnIndex="0"
-            alignment="CENTER"
-            style="-fx-padding: 0 0 20 0">
+            alignment="CENTER">
         <Canvas fx:id="bottomScroller" onMouseClicked="#onClickBottomScroller" height="40" width="800"/>
     </GridPane>
 

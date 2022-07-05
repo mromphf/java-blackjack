@@ -39,7 +39,7 @@ public class ImageReelAnimation extends AnimationTimer {
         graphics.clearRect(0, 0, 840, 40);
         for (MovingImage movingImage : imageReel) {
             movingImage.move();
-            movingImage.draw(graphics);
+            graphics.drawImage(movingImage.img(), movingImage.vector().position, 0, movingImage.vector().dimension, movingImage.vector().dimension);
         }
     }
 

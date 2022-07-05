@@ -42,6 +42,14 @@ public class MovingImage {
         direction = direction == LEFT ? RIGHT : LEFT;
     }
 
+    public Image img() {
+        return img;
+    }
+
+    public Vector vector() {
+        return vector;
+    }
+
     public void draw(GraphicsContext graphics) {
         graphics.drawImage(img, vector.position, TOP, vector.dimension, vector.dimension);
     }

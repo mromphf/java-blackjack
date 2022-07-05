@@ -1,9 +1,13 @@
 package main.adapter.graphics;
 
+import main.adapter.ui.Direction;
+
+import static main.adapter.ui.Direction.LEFT;
+
 public class Vector {
 
-    public final int position;
     public final int dimension;
+    public int position;
 
     private Vector(int position, int dimension) {
         this.position = position;
@@ -12,5 +16,17 @@ public class Vector {
 
     public static Vector vector(int position, int dimension) {
         return new Vector(position, dimension);
+    }
+
+    public void move(Direction direction, int velocity) {
+        if (direction == LEFT) {
+            position = (position - velocity);
+        } else {
+            position = (position + velocity);
+        }
+    }
+
+    public void relocate(int position) {
+        this.position = position;
     }
 }

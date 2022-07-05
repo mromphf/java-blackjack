@@ -1,6 +1,5 @@
 package main.adapter.graphics;
 
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import main.adapter.ui.Direction;
@@ -22,14 +21,17 @@ public class MovingImage {
     private Direction direction;
     private double x;
 
-    public MovingImage(Image img, Rectangle2D rectangle, Direction direction, float velocity ) {
+    public MovingImage(final Image img,
+                       final Vector v,
+                       final float velocity,
+                       Direction direction) {
         this.img = img;
         this.velocity = velocity;
+        this.width = v.dimension;
+        this.height = v.dimension;
+        this.x = v.position;
         this.direction = direction;
-        this.x = rectangle.getMinX();
-        this.y = rectangle.getMinY();
-        this.height = rectangle.getHeight();
-        this.width = rectangle.getWidth();
+        this.y = 0;
     }
 
     public void move() {

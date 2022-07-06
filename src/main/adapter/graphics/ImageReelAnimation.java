@@ -11,10 +11,10 @@ public class ImageReelAnimation extends AnimationTimer {
 
     private final static int IMG_SIZE = 40;
     private final static int REEL_SPEED = 1;
-    private final static int REEL_SIZE = 23;
+    private final static int REEL_LENGTH = 23;
 
     private final GraphicsContext graphics;
-    private final MovingImage[] imageReel = new MovingImage[REEL_SIZE];
+    private final MovingImage[] imageReel = new MovingImage[REEL_LENGTH];
 
     public ImageReelAnimation(Image[] images, GraphicsContext graphics, Direction direction) {
         this.graphics = graphics;

@@ -33,7 +33,7 @@ public class MovingImage {
 
         if ((direction == LEFT) && ((vector.position + vector.dimension) < 0)) {
             vector.relocate(BOUNDARY_LEFTMOST);
-        } else if ((vector.position - vector.dimension) >= (BOUNDARY_LEFTMOST - vector.dimension)) {
+        } else if (vector.position >= BOUNDARY_LEFTMOST) {
             vector.relocate((vector.dimension * (-1)));
         }
     }

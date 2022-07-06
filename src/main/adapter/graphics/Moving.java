@@ -1,28 +1,25 @@
 package main.adapter.graphics;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import main.adapter.ui.Direction;
 
 import static main.adapter.ui.Direction.LEFT;
 import static main.adapter.ui.Direction.RIGHT;
 
-public class MovingImage {
+public class Moving<T> {
 
-    private final static int TOP = 0;
-    private final static int BOUNDARY_LEFTMOST = 880;
+    private final static int RIGHT_BOUNDARY = 880;
 
-    private final Image img;
+    private final T data;
     private final int velocity;
     private final Vector vector;
 
     private Direction direction;
 
-    public MovingImage(final Image img,
-                       final Vector v,
-                       final int velocity,
-                       Direction direction) {
-        this.img = img;
+    public Moving(T data,
+                  final Vector v,
+                  final int velocity,
+                  Direction direction) {
+        this.data = data;
         this.velocity = velocity;
         this.vector = v;
         this.direction = direction;
@@ -32,8 +29,8 @@ public class MovingImage {
         vector.move(direction, velocity);
 
         if ((direction == LEFT) && ((vector.position + vector.dimension) < 0)) {
-            vector.relocate(BOUNDARY_LEFTMOST);
-        } else if (vector.position >= BOUNDARY_LEFTMOST) {
+            vector.relocate(RIGHT_BOUNDARY);
+        } else if (vector.position >= RIGHT_BOUNDARY) {
             vector.relocate((vector.dimension * (-1)));
         }
     }
@@ -42,15 +39,11 @@ public class MovingImage {
         direction = direction == LEFT ? RIGHT : LEFT;
     }
 
-    public Image img() {
-        return img;
+    public T data() {
+        return data;
     }
 
     public Vector vector() {
         return vector;
-    }
-
-    public void draw(GraphicsContext graphics) {
-        graphics.drawImage(img, vector.position, TOP, vector.dimension, vector.dimension);
     }
 }

@@ -21,54 +21,38 @@
 <!--        <URL value="@../css/Debug.css"/>-->
     </stylesheets>
 
-    <GridPane
-            GridPane.rowIndex="0"
-            GridPane.columnIndex="0"
-            alignment="CENTER">
-        <Canvas fx:id="topScroller" onMouseClicked="#onClickTopScroller" height="40" width="800"/>
+    <GridPane GridPane.rowIndex="1" hgap="20" styleClass="header-panel" alignment="CENTER">
+        <GridPane alignment="CENTER">
+            <Canvas fx:id="topScroller" onMouseClicked="#onClickTopScroller" height="40" width="800"/>
+        </GridPane>
+
+        <GridPane alignment="CENTER" GridPane.rowIndex="1">
+            <ImageView GridPane.columnIndex="0">
+                <Image url="@../png/sym_hearts_small.png"/>
+            </ImageView>
+
+            <ImageView GridPane.columnIndex="1">
+                <Image url="@../png/sym_spades_small.png"/>
+            </ImageView>
+
+            <Text GridPane.columnIndex="2" styleClass="header" textAlignment="JUSTIFY">
+                Blackjack
+            </Text>
+
+            <ImageView GridPane.columnIndex="3">
+                <Image url="@../png/sym_diamonds_small.png"/>
+            </ImageView>
+
+            <ImageView GridPane.columnIndex="4">
+                <Image url="@../png/sym_clubs_small.png"/>
+            </ImageView>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="2" alignment="CENTER">
+            <Canvas fx:id="bottomScroller" onMouseClicked="#onClickBottomScroller" height="40" width="800"/>
+        </GridPane>
     </GridPane>
 
-    <GridPane
-            GridPane.rowIndex="1"
-            GridPane.columnIndex="0"
-            hgap="20"
-            styleClass="header-panel"
-            alignment="CENTER">
-        <ImageView
-                GridPane.rowIndex="0"
-                GridPane.columnIndex="0">
-            <Image url="@../png/sym_hearts_small.png"/>
-        </ImageView>
-        <ImageView
-                GridPane.rowIndex="0"
-                GridPane.columnIndex="1">
-            <Image url="@../png/sym_spades_small.png"/>
-        </ImageView>
-        <Text
-                GridPane.rowIndex="0"
-                GridPane.columnIndex="2"
-                styleClass="header"
-                textAlignment="JUSTIFY">
-            Blackjack
-        </Text>
-        <ImageView
-                GridPane.rowIndex="0"
-                GridPane.columnIndex="3">
-            <Image url="@../png/sym_diamonds_small.png"/>
-        </ImageView>
-        <ImageView
-                GridPane.rowIndex="0"
-                GridPane.columnIndex="4">
-            <Image url="@../png/sym_clubs_small.png"/>
-        </ImageView>
-    </GridPane>
-
-    <GridPane
-            GridPane.rowIndex="2"
-            GridPane.columnIndex="0"
-            alignment="CENTER">
-        <Canvas fx:id="bottomScroller" onMouseClicked="#onClickBottomScroller" height="40" width="800"/>
-    </GridPane>
 
     <GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10">
         <Button GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="100" minHeight="50" onAction="#onNew">

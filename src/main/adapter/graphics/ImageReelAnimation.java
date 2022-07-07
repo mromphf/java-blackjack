@@ -1,40 +1,25 @@
 package main.adapter.graphics;
 
+import com.google.inject.Inject;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import main.adapter.ui.Direction;
 
 import java.util.Collection;
-import java.util.LinkedList;
-
-import static main.adapter.graphics.Vector.vector;
 
 public class ImageReelAnimation extends AnimationTimer {
 
-    private final static int CANVAS_WIDTH = 840;
     private final static int IMG_SIZE = 40;
-    private final static int REEL_SPEED = 1;
-    private final static int REEL_LENGTH = 23;
+    private final static int CANVAS_WIDTH = 840;
     private final static int ORIGIN = 0;
 
     private final GraphicsContext graphics;
-    private final Collection<Moving<Image>> imageReel = new LinkedList<>();
+    private final Collection<Moving<Image>> imageReel;
 
-    public ImageReelAnimation(Image[] images, GraphicsContext graphics, Direction direction) {
+    @Inject
+    public ImageReelAnimation(Collection<Moving<Image>> imageReel, GraphicsContext graphics) {
+        this.imageReel = imageReel;
         this.graphics = graphics;
-
-        for (int i = 0, position = 0, imageIndex = 0; i < REEL_LENGTH; i++, position += IMG_SIZE) {
-            final Moving<Image> moving = new Moving<>(images[imageIndex], vector(position, IMG_SIZE), REEL_SPEED, direction);
-
-            imageReel.add(moving);
-
-            imageIndex++;
-
-            if (imageIndex >= images.length) {
-                imageIndex = 0;
-            }
-        }
     }
 
     @Override
@@ -42,7 +27,13 @@ public class ImageReelAnimation extends AnimationTimer {
         clearCanvas();
         for (Moving<Image> img : imageReel) {
             img.move();
-            graphics.drawImage(img.data(), img.vector().position, ORIGIN, img.vector().dimension, img.vector().dimension);
+
+            final int x = img.vector().position;
+            final int y = 0;
+            final int w = img.vector().dimension;
+            final int h = img.vector().dimension;
+
+            graphics.drawImage(img.data(), x, y, w, h);
         }
     }
 

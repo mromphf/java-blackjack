@@ -12,14 +12,7 @@ import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.TransactionRepository;
 import main.adapter.ui.*;
-import main.adapter.ui.BetController;
-import main.adapter.ui.BlackjackController;
-import main.adapter.ui.ImageMap;
-import main.adapter.ui.HistoryController;
-import main.adapter.ui.HomeController;
-import main.adapter.ui.RegistrationController;
 import main.domain.Assessment;
-import main.usecase.Game;
 import main.domain.model.Deck;
 import main.domain.model.Transaction;
 import main.usecase.*;
@@ -38,14 +31,9 @@ import static main.domain.function.Evaluate.transactionEvaluators;
 
 public class BaseInjectionModule extends AbstractModule {
 
-    private final Deck deck;
-
-    public BaseInjectionModule() {
-        this.deck = freshlyShuffledDeck();
-    }
-
     @Override
     public void configure() {
+        final Deck deck = freshlyShuffledDeck();
 
         bind(Integer.class)
                 .annotatedWith(named(NUM_DECKS))

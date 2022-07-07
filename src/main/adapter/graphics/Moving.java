@@ -16,12 +16,12 @@ public class Moving<T> {
     private Direction direction;
 
     public Moving(T data,
-                  final Vector v,
+                  final Vector vector,
                   final int velocity,
                   Direction direction) {
         this.data = data;
         this.velocity = velocity;
-        this.vector = v;
+        this.vector = vector;
         this.direction = direction;
     }
 

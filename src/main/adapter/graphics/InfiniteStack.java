@@ -1,15 +1,14 @@
 package main.adapter.graphics;
 
+import java.util.Collection;
 import java.util.LinkedList;
-
-import static java.util.Arrays.asList;
 
 public class InfiniteStack<T> extends LinkedList<T> {
 
-
-    public InfiniteStack(T... t) {
-        addAll(asList(t));
+    public InfiniteStack(Collection<T> data) {
+        addAll(data);
     }
+
 
     @Override
     public T pop() {

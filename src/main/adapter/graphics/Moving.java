@@ -28,6 +28,12 @@ public class Moving<T> {
     public void move() {
         vector.move(direction, velocity);
 
+        /*
+            This procedure is aware of its surroundings, which means the movement of the object is complected
+            with the space it's moving through. We could solve this by pushing the boundary evaluations into
+            a subclass.
+         */
+
         if ((direction == LEFT) && ((vector.position + vector.dimension) < 0)) {
             vector.relocate(RIGHT_BOUNDARY);
         } else if (vector.position >= RIGHT_BOUNDARY) {

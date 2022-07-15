@@ -13,7 +13,7 @@ import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSortedMap;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.CardFunctions.settleBet;
-import static main.domain.predicate.LowOrderPredicate.determineOutcome;
+import static main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 

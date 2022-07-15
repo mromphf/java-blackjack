@@ -7,7 +7,6 @@ import main.domain.model.Snapshot;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Action.DOUBLE;
@@ -17,31 +16,36 @@ public class CardFunctions {
     public final static int MAXIMUM_SCORE = 21;
     public final static int ACE_HIGH_SCORE = 11;
 
-    public static Boolean atLeastOneAce(Collection<Card> hand) {
+    public static boolean atLeastOneAce(Collection<Card> hand) {
         return hand.stream().anyMatch(Card::isAce);
     }
 
-    public static Boolean isPush(Collection<Card> handA, Collection<Card> handB) {
-        return (score(handA) == score(handB)) && !isBust(handA) && !isBust(handB);
+    public static boolean isBlackjack(Collection<Card> cards) {
+        boolean oneAce = cards.stream().filter(Card::isAce).count() == 1;
+        boolean tenOrHigher = cards.stream().filter(c -> c.getBlackjackValue() > 9).count() == 1;
+        boolean twoCards = cards.size() == 2;
+        return twoCards && oneAce && tenOrHigher;
     }
 
-    public final static IsBlackjack isBlackjack = new IsBlackjack();
+    public static boolean isPush(Collection<Card> handA, Collection<Card> handB) {
+        return (score(handA) == score(handB)) && !isBust(handA);
+    }
 
-    public final static Predicate<Collection<Card>> canSplit = cards -> {
+    public static boolean canSplit(Collection<Card> cards) {
         if (cards.size() == 2) {
             final int blackjackValue = cards.stream().findFirst().get().getBlackjackValue();
             return cards.stream().allMatch(card -> card.getBlackjackValue() == blackjackValue);
         } else {
             return false;
         }
-    };
+    }
 
-    public static Boolean isBust(Collection<Card> cards)  {
+    public static boolean isBust(Collection<Card> cards)  {
         return score(cards) > MAXIMUM_SCORE;
     }
 
     public static int score(Collection<Card> cards) {
-        if (isBlackjack.test(cards)) {
+        if (isBlackjack(cards)) {
             return MAXIMUM_SCORE;
         } else if (atLeastOneAce(cards) && hardTotalIsFavourable(cards)) {
             return hardTotal(cards);
@@ -66,7 +70,7 @@ public class CardFunctions {
                 : softTotal(cards);
     }
 
-    public static Boolean hardTotalIsFavourable(Collection<Card> cards) {
+    public static boolean hardTotalIsFavourable(Collection<Card> cards) {
         return hardTotal(cards) <= MAXIMUM_SCORE;
     }
 
@@ -86,12 +90,12 @@ public class CardFunctions {
         final int bet = snapshot.getBet();
 
         final int insurancePayout = (actionsTaken.stream()
-                .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack.test(snapshot.getDealerHand()))
+                .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack(snapshot.getDealerHand()))
                 ? (bet * 2) : 0;
 
         final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
 
-        final float blackjackMultiplier = isBlackjack.test(playerHand) ? 1.5f : 1.0f;
+        final float blackjackMultiplier = isBlackjack(playerHand) ? 1.5f : 1.0f;
 
         switch (outcome) {
             case BLACKJACK:
@@ -101,16 +105,6 @@ public class CardFunctions {
                 return (bet * betMultiplier) + insurancePayout;
             default:
                 return 0;
-        }
-    }
-
-    public static class IsBlackjack implements Predicate<Collection<Card>> {
-        @Override
-        public boolean test(Collection<Card> cards) {
-            boolean oneAce = cards.stream().filter(Card::isAce).count() == 1;
-            boolean tenOrHigher = cards.stream().filter(c -> c.getBlackjackValue() > 9).count() == 1;
-            boolean twoCards = cards.size() == 2;
-            return twoCards && oneAce && tenOrHigher;
         }
     }
 }

@@ -44,11 +44,11 @@ public class RoundPredicate {
             outcomeIsUnresolved.and(handsRemainToBePlayed).and((playerHasBusted.or(turnEnded))).test(snapshot));
 
     public static final Predicate<Snapshot> isGameInProgress = snapshot -> (
-            not(canSplit).test(snapshot.getPlayerHand()) &&
+            !canSplit(snapshot.getPlayerHand()) &&
                     outcomeIsUnresolved.and(isInsuranceAvailable.negate().and(readyToPlayNextHand.negate())).test(snapshot));
 
     public static final Predicate<Snapshot> isSplitAvailable = (snapshot) -> (
-            canSplit.test(snapshot.getPlayerHand()) &&
+            canSplit(snapshot.getPlayerHand()) &&
                     outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(snapshot));
 
     public static final Predicate<Snapshot> allBetsSettled = (snapshot) -> (
@@ -70,12 +70,12 @@ public class RoundPredicate {
     private static final Predicate<Snapshot> blackjackOutcome = (snapshot) -> (
             turnEnded.and(not(noActionsTaken)).test(snapshot) &&
                     playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()) &&
-                    isBlackjack.test(snapshot.getPlayerHand()));
+                    isBlackjack(snapshot.getPlayerHand()));
 
     private static final Predicate<Snapshot> winOutcome = (snapshot) -> (
             turnEnded.and(not(noActionsTaken)).test(snapshot) &&
                     playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()) &&
-                    not(isBlackjack).test(snapshot.getPlayerHand()));
+                    !(isBlackjack(snapshot.getPlayerHand())));
 
     private static final Predicate<Snapshot> bustOutcome = (snapshot) -> (
             not(noActionsTaken).and(playerHasBusted).test(snapshot));

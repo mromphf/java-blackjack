@@ -24,13 +24,13 @@ public class CardFunctionsTest {
     @ParameterizedTest
     @MethodSource("blackjackHands")
     public void isBlackjack_shouldReturnTrue_whenGivenABlackjackHand(Hand hand) {
-        assertTrue(isBlackjack.test(hand));
+        assertTrue(isBlackjack(hand));
     }
 
     @ParameterizedTest
     @MethodSource("nonBlackjackHands")
     public void isBlackjack_shouldReturnFalse_whenGivenANonBlackjackHand(Hand hand) {
-        assertFalse(isBlackjack.test(hand));
+        assertFalse(isBlackjack(hand));
     }
 
     @ParameterizedTest
@@ -281,7 +281,7 @@ public class CardFunctionsTest {
             add(card(FIVE, SPADES));
         }};
 
-        assertTrue(canSplit.test(cards));
+        assertTrue(canSplit(cards));
     }
 
     @Test
@@ -291,7 +291,7 @@ public class CardFunctionsTest {
             add(card(QUEEN, SPADES));
         }};
 
-        assertTrue(canSplit.test(cards));
+        assertTrue(canSplit(cards));
     }
 
     @Test
@@ -301,7 +301,7 @@ public class CardFunctionsTest {
             add(card(SIX, SPADES));
         }};
 
-        assertFalse(canSplit.test(cards));
+        assertFalse(canSplit(cards));
     }
 
     @Test
@@ -312,7 +312,7 @@ public class CardFunctionsTest {
             add(card(FIVE, CLUBS));
         }};
 
-        assertFalse(canSplit.test(cards));
+        assertFalse(canSplit(cards));
     }
 
     @Test
@@ -321,7 +321,7 @@ public class CardFunctionsTest {
             add(card(FIVE, HEARTS));
         }};
 
-        assertFalse(canSplit.test(cards));
+        assertFalse(canSplit(cards));
     }
 
     private static Stream<Hand> bustedHands() {

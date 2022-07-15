@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static main.domain.model.Transaction.transaction;
-import static main.domain.predicate.RoundPredicate.startOfRound;
+import static main.domain.predicate.LowOrderPredicate.startOfRound;
 
 public class BetAssessment implements Assessment {
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import static main.domain.function.CardFunctions.settleBet;
 import static main.domain.model.Transaction.transaction;
-import static main.domain.predicate.RoundPredicate.outcomeIsResolved;
+import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
 
 public class OutcomeAssessment implements Assessment {
 

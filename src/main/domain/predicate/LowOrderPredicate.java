@@ -13,7 +13,7 @@ import static main.domain.function.CardFunctions.*;
 import static main.domain.model.Outcome.*;
 import static main.util.LessCode.not;
 
-public class RoundPredicate {
+public class LowOrderPredicate {
     public static final Predicate<Snapshot> outcomeIsUnresolved = snapshot ->
             snapshot.getOutcome() != null && snapshot.getOutcome() == UNRESOLVED;
 

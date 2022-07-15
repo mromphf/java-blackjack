@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.model.Action.*;
-import static main.domain.predicate.RoundPredicate.*;
+import static main.domain.predicate.LowOrderPredicate.*;
 import static main.adapter.ui.Screen.BET;
 
 public class BlackjackController implements Initializable, ScreenObserver {

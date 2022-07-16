@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import main.adapter.injection.BaseInjectionModule;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.FileSystem;
-import main.adapter.ui.ImageMap;
+import main.adapter.ui.ImageService;
 import main.adapter.ui.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
@@ -41,12 +41,13 @@ public class Main extends Application {
         final FileSystem fileSystem = injector.getInstance(FileSystem.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
         final HomeController homeController = injector.getInstance(HomeController.class);
-        final ImageMap imageMap = injector.getInstance(ImageMap.class);
+        final ImageService imageService = injector.getInstance(ImageService.class);
         final Collection<Account> accounts = accountService.loadAll();
         final Collection<Transaction> transactions = transactionService.loadAll();
 
         System.out.println("INFO: Loading image files...");
-        imageMap.loadImageMap();
+        imageService.loadCardImages();
+        imageService.loadMiscImages();
 
         final Map<Screen, Parent> nodeMap = fileSystem.loadFXMLDocuments();
 

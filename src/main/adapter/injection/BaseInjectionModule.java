@@ -77,7 +77,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
 
-        bind(ImageMap.class).in(Singleton.class);
+        bind(ImageService.class).in(Singleton.class);
         bind(AccountService.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);

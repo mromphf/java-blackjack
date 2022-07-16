@@ -61,12 +61,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final Game game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
-    private final ImageMap images;
+    private final ImageService images;
 
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
-                               ImageMap images,
+                               ImageService images,
                                @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;

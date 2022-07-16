@@ -49,18 +49,18 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private final ScreenManagement screen;
     private final AlertService alertService;
-    private final ImageMap imageMap;
+    private final ImageService imageService;
 
     @Inject
     public HomeController(
-            ImageMap imageMap,
+            ImageService imageService,
             AlertService alertService,
             AccountService accountService,
             ScreenManagement screen) {
         this.alertService = alertService;
         this.accountService = accountService;
         this.screen = screen;
-        this.imageMap = imageMap;
+        this.imageService = imageService;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = topScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = bottomScroller.getGraphicsContext2D();
 
-        animations.put(topScroller, new ImageReelAnimation(imageMap.reelLeft(), topScrollerGraphics));
-        animations.put(bottomScroller, new ImageReelAnimation(imageMap.reelRight(), bottomScrollerGraphics));
+        animations.put(topScroller, new ImageReelAnimation(imageService.reelLeft(), topScrollerGraphics));
+        animations.put(bottomScroller, new ImageReelAnimation(imageService.reelRight(), bottomScrollerGraphics));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 

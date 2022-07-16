@@ -64,10 +64,10 @@ public class BetController implements Initializable, ScreenObserver {
     private final Game game;
     private ImageReelAnimation animation;
     private int bet = 0;
-    private final ImageMap images;
+    private final ImageService images;
 
     @Inject
-    public BetController(ImageMap images,
+    public BetController(ImageService images,
                          SelectionService selectionService,
                          Game game,
                          ScreenManagement screen) {

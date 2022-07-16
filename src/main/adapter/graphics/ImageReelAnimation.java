@@ -1,6 +1,5 @@
 package main.adapter.graphics;
 
-import com.google.inject.Inject;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +15,6 @@ public class ImageReelAnimation extends AnimationTimer {
     private final GraphicsContext graphics;
     private final Collection<Moving<Image>> imageReel;
 
-    @Inject
     public ImageReelAnimation(Collection<Moving<Image>> imageReel, GraphicsContext graphics) {
         this.imageReel = imageReel;
         this.graphics = graphics;
@@ -24,7 +22,8 @@ public class ImageReelAnimation extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        clearCanvas();
+        graphics.clearRect(ORIGIN, ORIGIN, CANVAS_WIDTH, IMG_SIZE);
+
         for (Moving<Image> img : imageReel) {
             img.move();
 
@@ -38,13 +37,6 @@ public class ImageReelAnimation extends AnimationTimer {
     }
 
     public void switchDirection() {
-        clearCanvas();
-        for (Moving<Image> moving : imageReel) {
-            moving.switchDirection();
-        }
-    }
-
-    public void clearCanvas() {
-        graphics.clearRect(ORIGIN, ORIGIN, CANVAS_WIDTH, IMG_SIZE);
+        imageReel.forEach(Moving::switchDirection);
     }
 }

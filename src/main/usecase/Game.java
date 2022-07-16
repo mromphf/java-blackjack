@@ -23,7 +23,7 @@ import static main.domain.model.Action.*;
 
 public class Game {
 
-    private final int maxCards;
+    private final float maxCards;
 
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
@@ -69,8 +69,8 @@ public class Game {
         }
     }
 
-    public float deckProgress() {
-        return (float) (deck.size() / maxCards);
+    public double deckProgress() {
+        return deck.size() / maxCards;
     }
 
     public void placeBet(Account account, int bet) {

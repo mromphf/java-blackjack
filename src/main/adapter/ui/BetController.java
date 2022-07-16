@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -80,8 +79,6 @@ public class BetController implements Initializable, ScreenObserver {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final GraphicsContext graphics = cvsScroller.getGraphicsContext2D();
-
         prgDeck.setProgress(100);
 
         btnBet1.setOnMouseClicked(event -> onBet(event, 1));
@@ -90,7 +87,7 @@ public class BetController implements Initializable, ScreenObserver {
         btnBet25.setOnMouseClicked(event -> onBet(event, 25));
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
 
-        animation = new ImageReelAnimation(images.reelRight(), graphics);
+        animation = new ImageReelAnimation(images.reelRight(), cvsScroller.getGraphicsContext2D());
 
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static javafx.scene.paint.Color.*;
 import static main.domain.model.Outcome.*;
 
@@ -35,6 +36,7 @@ public class TableDisplay extends Canvas {
     }};
 
     private final static int TEXT_OFFSET = 50;
+    private final static String TABLE_GREEN = "#228b22";
 
     private final int HOR_CENTER;
     private final int VER_CENTER;
@@ -46,6 +48,7 @@ public class TableDisplay extends Canvas {
 
     public TableDisplay() {
         final Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
+
         setHeight((int) screen.getHeight() * 0.6);
         setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
@@ -58,13 +61,18 @@ public class TableDisplay extends Canvas {
 
     public void reset() {
         context.clearRect(0, 0, getWidth(), getHeight());
-        context.setFill(Color.valueOf("#228b22"));
+        context.setFill(Color.valueOf(TABLE_GREEN));
         context.fillRect(0, 0, getWidth(), getHeight());
     }
 
     public void drawScores(int dealerScore, int playerScore) {
-        drawLabel(String.format("Dealer: %s", dealerScore), 120);
-        drawLabel(String.format("You: %s", playerScore), VER_CENTER + 130);
+        if (dealerScore > 21) {
+            drawLabel("BUST", 120);
+        } else {
+            drawLabel(format("Dealer: %s", dealerScore), 120);
+        }
+
+        drawLabel(format("You: %s", playerScore), VER_CENTER + 130);
     }
 
     public void drawCards(Collection<Image> dealerCards, Collection<Image> playerCards) {
@@ -91,7 +99,6 @@ public class TableDisplay extends Canvas {
         context.setFill(WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
     }
-
 
     private void drawLineOfCards(Collection<Image> cards, int y) {
         Object[] images = cards.toArray();

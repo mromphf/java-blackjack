@@ -1,15 +1,9 @@
 package main.domain.function;
 
-import main.domain.model.Action;
 import main.domain.model.Card;
-import main.domain.model.Outcome;
-import main.domain.model.Snapshot;
 
 import java.util.Collection;
 import java.util.Iterator;
-
-import static main.domain.model.Action.BUY_INSURANCE;
-import static main.domain.model.Action.DOUBLE;
 
 public class CardFunctions {
 
@@ -79,32 +73,7 @@ public class CardFunctions {
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {
-        return (!isPush(playerCards, dealerCards) &&
-                isBust(dealerCards) && !isBust(playerCards) ||
+        return (isBust(dealerCards) && !isBust(playerCards) ||
                 (!isBust(playerCards) && score(playerCards) > score(dealerCards)));
-    }
-
-    public static int settleBet(Snapshot snapshot, Outcome outcome ) {
-        final Collection<Card> playerHand = snapshot.getPlayerHand();
-        final Collection<Action> actionsTaken = snapshot.getActionsTaken();
-        final int bet = snapshot.getBet();
-
-        final int insurancePayout = (actionsTaken.stream()
-                .anyMatch(a -> a.equals(BUY_INSURANCE)) && isBlackjack(snapshot.getDealerHand()))
-                ? (bet * 2) : 0;
-
-        final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;
-
-        final float blackjackMultiplier = isBlackjack(playerHand) ? 1.5f : 1.0f;
-
-        switch (outcome) {
-            case BLACKJACK:
-            case WIN:
-                return (((int) (bet * blackjackMultiplier) * 2) * betMultiplier) + insurancePayout;
-            case PUSH:
-                return (bet * betMultiplier) + insurancePayout;
-            default:
-                return 0;
-        }
     }
 }

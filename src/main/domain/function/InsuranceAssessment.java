@@ -1,16 +1,15 @@
 package main.domain.function;
 
 import main.domain.Assessment;
-import main.domain.model.Action;
 import main.domain.model.Snapshot;
 import main.domain.model.Transaction;
 
-import java.util.Collection;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Transaction.transaction;
+import static main.domain.predicate.LowOrderPredicate.playerPurchasedInsurance;
 
 public class InsuranceAssessment implements Assessment {
 
@@ -20,10 +19,7 @@ public class InsuranceAssessment implements Assessment {
 
     @Override
     public Optional<Transaction> apply(Snapshot snapshot) {
-        final Collection<Action> actionsTaken = snapshot.getActionsTaken();
-        final boolean insurancePurchased = actionsTaken.size() == 1 && actionsTaken.contains(BUY_INSURANCE);
-
-        if (insurancePurchased) {
+        if (playerPurchasedInsurance.test(snapshot)) {
             return Optional.of(transaction(
                     snapshot.getTimestamp(),
                     snapshot.getAccountKey(),

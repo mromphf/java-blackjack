@@ -22,25 +22,23 @@ public class HighOrderPredicate {
                     not(playerHasBusted).and(noActionsTaken.or(not(turnEnded)))).test(snapshot));
 
     private static final Predicate<Snapshot> pushOutcome = (snapshot) -> (
-            outcomeIsUnresolved.and(turnEnded).test(snapshot) &&
-                    isPush(snapshot.getPlayerHand(), snapshot.getDealerHand()) &&
-                    !playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()));
+            turnEnded.test(snapshot) && isPush(snapshot.getPlayerHand(), snapshot.getDealerHand()));
 
     private static final Predicate<Snapshot> blackjackOutcome = (snapshot) -> (
-            turnEnded.and(not(noActionsTaken)).test(snapshot) &&
+            turnEnded.test(snapshot) &&
                     playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()) &&
                     isBlackjack(snapshot.getPlayerHand()));
 
     private static final Predicate<Snapshot> winOutcome = (snapshot) -> (
-            turnEnded.and(not(noActionsTaken)).test(snapshot) &&
+            turnEnded.test(snapshot) &&
                     playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()) &&
                     !(isBlackjack(snapshot.getPlayerHand())));
 
     private static final Predicate<Snapshot> bustOutcome = (snapshot) -> (
-            not(noActionsTaken).and(playerHasBusted).test(snapshot));
+            atLeastOneActionTaken.and(playerHasBusted).test(snapshot));
 
     private static final Predicate<Snapshot> loseOutcome = (snapshot) -> (
-            turnEnded.and(not(noActionsTaken)).and(not(playerHasBusted)).test(snapshot) &&
+            turnEnded.and(atLeastOneActionTaken).and(not(playerHasBusted)).test(snapshot) &&
                     !playerWins(snapshot.getPlayerHand(), snapshot.getDealerHand()));
 
     public static Outcome determineOutcome(Snapshot snapshot) {
@@ -49,7 +47,6 @@ public class HighOrderPredicate {
                 .filter(predicate -> predicate.test(snapshot))
                 .findFirst()
                 .orElse(unresolvedOutcome));
-
     }
 
     private static final Map<Predicate<Snapshot>, Outcome> predicateOutcomeMap = new HashMap<Predicate<Snapshot>, Outcome>() {{

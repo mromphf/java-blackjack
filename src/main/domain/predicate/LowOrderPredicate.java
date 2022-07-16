@@ -27,6 +27,9 @@ public class LowOrderPredicate {
     public static final Predicate<Snapshot> noActionsTaken = snapshot ->
             snapshot.getActionsTaken().isEmpty();
 
+    public static final Predicate<Snapshot> atLeastOneActionTaken = snapshot ->
+            snapshot.getActionsTaken().size() > 0;
+
     public static final Predicate<Snapshot> handsRemainToBeSettled = snapshot ->
             !snapshot.getHandsToSettle().isEmpty();
 

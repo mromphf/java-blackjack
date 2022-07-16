@@ -14,7 +14,7 @@ import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
 import static main.adapter.injection.Bindings.EVALUATORS;
 
-public class AccountService implements SelectionService, AccountRegistrar, GameObserver {
+public class AccountService implements SelectionService, AccountRegistrar, TableObserver {
 
     private final Stack<UUID> selections;
     private final Map<UUID, Account> accountMap;

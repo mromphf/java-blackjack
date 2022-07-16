@@ -18,7 +18,7 @@ import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 import static main.domain.model.Transaction.signingBonus;
 
-public class TransactionService implements AccountRegistrar, GameObserver {
+public class TransactionService implements AccountRegistrar, TableObserver {
 
     private final Collection<Assessment> assessments;
     private final Map<UUID, Collection<Transaction>> transactionMap;

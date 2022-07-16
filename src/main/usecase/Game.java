@@ -28,15 +28,15 @@ public class Game {
     private final Deck deck;
     private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
-    private final Collection<GameObserver> gameObservers;
+    private final Collection<TableObserver> tableObservers;
 
     @Inject
-    public Game(Collection<GameObserver> gameObservers,
+    public Game(Collection<TableObserver> tableObservers,
                 @Named(DECK) Deck deck,
                 @Named(MAX_CARDS) int maxCards) {
         this.deck = deck;
         this.maxCards = maxCards;
-        this.gameObservers = gameObservers;
+        this.tableObservers = tableObservers;
     }
 
     public TableView peek() throws IllegalStateException {
@@ -63,7 +63,7 @@ public class Game {
             runnableMap.getOrDefault(action, () -> {}).run();
 
             final TableView tableView = currentRound.getSnapshot(timestamp);
-            return notifyListeners(tableView);
+            return notifyObservers(tableView);
         } else {
             throw new IllegalStateException();
         }
@@ -78,12 +78,12 @@ public class Game {
 
         roundStack.add(newRound);
 
-        notifyListeners(roundStack.peek().getSnapshot(now()));
+        notifyObservers(roundStack.peek().getSnapshot(now()));
     }
 
-    private TableView notifyListeners(final TableView tableView) {
-        for (GameObserver listener : gameObservers) {
-            listener.onUpdate(tableView);
+    private TableView notifyObservers(final TableView tableView) {
+        for (TableObserver observer : tableObservers) {
+            observer.onUpdate(tableView);
         }
         return tableView;
     }

@@ -7,7 +7,7 @@ import com.google.inject.TypeLiteral;
 import javafx.stage.Stage;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
-import main.adapter.log.GameLogger;
+import main.adapter.log.TableLogger;
 import main.adapter.storage.AccountRepository;
 import main.adapter.storage.Database;
 import main.adapter.storage.TransactionRepository;
@@ -82,7 +82,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);
         bind(Game.class).in(Singleton.class);
-        bind(GameLogger.class).in(Singleton.class);
+        bind(TableLogger.class).in(Singleton.class);
         bind(HistoryController.class).in(Singleton.class);
         bind(HomeController.class).in(Singleton.class);
         bind(ScreenSupervisor.class).in(Singleton.class);
@@ -92,16 +92,16 @@ public class BaseInjectionModule extends AbstractModule {
     }
 
     @Provides
-    public Collection<GameObserver> snapshotListeners(AccountService accountService,
-                                                      TransactionService transactionService,
-                                                      GameLogger gameLogger) {
+    public Collection<TableObserver> snapshotListeners(AccountService accountService,
+                                                       TransactionService transactionService,
+                                                       TableLogger gameLogger) {
         return of(accountService, transactionService, gameLogger).collect(toSet());
     }
 
     @Provides
     public Collection<AccountRegistrar> accountRegistrars(AccountService accountService,
                                                           TransactionService transactionService,
-                                                          GameLogger gameLogger) {
+                                                          TableLogger gameLogger) {
         return of(accountService, transactionService, gameLogger).collect(toSet());
     }
 

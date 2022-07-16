@@ -6,7 +6,7 @@ import main.domain.model.Account;
 import main.domain.model.TableView;
 import main.domain.model.Transaction;
 import main.usecase.AccountRegistrar;
-import main.usecase.GameObserver;
+import main.usecase.TableObserver;
 
 import java.util.Collection;
 import java.util.logging.Handler;
@@ -17,12 +17,12 @@ import static java.util.logging.Level.INFO;
 import static main.adapter.injection.Bindings.GAME_LOGGER;
 import static main.adapter.injection.Bindings.LOG_HANDLERS;
 
-public class GameLogger implements GameObserver, AccountRegistrar {
+public class TableLogger implements TableObserver, AccountRegistrar {
 
     private final Logger logger;
 
     @Inject
-    public GameLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
+    public TableLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
         this.logger = logger;
         logger.setUseParentHandlers(false);
         logHandlers.forEach(logger::addHandler);

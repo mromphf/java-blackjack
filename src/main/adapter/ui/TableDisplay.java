@@ -71,9 +71,9 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(playerCards, VER_CENTER + 110);
     }
 
-    public void drawHandsToPlay(List<List<Image>> cards) {
-        for (int i = 0, y = BOTTOM - 100; i < cards.size(); i++, y -= 120) {
-            drawSmallLineOfCards(cards.get(i), y);
+    public void drawCardsToPlay(List<Image> images) {
+        for (int i = 0, y = BOTTOM - 100; i < images.size(); i++, y -= 120) {
+            drawSmallCard(images.get(i), y);
         }
     }
 
@@ -100,9 +100,7 @@ public class TableDisplay extends Canvas {
         }
     }
 
-    private void drawSmallLineOfCards(List<Image> cards, int y) {
-        for (int i = 0, x = 30; i < cards.size(); i++, x += GAP_BETWEEN_CARDS * 0.3) {
-            context.drawImage(cards.get(i), x, y, CARD_WIDTH * 0.5, CARD_HEIGHT * 0.5);
-        }
+    private void drawSmallCard(Image card, int y) {
+        context.drawImage(card, 30, y, CARD_WIDTH * 0.5, CARD_HEIGHT * 0.5);
     }
 }

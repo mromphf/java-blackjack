@@ -7,7 +7,6 @@ import main.adapter.graphics.Moving;
 import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
-import main.domain.model.Hand;
 import main.domain.model.Suit;
 
 import java.util.*;
@@ -74,11 +73,9 @@ public class ImageMap {
         return arr;
     }
 
-    public List<List<Image>> ofHandsToSettle(Collection<Hand> handsToSettle) {
-        return handsToSettle.stream()
-                .map(cards -> cards.stream()
-                        .map(c -> c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard())
-                        .collect(toList()))
+    public List<Image> fromCards(Collection<Card> cards) {
+        return cards.stream()
+                .map(c -> cardImages.get(c.anonymize()))
                 .collect(toList());
     }
 

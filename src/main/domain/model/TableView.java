@@ -26,7 +26,7 @@ public class TableView {
     private final Collection<Card> deck;
     private final Collection<Card> dealerHand;
     private final Collection<Card> playerHand;
-    private final Collection<Hand> handsToPlay;
+    private final Collection<Card> cardsToPlay;
     private final Collection<Hand> handsToSettle;
     private final SortedMap<LocalDateTime, Action> actionsTaken;
     private final Account account;
@@ -37,7 +37,7 @@ public class TableView {
                      Stack<Card> deck,
                      Hand dealerHand,
                      Hand playerHand,
-                     Stack<Hand> handsToPlay,
+                     Stack<Card> cardsToPlay,
                      Collection<Hand> handsToSettle,
                      SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
@@ -46,7 +46,7 @@ public class TableView {
         this.deck = unmodifiableCollection(deck);
         this.dealerHand = unmodifiableCollection(dealerHand);
         this.playerHand = unmodifiableCollection(playerHand);
-        this.handsToPlay = unmodifiableCollection(handsToPlay);
+        this.cardsToPlay = unmodifiableCollection(cardsToPlay);
         this.handsToSettle = unmodifiableCollection(handsToSettle);
         this.actionsTaken = unmodifiableSortedMap(actionsTaken);
         this.outcome = determineOutcome(this);
@@ -88,8 +88,8 @@ public class TableView {
         return playerHand;
     }
 
-    public Collection<Hand> handsToPlay() {
-        return handsToPlay;
+    public Collection<Card> cardsToPlay() {
+        return cardsToPlay;
     }
 
     public Collection<Hand> handsToSettle() {
@@ -141,7 +141,7 @@ public class TableView {
                 deckSize(),
                 outcome,
                 bet,
-                handsToPlay.size(),
+                cardsToPlay.size(),
                 handsToSettle.size(),
                 actionString(actionsTaken),
                 playerString(playerHand),

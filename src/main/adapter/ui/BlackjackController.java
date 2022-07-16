@@ -61,17 +61,17 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final Game game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
-    private final ImageMap imageMap;
+    private final ImageMap images;
 
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
-                               ImageMap imageMap,
+                               ImageMap images,
                                @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;
         this.screenSupervisor = screenSupervisor;
-        this.imageMap = imageMap;
+        this.images = images;
     }
 
     @Override
@@ -156,11 +156,10 @@ public class BlackjackController implements Initializable, ScreenObserver {
                     tableView.playerScore());
 
             tableDisplay.drawCards(
-                    imageMap.imageArray(tableView.dealerHand(), outcomeIsResolved.test(tableView)),
-                    imageMap.imageArray(tableView.playerHand(), outcomeIsResolved.test(tableView)));
+                    images.imageArray(tableView.dealerHand(), outcomeIsResolved.test(tableView)),
+                    images.imageArray(tableView.playerHand(), outcomeIsResolved.test(tableView)));
 
-            tableDisplay.drawHandsToPlay(
-                    imageMap.ofHandsToSettle(tableView.handsToPlay()));
+            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay()));
             tableDisplay.drawResults(tableView.outcome());
         });
     }

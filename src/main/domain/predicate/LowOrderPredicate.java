@@ -23,7 +23,7 @@ public class LowOrderPredicate {
             table.playerHand().size() > 2;
 
     public static final Predicate<TableView> handsRemainToBePlayed = table ->
-            !table.handsToPlay().isEmpty();
+            !table.cardsToPlay().isEmpty();
 
     public static final Predicate<TableView> noActionsTaken = table ->
             table.actionsTaken().isEmpty();

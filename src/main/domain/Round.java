@@ -19,7 +19,7 @@ public class Round {
 
     private final Account player;
     private final Deck deck;
-    private final Stack<Hand> handsToPlay = new Stack<>();
+    private final Stack<Card> cardsToPlay = new Stack<>();
     private final Stack<HandToSettle> handsToSettle = new Stack<>();
     private final Hand dealerHand;
     private final int bet;
@@ -75,7 +75,7 @@ public class Round {
             refillDeck();
         }
 
-        if (handsToPlay.isEmpty()) {
+        if (cardsToPlay.isEmpty()) {
             while (score(dealerHand) < MINIMUM_DEALER_SCORE) {
                 dealerHand.add(deck.drawCard());
             }
@@ -88,7 +88,7 @@ public class Round {
         }
 
         handsToSettle.add(new HandToSettle(currentHand, actionsTaken));
-        currentHand = handsToPlay.pop();
+        currentHand = handOf(cardsToPlay.pop());
         currentHand.add(deck.drawCard());
         actionsTaken.values().removeIf(a -> !(a.equals(BUY_INSURANCE) ||
                 a.equals(WAIVE_INSURANCE) ||
@@ -107,9 +107,7 @@ public class Round {
             deck.drawCard()
         );
 
-        final Hand pocketHand = handOf(cardsInHand.next());
-
-        handsToPlay.add(pocketHand);
+        cardsToPlay.add(cardsInHand.next());
     }
 
     public void rewind() {
@@ -133,7 +131,7 @@ public class Round {
                 deck,
                 dealerHand,
                 currentHand,
-                handsToPlay,
+                cardsToPlay,
                 fetchHandsToSettle(handsToSettle),
                 actionsTaken
         );

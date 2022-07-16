@@ -1,7 +1,7 @@
 package main.domain.function;
 
 import main.domain.Assessment;
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import java.util.Optional;
@@ -17,13 +17,13 @@ public class DoubleDownAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(Snapshot snapshot) {
-        if (snapshot.getActionsTaken().stream().filter(a -> a.equals(DOUBLE)).count() == 1) {
+    public Optional<Transaction> apply(TableView tableView) {
+        if (tableView.actionsTaken().stream().filter(a -> a.equals(DOUBLE)).count() == 1) {
             return Optional.of(transaction(
-                    snapshot.getTimestamp(),
-                    snapshot.getAccountKey(),
+                    tableView.timestamp(),
+                    tableView.playerAccountKey(),
                     DOUBLE.name(),
-                    snapshot.getNegativeBet()));
+                    tableView.negativeBet()));
         } else {
             return empty();
         }

@@ -2,7 +2,7 @@ package main.domain.function;
 
 import main.domain.Assessment;
 import main.domain.model.Action;
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import java.util.Collection;
@@ -19,8 +19,8 @@ public class SplitAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(Snapshot snapshot) {
-        final Collection<Action> actionsTaken = snapshot.getActionsTaken();
+    public Optional<Transaction> apply(TableView tableView) {
+        final Collection<Action> actionsTaken = tableView.actionsTaken();
 
         final boolean chargeForSplit = (actionsTaken.stream().anyMatch(a -> a.equals(SPLIT)) &&
                 actionsTaken.stream().noneMatch(a ->
@@ -28,10 +28,10 @@ public class SplitAssessment implements Assessment {
 
         if (chargeForSplit) {
             return Optional.of(transaction(
-                    snapshot.getTimestamp(),
-                    snapshot.getAccountKey(),
+                    tableView.timestamp(),
+                    tableView.playerAccountKey(),
                     SPLIT.name(),
-                    snapshot.getNegativeBet()));
+                    tableView.negativeBet()));
         } else {
             return empty();
         }

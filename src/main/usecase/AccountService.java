@@ -5,7 +5,7 @@ import com.google.inject.name.Named;
 import main.adapter.storage.AccountRepository;
 import main.domain.Assessment;
 import main.domain.model.Account;
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import java.util.*;
@@ -41,9 +41,9 @@ public class AccountService implements SelectionService, AccountRegistrar, GameO
     }
 
     @Override
-    public void onUpdate(Snapshot snapshot) {
+    public void onUpdate(TableView tableView) {
         assessments.stream()
-                .map(function -> function.apply(snapshot))
+                .map(function -> function.apply(tableView))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(this::apply);

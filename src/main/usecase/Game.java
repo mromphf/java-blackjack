@@ -6,7 +6,7 @@ import main.domain.Round;
 import main.domain.model.Account;
 import main.domain.model.Action;
 import main.domain.model.Deck;
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class Game {
         this.gameObservers = gameObservers;
     }
 
-    public Snapshot peek() throws IllegalStateException {
+    public TableView peek() throws IllegalStateException {
         if (roundStack.size() > 0) {
             return roundStack.peek().getSnapshot(now());
         } else {
@@ -47,7 +47,7 @@ public class Game {
         }
     }
 
-    public Snapshot onActionTaken(Action action) {
+    public TableView onActionTaken(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
             final Round currentRound = roundStack.peek();
@@ -62,8 +62,8 @@ public class Game {
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();
 
-            final Snapshot snapshot = currentRound.getSnapshot(timestamp);
-            return notifyListeners(snapshot);
+            final TableView tableView = currentRound.getSnapshot(timestamp);
+            return notifyListeners(tableView);
         } else {
             throw new IllegalStateException();
         }
@@ -81,10 +81,10 @@ public class Game {
         notifyListeners(roundStack.peek().getSnapshot(now()));
     }
 
-    private Snapshot notifyListeners(final Snapshot snapshot) {
+    private TableView notifyListeners(final TableView tableView) {
         for (GameObserver listener : gameObservers) {
-            listener.onUpdate(snapshot);
+            listener.onUpdate(tableView);
         }
-        return snapshot;
+        return tableView;
     }
 }

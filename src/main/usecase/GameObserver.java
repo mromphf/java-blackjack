@@ -1,7 +1,7 @@
 package main.usecase;
 
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 
 public interface GameObserver {
-    void onUpdate(Snapshot snapshot);
+    void onUpdate(TableView tableView);
 }

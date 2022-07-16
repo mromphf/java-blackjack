@@ -20,25 +20,25 @@ public class OutcomeAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(Snapshot snapshot) {
-        if (outcomeIsResolved.test(snapshot)) {
+    public Optional<Transaction> apply(TableView tableView) {
+        if (outcomeIsResolved.test(tableView)) {
             return Optional.of(transaction(
-                    snapshot.getTimestamp(),
-                    snapshot.getAccountKey(),
-                    snapshot.getOutcome().name(),
-                    settleBet(snapshot)));
+                    tableView.timestamp(),
+                    tableView.playerAccountKey(),
+                    tableView.outcome().name(),
+                    settleBet(tableView)));
         } else {
             return empty();
         }
     }
 
-    public static int settleBet(Snapshot snapshot) {
-        final Collection<Card> playerHand = snapshot.getPlayerHand();
-        final Collection<Action> actionsTaken = snapshot.getActionsTaken();
-        final Outcome outcome = snapshot.getOutcome();
-        final int bet = snapshot.getBet();
+    public static int settleBet(TableView tableView) {
+        final Collection<Card> playerHand = tableView.playerHand();
+        final Collection<Action> actionsTaken = tableView.actionsTaken();
+        final Outcome outcome = tableView.outcome();
+        final int bet = tableView.bet();
 
-        final int insurancePayout = (playerPurchasedInsurance.test(snapshot) && isBlackjack(snapshot.getDealerHand()))
+        final int insurancePayout = (playerPurchasedInsurance.test(tableView) && isBlackjack(tableView.dealerHand()))
                 ? (bet * 2) : 0;
 
         final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;

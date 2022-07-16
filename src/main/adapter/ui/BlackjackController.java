@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.usecase.Game;
-import main.domain.model.Snapshot;
+import main.domain.model.TableView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -134,34 +134,34 @@ public class BlackjackController implements Initializable, ScreenObserver {
         onGameUpdate(game.onActionTaken(PLAY_NEXT_HAND));
     }
 
-    public void onGameUpdate(Snapshot snapshot) {
+    public void onGameUpdate(TableView tableView) {
         runLater(() -> {
-            insuranceControls.setVisible(isInsuranceAvailable.test(snapshot));
-            gameControls.setVisible(isGameInProgress.test(snapshot));
-            splitControls.setVisible(isSplitAvailable.test(snapshot));
-            settleControls.setVisible(readyToSettleNextHand.test(snapshot));
-            nextHandControls.setVisible(readyToPlayNextHand.test(snapshot));
-            gameOverControls.setVisible(allBetsSettled.test(snapshot));
-            prgDeck.setProgress(snapshot.deckProgress(maxDeckSize));
-            btnDouble.setDisable(atLeastOneCardDrawn.test(snapshot) || !snapshot.canAffordToSpendMore());
-            btnSplit.setDisable(!(isSplitAvailable.test(snapshot) && snapshot.canAffordToSpendMore()));
-            lblBalance.setText(snapshot.balanceText());
+            insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
+            gameControls.setVisible(isGameInProgress.test(tableView));
+            splitControls.setVisible(isSplitAvailable.test(tableView));
+            settleControls.setVisible(readyToSettleNextHand.test(tableView));
+            nextHandControls.setVisible(readyToPlayNextHand.test(tableView));
+            gameOverControls.setVisible(allBetsSettled.test(tableView));
+            prgDeck.setProgress(tableView.deckProgress(maxDeckSize));
+            btnDouble.setDisable(atLeastOneCardDrawn.test(tableView) || !tableView.canAffordToSpendMore());
+            btnSplit.setDisable(!(isSplitAvailable.test(tableView) && tableView.canAffordToSpendMore()));
+            lblBalance.setText(tableView.balanceText());
 
-            lblBet.setText(String.format("Bet: $%s", snapshot.getBet()));
+            lblBet.setText(String.format("Bet: $%s", tableView.bet()));
 
             tableDisplay.reset();
 
             tableDisplay.drawScores(
-                    snapshot.dealerScore(),
-                    snapshot.playerScore());
+                    tableView.dealerScore(),
+                    tableView.playerScore());
 
             tableDisplay.drawCards(
-                    imageMap.imageArray(snapshot.getDealerHand(), outcomeIsResolved.test(snapshot)),
-                    imageMap.imageArray(snapshot.getPlayerHand(), outcomeIsResolved.test(snapshot)));
+                    imageMap.imageArray(tableView.dealerHand(), outcomeIsResolved.test(tableView)),
+                    imageMap.imageArray(tableView.playerHand(), outcomeIsResolved.test(tableView)));
 
             tableDisplay.drawHandsToPlay(
-                    imageMap.ofHandsToSettle(snapshot.getHandsToPlay()));
-            tableDisplay.drawResults(snapshot.getOutcome());
+                    imageMap.ofHandsToSettle(tableView.handsToPlay()));
+            tableDisplay.drawResults(tableView.outcome());
         });
     }
 }

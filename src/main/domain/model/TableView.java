@@ -19,7 +19,7 @@ import static main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 
-public class Snapshot {
+public class TableView {
     private final LocalDateTime timestamp;
     private final int bet;
     private final Outcome outcome;
@@ -31,15 +31,15 @@ public class Snapshot {
     private final SortedMap<LocalDateTime, Action> actionsTaken;
     private final Account account;
 
-    public Snapshot(LocalDateTime timestamp,
-                    Account account,
-                    int bet,
-                    Stack<Card> deck,
-                    Hand dealerHand,
-                    Hand playerHand,
-                    Stack<Hand> handsToPlay,
-                    Collection<Hand> handsToSettle,
-                    SortedMap<LocalDateTime, Action> actionsTaken) {
+    public TableView(LocalDateTime timestamp,
+                     Account account,
+                     int bet,
+                     Stack<Card> deck,
+                     Hand dealerHand,
+                     Hand playerHand,
+                     Stack<Hand> handsToPlay,
+                     Collection<Hand> handsToSettle,
+                     SortedMap<LocalDateTime, Action> actionsTaken) {
         this.timestamp = timestamp;
         this.account = account;
         this.bet = bet;
@@ -52,59 +52,59 @@ public class Snapshot {
         this.outcome = determineOutcome(this);
     }
 
-    public LocalDateTime getTimestamp() {
+    public LocalDateTime timestamp() {
         return timestamp;
     }
 
     public String balanceText() {
-        return format("Balance $%s", getBalance());
+        return format("Balance $%s", playerBalance());
     }
 
-    public int getBet() {
+    public int bet() {
         return bet;
     }
 
-    public int getBalance() {
-        return account.getBalance() + settleBet(this);
-    }
-
-    public int getNegativeBet() {
+    public int negativeBet() {
         return negateExact(bet);
     }
 
-    public Outcome getOutcome() {
+    public int playerBalance() {
+        return account.getBalance() + settleBet(this);
+    }
+
+    public Outcome outcome() {
         return outcome;
     }
 
     public boolean canAffordToSpendMore() {
-        return getBalance() >= bet;
+        return playerBalance() >= bet;
     }
 
-    public Collection<Card> getDealerHand() {
+    public Collection<Card> dealerHand() {
         return dealerHand;
     }
 
-    public Collection<Card> getPlayerHand() {
+    public Collection<Card> playerHand() {
         return playerHand;
     }
 
-    public Collection<Hand> getHandsToPlay() {
+    public Collection<Hand> handsToPlay() {
         return handsToPlay;
     }
 
-    public Collection<Hand> getHandsToSettle() {
+    public Collection<Hand> handsToSettle() {
         return handsToSettle;
     }
 
-    public Collection<Action> getActionsTaken() {
+    public Collection<Action> actionsTaken() {
         return actionsTaken.values();
     }
 
-    public UUID getAccountKey() {
+    public UUID playerAccountKey() {
         return account.getKey();
     }
 
-    public int getDeckSize() {
+    public int deckSize() {
         return deck.size();
     }
 
@@ -136,9 +136,9 @@ public class Snapshot {
                         "ActionsTaken: {%s\n\t},\n\t" +
                         "Player: %s,\n\t" +
                         "Dealer: %s",
-                getAccountKey(),
-                getBalance(),
-                getDeckSize(),
+                playerAccountKey(),
+                playerBalance(),
+                deckSize(),
                 outcome,
                 bet,
                 handsToPlay.size(),

@@ -37,6 +37,7 @@ public class TableDisplay extends Canvas {
 
     private final static int TEXT_OFFSET = 50;
     private final static String TABLE_GREEN = "#228b22";
+    private final static String FONT_NAME = "Arial";
 
     private final int HOR_CENTER;
     private final int VER_CENTER;
@@ -87,14 +88,14 @@ public class TableDisplay extends Canvas {
     }
 
     public void drawResults(Outcome outcome) {
-        final Font f = new Font("Arial", 50);
+        final Font f = new Font(FONT_NAME, 50);
         context.setFont(f);
         context.setFill(OUTCOME_COLORS.get(outcome));
         context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 20);
     }
 
     private void drawLabel(String label, int y) {
-        final Font f = new Font("Arial", 30);
+        final Font f = new Font(FONT_NAME, 30);
         context.setFont(f);
         context.setFill(WHITE);
         context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);

@@ -8,17 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.usecase.Game;
+import main.adapter.graphics.DealAnimation;
 import main.domain.model.TableView;
+import main.usecase.Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
 import static main.adapter.injection.Bindings.MAX_CARDS;
+import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.LowOrderPredicate.*;
-import static main.adapter.ui.Screen.BET;
+import static main.util.LessCode.not;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 
@@ -75,11 +77,27 @@ public class BlackjackController implements Initializable, ScreenObserver {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     @Override
     public void onScreenChanged() {
-        onGameUpdate(game.peek());
+        final TableView table = game.peek();
+
+        onGameUpdate(table);
+
+        if (startOfRound.test(table)) {
+            final boolean outcomeResolved = false;
+
+            runLater(() -> {
+                DealAnimation animation = new DealAnimation(
+                        this.tableDisplay,
+                        images.fromCards(table.dealerHand(), outcomeResolved),
+                        images.fromCards(table.playerHand(), outcomeResolved));
+
+                new Thread(animation::start, "Deal Animation Thread").start();
+            });
+        }
     }
 
     @FXML
@@ -136,6 +154,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     public void onGameUpdate(TableView tableView) {
         final boolean outcomeResolved = outcomeIsResolved.test(tableView);
+        final boolean middleOfRound = not(startOfRound).test(tableView);
 
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
@@ -157,13 +176,15 @@ public class BlackjackController implements Initializable, ScreenObserver {
                     tableView.dealerScore(),
                     tableView.playerScore());
 
-            tableDisplay.drawCards(
-                    images.fromCards(tableView.dealerHand(), outcomeResolved),
-                    images.fromCards(tableView.playerHand(), outcomeResolved));
-
             tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
 
             tableDisplay.drawResults(tableView.outcome());
+
+            if (middleOfRound) {
+                tableDisplay.drawCards(
+                        images.fromCards(tableView.dealerHand(), outcomeResolved),
+                        images.fromCards(tableView.playerHand(), outcomeResolved));
+            }
         });
     }
 }

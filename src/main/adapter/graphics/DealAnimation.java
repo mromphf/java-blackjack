@@ -1,69 +1,83 @@
 package main.adapter.graphics;
 
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.util.concurrent.DelayQueue;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import static java.lang.System.exit;
+import static java.lang.System.currentTimeMillis;
+import static javafx.stage.Screen.getPrimary;
 
-public class DealAnimation implements Runnable {
+public class DealAnimation extends AnimationTimer {
 
-    private final static int CODE_1 = 1;
+    private static final int DELAY_1 = 500;
+    private static final int DELAY_2 = 1000;
+    private static final int DELAY_3 = 1500;
+    private static final int DELAY_4 = 2000;
 
-    private final int HOR_CENTER;
-    private final int CARD_WIDTH;
-    private final int GAP_BETWEEN_CARDS;
-    private final int CARD_HEIGHT;
-    private final int VER_CENTER;
+    private final double GAP_BETWEEN_CARDS;
+    private final double START_HOR;
+    private final double START_VER;
+    private final double HOR_CENTER;
+    private final double CARD_WIDTH;
+    private final double VER_CENTER;
+    private final long START_TIME_MILLIS;
 
     private final GraphicsContext graphics;
+    private final Canvas canvas;
+    private final List<Image> images = new ArrayList<>();
 
+    public DealAnimation(Canvas canvas,
+                         Collection<Image> dealerCards,
+                         Collection<Image> playerCards) {
+        this.canvas = canvas;
+        this.graphics = canvas.getGraphicsContext2D();
 
-    private final DelayQueue<DelayedElement<Image>> dealerCards;
-    private final DelayQueue<DelayedElement<Image>> playerCards;
+        final Rectangle2D screen = getPrimary().getBounds();
 
-    public DealAnimation(
-            int HOR_CENTER,
-            int CARD_WIDTH,
-            int GAP_BETWEEN_CARDS,
-            int CARD_HEIGHT,
-            int VER_CENTER,
-            GraphicsContext graphics,
-            DelayQueue<DelayedElement<Image>> dealerCards,
-            DelayQueue<DelayedElement<Image>> playerCards) {
-        this.dealerCards = dealerCards;
-        this.playerCards = playerCards;
-        this.HOR_CENTER = HOR_CENTER;
-        this.CARD_HEIGHT = CARD_HEIGHT;
-        this.CARD_WIDTH = CARD_WIDTH;
-        this.GAP_BETWEEN_CARDS = GAP_BETWEEN_CARDS;
-        this.VER_CENTER = VER_CENTER;
-        this.graphics = graphics;
+        Iterator<Image> dealerItr = dealerCards.iterator();
+        Iterator<Image> playerItr = playerCards.iterator();
+
+        images.add(dealerItr.next());
+        images.add(dealerItr.next());
+        images.add(playerItr.next());
+        images.add(playerItr.next());
+
+        START_TIME_MILLIS = currentTimeMillis();
+
+        HOR_CENTER = canvas.getWidth() / 2;
+        VER_CENTER = canvas.getHeight() / 2;
+        CARD_WIDTH = screen.getWidth() * 0.08;
+        START_HOR = HOR_CENTER - (CARD_WIDTH * images.size()) + (CARD_WIDTH / 2);
+        START_VER = VER_CENTER + 110;
+        GAP_BETWEEN_CARDS = screen.getWidth() * 0.15;
     }
 
     @Override
-    public void run() {
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * dealerCards.size() + (CARD_WIDTH / 2));
+    public void handle(long now) {
+        final long currTimeMillis = currentTimeMillis();
 
-        for (int i = 0, x = START_POS; i < dealerCards.size(); i++, x += GAP_BETWEEN_CARDS) {
-            try {
-                Image image = dealerCards.take().data();
-                graphics.drawImage(image, x, 100, CARD_WIDTH, CARD_HEIGHT);
-            } catch(InterruptedException ex) {
-                ex.printStackTrace();
-                exit(CODE_1);
-            }
+        if ((-START_TIME_MILLIS + currTimeMillis) > DELAY_1) {
+            graphics.drawImage(images.get(0), START_HOR + GAP_BETWEEN_CARDS, 100);
         }
 
-        for (int i = 0, x = START_POS; i < playerCards.size(); i++, x += GAP_BETWEEN_CARDS) {
-            try {
-                Image image = playerCards.take().data();
-                graphics.drawImage(image, x, VER_CENTER + 110, CARD_WIDTH, CARD_HEIGHT);
-            } catch(InterruptedException ex) {
-                ex.printStackTrace();
-                exit(CODE_1);
-            }
+        if ((-START_TIME_MILLIS + currTimeMillis) > DELAY_2) {
+            graphics.drawImage(images.get(1), START_HOR + (2 * GAP_BETWEEN_CARDS), 100);
+        }
+
+        if ((-START_TIME_MILLIS + currTimeMillis) > DELAY_3) {
+            graphics.drawImage(images.get(2), START_HOR + GAP_BETWEEN_CARDS, START_VER);
+        }
+
+        if ((-START_TIME_MILLIS + currTimeMillis) > DELAY_4) {
+            graphics.drawImage(images.get(3), START_HOR + (2 * GAP_BETWEEN_CARDS), START_VER);
+            stop();
         }
     }
 }

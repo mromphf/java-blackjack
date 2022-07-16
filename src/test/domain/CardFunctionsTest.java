@@ -119,77 +119,77 @@ public class CardFunctionsTest {
     }
 
     @Test
-    public void hardTotal_shouldReturnThirteen_whenGivenAnAceAndATwo() {
+    public void softTotal_shouldReturnThirteen_whenGivenAnAceAndATwo() {
         Stack<Card> cards = new Stack<Card>() {{
             add(card(ACE, HEARTS));
             add(card(TWO, SPADES));
         }};
 
-        assertEquals(13, hardTotal(cards));
+        assertEquals(13, softTotal(cards));
     }
 
     @Test
-    public void hardTotal_shouldReturnTwentyOne_whenGivenAnAceAndATen() {
+    public void softTotal_shouldReturnTwentyOne_whenGivenAnAceAndATen() {
         Stack<Card> cards = new Stack<Card>() {{
             add(card(ACE, HEARTS));
             add(card(TEN, SPADES));
         }};
 
-        assertEquals(21, hardTotal(cards));
+        assertEquals(21, softTotal(cards));
     }
 
     @Test
-    public void hardTotal_shouldReturnTwentyFive_whenGivenAnAceAndATenAndAFour() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(card(ACE, HEARTS));
-            add(card(TEN, SPADES));
-            add(card(FOUR, CLUBS));
-        }};
-
-        assertEquals(25, hardTotal(cards));
-    }
-
-    @Test
-    public void softTotal_shouldReturnFive_whenGivenAnAceAndAFour() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(card(ACE, HEARTS));
-            add(card(FOUR, CLUBS));
-        }};
-
-        assertEquals(5, softTotal(cards));
-    }
-
-    @Test
-    public void softTotal_shouldReturnFifteen_whenGivenAnAceATenAndAFour() {
+    public void softTotal_shouldReturnTwentyFive_whenGivenAnAceAndATenAndAFour() {
         Stack<Card> cards = new Stack<Card>() {{
             add(card(ACE, HEARTS));
             add(card(TEN, SPADES));
             add(card(FOUR, CLUBS));
         }};
 
-        assertEquals(15, softTotal(cards));
+        assertEquals(25, softTotal(cards));
     }
 
     @Test
-    public void hardTotalFavorable_shouldReturnTrue_whenTheValueOfTheHardTotalIsLessThanOrEqualToTwentyOne() {
+    public void total_shouldReturnFive_whenGivenAnAceAndAFour() {
+        Stack<Card> cards = new Stack<Card>() {{
+            add(card(ACE, HEARTS));
+            add(card(FOUR, CLUBS));
+        }};
+
+        assertEquals(5, total(cards));
+    }
+
+    @Test
+    public void total_shouldReturnFifteen_whenGivenAnAceATenAndAFour() {
+        Stack<Card> cards = new Stack<Card>() {{
+            add(card(ACE, HEARTS));
+            add(card(TEN, SPADES));
+            add(card(FOUR, CLUBS));
+        }};
+
+        assertEquals(15, total(cards));
+    }
+
+    @Test
+    public void softTotalFavorable_shouldReturnTrue_whenTheValueOfTheHardTotalIsLessThanOrEqualToTwentyOne() {
         Stack<Card> cards = new Stack<Card>() {{
             add(card(ACE, HEARTS));
             add(card(FIVE, SPADES));
             add(card(FIVE, SPADES));
         }};
 
-        assertTrue(hardTotalIsFavourable(cards));
+        assertTrue(softTotalIsFavourable(cards));
     }
 
     @Test
-    public void hardTotalFavorable_shouldReturnTrue_whenTheValueOfTheHardTotalIsGreaterThanTwentyOne() {
+    public void softTotalFavorable_shouldReturnTrue_whenTotalIsGreaterThanTwentyOne() {
         List<Card> cards = new LinkedList<Card>() {{
             add(card(ACE, HEARTS));
             add(card(SIX, SPADES));
             add(card(FIVE, SPADES));
         }};
 
-        assertFalse(hardTotalIsFavourable(cards));
+        assertFalse(softTotalIsFavourable(cards));
     }
 
     @Test

@@ -40,10 +40,10 @@ public class CardFunctions {
     public static int score(Collection<Card> cards) {
         if (isBlackjack(cards)) {
             return MAXIMUM_SCORE;
-        } else if (atLeastOneAce(cards) && hardTotalIsFavourable(cards)) {
-            return hardTotal(cards);
-        } else {
+        } else if (atLeastOneAce(cards) && softTotalIsFavourable(cards)) {
             return softTotal(cards);
+        } else {
+            return total(cards);
         }
     }
 
@@ -54,17 +54,17 @@ public class CardFunctions {
                 .sum();
     }
 
-    public static int hardTotal(Collection<Card> cards) {
-        return atLeastOneAce(cards)
-                ? softTotal(cards) + 10
-                : softTotal(cards);
-    }
-
-    public static boolean hardTotalIsFavourable(Collection<Card> cards) {
-        return hardTotal(cards) <= MAXIMUM_SCORE;
-    }
-
     public static int softTotal(Collection<Card> cards) {
+        return atLeastOneAce(cards)
+                ? total(cards) + 10
+                : total(cards);
+    }
+
+    public static boolean softTotalIsFavourable(Collection<Card> cards) {
+        return softTotal(cards) <= MAXIMUM_SCORE;
+    }
+
+    public static int total(Collection<Card> cards) {
         return cards.stream().mapToInt(Card::getBlackjackValue).sum();
     }
 

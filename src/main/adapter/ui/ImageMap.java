@@ -98,7 +98,6 @@ public class ImageMap {
         return symbolReel(LEFT);
     }
 
-    // TODO: Wrap this up in Left and Right versions so this loop can be reused
     private Collection<Moving<Image>> symbolReel(Direction direction) {
         final Collection<Moving<Image>> reel = new LinkedList<>();
         final InfiniteStack<Image> symbols = new InfiniteStack<>(asList(symbolImages()));

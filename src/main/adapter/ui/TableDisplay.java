@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import main.domain.model.Outcome;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class TableDisplay extends Canvas {
         drawLabel(String.format("You: %s", playerScore), VER_CENTER + 130);
     }
 
-    public void drawCards(Image[] dealerCards, Image[] playerCards) {
+    public void drawCards(Collection<Image> dealerCards, Collection<Image> playerCards) {
         drawLineOfCards(dealerCards, 100);
         drawLineOfCards(playerCards, VER_CENTER + 110);
     }
@@ -92,11 +93,13 @@ public class TableDisplay extends Canvas {
     }
 
 
-    private void drawLineOfCards(Image[] cards, int y) {
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * cards.length) + (CARD_WIDTH / 2);
+    private void drawLineOfCards(Collection<Image> cards, int y) {
+        Object[] images = cards.toArray();
 
-        for (int i = 0, x = START_POS; i < cards.length; i++, x += GAP_BETWEEN_CARDS) {
-            context.drawImage(cards[i], x, y, CARD_WIDTH, CARD_HEIGHT);
+        final int START_POS  = HOR_CENTER - (CARD_WIDTH * images.length) + (CARD_WIDTH / 2);
+
+        for (int i = 0, x = START_POS; i < images.length; i++, x += GAP_BETWEEN_CARDS) {
+            context.drawImage((Image) images[i], x, y, CARD_WIDTH, CARD_HEIGHT);
         }
     }
 

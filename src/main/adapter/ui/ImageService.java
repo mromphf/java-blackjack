@@ -54,30 +54,9 @@ public class ImageService {
         }
     }
 
-    public Image[] imageArray(Collection<Card> cards, boolean outcomeResolved) {
-        final Image[] arr = new Image[cards.size()];
-        final Iterator<Card> iter = cards.iterator();
-
-        int i = 0;
-
-        while (iter.hasNext()) {
-            final Card c = iter.next();
-
-            if (outcomeResolved) {
-                arr[i] = cardImages.get(c.anonymize());
-            } else {
-                arr[i] = c.isFaceUp() ? cardImages.get(c.anonymize()) : blankCard();
-            }
-
-            i++;
-        }
-
-        return arr;
-    }
-
-    public List<Image> fromCards(Collection<Card> cards) {
+    public List<Image> fromCards(Collection<Card> cards, boolean outcomeResolved) {
         return cards.stream()
-                .map(c -> cardImages.get(c.anonymize()))
+                .map(card -> determineImage(card, outcomeResolved))
                 .collect(toList());
     }
 
@@ -130,6 +109,14 @@ public class ImageService {
                 return symbolImages.get(SYMBOL_DIAMONDS);
             default:
                 return symbolImages.get(SYMBOL_HEARTS);
+        }
+    }
+
+    private Image determineImage(Card card, boolean outcomeResolved) {
+        if (outcomeResolved) {
+            return cardImages.get(card.anonymize());
+        } else {
+            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
         }
     }
 }

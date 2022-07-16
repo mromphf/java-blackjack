@@ -135,6 +135,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
     }
 
     public void onGameUpdate(TableView tableView) {
+        final boolean outcomeResolved = outcomeIsResolved.test(tableView);
+
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
             gameControls.setVisible(isGameInProgress.test(tableView));
@@ -156,10 +158,11 @@ public class BlackjackController implements Initializable, ScreenObserver {
                     tableView.playerScore());
 
             tableDisplay.drawCards(
-                    images.imageArray(tableView.dealerHand(), outcomeIsResolved.test(tableView)),
-                    images.imageArray(tableView.playerHand(), outcomeIsResolved.test(tableView)));
+                    images.fromCards(tableView.dealerHand(), outcomeResolved),
+                    images.fromCards(tableView.playerHand(), outcomeResolved));
 
-            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay()));
+            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
+
             tableDisplay.drawResults(tableView.outcome());
         });
     }

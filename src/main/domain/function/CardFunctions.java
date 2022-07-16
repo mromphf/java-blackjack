@@ -3,7 +3,6 @@ package main.domain.function;
 import main.domain.model.Card;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class CardFunctions {
 
@@ -49,13 +48,10 @@ public class CardFunctions {
     }
 
     public static int concealedScore(Collection<Card> cards) {
-        final Iterator<Card> cardIterator = cards.iterator();
-        if (cardIterator.hasNext()) {
-            final Card card = cardIterator.next();
-            return card.isAce() ? ACE_HIGH_SCORE : card.getBlackjackValue();
-        } else {
-            return 0;
-        }
+        return cards.stream()
+                .filter(Card::isFaceUp)
+                .mapToInt(card -> card.isAce() ? ACE_HIGH_SCORE : card.getBlackjackValue())
+                .sum();
     }
 
     public static int hardTotal(Collection<Card> cards) {

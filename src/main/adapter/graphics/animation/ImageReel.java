@@ -1,12 +1,13 @@
-package main.adapter.graphics;
+package main.adapter.graphics.animation;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import main.adapter.graphics.Moving;
 
 import java.util.Collection;
 
-public class ImageReelAnimation extends AnimationTimer {
+public class ImageReel extends AnimationTimer {
 
     private final static int IMG_SIZE = 40;
     private final static int CANVAS_WIDTH = 840;
@@ -15,7 +16,7 @@ public class ImageReelAnimation extends AnimationTimer {
     private final GraphicsContext graphics;
     private final Collection<Moving<Image>> imageReel;
 
-    public ImageReelAnimation(Collection<Moving<Image>> imageReel, GraphicsContext graphics) {
+    public ImageReel(Collection<Moving<Image>> imageReel, GraphicsContext graphics) {
         this.imageReel = imageReel;
         this.graphics = graphics;
     }

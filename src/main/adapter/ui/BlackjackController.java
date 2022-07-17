@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.adapter.graphics.DealAnimation;
+import main.adapter.graphics.animation.OpeningDeal;
 import main.domain.model.TableView;
 import main.usecase.Game;
 
@@ -90,7 +90,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
             final boolean outcomeResolved = false;
 
             runLater(() -> {
-                DealAnimation animation = new DealAnimation(
+                OpeningDeal animation = new OpeningDeal(
                         this.tableDisplay,
                         images.fromCards(table.dealerHand(), outcomeResolved),
                         images.fromCards(table.playerHand(), outcomeResolved));

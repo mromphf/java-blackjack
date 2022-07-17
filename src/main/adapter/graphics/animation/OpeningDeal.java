@@ -1,4 +1,4 @@
-package main.adapter.graphics;
+package main.adapter.graphics.animation;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
@@ -14,7 +14,7 @@ import java.util.List;
 import static java.lang.System.currentTimeMillis;
 import static javafx.stage.Screen.getPrimary;
 
-public class DealAnimation extends AnimationTimer {
+public class OpeningDeal extends AnimationTimer {
 
     private static final int DELAY_1 = 500;
     private static final int DELAY_2 = 1000;
@@ -33,9 +33,9 @@ public class DealAnimation extends AnimationTimer {
     private final Canvas canvas;
     private final List<Image> images = new ArrayList<>();
 
-    public DealAnimation(Canvas canvas,
-                         Collection<Image> dealerCards,
-                         Collection<Image> playerCards) {
+    public OpeningDeal(Canvas canvas,
+                       Collection<Image> dealerCards,
+                       Collection<Image> playerCards) {
         this.canvas = canvas;
         this.graphics = canvas.getGraphicsContext2D();
 

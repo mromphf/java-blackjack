@@ -9,7 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import main.adapter.graphics.ImageReelAnimation;
+import main.adapter.graphics.animation.ImageReel;
 import main.domain.model.Account;
 import main.usecase.AccountService;
 
@@ -47,7 +47,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private final AccountService accountService;
     private final Map<UUID, Account> accountMap = new HashMap<>();
-    private final Map<Canvas, ImageReelAnimation> animations = new HashMap<>();
+    private final Map<Canvas, ImageReel> animations = new HashMap<>();
 
     private final ScreenManagement screen;
     private final AlertService alertService;
@@ -71,8 +71,8 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = topScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = bottomScroller.getGraphicsContext2D();
 
-        animations.put(topScroller, new ImageReelAnimation(imageService.reelLeft(), topScrollerGraphics));
-        animations.put(bottomScroller, new ImageReelAnimation(imageService.reelRight(), bottomScrollerGraphics));
+        animations.put(topScroller, new ImageReel(imageService.reelLeft(), topScrollerGraphics));
+        animations.put(bottomScroller, new ImageReel(imageService.reelRight(), bottomScrollerGraphics));
 
         tblAccounts.setPlaceholder(new Label("Loading accounts..."));
 
@@ -166,7 +166,7 @@ public class HomeController implements Initializable, ScreenObserver {
             animations.values()
                     .forEach(animation -> new Thread(animation::start, ANIMATION_THREAD_NAME).start());
         } else {
-            animations.values().forEach(ImageReelAnimation::stop);
+            animations.values().forEach(ImageReel::stop);
         }
     }
 

@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
-import main.adapter.graphics.ImageReelAnimation;
+import main.adapter.graphics.animation.ImageReel;
 import main.domain.model.Account;
 import main.usecase.Game;
 import main.usecase.SelectionService;
@@ -62,7 +62,7 @@ public class BetController implements Initializable, ScreenObserver {
     private final ScreenManagement screen;
 
     private final Game game;
-    private ImageReelAnimation animation;
+    private ImageReel animation;
     private int bet = 0;
     private final ImageService images;
 
@@ -87,7 +87,7 @@ public class BetController implements Initializable, ScreenObserver {
         btnBet25.setOnMouseClicked(event -> onBet(event, 25));
         btnBet100.setOnMouseClicked(event -> onBet(event, 100));
 
-        animation = new ImageReelAnimation(images.reelRight(), cvsScroller.getGraphicsContext2D());
+        animation = new ImageReel(images.reelRight(), cvsScroller.getGraphicsContext2D());
 
         new Thread(() -> animation.start(), "Bet Screen Animation Thread").start();
     }

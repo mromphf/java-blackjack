@@ -81,8 +81,8 @@ public class BaseInjectionModule extends AbstractModule {
                     add(new FileLogHandler());
                 }});
 
-        bind(AccountRepository.class).to(SqliteDatabase.class);
-        bind(TransactionRepository.class).to(SqliteDatabase.class);
+        bind(AccountRepository.class).to(Database.class);
+        bind(TransactionRepository.class).to(Database.class);
         bind(SelectionService.class).to(AccountService.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);

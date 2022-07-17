@@ -1,22 +1,31 @@
 package main.adapter.storage;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.String.format;
-import static java.lang.System.getenv;
 import static java.sql.DriverManager.getConnection;
+import static main.adapter.injection.Bindings.QUERIES_SQLITE;
+import static main.adapter.storage.QueryKey.*;
 import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
 import static main.adapter.storage.ResultSetUtil.transactionFromResultSet;
-import static main.adapter.storage.PsqlQuery.*;
 
-public class PsqlDatabase implements AccountRepository, TransactionRepository {
+public class Database implements AccountRepository, TransactionRepository {
 
+    private final Map<QueryKey, String> queryMap;
+
+    @Inject
+    public Database(@Named(QUERIES_SQLITE) Map<QueryKey, String> queryMap) {
+        this.queryMap = queryMap;
+    }
 
     @Override
     public Collection<Account> loadAllAccounts() {
@@ -24,7 +33,7 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
             final ArrayList<Account> accounts = new ArrayList<>();
             final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery(SELECT_ALL_ACCOUNTS.query());
+            final ResultSet rs = st.executeQuery(queryMap.get(ALL_ACCOUNTS));
 
             while (rs.next()) {
                 accounts.add(accountFromResultSet(rs));
@@ -49,7 +58,7 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
             final ArrayList<Transaction> transactions = new ArrayList<>();
             final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery(SELECT_ALL_TRANSACTIONS.query());
+            final ResultSet rs = st.executeQuery(queryMap.get(ALL_TRANSACTIONS));
 
             while (rs.next()) {
                 transactions.add(transactionFromResultSet(rs));
@@ -71,7 +80,7 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
 
     @Override
     public void createNew(Account account) {
-        final String sql = format(INSERT_NEW_ACCOUNT.query(),
+        final String sql = format(queryMap.get(CREATE_NEW_ACCOUNT),
                 account.getKey(),
                 account.getName(),
                 account.getCreated());
@@ -81,7 +90,7 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
 
     @Override
     public void closeAccount(Account account) {
-        final String sql = format(CLOSE_ACCOUNT.query(),
+        final String sql = format(queryMap.get(DELETE_ACCOUNT),
                 account.getKey(),
                 account.getCreated());
 
@@ -90,7 +99,7 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String sql = format(INSERT_NEW_TRANSACTION.query(),
+        final String sql = format(queryMap.get(CREATE_NEW_TRANSACTION),
                 transaction.getAccountKey(),
                 transaction.getTime(),
                 transaction.getAmount(),
@@ -113,11 +122,8 @@ public class PsqlDatabase implements AccountRepository, TransactionRepository {
     }
 
     private static Connection openDbConnection() throws SQLException {
-        final String url = getenv("PSQL_URL");
-        final String username = getenv("PSQL_USERNAME");
+        final String url = "jdbc:sqlite:./db/blackjack.db";
         final Properties props = new Properties();
-
-        props.setProperty("user", username);
 
         return getConnection(url, props);
     }

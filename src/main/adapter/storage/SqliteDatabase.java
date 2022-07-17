@@ -111,7 +111,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
     }
 
     private static Connection openDbConnection() throws SQLException {
-        final String url = "jdbc:sqlite:/Users/mromphf/data/blackjack.db";
+        final String url = "jdbc:sqlite:./db/blackjack.db";
 
         return getConnection(url);
     }

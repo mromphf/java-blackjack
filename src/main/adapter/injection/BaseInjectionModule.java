@@ -9,7 +9,7 @@ import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountRepository;
-import main.adapter.storage.Database;
+import main.adapter.storage.PsqlDatabase;
 import main.adapter.storage.TransactionRepository;
 import main.adapter.ui.*;
 import main.domain.Assessment;
@@ -71,8 +71,8 @@ public class BaseInjectionModule extends AbstractModule {
         bind(new TypeLiteral<Collection<Assessment>>() {
         }).annotatedWith(named(EVALUATORS)).toInstance(transactionEvaluators());
 
-        bind(AccountRepository.class).to(Database.class);
-        bind(TransactionRepository.class).to(Database.class);
+        bind(AccountRepository.class).to(PsqlDatabase.class);
+        bind(TransactionRepository.class).to(PsqlDatabase.class);
         bind(SelectionService.class).to(AccountService.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);

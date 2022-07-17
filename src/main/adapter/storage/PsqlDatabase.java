@@ -15,7 +15,7 @@ import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
 import static main.adapter.storage.ResultSetUtil.transactionFromResultSet;
 import static main.adapter.storage.PsqlQuery.*;
 
-public class Database implements AccountRepository, TransactionRepository {
+public class PsqlDatabase implements AccountRepository, TransactionRepository {
 
 
     @Override

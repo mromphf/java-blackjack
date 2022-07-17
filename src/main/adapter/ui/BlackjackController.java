@@ -20,7 +20,6 @@ import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.LowOrderPredicate.*;
-import static main.util.LessCode.not;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 
@@ -85,19 +84,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
         final TableView table = game.peek();
 
         onGameUpdate(table);
-
-        if (startOfRound.test(table)) {
-            final boolean outcomeResolved = false;
-
-            runLater(() -> {
-                OpeningDeal animation = new OpeningDeal(
-                        this.tableDisplay,
-                        images.fromCards(table.dealerHand(), outcomeResolved),
-                        images.fromCards(table.playerHand(), outcomeResolved));
-
-                new Thread(animation::start, "Deal Animation Thread").start();
-            });
-        }
     }
 
     @FXML
@@ -154,7 +140,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     public void onGameUpdate(TableView tableView) {
         final boolean outcomeResolved = outcomeIsResolved.test(tableView);
-        final boolean middleOfRound = not(startOfRound).test(tableView);
 
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
@@ -180,10 +165,17 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.drawResults(tableView.outcome());
 
-            if (middleOfRound) {
-                tableDisplay.drawCards(
+            if (startOfRound.test(tableView)) {
+                OpeningDeal animation = new OpeningDeal(
+                        this.tableDisplay,
                         images.fromCards(tableView.dealerHand(), outcomeResolved),
                         images.fromCards(tableView.playerHand(), outcomeResolved));
+
+                new Thread(animation::start, "Deal Animation Thread").start();
+            } else {
+                    tableDisplay.drawCards(
+                            images.fromCards(tableView.dealerHand(), outcomeResolved),
+                            images.fromCards(tableView.playerHand(), outcomeResolved));
             }
         });
     }

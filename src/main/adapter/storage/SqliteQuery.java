@@ -12,7 +12,9 @@ public enum SqliteQuery {
     INSERT_NEW_TRANSACTION("INSERT INTO transactions (accountkey, timestamp, amount, description) " +
             "VALUES ('%s', '%s', '%s', '%s');"),
 
-    CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES ('%s', '%s');");
+    CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES ('%s', '%s');"),
+
+    CONNECTION_URL("jdbc:sqlite:./db/blackjack.db");
 
     private final String sql;
 

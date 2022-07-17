@@ -1,5 +1,7 @@
 package main.adapter.storage;
 
+import static java.lang.System.getenv;
+
 public enum PsqlQuery {
     SELECT_ALL_ACCOUNTS("SELECT * FROM blackjack.account_stats;"),
 
@@ -10,7 +12,9 @@ public enum PsqlQuery {
     INSERT_NEW_TRANSACTION("INSERT INTO blackjack.transactions (accountkey, timestamp, amount, description) " +
             "VALUES ('%s', '%s', '%s', '%s');"),
 
-    CLOSE_ACCOUNT("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');");
+    CLOSE_ACCOUNT("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');"),
+
+    CONNECTION_URL(getenv("PSQL_URL"));
 
     private final String sql;
 

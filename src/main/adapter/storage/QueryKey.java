@@ -6,4 +6,5 @@ public enum QueryKey {
     CREATE_NEW_ACCOUNT,
     CREATE_NEW_TRANSACTION,
     DELETE_ACCOUNT,
+    URL,
 }

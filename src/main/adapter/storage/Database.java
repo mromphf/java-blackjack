@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import static java.lang.String.format;
 import static java.sql.DriverManager.getConnection;
+import static main.adapter.injection.Bindings.QUERIES_PSQL;
 import static main.adapter.injection.Bindings.QUERIES_SQLITE;
 import static main.adapter.storage.QueryKey.*;
 import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
@@ -121,9 +122,11 @@ public class Database implements AccountRepository, TransactionRepository {
         }
     }
 
-    private static Connection openDbConnection() throws SQLException {
-        final String url = "jdbc:sqlite:./db/blackjack.db";
+    private Connection openDbConnection() throws SQLException {
+        final String url = queryMap.get(URL);
         final Properties props = new Properties();
+
+        props.setProperty("user", "mromphf");
 
         return getConnection(url, props);
     }

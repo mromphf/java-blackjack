@@ -62,7 +62,19 @@ public class BaseInjectionModule extends AbstractModule {
                             put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
                             put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
                             put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
+                            put(URL, SqliteQuery.CONNECTION_URL.query());
                         }});
+
+        bind(new TypeLiteral<Map<QueryKey, String>>() {})
+                .annotatedWith(named(QUERIES_PSQL))
+                .toInstance(new HashMap<QueryKey, String>() {{
+                    put(ALL_ACCOUNTS, PsqlQuery.SELECT_ALL_ACCOUNTS.query());
+                    put(ALL_TRANSACTIONS, PsqlQuery.SELECT_ALL_TRANSACTIONS.query());
+                    put(CREATE_NEW_ACCOUNT, PsqlQuery.INSERT_NEW_ACCOUNT.query());
+                    put(CREATE_NEW_TRANSACTION, PsqlQuery.INSERT_NEW_TRANSACTION.query());
+                    put(DELETE_ACCOUNT, PsqlQuery.CLOSE_ACCOUNT.query());
+                    put(URL, PsqlQuery.CONNECTION_URL.query());
+                }});
 
         bind(new TypeLiteral<Stack<UUID>>() {
         })

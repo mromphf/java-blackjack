@@ -58,7 +58,7 @@ public class LowOrderPredicate {
             not(playerPurchasedInsurance).and(dealerHasAce).and(noActionsTaken).test(table);
 
     public static final Predicate<TableView> readyToPlayNextHand = table -> (
-            outcomeIsUnresolved.and(handsRemainToBePlayed).and(playerHasBusted.or(turnEnded)).test(table));
+            outcomeIsResolved.and(handsRemainToBePlayed).and(playerHasBusted.or(turnEnded)).test(table));
 
     public static final Predicate<TableView> isGameInProgress = table -> (
             !canSplit(table.playerHand()) &&

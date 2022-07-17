@@ -74,7 +74,7 @@ public class HomeController implements Initializable, ScreenObserver {
         animations.put(topScroller, new ImageReel(imageService.reelLeft(), topScrollerGraphics));
         animations.put(bottomScroller, new ImageReel(imageService.reelRight(), bottomScrollerGraphics));
 
-        tblAccounts.setPlaceholder(new Label("Loading accounts..."));
+        tblAccounts.setPlaceholder(new Label("No account records."));
 
         btnDelete.setOnAction(handler);
 

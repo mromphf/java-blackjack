@@ -9,7 +9,6 @@ import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.AccountRepository;
-import main.adapter.storage.PsqlDatabase;
 import main.adapter.storage.SqliteDatabase;
 import main.adapter.storage.TransactionRepository;
 import main.adapter.ui.*;
@@ -27,8 +26,12 @@ import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
 import static main.adapter.ui.Screen.*;
+import static main.domain.function.BetAssessment.betAssessment;
 import static main.domain.function.Dealer.freshlyShuffledDeck;
-import static main.domain.function.Evaluate.transactionEvaluators;
+import static main.domain.function.DoubleDownAssessment.doubleDownAssessment;
+import static main.domain.function.InsuranceAssessment.insuranceAssessment;
+import static main.domain.function.OutcomeAssessment.outcomeAssessment;
+import static main.domain.function.SplitAssessment.splitAssessment;
 
 public class BaseInjectionModule extends AbstractModule {
 
@@ -68,9 +71,6 @@ public class BaseInjectionModule extends AbstractModule {
                     add(new ConsoleLogHandler());
                     add(new FileLogHandler());
                 }});
-
-        bind(new TypeLiteral<Collection<Assessment>>() {
-        }).annotatedWith(named(EVALUATORS)).toInstance(transactionEvaluators());
 
         bind(AccountRepository.class).to(SqliteDatabase.class);
         bind(TransactionRepository.class).to(SqliteDatabase.class);
@@ -121,5 +121,17 @@ public class BaseInjectionModule extends AbstractModule {
         screenMap.put(GAME, blackjackController);
 
         return screenMap;
+    }
+
+    @Provides Collection<Assessment> assessors() {
+        final Collection<Assessment> evaluators = new HashSet<>();
+
+        evaluators.add(doubleDownAssessment());
+        evaluators.add(insuranceAssessment());
+        evaluators.add(outcomeAssessment());
+        evaluators.add(betAssessment());
+        evaluators.add(splitAssessment());
+
+        return evaluators;
     }
 }

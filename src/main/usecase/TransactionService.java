@@ -14,7 +14,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
-import static main.adapter.injection.Bindings.EVALUATORS;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 import static main.domain.model.Transaction.signingBonus;
 
@@ -27,10 +26,10 @@ public class TransactionService implements AccountRegistrar, TableObserver {
     @Inject
     public TransactionService(
             TransactionRepository transactionRepository,
-            @Named(EVALUATORS) Collection<Assessment> evaluators,
+            Collection<Assessment> assessors,
             @Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {
         this.transactionMap = transactionMap;
-        this.assessments = evaluators;
+        this.assessments = assessors;
         this.transactionRepository = transactionRepository;
     }
 

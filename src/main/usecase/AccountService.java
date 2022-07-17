@@ -12,7 +12,6 @@ import java.util.*;
 
 import static java.util.Optional.empty;
 import static main.adapter.injection.Bindings.ACCOUNT_STACK;
-import static main.adapter.injection.Bindings.EVALUATORS;
 
 public class AccountService implements SelectionService, AccountRegistrar, TableObserver {
 
@@ -23,10 +22,10 @@ public class AccountService implements SelectionService, AccountRegistrar, Table
 
     @Inject
     public AccountService(AccountRepository accountRepository,
-                          @Named(EVALUATORS) Collection<Assessment> evaluators,
+                          Collection<Assessment> assessors,
                           @Named(ACCOUNT_STACK) Stack<UUID> selections) {
         this.selections = selections;
-        this.assessments = evaluators;
+        this.assessments = assessors;
         this.accountMap = new HashMap<>();
         this.accountRepository = accountRepository;
     }

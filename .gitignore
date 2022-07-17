@@ -1,6 +1,7 @@
 /app-data
 /target
 /log
+/db
 *.class
 *.swp
 .idea

@@ -8,9 +8,7 @@ import javafx.stage.Stage;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
-import main.adapter.storage.AccountRepository;
-import main.adapter.storage.SqliteDatabase;
-import main.adapter.storage.TransactionRepository;
+import main.adapter.storage.*;
 import main.adapter.ui.*;
 import main.domain.Assessment;
 import main.domain.model.Deck;
@@ -25,6 +23,7 @@ import static com.google.inject.name.Names.named;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
+import static main.adapter.storage.QueryKey.*;
 import static main.adapter.ui.Screen.*;
 import static main.domain.function.BetAssessment.betAssessment;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
@@ -54,6 +53,16 @@ public class BaseInjectionModule extends AbstractModule {
         })
                 .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
+
+        bind(new TypeLiteral<Map<QueryKey, String>>() {})
+                .annotatedWith(named(QUERIES_SQLITE))
+                        .toInstance(new HashMap<QueryKey, String>() {{
+                            put(ALL_ACCOUNTS, SqliteQuery.SELECT_ALL_ACCOUNTS.query());
+                            put(ALL_TRANSACTIONS, SqliteQuery.SELECT_ALL_TRANSACTIONS.query());
+                            put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
+                            put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
+                            put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
+                        }});
 
         bind(new TypeLiteral<Stack<UUID>>() {
         })

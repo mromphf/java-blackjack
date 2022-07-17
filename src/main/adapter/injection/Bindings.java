@@ -8,4 +8,5 @@ public class Bindings {
     public static final String ACCOUNT_STACK = "accountStack";
     public static final String GAME_LOGGER = "gameLogger";
     public static final String LOG_HANDLERS = "logHandlers";
+    public static final String QUERIES_SQLITE = "queriesSqlite";
 }

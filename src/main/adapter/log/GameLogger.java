@@ -17,12 +17,12 @@ import static java.util.logging.Level.INFO;
 import static main.adapter.injection.Bindings.GAME_LOGGER;
 import static main.adapter.injection.Bindings.LOG_HANDLERS;
 
-public class TableLogger implements TableObserver, AccountRegistrar {
+public class GameLogger implements TableObserver, AccountRegistrar {
 
     private final Logger logger;
 
     @Inject
-    public TableLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
+    public GameLogger(@Named(GAME_LOGGER) Logger logger, @Named(LOG_HANDLERS) Collection<Handler> logHandlers) {
         this.logger = logger;
         logger.setUseParentHandlers(false);
         logHandlers.forEach(logger::addHandler);

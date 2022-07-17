@@ -6,7 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import main.adapter.injection.BaseInjectionModule;
-import main.adapter.log.TableLogger;
+import main.adapter.log.GameLogger;
 import main.adapter.storage.FileSystem;
 import main.adapter.ui.ImageService;
 import main.adapter.ui.HomeController;
@@ -39,7 +39,7 @@ public class Main extends Application {
         final AccountService accountService = injector.getInstance(AccountService.class);
         final ScreenSupervisor screenSupervisor = injector.getInstance(ScreenSupervisor.class);
         final FileSystem fileSystem = injector.getInstance(FileSystem.class);
-        final TableLogger gameLogger = injector.getInstance(TableLogger.class);
+        final GameLogger gameLogger = injector.getInstance(GameLogger.class);
         final HomeController homeController = injector.getInstance(HomeController.class);
         final ImageService imageService = injector.getInstance(ImageService.class);
         final Collection<Account> accounts = accountService.loadAll();

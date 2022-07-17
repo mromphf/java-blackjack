@@ -43,6 +43,8 @@ public class HomeController implements Initializable, ScreenObserver {
     @FXML
     private Button btnHistory;
 
+    private static final String ANIMATION_THREAD_NAME = "Home Screen Animation Thread";
+
     private final AccountService accountService;
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<Canvas, ImageReelAnimation> animations = new HashMap<>();
@@ -162,7 +164,7 @@ public class HomeController implements Initializable, ScreenObserver {
     private void toggleAnimationsRunning(boolean isRunning) {
         if (isRunning) {
             animations.values()
-                    .forEach(animation -> new Thread(animation::start, "Home Screen Animation Thread").start());
+                    .forEach(animation -> new Thread(animation::start, ANIMATION_THREAD_NAME).start());
         } else {
             animations.values().forEach(ImageReelAnimation::stop);
         }

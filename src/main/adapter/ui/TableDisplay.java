@@ -6,15 +6,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import main.adapter.graphics.DealAnimation_old;
-import main.adapter.graphics.DelayedElement;
 import main.domain.model.Outcome;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.DelayQueue;
 
 import static java.lang.String.format;
 import static javafx.scene.paint.Color.*;
@@ -82,32 +79,6 @@ public class TableDisplay extends Canvas {
     public void drawCards(Collection<Image> dealerCards, Collection<Image> playerCards) {
         drawLineOfCards(dealerCards, 100);
         drawLineOfCards(playerCards, VER_CENTER + 110);
-    }
-
-    public void drawOpeningAnimation(Collection<Image> dealerCards, Collection<Image> playerCards) {
-        final DelayQueue<DelayedElement<Image>> dealerQueue = new DelayQueue<>();
-        final DelayQueue<DelayedElement<Image>> playerQueue = new DelayQueue<>();
-
-        for (Image img : dealerCards) {
-            dealerQueue.add(new DelayedElement<>(img, 1000));
-        }
-
-        for (Image img : playerCards) {
-            playerQueue.add(new DelayedElement<>(img, 1000));
-        }
-
-        final DealAnimation_old animation = new DealAnimation_old(
-               HOR_CENTER,
-               CARD_WIDTH,
-               GAP_BETWEEN_CARDS,
-               CARD_HEIGHT,
-               VER_CENTER,
-               context,
-               dealerQueue,
-               playerQueue
-        );
-
-        animation.run();
     }
 
     public void drawCardsToPlay(List<Image> images) {

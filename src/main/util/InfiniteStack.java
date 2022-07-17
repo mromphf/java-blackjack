@@ -1,4 +1,4 @@
-package main.adapter.graphics;
+package main.util;
 
 import java.util.Collection;
 import java.util.LinkedList;

@@ -39,6 +39,7 @@ public class HighOrderPredicate {
 
     private static final Predicate<TableView> loseOutcome = (table) -> (
             turnEnded.and(not(playerHasBusted)).test(table) &&
+                    !isPush(table.playerHand(), table.dealerHand()) &&
                     !playerWins(table.playerHand(), table.dealerHand()));
 
     public static Outcome determineOutcome(TableView tableView) {

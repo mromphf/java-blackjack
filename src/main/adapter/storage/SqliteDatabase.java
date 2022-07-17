@@ -22,7 +22,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
             final ArrayList<Account> accounts = new ArrayList<>();
             final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery(SELECT_ALL_ACCOUNTS.sql);
+            final ResultSet rs = st.executeQuery(SELECT_ALL_ACCOUNTS.query());
 
             while (rs.next()) {
                 accounts.add(accountFromResultSet(rs));
@@ -47,7 +47,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
             final ArrayList<Transaction> transactions = new ArrayList<>();
             final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
-            final ResultSet rs = st.executeQuery(SELECT_ALL_TRANSACTIONS.sql);
+            final ResultSet rs = st.executeQuery(SELECT_ALL_TRANSACTIONS.query());
 
             while (rs.next()) {
                 transactions.add(transactionFromResultSet(rs));
@@ -69,7 +69,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
 
     @Override
     public void createNew(Account account) {
-        final String sql = format(INSERT_NEW_ACCOUNT.sql,
+        final String sql = format(INSERT_NEW_ACCOUNT.query(),
                 account.getKey(),
                 account.getName(),
                 account.getCreated());
@@ -79,7 +79,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
 
     @Override
     public void closeAccount(Account account) {
-        final String sql = format(CLOSE_ACCOUNT.sql,
+        final String sql = format(CLOSE_ACCOUNT.query(),
                 account.getKey(),
                 account.getCreated());
 
@@ -88,7 +88,7 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String sql = format(INSERT_NEW_TRANSACTION.sql,
+        final String sql = format(INSERT_NEW_TRANSACTION.query(),
                 transaction.getAccountKey(),
                 transaction.getTime(),
                 transaction.getAmount(),

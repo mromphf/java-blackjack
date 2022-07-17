@@ -12,9 +12,13 @@ public enum PsqlQuery {
 
     CLOSE_ACCOUNT("INSERT INTO blackjack.account_closures (key, timestamp) VALUES ('%s', '%s');");
 
-    public final String sql;
+    private final String sql;
 
     PsqlQuery(String sql) {
        this.sql = sql;
+    }
+
+    public String query() {
+        return sql;
     }
 }

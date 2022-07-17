@@ -14,9 +14,13 @@ public enum SqliteQuery {
 
     CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES ('%s', '%s');");
 
-    public final String sql;
+    private final String sql;
 
     SqliteQuery(String sql) {
        this.sql = sql;
+    }
+
+    public String query() {
+        return sql;
     }
 }

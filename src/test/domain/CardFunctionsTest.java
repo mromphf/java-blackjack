@@ -73,7 +73,7 @@ public class CardFunctionsTest {
     public void concealedScore_shouldReturnFive_whenGivenAFiveFirst() {
         Queue<Card> cards = new LinkedList<Card>() {{
             add(card(FIVE, HEARTS));
-            add(card(EIGHT, SPADES));
+            add(card(EIGHT, SPADES).faceDown());
         }};
 
         assertEquals(5, concealedScore(cards));
@@ -83,7 +83,7 @@ public class CardFunctionsTest {
     public void concealedScore_shouldReturnEleven_whenGivenAnAceFirst() {
         Queue<Card> cards = new LinkedList<Card>() {{
             add(card(ACE, HEARTS));
-            add(card(EIGHT, SPADES));
+            add(card(EIGHT, SPADES).faceDown());
         }};
 
         assertEquals(11, concealedScore(cards));

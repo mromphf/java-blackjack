@@ -6,6 +6,7 @@ import main.domain.model.Transaction;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 
 import static java.lang.String.format;
 import static java.sql.DriverManager.getConnection;
@@ -112,7 +113,8 @@ public class SqliteDatabase implements AccountRepository, TransactionRepository 
 
     private static Connection openDbConnection() throws SQLException {
         final String url = "jdbc:sqlite:./db/blackjack.db";
+        final Properties props = new Properties();
 
-        return getConnection(url);
+        return getConnection(url, props);
     }
 }

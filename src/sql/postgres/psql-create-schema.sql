@@ -9,13 +9,13 @@ CREATE TABLE IF NOT EXISTS blackjack.accounts (
 );
 
 CREATE TABLE IF NOT EXISTS blackjack.transactions (
-    accountKey UUID PRIMARY KEY,
+    accountKey UUID PRIMARY KEY REFERENCES blackjack.accounts(key),
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     description VARCHAR(20) NOT NULL,
     amount INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS blackjack.account_closures (
-    key UUID PRIMARY KEY,
+    key UUID PRIMARY KEY REFERENCES blackjack.accounts(key),
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL
 );

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Stack;
 
-import static main.domain.function.Dealer.*;
+import static main.domain.function.DealerFunctions.*;
 import static main.domain.model.Card.card;
 import static main.domain.model.Rank.*;
 import static main.domain.model.Suit.*;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-class DealerTest {
+class DealerFunctionsTest {
 
     private static final int EXPECTED_CARDS_OF_SUIT = 13;
 

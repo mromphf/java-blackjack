@@ -27,7 +27,7 @@ import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.*;
 import static main.adapter.ui.Screen.*;
 import static main.domain.function.BetAssessment.betAssessment;
-import static main.domain.function.Dealer.freshlyShuffledDeck;
+import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
 import static main.domain.function.DoubleDownAssessment.doubleDownAssessment;
 import static main.domain.function.InsuranceAssessment.insuranceAssessment;
 import static main.domain.function.OutcomeAssessment.outcomeAssessment;

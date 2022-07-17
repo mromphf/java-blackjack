@@ -19,7 +19,7 @@ import static main.adapter.graphics.Symbol.*;
 import static main.adapter.graphics.Vector.vector;
 import static main.adapter.ui.Direction.LEFT;
 import static main.adapter.ui.Direction.RIGHT;
-import static main.domain.function.Dealer.anonymousDeck;
+import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
 
 public class ImageService {

@@ -9,7 +9,7 @@ import static main.domain.model.AnonymousCard.anonymousCard;
 import static main.domain.model.Card.card;
 import static main.domain.model.Hand.emptyHand;
 
-public class Dealer {
+public class DealerFunctions {
 
     public static Deck freshDeck() {
 

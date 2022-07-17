@@ -13,7 +13,7 @@ import static java.lang.System.getenv;
 import static java.sql.DriverManager.getConnection;
 import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
 import static main.adapter.storage.ResultSetUtil.transactionFromResultSet;
-import static main.adapter.storage.Query.*;
+import static main.adapter.storage.PsqlQuery.*;
 
 public class Database implements AccountRepository, TransactionRepository {
 

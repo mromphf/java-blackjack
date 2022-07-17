@@ -1,6 +1,6 @@
 package main.adapter.storage;
 
-public enum Query {
+public enum PsqlQuery {
     SELECT_ALL_ACCOUNTS("SELECT * FROM blackjack.account_stats;"),
 
     SELECT_ALL_TRANSACTIONS("SELECT * FROM blackjack.active_transactions;"),
@@ -14,7 +14,7 @@ public enum Query {
 
     public final String sql;
 
-    Query(String sql) {
+    PsqlQuery(String sql) {
        this.sql = sql;
     }
 }

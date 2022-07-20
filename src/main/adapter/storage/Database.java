@@ -11,9 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 
-import static java.lang.String.format;
 import static java.sql.DriverManager.getConnection;
-import static main.adapter.injection.Bindings.QUERIES_PSQL;
 import static main.adapter.injection.Bindings.QUERIES_SQLITE;
 import static main.adapter.storage.QueryKey.*;
 import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
@@ -54,6 +52,24 @@ public class Database implements AccountRepository, TransactionRepository {
     }
 
     @Override
+    public void createNew(Account account) {
+        try {
+            final Connection conn = openDbConnection();
+            final PreparedStatement st = conn.prepareStatement(queryMap.get(CREATE_NEW_ACCOUNT));
+
+            st.setString(1, account.getKey().toString());
+            st.setString(2, account.getName());
+            st.setString(3, account.getCreated().toString());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    @Override
     public Collection<Transaction> loadAllTransactions() {
         try {
             final ArrayList<Transaction> transactions = new ArrayList<>();
@@ -80,39 +96,34 @@ public class Database implements AccountRepository, TransactionRepository {
     }
 
     @Override
-    public void createNew(Account account) {
-        final String sql = format(queryMap.get(CREATE_NEW_ACCOUNT),
-                account.getKey(),
-                account.getName(),
-                account.getCreated());
-
-        executePreparedStatement(sql);
-    }
-
-    @Override
     public void closeAccount(Account account) {
-        final String sql = format(queryMap.get(DELETE_ACCOUNT),
-                account.getKey(),
-                account.getCreated());
+        try {
+            final Connection conn = openDbConnection();
+            final PreparedStatement st = conn.prepareStatement(
+                    queryMap.get(DELETE_ACCOUNT));
 
-        executePreparedStatement(sql);
+            st.setString(1, account.getKey().toString());
+            st.setString(2, account.getCreated().toString());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        final String sql = format(queryMap.get(CREATE_NEW_TRANSACTION),
-                transaction.getAccountKey(),
-                transaction.getTime(),
-                transaction.getAmount(),
-                transaction.getDescription());
-
-        executePreparedStatement(sql);
-    }
-
-    private void executePreparedStatement(String sql) {
         try {
             final Connection conn = openDbConnection();
-            final PreparedStatement st = conn.prepareStatement(sql);
+            final PreparedStatement st = conn.prepareStatement(
+                    queryMap.get(CREATE_NEW_TRANSACTION));
+
+            st.setString(1, transaction.getAccountKey().toString());
+            st.setString(2, transaction.getTime().toString());
+            st.setInt(3, transaction.getAmount());
+            st.setString(4, transaction.getDescription());
 
             st.executeUpdate();
             st.close();

@@ -22,19 +22,6 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
     private final Map<Screen, Parent> sceneMap = new HashMap<>();
     private final Map<Screen, ScreenObserver> screenMap;
 
-    /*
-        PROBLEM STATEMENT: By sharing a stage with the rest of the UI components, the canvas
-        graphics are complected with the controls.
-
-        A second stage should be layered under the primary one to separate the 'background'
-        and the 'foreground'.
-
-        First approach: create separate guice bindings for two stages and annotate them with
-        names (background/foreground). Then... a separate scene?
-
-        - Mark   July 7, 2022
-     */
-
     @Inject
     public ScreenSupervisor(Stage stage, Map<Screen, ScreenObserver> screenMap) {
         this.stage = stage;

@@ -15,10 +15,13 @@ import main.domain.model.Deck;
 import main.domain.model.Transaction;
 import main.usecase.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
+import static com.google.inject.name.Names.bindProperties;
 import static com.google.inject.name.Names.named;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.of;
@@ -34,9 +37,23 @@ import static main.domain.function.SplitAssessment.splitAssessment;
 
 public class BaseInjectionModule extends AbstractModule {
 
+    // No good for a jar.
+    // TODO: Replace with a java resource
+    private static final String CONFIG_PATH = "src/main/resources/config/dev.properties";
+
     @Override
     public void configure() {
         final Deck deck = freshlyShuffledDeck();
+        final Properties props = new Properties();
+
+        try {
+            final FileInputStream filoIo = new FileInputStream(CONFIG_PATH);
+            props.load(filoIo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        bindProperties(binder(), props);
 
         bind(Integer.class)
                 .annotatedWith(named(NUM_DECKS))

@@ -11,7 +11,7 @@ import static main.domain.function.CardFunctions.isBlackjack;
 import static main.domain.model.Action.DOUBLE;
 import static main.domain.model.Transaction.transaction;
 import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
-import static main.domain.predicate.LowOrderPredicate.playerPurchasedInsurance;
+import static main.domain.predicate.LowOrderPredicate.insurancePurchased;
 
 public class OutcomeAssessment implements Assessment {
 
@@ -38,7 +38,7 @@ public class OutcomeAssessment implements Assessment {
         final Outcome outcome = tableView.outcome();
         final int bet = tableView.bet();
 
-        final int insurancePayout = (playerPurchasedInsurance.test(tableView) && isBlackjack(tableView.dealerHand()))
+        final int insurancePayout = (insurancePurchased.test(tableView) && isBlackjack(tableView.dealerHand()))
                 ? (bet * 2) : 0;
 
         final int betMultiplier = actionsTaken.stream().anyMatch(a -> a.equals(DOUBLE)) ? 2 : 1;

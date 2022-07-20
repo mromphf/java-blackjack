@@ -22,7 +22,8 @@ public class HighOrderPredicate {
                     not(playerHasBusted).and(noActionsTaken.or(not(turnEnded)))).test(table));
 
     private static final Predicate<TableView> pushOutcome = table -> (
-            turnEnded.test(table) && isPush(table.playerHand(), table.dealerHand()));
+            turnEnded.and(not(readyToPlayNextHand)).test(table) &&
+                    isPush(table.playerHand(), table.dealerHand()));
 
     private static final Predicate<TableView> blackjackOutcome = table -> (
             turnEnded.test(table) &&
@@ -38,7 +39,7 @@ public class HighOrderPredicate {
             atLeastOneActionTaken.and(playerHasBusted).test(table));
 
     private static final Predicate<TableView> loseOutcome = (table) -> (
-            turnEnded.and(not(playerHasBusted)).test(table) &&
+            turnEnded.and(not(playerHasBusted)).and(not(readyToPlayNextHand)).test(table) &&
                     !isPush(table.playerHand(), table.dealerHand()) &&
                     !playerWins(table.playerHand(), table.dealerHand()));
 

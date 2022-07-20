@@ -9,7 +9,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Transaction.transaction;
-import static main.domain.predicate.LowOrderPredicate.playerPurchasedInsurance;
+import static main.domain.predicate.LowOrderPredicate.insurancePurchased;
 
 public class InsuranceAssessment implements Assessment {
 
@@ -19,7 +19,7 @@ public class InsuranceAssessment implements Assessment {
 
     @Override
     public Optional<Transaction> apply(TableView tableView) {
-        if (playerPurchasedInsurance.test(tableView)) {
+        if (insurancePurchased.test(tableView)) {
             return Optional.of(transaction(
                     tableView.timestamp(),
                     tableView.playerAccountKey(),

@@ -40,10 +40,8 @@ public class LowOrderPredicate {
     public static final Predicate<TableView> dealerHasAce = table ->
             table.dealerHand().stream().filter(Card::isFaceUp).limit(1).allMatch(Card::isAce);
 
-    public static final Predicate<TableView> playerPurchasedInsurance = table ->
-            table.actionsTaken()
-                    .stream()
-                    .anyMatch(action -> action == BUY_INSURANCE);
+    public static final Predicate<TableView> insurancePurchased = table ->
+            table.actionsTaken().stream().anyMatch(action -> action == BUY_INSURANCE);
 
     public static final Predicate<TableView> turnEnded = table ->
             table.actionsTaken().stream().anyMatch(Action::turnEnded);
@@ -52,13 +50,13 @@ public class LowOrderPredicate {
             outcomeIsUnresolved.and(noActionsTaken).test(table));
 
     public static final Predicate<TableView> readyToSettleNextHand = table ->
-            outcomeIsResolved.and(handsRemainToBeSettled).test(table);
+            outcomeIsUnresolved.and(handsRemainToBeSettled).test(table);
 
     public static final Predicate<TableView> isInsuranceAvailable = table ->
-            not(playerPurchasedInsurance).and(dealerHasAce).and(noActionsTaken).test(table);
+            dealerHasAce.and(noActionsTaken).test(table);
 
     public static final Predicate<TableView> readyToPlayNextHand = table -> (
-            outcomeIsResolved.and(handsRemainToBePlayed).and(playerHasBusted.or(turnEnded)).test(table));
+            handsRemainToBePlayed.and(playerHasBusted.or(turnEnded)).test(table));
 
     public static final Predicate<TableView> isGameInProgress = table -> (
             !canSplit(table.playerHand()) &&

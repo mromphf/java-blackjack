@@ -3,8 +3,6 @@ package main.domain.model;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
 import static main.domain.model.AnonymousCard.anonymousCard;
@@ -12,19 +10,19 @@ import static main.domain.model.Rank.ACE;
 
 public class Card {
 
-    private final Boolean isFaceUp;
+    private final boolean isFaceUp;
     protected final UUID key;
     protected final Rank rank;
     protected final Suit suit;
 
-    private Card(UUID key, Rank rank, Suit suit, Boolean isFaceUp) {
+    private Card(UUID key, Rank rank, Suit suit, boolean isFaceUp) {
         this.key = key;
         this.rank = rank;
         this.suit = suit;
         this.isFaceUp = isFaceUp;
     }
 
-    protected Card(Rank rank, Suit suit, Boolean isFaceUp) {
+    protected Card(Rank rank, Suit suit, boolean isFaceUp) {
         this.key = randomUUID();
         this.rank = rank;
         this.suit = suit;
@@ -32,18 +30,18 @@ public class Card {
     }
 
     public static Card card(Rank rank, Suit suit) {
-        return new Card(rank, suit, TRUE);
+        return new Card(rank, suit, (true));
     }
 
-    public static Card card(Rank rank, Suit suit, Boolean isFaceUp) {
+    public static Card card(Rank rank, Suit suit, boolean isFaceUp) {
         return new Card(rank, suit, isFaceUp);
     }
 
     public Card faceDown() {
-        return new Card(key, rank, suit, FALSE);
+        return new Card(key, rank, suit, (false));
     }
 
-    public Boolean isFaceUp() {
+    public boolean isFaceUp() {
         return isFaceUp;
     }
 

@@ -135,7 +135,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     void onPlayNextHand() {
-        onGameUpdate(game.onActionTaken(PLAY_NEXT_HAND));
+        onGameUpdate(game.onActionTaken(NEXT));
     }
 
     public void onGameUpdate(TableView tableView) {

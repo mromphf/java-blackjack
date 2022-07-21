@@ -57,7 +57,7 @@ public class Game {
             runnableMap.put(STAND, currentRound::stand);
             runnableMap.put(SETTLE, currentRound::rewind);
             runnableMap.put(DOUBLE, currentRound::doubleDown);
-            runnableMap.put(PLAY_NEXT_HAND, currentRound::playNextHand);
+            runnableMap.put(NEXT, currentRound::playNextHand);
 
             currentRound.record(timestamp, action);
             runnableMap.getOrDefault(action, () -> {}).run();

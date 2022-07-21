@@ -47,10 +47,13 @@ public class LowOrderPredicate {
             table.actionsTaken().stream().anyMatch(Action::turnEnded);
 
     public static final Predicate<TableView> startOfRound = table -> (
-            outcomeIsUnresolved.and(noActionsTaken).test(table));
+            outcomeIsUnresolved
+                    .and(not(handsRemainToBePlayed))
+                    .and(not(handsRemainToBeSettled))
+                    .and(noActionsTaken).test(table));
 
     public static final Predicate<TableView> readyToSettleNextHand = table ->
-            outcomeIsUnresolved.and(handsRemainToBeSettled).test(table);
+            outcomeIsResolved.and(handsRemainToBeSettled).test(table);
 
     public static final Predicate<TableView> isInsuranceAvailable = table ->
             dealerHasAce.and(noActionsTaken).test(table);

@@ -2,10 +2,15 @@ package main.domain.model;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
+import static java.util.Objects.hash;
+import static java.util.UUID.randomUUID;
 
 public class Hand extends HashSet<Card> {
+
+    private final UUID key = randomUUID();
 
     private Hand() {
         super();
@@ -21,5 +26,10 @@ public class Hand extends HashSet<Card> {
 
     public static Hand handOf(Card... cards) {
         return new Hand(asList(cards));
+    }
+
+    @Override
+    public int hashCode() {
+        return hash(key);
     }
 }

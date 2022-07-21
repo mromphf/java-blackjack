@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
-import static java.util.stream.Collectors.toList;
+import static main.domain.function.CardFunctions.score;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
 import static main.domain.function.DealerFunctions.openingHand;
-import static main.domain.function.CardFunctions.score;
 import static main.domain.model.Action.*;
+import static main.domain.model.ActionLog.emptyActionLog;
 import static main.domain.model.Hand.handOf;
 
 public class Round {
@@ -19,20 +19,21 @@ public class Round {
 
     private final Account player;
     private final Deck deck;
-    private final Stack<Card> cardsToPlay = new Stack<>();
-    private final Stack<HandToSettle> handsToSettle = new Stack<>();
+    private final Stack<Hand> handsToPlay = new Stack<>();
+    private final Stack<Hand> handsToSettle = new Stack<>();
     private final Hand dealerHand;
-    private final int bet;
+    private final Bets bets;
 
-    private SortedMap<LocalDateTime, Action> actionsTaken = new TreeMap<>();
+    private final Map<Hand, ActionLog> actionLog = new HashMap<>();
+
     private Hand currentHand;
 
-    public static Round newRound(Account player, Deck deck, int bet) {
-        return new Round(player.debit(bet), deck, bet);
+    public static Round newRound(Account player, Deck deck, Bets bets) {
+        return new Round(player, deck, bets);
     }
 
-    private Round(Account player, Deck deck, int bet) {
-        this.bet = bet;
+    private Round(Account player, Deck deck, Bets bets) {
+        this.bets = bets;
         this.deck = deck;
         this.player = player;
 
@@ -44,10 +45,33 @@ public class Round {
 
         this.dealerHand = openingHands.get("dealer");
         this.currentHand = openingHands.get("player");
+
+        actionLog.put(currentHand, emptyActionLog());
     }
 
     public void record(LocalDateTime timestamp, Action action) {
-        actionsTaken.put(timestamp, action);
+        actionLog.get(currentHand).put(timestamp, action);
+    }
+
+    public void split() throws NoSuchElementException, EmptyStackException {
+        if (deck.isEmpty()) {
+            refillDeck();
+        }
+
+        final Iterator<Card> cardsInHand = currentHand.iterator();
+
+        final Card firstCard = cardsInHand.next();
+        final Card secondCard = cardsInHand.next();
+
+        final Hand secondHand = handOf(secondCard);
+
+        currentHand.clear();
+        currentHand.add(firstCard);
+        currentHand.add(deck.drawCard());
+
+        handsToPlay.add(secondHand);
+
+        actionLog.put(secondHand, emptyActionLog());
     }
 
     public void hit() throws EmptyStackException {
@@ -75,7 +99,7 @@ public class Round {
             refillDeck();
         }
 
-        if (cardsToPlay.isEmpty()) {
+        if (handsToPlay.isEmpty()) {
             while (score(dealerHand) < MINIMUM_DEALER_SCORE) {
                 dealerHand.add(deck.drawCard());
             }
@@ -87,34 +111,14 @@ public class Round {
             refillDeck();
         }
 
-        handsToSettle.add(new HandToSettle(currentHand, actionsTaken));
-        currentHand = handOf(cardsToPlay.pop());
+        handsToSettle.add(currentHand);
+        currentHand = handsToPlay.pop();
         currentHand.add(deck.drawCard());
-        actionsTaken.values().removeIf(a -> !(a.equals(BUY_INSURANCE) ||
-                a.equals(WAIVE_INSURANCE) ||
-                a.equals(REFILL)));
     }
 
-    public void split() throws NoSuchElementException, EmptyStackException {
-        final Iterator<Card> cardsInHand = currentHand.iterator();
-
-        if (deck.isEmpty()) {
-            refillDeck();
-        }
-
-        currentHand = handOf(
-            cardsInHand.next(),
-            deck.drawCard()
-        );
-
-        cardsToPlay.add(cardsInHand.next());
-    }
-
-    public void rewind() {
-        if (!handsToSettle.isEmpty()) {
-            HandToSettle previousState = handsToSettle.pop();
-            currentHand = previousState.playerHand;
-            actionsTaken = previousState.actionsTaken;
+    public void settleNextHand() {
+        if (handsToSettle.size() > 0) {
+            currentHand = handsToSettle.pop();
         }
     }
 
@@ -127,33 +131,13 @@ public class Round {
         return new TableView(
                 timestamp,
                 player,
-                bet,
+                bets,
                 deck,
                 dealerHand,
                 currentHand,
-                cardsToPlay,
-                fetchHandsToSettle(handsToSettle),
-                actionsTaken
+                handsToPlay,
+                handsToSettle,
+                actionLog
         );
-    }
-
-    private Collection<Hand> fetchHandsToSettle(Stack<HandToSettle> handsToSettle) {
-        return handsToSettle.stream()
-                .map(HandToSettle::playerHand)
-                .collect(toList());
-    }
-
-    private static class HandToSettle {
-        public final Hand playerHand;
-        public final SortedMap<LocalDateTime, Action> actionsTaken;
-
-        public HandToSettle(Hand playerHand, SortedMap<LocalDateTime, Action> actionsTaken) {
-            this.playerHand = playerHand;
-            this.actionsTaken = actionsTaken;
-        }
-
-        public Hand playerHand() {
-            return playerHand;
-        }
     }
 }

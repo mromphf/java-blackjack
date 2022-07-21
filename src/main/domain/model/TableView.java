@@ -3,14 +3,14 @@ package main.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
 import static java.lang.Math.negateExact;
 import static java.lang.String.format;
-import static java.util.Collections.unmodifiableCollection;
-import static java.util.Collections.unmodifiableSortedMap;
+import static java.util.Collections.unmodifiableMap;
+import static java.util.stream.Collectors.toList;
 import static main.domain.function.CardFunctions.concealedScore;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.OutcomeAssessment.settleBet;
@@ -20,35 +20,35 @@ import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 
 public class TableView {
-    private final LocalDateTime timestamp;
-    private final int bet;
-    private final Outcome outcome;
-    private final Collection<Card> deck;
-    private final Collection<Card> dealerHand;
-    private final Collection<Card> playerHand;
-    private final Collection<Card> cardsToPlay;
+    private final Account player;
+    private final Bets bets;
+    private final Collection<Hand> handsToPlay;
     private final Collection<Hand> handsToSettle;
-    private final SortedMap<LocalDateTime, Action> actionsTaken;
-    private final Account account;
+    private final Deck deck;
+    private final Hand dealerHand;
+    private final Hand playerHand;
+    private final LocalDateTime timestamp;
+    private final Map<Hand, ActionLog> actionLog;
+    private final Outcome outcome;
 
     public TableView(LocalDateTime timestamp,
-                     Account account,
-                     int bet,
-                     Stack<Card> deck,
+                     Account player,
+                     Bets bets,
+                     Deck deck,
                      Hand dealerHand,
                      Hand playerHand,
-                     Stack<Card> cardsToPlay,
+                     Stack<Hand> handsToPlay,
                      Collection<Hand> handsToSettle,
-                     SortedMap<LocalDateTime, Action> actionsTaken) {
+                     Map<Hand, ActionLog> actionsTaken) {
         this.timestamp = timestamp;
-        this.account = account;
-        this.bet = bet;
-        this.deck = unmodifiableCollection(deck);
-        this.dealerHand = unmodifiableCollection(dealerHand);
-        this.playerHand = unmodifiableCollection(playerHand);
-        this.cardsToPlay = unmodifiableCollection(cardsToPlay);
-        this.handsToSettle = unmodifiableCollection(handsToSettle);
-        this.actionsTaken = unmodifiableSortedMap(actionsTaken);
+        this.player = player;
+        this.bets = bets;
+        this.deck = deck;
+        this.dealerHand = dealerHand;
+        this.playerHand = playerHand;
+        this.handsToPlay = handsToPlay;
+        this.handsToSettle = handsToSettle;
+        this.actionLog = unmodifiableMap(actionsTaken);
         this.outcome = determineOutcome(this);
     }
 
@@ -61,15 +61,15 @@ public class TableView {
     }
 
     public int bet() {
-        return bet;
+        return bets.get(player);
     }
 
     public int negativeBet() {
-        return negateExact(bet);
+        return negateExact(bets.get(player));
     }
 
     public int playerBalance() {
-        return account.getBalance() + settleBet(this);
+        return player.getBalance() + settleBet(this);
     }
 
     public Outcome outcome() {
@@ -77,7 +77,7 @@ public class TableView {
     }
 
     public boolean canAffordToSpendMore() {
-        return playerBalance() >= bet;
+        return playerBalance() >= bets.get(player);
     }
 
     public Collection<Card> dealerHand() {
@@ -89,7 +89,9 @@ public class TableView {
     }
 
     public Collection<Card> cardsToPlay() {
-        return cardsToPlay;
+        return handsToPlay.stream()
+                .flatMap(Collection::stream)
+                .collect(toList());
     }
 
     public Collection<Hand> handsToSettle() {
@@ -97,11 +99,11 @@ public class TableView {
     }
 
     public Collection<Action> actionsTaken() {
-        return actionsTaken.values();
+        return actionLog.get(playerHand).values();
     }
 
     public UUID playerAccountKey() {
-        return account.getKey();
+        return player.getKey();
     }
 
     public int deckSize() {
@@ -140,10 +142,10 @@ public class TableView {
                 playerBalance(),
                 deckSize(),
                 outcome,
-                bet,
-                cardsToPlay.size(),
+                bets.get(player),
+                handsToPlay.size(),
                 handsToSettle.size(),
-                actionString(actionsTaken),
+                actionString(actionLog.get(playerHand)),
                 playerString(playerHand),
                 playerString(dealerHand));
     }

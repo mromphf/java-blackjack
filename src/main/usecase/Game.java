@@ -3,10 +3,7 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.Round;
-import main.domain.model.Account;
-import main.domain.model.Action;
-import main.domain.model.Deck;
-import main.domain.model.TableView;
+import main.domain.model.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -14,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static java.lang.Math.abs;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
 import static main.adapter.injection.Bindings.MAX_CARDS;
@@ -55,7 +51,7 @@ public class Game {
             runnableMap.put(HIT, currentRound::hit);
             runnableMap.put(SPLIT, currentRound::split);
             runnableMap.put(STAND, currentRound::stand);
-            runnableMap.put(SETTLE, currentRound::rewind);
+            runnableMap.put(SETTLE, currentRound::settleNextHand);
             runnableMap.put(DOUBLE, currentRound::doubleDown);
             runnableMap.put(NEXT, currentRound::playNextHand);
 
@@ -74,7 +70,11 @@ public class Game {
     }
 
     public void placeBet(Account account, int bet) {
-        final Round newRound = newRound(account, deck, abs(bet));
+        final Bets bets = new Bets();
+
+        bets.put(account, bet);
+
+        final Round newRound = newRound(account, deck, bets);
 
         roundStack.add(newRound);
 

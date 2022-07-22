@@ -26,7 +26,7 @@ public class HighOrderPredicate {
                     isPush(table.playerHand(), table.dealerHand()));
 
     private static final Predicate<TableView> blackjackOutcome = table -> (
-            turnEnded.test(table) &&
+            turnEnded.and(not(readyToPlayNextHand)).test(table) &&
                     playerWins(table.playerHand(), table.dealerHand()) &&
                     isBlackjack(table.playerHand()));
 

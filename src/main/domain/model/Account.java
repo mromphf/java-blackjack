@@ -36,12 +36,8 @@ public class Account implements Function<Transaction, Account> {
         return balance;
     }
 
-    public Account credit(int credit) {
-        return new Account(this.key, this.name, (this.balance + credit), this.created);
-    }
-
     public Account debit(int debit) {
-        return new Account(this.key, this.name, (this.balance + (debit * -1)), this.created);
+        return new Account(key, name, (balance + (debit * -1)), created);
     }
 
     @Override

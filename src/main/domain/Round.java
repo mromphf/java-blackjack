@@ -18,24 +18,27 @@ public class Round {
     private final static int MINIMUM_DEALER_SCORE = 16;
 
     private final Account player;
+    private final Bets bets;
     private final Deck deck;
+    private final Hand dealerHand;
+    private final Map<Hand, ActionLog> actionLog = new HashMap<>();
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<Hand> handsToSettle = new Stack<>();
-    private final Hand dealerHand;
-    private final Bets bets;
-
-    private final Map<Hand, ActionLog> actionLog = new HashMap<>();
 
     private Hand currentHand;
 
-    public static Round newRound(Account player, Deck deck, Bets bets) {
-        return new Round(player, deck, bets);
+    public static Round newRound(Deck deck, Bets bets) {
+        return new Round(deck, bets);
     }
 
-    private Round(Account player, Deck deck, Bets bets) {
+    private Round(Deck deck, Bets bets) {
         this.bets = bets;
         this.deck = deck;
-        this.player = player;
+
+        this.player = bets.accounts()
+                .stream()
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
 
         if (deck.size() < 4) {
             refillDeck();

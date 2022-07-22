@@ -23,6 +23,7 @@ import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.input.MouseButton.PRIMARY;
 import static main.adapter.ui.Screen.*;
+import static main.domain.model.Bets.bet;
 
 
 public class BetController implements Initializable, ScreenObserver {
@@ -103,7 +104,9 @@ public class BetController implements Initializable, ScreenObserver {
         final Optional<Account> account = selectionService.selectedAccount();
 
         if (account.isPresent()) {
-            game.placeBet(account.get().debit(bet), bet);
+            final Account chargedAccount = account.get().debit(bet);
+
+            game.placeBets(bet(chargedAccount, bet));
             screen.switchTo(GAME);
             bet = 0;
         } else {

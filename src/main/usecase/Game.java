@@ -69,12 +69,8 @@ public class Game {
         return deck.size() / maxCards;
     }
 
-    public void placeBet(Account account, int bet) {
-        final Bets bets = new Bets();
-
-        bets.put(account, bet);
-
-        final Round newRound = newRound(account, deck, bets);
+    public void placeBets(Bets bets) {
+        final Round newRound = newRound(deck, bets);
 
         roundStack.add(newRound);
 

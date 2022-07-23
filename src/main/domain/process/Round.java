@@ -1,4 +1,4 @@
-package main.domain;
+package main.domain.process;
 
 import main.domain.model.*;
 

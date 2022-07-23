@@ -2,7 +2,7 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.Round;
+import main.domain.process.Round;
 import main.domain.model.Action;
 import main.domain.model.Bets;
 import main.domain.model.Deck;
@@ -15,7 +15,7 @@ import java.util.Stack;
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.Round.newRound;
+import static main.domain.process.Round.newRound;
 
 public class Game {
 

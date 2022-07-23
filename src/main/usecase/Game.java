@@ -34,6 +34,11 @@ public class Game {
         this.tableObservers = tableObservers;
     }
 
+    public void placeBets(Bets bets) {
+        roundStack.add(newRound(deck, bets));
+        notifyObservers(roundStack.peek().getSnapshot(now()));
+    }
+
     public TableView peek() throws IllegalStateException {
         if (roundStack.size() > 0) {
             return roundStack.peek().getSnapshot(now());
@@ -81,14 +86,6 @@ public class Game {
 
     public double deckProgress() {
         return deck.size() / maxCards;
-    }
-
-    public void placeBets(Bets bets) {
-        final Round newRound = newRound(deck, bets);
-
-        roundStack.add(newRound);
-
-        notifyObservers(roundStack.peek().getSnapshot(now()));
     }
 
     private TableView notifyObservers(final TableView tableView) {

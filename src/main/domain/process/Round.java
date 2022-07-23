@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
+import static main.adapter.injection.Bindings.MIN_DEALER_SCORE;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
 import static main.domain.function.DealerFunctions.openingHand;
@@ -14,8 +15,6 @@ import static main.domain.model.ActionLog.emptyActionLog;
 import static main.domain.model.Hand.handOf;
 
 public class Round {
-
-    private final static int MINIMUM_DEALER_SCORE = 16;
 
     private final Account player;
     private final Bets bets;
@@ -95,13 +94,14 @@ public class Round {
     public void stand() throws EmptyStackException {
         final int deckValue = deck.stream().mapToInt(Card::blackjackValue).sum();
         final int deckValueRequired = deckValue - score(dealerHand);
+        final int minDealerScore = (int) config.get(MIN_DEALER_SCORE);
 
-        if (deckValueRequired < MINIMUM_DEALER_SCORE) {
+        if (deckValueRequired < minDealerScore) {
             refillDeck();
         }
 
         if (handsToPlay.isEmpty()) {
-            while (score(dealerHand) < MINIMUM_DEALER_SCORE) {
+            while (score(dealerHand) < minDealerScore) {
                 dealerHand.add(deck.drawCard());
             }
         }

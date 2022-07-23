@@ -8,6 +8,7 @@ import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Collectors.toList;
+import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.function.CardFunctions.concealedScore;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.OutcomeAssessment.settleBet;
@@ -111,7 +112,7 @@ public class Table {
     }
 
     public double deckProgress() {
-        return deck.size() / (double) config.get("maxCards");
+        return deck.size() / (double) config.get(MAX_CARDS);
     }
 
     public int dealerScore() {

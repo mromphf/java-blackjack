@@ -83,7 +83,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onPlay() {
-        accountStore.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        accountStore.selectAccount(tblAccounts.getSelectionModel().getSelectedItem());
         screen.switchTo(BET);
     }
 
@@ -102,7 +102,7 @@ public class HomeController implements Initializable, ScreenObserver {
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else if (selectedAccount != null) {
-            accountStore.onAccountSelected(selectedAccount);
+            accountStore.selectAccount(selectedAccount);
         }
     }
 
@@ -113,7 +113,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onRequestHistory() {
-        accountStore.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        accountStore.selectAccount(tblAccounts.getSelectionModel().getSelectedItem());
         screen.switchTo(HISTORY);
         toggleAnimationsRunning((false));
     }

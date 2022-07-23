@@ -55,10 +55,6 @@ public class InjectionModule extends AbstractModule {
 
         bindProperties(binder(), props);
 
-        bind(Integer.class)
-                .annotatedWith(named(NUM_DECKS))
-                .toInstance((4));
-
         bind(Double.class)
                 .annotatedWith(named(MAX_CARDS))
                 .toInstance(deck.size() * 1.0);

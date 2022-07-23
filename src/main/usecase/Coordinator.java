@@ -14,8 +14,7 @@ import java.util.Properties;
 import java.util.Stack;
 
 import static java.time.LocalDateTime.now;
-import static main.adapter.injection.Bindings.DECK;
-import static main.adapter.injection.Bindings.MAX_CARDS;
+import static main.adapter.injection.Bindings.*;
 import static main.domain.process.Round.newRound;
 
 public class Coordinator implements Game {
@@ -34,7 +33,8 @@ public class Coordinator implements Game {
         this.tableObservers = tableObservers;
         this.config = new Properties();
 
-        config.put("maxCards", deckSize);
+        config.put(MAX_CARDS, deckSize);
+        config.put(MIN_DEALER_SCORE, 16);
     }
 
     @Override

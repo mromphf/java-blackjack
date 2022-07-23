@@ -28,7 +28,7 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
         this.screenMap = screenMap;
     }
 
-    public void initializeLayout(Map<Screen, Parent> sceneMap) {
+    public void initialize(Map<Screen, Parent> sceneMap) {
         this.sceneMap.putAll(sceneMap);
 
         this.scene = new Scene(sceneMap.get(HOME));

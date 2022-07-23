@@ -32,8 +32,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        final Module baseInjectionModule = new InjectionModule();
-        final Injector injector = createInjector(baseInjectionModule);
+        final Module injectionModule = new InjectionModule();
+        final Injector injector = createInjector(injectionModule);
 
         final TransactionStore transactionStore = injector.getInstance(TransactionStore.class);
         final AccountStore accountStore = injector.getInstance(AccountStore.class);
@@ -55,6 +55,6 @@ public class Main extends Application {
         gameLogger.onAccountsLoaded(accounts);
         gameLogger.onTransactionsLoaded(transactions);
 
-        screenSupervisor.initializeLayout(nodeMap);
+        screenSupervisor.initialize(nodeMap);
     }
 }

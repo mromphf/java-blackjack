@@ -59,7 +59,7 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
         accountMap.remove(account.key());
     }
 
-    public void onAccountSelected(Account account) {
+    public void selectAccount(Account account) {
         selections.add(account.key());
     }
 
@@ -71,8 +71,6 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
 
     private void apply(Transaction transaction) {
         final UUID accountKey = transaction.getAccountKey();
-        if (accountMap.containsKey(accountKey)) {
-            accountMap.put(accountKey, accountMap.get(accountKey).apply(transaction));
-        }
+        accountMap.put(accountKey, accountMap.get(accountKey).apply(transaction));
     }
 }

@@ -103,7 +103,7 @@ public class Table {
     }
 
     public UUID playerAccountKey() {
-        return player.getKey();
+        return player.key();
     }
 
     public int deckSize() {

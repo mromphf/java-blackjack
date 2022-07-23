@@ -58,7 +58,7 @@ public class HistoryController implements Initializable, ScreenObserver {
         final Optional<Account> optionalAccount = accountStore.selectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.key());
             final LocalDate date = datePicker.getValue();
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
@@ -78,7 +78,7 @@ public class HistoryController implements Initializable, ScreenObserver {
         if (optionalAccount.isPresent()) {
 
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.key());
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = dateAxis(accountTransactions);
 
@@ -97,7 +97,7 @@ public class HistoryController implements Initializable, ScreenObserver {
 
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> transactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> transactions = transactionStore.getTransactionsByKey(selectedAccount.key());
 
             drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }

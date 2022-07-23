@@ -91,7 +91,7 @@ public class Round {
     }
 
     public void stand() throws EmptyStackException {
-        final int deckValue = deck.stream().mapToInt(Card::getBlackjackValue).sum();
+        final int deckValue = deck.stream().mapToInt(Card::blackjackValue).sum();
         final int deckValueRequired = deckValue - score(dealerHand);
 
         if (deckValueRequired < MINIMUM_DEALER_SCORE) {

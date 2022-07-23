@@ -39,9 +39,9 @@ public class GameLogger implements TableObserver, AccountRegistrar {
     public void createNew(Account account) {
         logger.log(INFO, format(
                 "%s: Account Opened - %s [%s]",
-                account.getCreated(),
+                account.getTimestamp(),
                 account.getName(),
-                account.getKey()));
+                account.key()));
     }
 
     public void onTransactionsLoaded(Collection<Transaction> transactions) {
@@ -54,9 +54,9 @@ public class GameLogger implements TableObserver, AccountRegistrar {
 
     public void onAccountDeleted(Account account) {
         logger.log(INFO, format("%s: Account Closure Request - %s [%s]",
-                account.getCreated(),
+                account.getTimestamp(),
                 account.getName(),
-                account.getKey()));
+                account.key()));
     }
 
     public void onTransaction(Transaction transaction) {

@@ -11,7 +11,7 @@ class CardTest {
 
     @Test
     public void blackjackValue_shouldReturn10_whenCalledOnAQueen() {
-        assertEquals(10, card(QUEEN, DIAMONDS).getBlackjackValue());
+        assertEquals(10, card(QUEEN, DIAMONDS).blackjackValue());
     }
 
     @Test

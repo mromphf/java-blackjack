@@ -15,7 +15,7 @@ public class CardFunctions {
 
     public static boolean isBlackjack(Collection<Card> cards) {
         boolean oneAce = cards.stream().filter(Card::isAce).count() == 1;
-        boolean tenOrHigher = cards.stream().filter(c -> c.getBlackjackValue() > 9).count() == 1;
+        boolean tenOrHigher = cards.stream().filter(c -> c.blackjackValue() > 9).count() == 1;
         boolean twoCards = cards.size() == 2;
         return twoCards && oneAce && tenOrHigher;
     }
@@ -26,8 +26,8 @@ public class CardFunctions {
 
     public static boolean canSplit(Collection<Card> cards) {
         if (cards.size() == 2) {
-            final int blackjackValue = cards.stream().findFirst().get().getBlackjackValue();
-            return cards.stream().allMatch(card -> card.getBlackjackValue() == blackjackValue);
+            final int blackjackValue = cards.stream().findFirst().get().blackjackValue();
+            return cards.stream().allMatch(card -> card.blackjackValue() == blackjackValue);
         } else {
             return false;
         }
@@ -50,7 +50,7 @@ public class CardFunctions {
     public static int concealedScore(Collection<Card> cards) {
         return cards.stream()
                 .filter(Card::isFaceUp)
-                .mapToInt(card -> card.isAce() ? ACE_HIGH_SCORE : card.getBlackjackValue())
+                .mapToInt(card -> card.isAce() ? ACE_HIGH_SCORE : card.blackjackValue())
                 .sum();
     }
 
@@ -65,7 +65,7 @@ public class CardFunctions {
     }
 
     public static int total(Collection<Card> cards) {
-        return cards.stream().mapToInt(Card::getBlackjackValue).sum();
+        return cards.stream().mapToInt(Card::blackjackValue).sum();
     }
 
     public static boolean playerWins(Collection<Card> playerCards, Collection<Card> dealerCards) {

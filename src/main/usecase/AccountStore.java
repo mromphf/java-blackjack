@@ -50,22 +50,22 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
     @Override
     public void createNew(Account account) {
         accountRepository.createNew(account);
-        accountMap.put(account.getKey(), account);
-        selections.add(account.getKey());
+        accountMap.put(account.key(), account);
+        selections.add(account.key());
     }
 
     public void onAccountDeleted(Account account) {
         accountRepository.closeAccount(account);
-        accountMap.remove(account.getKey());
+        accountMap.remove(account.key());
     }
 
     public void onAccountSelected(Account account) {
-        selections.add(account.getKey());
+        selections.add(account.key());
     }
 
     public Collection<Account> loadAll() {
         final Collection<Account> accounts = accountRepository.loadAllAccounts();
-        accounts.forEach(account -> accountMap.put(account.getKey(), account));
+        accounts.forEach(account -> accountMap.put(account.key(), account));
         return accounts;
     }
 

@@ -138,7 +138,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     public void onAccountsLoaded(Collection<Account> accounts) {
         for (Account account : accounts) {
-            accountMap.put(account.getKey(), account);
+            accountMap.put(account.key(), account);
         }
 
         tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
@@ -156,7 +156,7 @@ public class HomeController implements Initializable, ScreenObserver {
         if (selectedAccount.isPresent()) {
             final Account account = selectedAccount.get();
 
-            accountMap.put(account.getKey(), account);
+            accountMap.put(account.key(), account);
             runLater(() -> tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values()))));
         }
     }
@@ -177,7 +177,7 @@ public class HomeController implements Initializable, ScreenObserver {
             final Optional<ButtonType> buttonType = alert.showAndWait();
 
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
-                accountMap.remove(selectedAccount.getKey());
+                accountMap.remove(selectedAccount.key());
                 tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
                 accountStore.onAccountDeleted(selectedAccount);
             }

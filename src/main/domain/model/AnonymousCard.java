@@ -13,7 +13,7 @@ public class AnonymousCard extends Card {
     }
 
     public String shortName() {
-        return suit.name().toLowerCase() + getRank().ORDINAL;
+        return suit.name().toLowerCase() + rank().ORDINAL;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class AnonymousCard extends Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return rank == card.getRank() && suit == card.getSuit();
+        return rank == card.rank() && suit == card.suit();
     }
 
     @Override

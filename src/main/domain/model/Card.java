@@ -49,15 +49,15 @@ public class Card {
         return rank == ACE;
     }
 
-    public int getBlackjackValue() {
+    public int blackjackValue() {
         return rank.BLACKJACK_VALUE;
     }
 
-    public Rank getRank() {
+    public Rank rank() {
         return rank;
     }
 
-    public Suit getSuit() {
+    public Suit suit() {
         return suit;
     }
 

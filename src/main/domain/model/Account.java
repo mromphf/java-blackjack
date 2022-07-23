@@ -20,7 +20,7 @@ public class Account implements Function<Transaction, Account> {
         this.created = created;
     }
 
-    public UUID getKey() {
+    public UUID key() {
         return key;
     }
 
@@ -28,7 +28,7 @@ public class Account implements Function<Transaction, Account> {
         return name;
     }
 
-    public LocalDateTime getCreated() {
+    public LocalDateTime getTimestamp() {
         return created;
     }
 

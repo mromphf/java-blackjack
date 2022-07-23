@@ -59,9 +59,9 @@ public class Database implements AccountRepository, TransactionRepository {
             final Connection conn = openDbConnection();
             final PreparedStatement st = conn.prepareStatement(queryMap.get(CREATE_NEW_ACCOUNT));
 
-            st.setString(1, account.getKey().toString());
+            st.setString(1, account.key().toString());
             st.setString(2, account.getName());
-            st.setString(3, account.getCreated().toString());
+            st.setString(3, account.getTimestamp().toString());
 
             st.executeUpdate();
             st.close();
@@ -104,8 +104,8 @@ public class Database implements AccountRepository, TransactionRepository {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(DELETE_ACCOUNT));
 
-            st.setString(1, account.getKey().toString());
-            st.setString(2, account.getCreated().toString());
+            st.setString(1, account.key().toString());
+            st.setString(2, account.getTimestamp().toString());
 
             st.executeUpdate();
             st.close();

@@ -86,7 +86,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     public void onSplit() {
-        updateTable(game.onAction(SPLIT));
+        updateTable(game.action(SPLIT));
     }
 
     @FXML
@@ -97,12 +97,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private void onStand() {
-        updateTable(game.onAction(STAND));
+        updateTable(game.action(STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        updateTable(game.onAction(SETTLE));
+        updateTable(game.action(SETTLE));
     }
 
     @FXML
@@ -113,27 +113,27 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private void onHit() {
-        updateTable(game.onAction(HIT));
+        updateTable(game.action(HIT));
     }
 
     @FXML
     private void onDouble() {
-        updateTable(game.onAction(DOUBLE));
+        updateTable(game.action(DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        updateTable(game.onAction(BUY_INSURANCE));
+        updateTable(game.action(BUY_INSURANCE));
     }
 
     @FXML
     private void onWaiveInsurance() {
-        updateTable(game.onAction(WAIVE_INSURANCE));
+        updateTable(game.action(WAIVE_INSURANCE));
     }
 
     @FXML
     void onPlayNextHand() {
-        updateTable(game.onAction(NEXT));
+        updateTable(game.action(NEXT));
     }
 
     public void updateTable(Table table) {

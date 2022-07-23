@@ -5,5 +5,5 @@ import main.domain.model.Table;
 
 public interface Game {
     Table peek();
-    Table onAction(Action action);
+    Table action(Action action);
 }

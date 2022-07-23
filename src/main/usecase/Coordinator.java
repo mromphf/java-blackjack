@@ -49,7 +49,7 @@ public class Coordinator implements Game {
     }
 
     @Override
-    public Table onAction(Action action) {
+    public Table action(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
             final Round round = roundStack.peek();

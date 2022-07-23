@@ -24,16 +24,18 @@ public class Round {
     private final Map<Hand, ActionLog> actionLog = new HashMap<>();
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<Hand> handsToSettle = new Stack<>();
+    private final Properties config;
 
     private Hand currentHand;
 
-    public static Round newRound(Deck deck, Bets bets) {
-        return new Round(deck, bets);
+    public static Round newRound(Deck deck, Bets bets, Properties config) {
+        return new Round(deck, bets, config);
     }
 
-    private Round(Deck deck, Bets bets) {
+    private Round(Deck deck, Bets bets, Properties config) {
         this.bets = bets;
         this.deck = deck;
+        this.config = config;
 
         this.player = bets.accounts()
                 .stream()
@@ -134,7 +136,8 @@ public class Round {
                 currentHand,
                 handsToPlay,
                 handsToSettle,
-                actionLog
+                actionLog,
+                config
         );
     }
 }

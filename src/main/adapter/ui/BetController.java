@@ -147,6 +147,6 @@ public class BetController implements Initializable, ScreenObserver {
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(format("Balance: $%s", balance));
-        prgDeck.setProgress(game.deckProgress());
+        prgDeck.setProgress(game.peek().deckProgress());
     }
 }

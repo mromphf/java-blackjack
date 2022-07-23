@@ -2,14 +2,15 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.process.Round;
 import main.domain.model.Action;
 import main.domain.model.Bets;
 import main.domain.model.Deck;
 import main.domain.model.Table;
+import main.domain.process.Round;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.Stack;
 
 import static java.time.LocalDateTime.now;
@@ -19,29 +20,26 @@ import static main.domain.process.Round.newRound;
 
 public class Coordinator implements Game {
 
-    private final float maxCards;
-
     private final Deck deck;
     private final Stack<Round> roundStack = new Stack<>();
     private final Collection<TableObserver> tableObservers;
+    private final Properties config;
 
     @Inject
     public Coordinator(Collection<TableObserver> tableObservers,
                        @Named(DECK) Deck deck,
-                       @Named(MAX_CARDS) int maxCards) {
-        this.deck = deck;
-        this.maxCards = maxCards;
-        this.tableObservers = tableObservers;
-    }
+                       @Named(MAX_CARDS) double deckSize) {
 
-    @Override
-    public double deckProgress() {
-        return deck.size() / maxCards;
+        this.deck = deck;
+        this.tableObservers = tableObservers;
+        this.config = new Properties();
+
+        config.put("maxCards", deckSize);
     }
 
     @Override
     public void bet(Bets bets) {
-        roundStack.add(newRound(deck, bets));
+        roundStack.add(newRound(deck, bets, config));
         notifyObservers(roundStack.peek().getSnapshot(now()));
     }
 

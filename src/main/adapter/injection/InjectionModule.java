@@ -59,12 +59,11 @@ public class InjectionModule extends AbstractModule {
                 .annotatedWith(named(NUM_DECKS))
                 .toInstance((4));
 
-        bind(Integer.class)
+        bind(Double.class)
                 .annotatedWith(named(MAX_CARDS))
-                .toInstance(deck.size());
+                .toInstance(deck.size() * 1.0);
 
-        bind(new TypeLiteral<Deck>() {
-        }).annotatedWith(named(DECK)).toInstance(deck);
+        bind(new TypeLiteral<Deck>() {}).annotatedWith(named(DECK)).toInstance(deck);
 
         bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {
         })

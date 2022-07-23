@@ -1,7 +1,6 @@
 package main.adapter.ui;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,7 +15,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
-import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.LowOrderPredicate.*;
@@ -60,17 +58,14 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private ProgressBar prgDeck;
 
     private final Game game;
-    private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
     private final ImageStore images;
 
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
-                               ImageStore images,
-                               @Named(MAX_CARDS) int maxCards) {
+                               ImageStore images) {
         this.game = game;
-        this.maxDeckSize = maxCards;
         this.screenSupervisor = screenSupervisor;
         this.images = images;
     }
@@ -146,9 +141,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
             settleControls.setVisible(readyToSettleNextHand.test(table));
             nextHandControls.setVisible(readyToPlayNextHand.test(table));
             gameOverControls.setVisible(allBetsSettled.test(table));
-            prgDeck.setProgress(table.deckProgress(maxDeckSize));
+
+            prgDeck.setProgress(table.deckProgress());
+
             btnDouble.setDisable(atLeastOneCardDrawn.test(table) || !table.canAffordToSpendMore());
             btnSplit.setDisable(!(isSplitAvailable.test(table) && table.canAffordToSpendMore()));
+
             lblBalance.setText(table.balanceText());
 
             lblBet.setText(String.format("Bet: $%s", table.bet()));

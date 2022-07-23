@@ -2,10 +2,7 @@ package main.domain.model;
 
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.Math.negateExact;
 import static java.lang.String.format;
@@ -30,6 +27,7 @@ public class Table {
     private final LocalDateTime timestamp;
     private final Map<Hand, ActionLog> actionLog;
     private final Outcome outcome;
+    private final Properties config;
 
     public Table(LocalDateTime timestamp,
                  Account player,
@@ -39,7 +37,8 @@ public class Table {
                  Hand playerHand,
                  Stack<Hand> handsToPlay,
                  Collection<Hand> handsToSettle,
-                 Map<Hand, ActionLog> actionsTaken) {
+                 Map<Hand, ActionLog> actionsTaken,
+                 Properties config) {
         this.timestamp = timestamp;
         this.player = player;
         this.bets = bets;
@@ -50,6 +49,7 @@ public class Table {
         this.handsToSettle = handsToSettle;
         this.actionLog = unmodifiableMap(actionsTaken);
         this.outcome = determineOutcome(this);
+        this.config = config;
     }
 
     public LocalDateTime timestamp() {
@@ -110,8 +110,8 @@ public class Table {
         return deck.size();
     }
 
-    public double deckProgress(float maxDeckSize) {
-        return deck.size() / maxDeckSize;
+    public double deckProgress() {
+        return deck.size() / (double) config.get("maxCards");
     }
 
     public int dealerScore() {

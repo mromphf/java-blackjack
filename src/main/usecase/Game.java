@@ -17,7 +17,7 @@ import static main.adapter.injection.Bindings.DECK;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.process.Round.newRound;
 
-public class Game {
+public class Game implements GameListener {
 
     private final float maxCards;
 
@@ -39,6 +39,7 @@ public class Game {
         notifyObservers(roundStack.peek().getSnapshot(now()));
     }
 
+    @Override
     public TableView peek() throws IllegalStateException {
         if (roundStack.size() > 0) {
             return roundStack.peek().getSnapshot(now());
@@ -47,7 +48,8 @@ public class Game {
         }
     }
 
-    public TableView onActionTaken(Action action) {
+    @Override
+    public TableView onAction(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
             final Round round = roundStack.peek();

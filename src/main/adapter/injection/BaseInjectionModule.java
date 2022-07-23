@@ -111,10 +111,11 @@ public class BaseInjectionModule extends AbstractModule {
                 }});
 
         bind(AccountRepository.class).to(Database.class);
-        bind(TransactionRepository.class).to(Database.class);
+        bind(TransactionRepository.class).to(Database.class).in(Singleton.class);
         bind(SelectionService.class).to(AccountService.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
+        bind(GameListener.class).to(Game.class);
 
         bind(ImageService.class).in(Singleton.class);
         bind(AccountService.class).in(Singleton.class);

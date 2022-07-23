@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.animation.OpeningDeal;
 import main.domain.model.TableView;
-import main.usecase.Game;
+import main.usecase.GameListener;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,13 +59,13 @@ public class BlackjackController implements Initializable, ScreenObserver {
     @FXML
     private ProgressBar prgDeck;
 
-    private final Game game;
+    private final GameListener game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
     private final ImageService images;
 
     @Inject
-    public BlackjackController(Game game,
+    public BlackjackController(GameListener game,
                                ScreenManagement screenSupervisor,
                                ImageService images,
                                @Named(MAX_CARDS) int maxCards) {
@@ -81,14 +81,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @Override
     public void onScreenChanged() {
-        final TableView table = game.peek();
-
-        onGameUpdate(table);
+        updateTable(game.peek());
     }
 
     @FXML
     public void onSplit() {
-        onGameUpdate(game.onActionTaken(SPLIT));
+        updateTable(game.onAction(SPLIT));
     }
 
     @FXML
@@ -99,12 +97,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private void onStand() {
-        onGameUpdate(game.onActionTaken(STAND));
+        updateTable(game.onAction(STAND));
     }
 
     @FXML
     private void onSettleNextHand() {
-        onGameUpdate(game.onActionTaken(SETTLE));
+        updateTable(game.onAction(SETTLE));
     }
 
     @FXML
@@ -115,30 +113,30 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @FXML
     private void onHit() {
-        onGameUpdate(game.onActionTaken(HIT));
+        updateTable(game.onAction(HIT));
     }
 
     @FXML
     private void onDouble() {
-        onGameUpdate(game.onActionTaken(DOUBLE));
+        updateTable(game.onAction(DOUBLE));
     }
 
     @FXML
     private void onTakeInsurance() {
-        onGameUpdate(game.onActionTaken(BUY_INSURANCE));
+        updateTable(game.onAction(BUY_INSURANCE));
     }
 
     @FXML
     private void onWaiveInsurance() {
-        onGameUpdate(game.onActionTaken(WAIVE_INSURANCE));
+        updateTable(game.onAction(WAIVE_INSURANCE));
     }
 
     @FXML
     void onPlayNextHand() {
-        onGameUpdate(game.onActionTaken(NEXT));
+        updateTable(game.onAction(NEXT));
     }
 
-    public void onGameUpdate(TableView tableView) {
+    public void updateTable(TableView tableView) {
         final boolean outcomeResolved = outcomeIsResolved.test(tableView);
 
         runLater(() -> {

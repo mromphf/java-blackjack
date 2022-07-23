@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import main.adapter.injection.InjectionModule;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.FileSystem;
-import main.adapter.ui.ImageStore;
+import main.adapter.graphics.ImageStore;
 import main.adapter.ui.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;

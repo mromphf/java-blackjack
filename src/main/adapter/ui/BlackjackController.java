@@ -7,7 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
+import main.adapter.graphics.ImageStore;
 import main.adapter.graphics.animations.OpeningDeal;
+import main.adapter.graphics.animations.TableDisplay;
 import main.domain.model.Table;
 import main.usecase.Game;
 

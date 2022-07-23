@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import main.adapter.graphics.ImageStore;
 import main.adapter.graphics.animations.ImageReel;
 import main.domain.model.Account;
 import main.usecase.AccountStore;

@@ -53,7 +53,7 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
     }
 
     private void switchToScreen(Screen screen) {
-        if (screen == BACK && navHistory.size() < 1) {
+        if (screen == BACK && navHistory.isEmpty()) {
             throw new IllegalStateException();
         }
 
@@ -62,9 +62,7 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
         }
 
         if (screen == BACK) {
-            navHistory.pop();
-            final Screen previousScreen = navHistory.peek();
-
+            final Screen previousScreen = navHistory.pop();
             scene.setRoot(sceneMap.get(previousScreen));
             screenMap.get(previousScreen).onScreenChanged();
 
@@ -72,6 +70,7 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
             navHistory.add(screen);
             scene.setRoot(sceneMap.get(screen));
             screenMap.get(screen).onScreenChanged();
+
         }
     }
 }

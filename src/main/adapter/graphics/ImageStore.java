@@ -1,14 +1,11 @@
-package main.adapter.ui;
+package main.adapter.graphics;
 
 import javafx.scene.image.Image;
 import main.Main;
-import main.adapter.graphics.Direction;
-import main.util.InfiniteStack;
-import main.adapter.graphics.Moving;
-import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
 import main.domain.model.Suit;
+import main.util.InfiniteStack;
 
 import java.util.*;
 
@@ -16,10 +13,10 @@ import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
-import static main.adapter.graphics.Symbol.*;
-import static main.adapter.graphics.Vector.vector;
 import static main.adapter.graphics.Direction.LEFT;
 import static main.adapter.graphics.Direction.RIGHT;
+import static main.adapter.graphics.Symbol.*;
+import static main.adapter.graphics.Vector.vector;
 import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
 

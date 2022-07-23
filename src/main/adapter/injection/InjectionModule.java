@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import javafx.stage.Stage;
+import main.adapter.graphics.ImageStore;
 import main.adapter.log.ConsoleLogHandler;
 import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;

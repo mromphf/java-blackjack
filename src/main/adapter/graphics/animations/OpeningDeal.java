@@ -1,4 +1,4 @@
-package main.adapter.graphics.animation;
+package main.adapter.graphics.animations;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;

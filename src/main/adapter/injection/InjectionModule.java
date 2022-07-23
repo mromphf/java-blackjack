@@ -35,7 +35,7 @@ import static main.domain.function.InsuranceAssessment.insuranceAssessment;
 import static main.domain.function.OutcomeAssessment.outcomeAssessment;
 import static main.domain.function.SplitAssessment.splitAssessment;
 
-public class BaseInjectionModule extends AbstractModule {
+public class InjectionModule extends AbstractModule {
 
     // No good for a jar.
     // TODO: Replace with a java resource
@@ -117,7 +117,7 @@ public class BaseInjectionModule extends AbstractModule {
         bind(AlertService.class).to(ScreenSupervisor.class);
         bind(Game.class).to(Coordinator.class);
 
-        bind(ImageService.class).in(Singleton.class);
+        bind(ImageStore.class).in(Singleton.class);
         bind(AccountStore.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);

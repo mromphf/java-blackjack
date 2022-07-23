@@ -1,10 +1,7 @@
-package main.adapter.graphics.animation;
+package main.adapter.graphics;
 
-import main.adapter.graphics.Vector;
-import main.adapter.ui.Direction;
-
-import static main.adapter.ui.Direction.LEFT;
-import static main.adapter.ui.Direction.RIGHT;
+import static main.adapter.graphics.Direction.LEFT;
+import static main.adapter.graphics.Direction.RIGHT;
 
 public class Moving<T> {
 

@@ -5,10 +5,10 @@ import com.google.inject.Module;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import main.adapter.injection.BaseInjectionModule;
+import main.adapter.injection.InjectionModule;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.FileSystem;
-import main.adapter.ui.ImageService;
+import main.adapter.ui.ImageStore;
 import main.adapter.ui.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
@@ -32,7 +32,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        final Module baseInjectionModule = new BaseInjectionModule();
+        final Module baseInjectionModule = new InjectionModule();
         final Injector injector = createInjector(baseInjectionModule);
 
         final TransactionStore transactionStore = injector.getInstance(TransactionStore.class);
@@ -41,13 +41,13 @@ public class Main extends Application {
         final FileSystem fileSystem = injector.getInstance(FileSystem.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
         final HomeController homeController = injector.getInstance(HomeController.class);
-        final ImageService imageService = injector.getInstance(ImageService.class);
+        final ImageStore imageStore = injector.getInstance(ImageStore.class);
         final Collection<Account> accounts = accountStore.loadAll();
         final Collection<Transaction> transactions = transactionStore.loadAll();
 
         System.out.println("INFO: Loading image files...");
-        imageService.loadCardImages();
-        imageService.loadMiscImages();
+        imageStore.loadCardImages();
+        imageStore.loadMiscImages();
 
         final Map<Screen, Parent> nodeMap = fileSystem.loadFXMLDocuments();
 

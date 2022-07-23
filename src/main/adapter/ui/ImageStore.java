@@ -2,8 +2,9 @@ package main.adapter.ui;
 
 import javafx.scene.image.Image;
 import main.Main;
+import main.adapter.graphics.Direction;
 import main.util.InfiniteStack;
-import main.adapter.graphics.animation.Moving;
+import main.adapter.graphics.Moving;
 import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
@@ -17,12 +18,12 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static main.adapter.graphics.Symbol.*;
 import static main.adapter.graphics.Vector.vector;
-import static main.adapter.ui.Direction.LEFT;
-import static main.adapter.ui.Direction.RIGHT;
+import static main.adapter.graphics.Direction.LEFT;
+import static main.adapter.graphics.Direction.RIGHT;
 import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
 
-public class ImageService {
+public class ImageStore {
 
     private final static int REEL_LENGTH = 23;
     private final static int REEL_SPEED = 1;

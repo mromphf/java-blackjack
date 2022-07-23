@@ -9,7 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import main.adapter.graphics.animation.ImageReel;
+import main.adapter.graphics.animations.ImageReel;
 import main.domain.model.Account;
 import main.usecase.AccountStore;
 
@@ -51,18 +51,18 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private final ScreenManagement screen;
     private final AlertService alertService;
-    private final ImageService imageService;
+    private final ImageStore imageStore;
 
     @Inject
     public HomeController(
-            ImageService imageService,
+            ImageStore imageStore,
             AlertService alertService,
             AccountStore accountStore,
             ScreenManagement screen) {
         this.alertService = alertService;
         this.accountStore = accountStore;
         this.screen = screen;
-        this.imageService = imageService;
+        this.imageStore = imageStore;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class HomeController implements Initializable, ScreenObserver {
         final GraphicsContext topScrollerGraphics = topScroller.getGraphicsContext2D();
         final GraphicsContext bottomScrollerGraphics = bottomScroller.getGraphicsContext2D();
 
-        animations.put(topScroller, new ImageReel(imageService.reelLeft(), topScrollerGraphics));
-        animations.put(bottomScroller, new ImageReel(imageService.reelRight(), bottomScrollerGraphics));
+        animations.put(topScroller, new ImageReel(imageStore.reelLeft(), topScrollerGraphics));
+        animations.put(bottomScroller, new ImageReel(imageStore.reelRight(), bottomScrollerGraphics));
 
         tblAccounts.setPlaceholder(new Label("No account records."));
 

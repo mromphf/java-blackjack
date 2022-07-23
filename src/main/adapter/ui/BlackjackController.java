@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.adapter.graphics.animation.OpeningDeal;
+import main.adapter.graphics.animations.OpeningDeal;
 import main.domain.model.Table;
 import main.usecase.Game;
 
@@ -62,12 +62,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final Game game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
-    private final ImageService images;
+    private final ImageStore images;
 
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
-                               ImageService images,
+                               ImageStore images,
                                @Named(MAX_CARDS) int maxCards) {
         this.game = game;
         this.maxDeckSize = maxCards;

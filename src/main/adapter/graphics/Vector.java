@@ -1,8 +1,6 @@
 package main.adapter.graphics;
 
-import main.adapter.ui.Direction;
-
-import static main.adapter.ui.Direction.LEFT;
+import static main.adapter.graphics.Direction.LEFT;
 
 public class Vector {
 

@@ -12,8 +12,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.AccountService;
-import main.usecase.TransactionService;
+import main.usecase.AccountStore;
+import main.usecase.TransactionStore;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -33,16 +33,16 @@ public class HistoryController implements Initializable, ScreenObserver {
     @FXML
     public GridPane chartHousing;
 
-    private final TransactionService transactionService;
-    private final AccountService accountService;
+    private final TransactionStore transactionStore;
+    private final AccountStore accountStore;
     private final ScreenManagement screen;
 
     @Inject
-    public HistoryController(TransactionService transactionService,
-                             AccountService accountService,
+    public HistoryController(TransactionStore transactionStore,
+                             AccountStore accountStore,
                              ScreenManagement screen) {
-        this.transactionService = transactionService;
-        this.accountService = accountService;
+        this.transactionStore = transactionStore;
+        this.accountStore = accountStore;
         this.screen = screen;
     }
 
@@ -55,10 +55,10 @@ public class HistoryController implements Initializable, ScreenObserver {
 
     @FXML
     public void onDateSelected() {
-        final Optional<Account> optionalAccount = accountService.selectedAccount();
+        final Optional<Account> optionalAccount = accountStore.selectedAccount();
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
             final LocalDate date = datePicker.getValue();
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = date == null ? dateAxis(accountTransactions) : dateAxis(accountTransactions, date);
@@ -73,12 +73,12 @@ public class HistoryController implements Initializable, ScreenObserver {
 
     @FXML
     public void clearFilter() {
-        final Optional<Account> optionalAccount = accountService.selectedAccount();
+        final Optional<Account> optionalAccount = accountStore.selectedAccount();
 
         if (optionalAccount.isPresent()) {
 
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> accountTransactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> accountTransactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
             final NumberAxis yAxis = new NumberAxis();
             final Axis<String> xAxis = dateAxis(accountTransactions);
 
@@ -93,11 +93,11 @@ public class HistoryController implements Initializable, ScreenObserver {
 
     @Override
     public void onScreenChanged() {
-        final Optional<Account> optionalAccount = accountService.selectedAccount();
+        final Optional<Account> optionalAccount = accountStore.selectedAccount();
 
         if (optionalAccount.isPresent()) {
             final Account selectedAccount = optionalAccount.get();
-            final List<Transaction> transactions = transactionService.getTransactionsByKey(selectedAccount.getKey());
+            final List<Transaction> transactions = transactionStore.getTransactionsByKey(selectedAccount.getKey());
 
             drawChart(selectedAccount, dateAxis(transactions), new NumberAxis(), transactionDataMap(transactions));
         }

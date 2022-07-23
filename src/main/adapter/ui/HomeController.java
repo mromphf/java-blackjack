@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.animation.ImageReel;
 import main.domain.model.Account;
-import main.usecase.AccountService;
+import main.usecase.AccountStore;
 
 import java.net.URL;
 import java.util.*;
@@ -45,7 +45,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private static final String ANIMATION_THREAD_NAME = "Home Screen Animation Thread";
 
-    private final AccountService accountService;
+    private final AccountStore accountStore;
     private final Map<UUID, Account> accountMap = new HashMap<>();
     private final Map<Canvas, ImageReel> animations = new HashMap<>();
 
@@ -57,10 +57,10 @@ public class HomeController implements Initializable, ScreenObserver {
     public HomeController(
             ImageService imageService,
             AlertService alertService,
-            AccountService accountService,
+            AccountStore accountStore,
             ScreenManagement screen) {
         this.alertService = alertService;
-        this.accountService = accountService;
+        this.accountStore = accountStore;
         this.screen = screen;
         this.imageService = imageService;
     }
@@ -83,7 +83,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onPlay() {
-        accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        accountStore.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
         screen.switchTo(BET);
     }
 
@@ -102,7 +102,7 @@ public class HomeController implements Initializable, ScreenObserver {
         if (mouseEvent.getClickCount() == 2) {
             onPlay();
         } else if (selectedAccount != null) {
-            accountService.onAccountSelected(selectedAccount);
+            accountStore.onAccountSelected(selectedAccount);
         }
     }
 
@@ -113,7 +113,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @FXML
     public void onRequestHistory() {
-        accountService.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
+        accountStore.onAccountSelected(tblAccounts.getSelectionModel().getSelectedItem());
         screen.switchTo(HISTORY);
         toggleAnimationsRunning((false));
     }
@@ -146,7 +146,7 @@ public class HomeController implements Initializable, ScreenObserver {
 
     @Override
     public void onScreenChanged() {
-        final Optional<Account> selectedAccount = accountService.selectedAccount();
+        final Optional<Account> selectedAccount = accountStore.selectedAccount();
 
         toggleAnimationsRunning((true));
         btnPlay.setDisable(true);
@@ -179,7 +179,7 @@ public class HomeController implements Initializable, ScreenObserver {
             if ((buttonType.isPresent() && buttonType.get() == OK)) {
                 accountMap.remove(selectedAccount.getKey());
                 tblAccounts.setItems(observableList(new ArrayList<>(accountMap.values())));
-                accountService.onAccountDeleted(selectedAccount);
+                accountStore.onAccountDeleted(selectedAccount);
             }
         };
     }

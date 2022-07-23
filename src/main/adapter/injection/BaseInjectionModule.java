@@ -112,13 +112,13 @@ public class BaseInjectionModule extends AbstractModule {
 
         bind(AccountRepository.class).to(Database.class);
         bind(TransactionRepository.class).to(Database.class).in(Singleton.class);
-        bind(SelectionService.class).to(AccountService.class);
+        bind(SelectionService.class).to(AccountStore.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
         bind(GameListener.class).to(Game.class);
 
         bind(ImageService.class).in(Singleton.class);
-        bind(AccountService.class).in(Singleton.class);
+        bind(AccountStore.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);
         bind(Game.class).in(Singleton.class);
@@ -128,21 +128,21 @@ public class BaseInjectionModule extends AbstractModule {
         bind(ScreenSupervisor.class).in(Singleton.class);
         bind(RegistrationController.class).in(Singleton.class);
         bind(Stage.class).in(Singleton.class);
-        bind(TransactionService.class).in(Singleton.class);
+        bind(TransactionStore.class).in(Singleton.class);
     }
 
     @Provides
-    public Collection<TableObserver> snapshotListeners(AccountService accountService,
-                                                       TransactionService transactionService,
+    public Collection<TableObserver> snapshotListeners(AccountStore accountStore,
+                                                       TransactionStore transactionStore,
                                                        GameLogger gameLogger) {
-        return of(accountService, transactionService, gameLogger).collect(toSet());
+        return of(accountStore, transactionStore, gameLogger).collect(toSet());
     }
 
     @Provides
-    public Collection<AccountRegistrar> accountRegistrars(AccountService accountService,
-                                                          TransactionService transactionService,
+    public Collection<AccountRegistrar> accountRegistrars(AccountStore accountStore,
+                                                          TransactionStore transactionStore,
                                                           GameLogger gameLogger) {
-        return of(accountService, transactionService, gameLogger).collect(toSet());
+        return of(accountStore, transactionStore, gameLogger).collect(toSet());
     }
 
     @Provides

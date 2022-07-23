@@ -17,14 +17,14 @@ import static java.util.stream.Stream.of;
 import static main.adapter.injection.Bindings.TRANSACTION_MAP;
 import static main.domain.model.Transaction.signingBonus;
 
-public class TransactionService implements AccountRegistrar, TableObserver {
+public class TransactionStore implements AccountRegistrar, TableObserver {
 
     private final Collection<Assessment> assessments;
     private final Map<UUID, Collection<Transaction>> transactionMap;
     private final TransactionRepository transactionRepository;
 
     @Inject
-    public TransactionService(
+    public TransactionStore(
             TransactionRepository transactionRepository,
             Collection<Assessment> assessors,
             @Named(TRANSACTION_MAP) Map<UUID, Collection<Transaction>> transactionMap) {

@@ -12,10 +12,10 @@ import main.adapter.ui.ImageService;
 import main.adapter.ui.HomeController;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
-import main.usecase.AccountService;
+import main.usecase.AccountStore;
 import main.adapter.ui.Screen;
 import main.adapter.ui.ScreenSupervisor;
-import main.usecase.TransactionService;
+import main.usecase.TransactionStore;
 
 import java.util.Collection;
 import java.util.Map;
@@ -35,15 +35,15 @@ public class Main extends Application {
         final Module baseInjectionModule = new BaseInjectionModule();
         final Injector injector = createInjector(baseInjectionModule);
 
-        final TransactionService transactionService = injector.getInstance(TransactionService.class);
-        final AccountService accountService = injector.getInstance(AccountService.class);
+        final TransactionStore transactionStore = injector.getInstance(TransactionStore.class);
+        final AccountStore accountStore = injector.getInstance(AccountStore.class);
         final ScreenSupervisor screenSupervisor = injector.getInstance(ScreenSupervisor.class);
         final FileSystem fileSystem = injector.getInstance(FileSystem.class);
         final GameLogger gameLogger = injector.getInstance(GameLogger.class);
         final HomeController homeController = injector.getInstance(HomeController.class);
         final ImageService imageService = injector.getInstance(ImageService.class);
-        final Collection<Account> accounts = accountService.loadAll();
-        final Collection<Transaction> transactions = transactionService.loadAll();
+        final Collection<Account> accounts = accountStore.loadAll();
+        final Collection<Transaction> transactions = transactionStore.loadAll();
 
         System.out.println("INFO: Loading image files...");
         imageService.loadCardImages();

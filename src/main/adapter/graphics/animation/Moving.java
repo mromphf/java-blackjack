@@ -1,5 +1,6 @@
-package main.adapter.graphics;
+package main.adapter.graphics.animation;
 
+import main.adapter.graphics.Vector;
 import main.adapter.ui.Direction;
 
 import static main.adapter.ui.Direction.LEFT;

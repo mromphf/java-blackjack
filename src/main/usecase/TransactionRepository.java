@@ -1,4 +1,4 @@
-package main.adapter.storage;
+package main.usecase;
 
 import main.domain.model.Transaction;
 

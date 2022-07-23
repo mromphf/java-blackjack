@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.model.Account;
 import main.domain.model.Transaction;
+import main.usecase.AccountRepository;
+import main.usecase.TransactionRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

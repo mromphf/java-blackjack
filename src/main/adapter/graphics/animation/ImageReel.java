@@ -3,7 +3,6 @@ package main.adapter.graphics.animation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import main.adapter.graphics.Moving;
 
 import java.util.Collection;
 

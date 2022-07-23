@@ -2,7 +2,6 @@ package main.usecase;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.adapter.storage.TransactionRepository;
 import main.domain.function.Assessment;
 import main.domain.model.Account;
 import main.domain.model.TableView;

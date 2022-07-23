@@ -3,7 +3,7 @@ package main.adapter.ui;
 import javafx.scene.image.Image;
 import main.Main;
 import main.util.InfiniteStack;
-import main.adapter.graphics.Moving;
+import main.adapter.graphics.animation.Moving;
 import main.adapter.graphics.Symbol;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;

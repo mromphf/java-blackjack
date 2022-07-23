@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.animation.OpeningDeal;
-import main.domain.model.TableView;
-import main.usecase.GameListener;
+import main.domain.model.Table;
+import main.usecase.Game;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,13 +59,13 @@ public class BlackjackController implements Initializable, ScreenObserver {
     @FXML
     private ProgressBar prgDeck;
 
-    private final GameListener game;
+    private final Game game;
     private final float maxDeckSize;
     private final ScreenManagement screenSupervisor;
     private final ImageService images;
 
     @Inject
-    public BlackjackController(GameListener game,
+    public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
                                ImageService images,
                                @Named(MAX_CARDS) int maxCards) {
@@ -136,44 +136,44 @@ public class BlackjackController implements Initializable, ScreenObserver {
         updateTable(game.onAction(NEXT));
     }
 
-    public void updateTable(TableView tableView) {
-        final boolean outcomeResolved = outcomeIsResolved.test(tableView);
+    public void updateTable(Table table) {
+        final boolean outcomeResolved = outcomeIsResolved.test(table);
 
         runLater(() -> {
-            insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
-            gameControls.setVisible(isGameInProgress.test(tableView));
-            splitControls.setVisible(isSplitAvailable.test(tableView));
-            settleControls.setVisible(readyToSettleNextHand.test(tableView));
-            nextHandControls.setVisible(readyToPlayNextHand.test(tableView));
-            gameOverControls.setVisible(allBetsSettled.test(tableView));
-            prgDeck.setProgress(tableView.deckProgress(maxDeckSize));
-            btnDouble.setDisable(atLeastOneCardDrawn.test(tableView) || !tableView.canAffordToSpendMore());
-            btnSplit.setDisable(!(isSplitAvailable.test(tableView) && tableView.canAffordToSpendMore()));
-            lblBalance.setText(tableView.balanceText());
+            insuranceControls.setVisible(isInsuranceAvailable.test(table));
+            gameControls.setVisible(isGameInProgress.test(table));
+            splitControls.setVisible(isSplitAvailable.test(table));
+            settleControls.setVisible(readyToSettleNextHand.test(table));
+            nextHandControls.setVisible(readyToPlayNextHand.test(table));
+            gameOverControls.setVisible(allBetsSettled.test(table));
+            prgDeck.setProgress(table.deckProgress(maxDeckSize));
+            btnDouble.setDisable(atLeastOneCardDrawn.test(table) || !table.canAffordToSpendMore());
+            btnSplit.setDisable(!(isSplitAvailable.test(table) && table.canAffordToSpendMore()));
+            lblBalance.setText(table.balanceText());
 
-            lblBet.setText(String.format("Bet: $%s", tableView.bet()));
+            lblBet.setText(String.format("Bet: $%s", table.bet()));
 
             tableDisplay.reset();
 
             tableDisplay.drawScores(
-                    tableView.dealerScore(),
-                    tableView.playerScore());
+                    table.dealerScore(),
+                    table.playerScore());
 
-            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
+            tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
 
-            tableDisplay.drawResults(tableView.outcome());
+            tableDisplay.drawResults(table.outcome());
 
-            if (startOfRound.test(tableView)) {
+            if (startOfRound.test(table)) {
                 OpeningDeal animation = new OpeningDeal(
                         this.tableDisplay,
-                        images.fromCards(tableView.dealerHand(), outcomeResolved),
-                        images.fromCards(tableView.playerHand(), outcomeResolved));
+                        images.fromCards(table.dealerHand(), outcomeResolved),
+                        images.fromCards(table.playerHand(), outcomeResolved));
 
                 new Thread(animation::start, "Deal Animation Thread").start();
             } else {
                     tableDisplay.drawCards(
-                            images.fromCards(tableView.dealerHand(), outcomeResolved),
-                            images.fromCards(tableView.playerHand(), outcomeResolved));
+                            images.fromCards(table.dealerHand(), outcomeResolved),
+                            images.fromCards(table.playerHand(), outcomeResolved));
             }
         });
     }

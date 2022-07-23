@@ -1,6 +1,6 @@
 package main.domain.function;
 
-import main.domain.model.TableView;
+import main.domain.model.Table;
 import main.domain.model.Transaction;
 
 import java.util.Optional;
@@ -16,13 +16,13 @@ public class BetAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(TableView tableView) {
-        if (startOfRound.test(tableView)) {
+    public Optional<Transaction> apply(Table table) {
+        if (startOfRound.test(table)) {
             return Optional.of(transaction(
-                    tableView.timestamp(),
-                    tableView.playerAccountKey(),
+                    table.timestamp(),
+                    table.playerAccountKey(),
                     "BET",
-                    tableView.negativeBet()));
+                    table.negativeBet()));
         } else {
             return empty();
         }

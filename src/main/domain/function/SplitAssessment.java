@@ -1,7 +1,7 @@
 package main.domain.function;
 
 import main.domain.model.Action;
-import main.domain.model.TableView;
+import main.domain.model.Table;
 import main.domain.model.Transaction;
 
 import java.util.Collection;
@@ -18,8 +18,8 @@ public class SplitAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(TableView tableView) {
-        final Collection<Action> actionsTaken = tableView.actionsTaken();
+    public Optional<Transaction> apply(Table table) {
+        final Collection<Action> actionsTaken = table.actionsTaken();
 
         final boolean chargeForSplit = (actionsTaken.stream().anyMatch(a -> a.equals(SPLIT)) &&
                 actionsTaken.stream().noneMatch(a ->
@@ -27,10 +27,10 @@ public class SplitAssessment implements Assessment {
 
         if (chargeForSplit) {
             return Optional.of(transaction(
-                    tableView.timestamp(),
-                    tableView.playerAccountKey(),
+                    table.timestamp(),
+                    table.playerAccountKey(),
                     SPLIT.name(),
-                    tableView.negativeBet()));
+                    table.negativeBet()));
         } else {
             return empty();
         }

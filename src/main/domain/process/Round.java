@@ -86,11 +86,7 @@ public class Round {
     }
 
     public void doubleDown() throws EmptyStackException {
-        if (deck.isEmpty()) {
-            refillDeck();
-        }
-
-        currentHand.add(deck.drawCard());
+        hit();
         stand();
     }
 
@@ -120,9 +116,7 @@ public class Round {
     }
 
     public void settleNextHand() {
-        if (handsToSettle.size() > 0) {
-            currentHand = handsToSettle.pop();
-        }
+        currentHand = handsToSettle.pop();
     }
 
     public void refillDeck() {
@@ -130,8 +124,8 @@ public class Round {
         deck.addAll(freshlyShuffledDeck());
     }
 
-    public TableView getSnapshot(LocalDateTime timestamp) {
-        return new TableView(
+    public Table getSnapshot(LocalDateTime timestamp) {
+        return new Table(
                 timestamp,
                 player,
                 bets,

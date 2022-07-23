@@ -1,7 +1,7 @@
 package main.usecase;
 
-import main.domain.model.TableView;
+import main.domain.model.Table;
 
 public interface TableObserver {
-    void onUpdate(TableView tableView);
+    void onUpdate(Table table);
 }

@@ -19,7 +19,7 @@ import static main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
 
-public class TableView {
+public class Table {
     private final Account player;
     private final Bets bets;
     private final Collection<Hand> handsToPlay;
@@ -31,15 +31,15 @@ public class TableView {
     private final Map<Hand, ActionLog> actionLog;
     private final Outcome outcome;
 
-    public TableView(LocalDateTime timestamp,
-                     Account player,
-                     Bets bets,
-                     Deck deck,
-                     Hand dealerHand,
-                     Hand playerHand,
-                     Stack<Hand> handsToPlay,
-                     Collection<Hand> handsToSettle,
-                     Map<Hand, ActionLog> actionsTaken) {
+    public Table(LocalDateTime timestamp,
+                 Account player,
+                 Bets bets,
+                 Deck deck,
+                 Hand dealerHand,
+                 Hand playerHand,
+                 Stack<Hand> handsToPlay,
+                 Collection<Hand> handsToSettle,
+                 Map<Hand, ActionLog> actionsTaken) {
         this.timestamp = timestamp;
         this.player = player;
         this.bets = bets;

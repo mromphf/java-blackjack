@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.animation.ImageReel;
 import main.domain.model.Account;
-import main.usecase.Game;
+import main.usecase.Coordinator;
 import main.usecase.SelectionService;
 
 import java.net.URL;
@@ -62,7 +62,7 @@ public class BetController implements Initializable, ScreenObserver {
     private final static int MAX_BET = 500;
     private final ScreenManagement screen;
 
-    private final Game game;
+    private final Coordinator coordinator;
     private ImageReel animation;
     private int bet = 0;
     private final ImageService images;
@@ -70,11 +70,11 @@ public class BetController implements Initializable, ScreenObserver {
     @Inject
     public BetController(ImageService images,
                          SelectionService selectionService,
-                         Game game,
+                         Coordinator coordinator,
                          ScreenManagement screen) {
         this.selectionService = selectionService;
         this.screen = screen;
-        this.game = game;
+        this.coordinator = coordinator;
         this.images = images;
     }
 
@@ -106,7 +106,7 @@ public class BetController implements Initializable, ScreenObserver {
         if (account.isPresent()) {
             final Account chargedAccount = account.get().debit(bet);
 
-            game.placeBets(bet(chargedAccount, bet));
+            coordinator.placeBets(bet(chargedAccount, bet));
             screen.switchTo(GAME);
             bet = 0;
         } else {
@@ -146,6 +146,6 @@ public class BetController implements Initializable, ScreenObserver {
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(format("Balance: $%s", balance));
-        prgDeck.setProgress(game.deckProgress());
+        prgDeck.setProgress(coordinator.deckProgress());
     }
 }

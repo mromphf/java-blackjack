@@ -115,13 +115,13 @@ public class BaseInjectionModule extends AbstractModule {
         bind(SelectionService.class).to(AccountStore.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
-        bind(GameListener.class).to(Game.class);
+        bind(Game.class).to(Coordinator.class);
 
         bind(ImageService.class).in(Singleton.class);
         bind(AccountStore.class).in(Singleton.class);
         bind(BetController.class).in(Singleton.class);
         bind(BlackjackController.class).in(Singleton.class);
-        bind(Game.class).in(Singleton.class);
+        bind(Coordinator.class).in(Singleton.class);
         bind(GameLogger.class).in(Singleton.class);
         bind(HistoryController.class).in(Singleton.class);
         bind(HomeController.class).in(Singleton.class);

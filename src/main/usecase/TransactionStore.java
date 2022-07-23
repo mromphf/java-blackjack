@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.function.Assessment;
 import main.domain.model.Account;
-import main.domain.model.TableView;
+import main.domain.model.Table;
 import main.domain.model.Transaction;
 
 import java.util.*;
@@ -41,9 +41,9 @@ public class TransactionStore implements AccountRegistrar, TableObserver {
     }
 
     @Override
-    public void onUpdate(TableView tableView) {
+    public void onUpdate(Table table) {
         assessments.stream()
-                .map(function -> function.apply(tableView))
+                .map(function -> function.apply(table))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(groupingBy(Transaction::getAccountKey))

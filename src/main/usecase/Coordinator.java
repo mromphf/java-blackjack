@@ -34,7 +34,13 @@ public class Coordinator implements Game {
         this.tableObservers = tableObservers;
     }
 
-    public void placeBets(Bets bets) {
+    @Override
+    public double deckProgress() {
+        return deck.size() / maxCards;
+    }
+
+    @Override
+    public void bet(Bets bets) {
         roundStack.add(newRound(deck, bets));
         notifyObservers(roundStack.peek().getSnapshot(now()));
     }
@@ -84,10 +90,6 @@ public class Coordinator implements Game {
         } else {
             throw new IllegalStateException();
         }
-    }
-
-    public double deckProgress() {
-        return deck.size() / maxCards;
     }
 
     private Table notifyObservers(final Table table) {

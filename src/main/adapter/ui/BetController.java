@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import main.adapter.graphics.animation.ImageReel;
 import main.domain.model.Account;
-import main.usecase.Coordinator;
+import main.usecase.Game;
 import main.usecase.SelectionService;
 
 import java.net.URL;
@@ -58,23 +58,24 @@ public class BetController implements Initializable, ScreenObserver {
     @FXML
     public Button btnBet100;
 
-    private final SelectionService selectionService;
     private final static int MAX_BET = 500;
-    private final ScreenManagement screen;
 
-    private final Coordinator coordinator;
+    private final Game game;
+    private final ImageService images;
+    private final ScreenManagement screen;
+    private final SelectionService selectionService;
+
     private ImageReel animation;
     private int bet = 0;
-    private final ImageService images;
 
     @Inject
     public BetController(ImageService images,
                          SelectionService selectionService,
-                         Coordinator coordinator,
+                         Game game,
                          ScreenManagement screen) {
         this.selectionService = selectionService;
         this.screen = screen;
-        this.coordinator = coordinator;
+        this.game = game;
         this.images = images;
     }
 
@@ -106,7 +107,7 @@ public class BetController implements Initializable, ScreenObserver {
         if (account.isPresent()) {
             final Account chargedAccount = account.get().debit(bet);
 
-            coordinator.placeBets(bet(chargedAccount, bet));
+            game.bet(bet(chargedAccount, bet));
             screen.switchTo(GAME);
             bet = 0;
         } else {
@@ -146,6 +147,6 @@ public class BetController implements Initializable, ScreenObserver {
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
         lblBalance.setText(format("Balance: $%s", balance));
-        prgDeck.setProgress(coordinator.deckProgress());
+        prgDeck.setProgress(game.deckProgress());
     }
 }

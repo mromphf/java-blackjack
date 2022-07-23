@@ -3,26 +3,25 @@ package main.usecase;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.Round;
-import main.domain.model.*;
+import main.domain.model.Action;
+import main.domain.model.Bets;
+import main.domain.model.Deck;
+import main.domain.model.TableView;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.DECK;
 import static main.adapter.injection.Bindings.MAX_CARDS;
 import static main.domain.Round.newRound;
-import static main.domain.model.Action.*;
 
 public class Game {
 
     private final float maxCards;
 
     private final Deck deck;
-    private final Map<Action, Runnable> runnableMap = new HashMap<>();
     private final Stack<Round> roundStack = new Stack<>();
     private final Collection<TableObserver> tableObservers;
 
@@ -46,20 +45,35 @@ public class Game {
     public TableView onActionTaken(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
-            final Round currentRound = roundStack.peek();
+            final Round round = roundStack.peek();
 
-            runnableMap.put(HIT, currentRound::hit);
-            runnableMap.put(SPLIT, currentRound::split);
-            runnableMap.put(STAND, currentRound::stand);
-            runnableMap.put(SETTLE, currentRound::settleNextHand);
-            runnableMap.put(DOUBLE, currentRound::doubleDown);
-            runnableMap.put(NEXT, currentRound::playNextHand);
+            round.record(timestamp, action);
 
-            currentRound.record(timestamp, action);
-            runnableMap.getOrDefault(action, () -> {}).run();
+            switch(action) {
+                case HIT:
+                    round.hit();
+                    break;
+                case SPLIT:
+                    round.split();
+                    break;
+                case STAND:
+                    round.stand();
+                    break;
+                case SETTLE:
+                    round.settleNextHand();
+                    break;
+                case DOUBLE:
+                    round.doubleDown();
+                    break;
+                case NEXT:
+                    round.playNextHand();
+                    break;
+                default:
+                    break;
+            }
 
-            final TableView tableView = currentRound.getSnapshot(timestamp);
-            return notifyObservers(tableView);
+            return notifyObservers(round.getSnapshot(timestamp));
+
         } else {
             throw new IllegalStateException();
         }

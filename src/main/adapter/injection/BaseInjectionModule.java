@@ -10,7 +10,7 @@ import main.adapter.log.FileLogHandler;
 import main.adapter.log.GameLogger;
 import main.adapter.storage.*;
 import main.adapter.ui.*;
-import main.domain.Assessment;
+import main.domain.function.Assessment;
 import main.domain.model.Deck;
 import main.domain.model.Transaction;
 import main.usecase.*;

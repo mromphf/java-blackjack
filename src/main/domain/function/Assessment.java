@@ -1,4 +1,4 @@
-package main.domain;
+package main.domain.function;
 
 import main.domain.model.TableView;
 import main.domain.model.Transaction;

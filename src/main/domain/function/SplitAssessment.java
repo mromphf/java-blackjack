@@ -1,6 +1,5 @@
 package main.domain.function;
 
-import main.domain.Assessment;
 import main.domain.model.Action;
 import main.domain.model.TableView;
 import main.domain.model.Transaction;

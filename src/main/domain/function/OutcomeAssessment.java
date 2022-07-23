@@ -1,6 +1,5 @@
 package main.domain.function;
 
-import main.domain.Assessment;
 import main.domain.model.*;
 
 import java.util.Collection;

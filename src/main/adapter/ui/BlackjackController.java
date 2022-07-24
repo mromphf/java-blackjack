@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
+import main.adapter.graphics.VectorFunctions;
 import main.adapter.graphics.animations.DealCards;
 import main.adapter.graphics.animations.TableDisplay;
 import main.domain.model.Table;
@@ -162,7 +163,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             if (startOfRound.test(table)) {
                 DealCards animation = new DealCards(
-                        this.tableDisplay,
+                        VectorFunctions.openingCardDeal(tableDisplay),
+                        tableDisplay.getGraphicsContext2D(),
                         images.fromCards(table.dealerHand(), outcomeResolved),
                         images.fromCards(table.playerHand(), outcomeResolved));
 

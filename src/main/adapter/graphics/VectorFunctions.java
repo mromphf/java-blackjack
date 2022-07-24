@@ -2,11 +2,9 @@ package main.adapter.graphics;
 
 import javafx.scene.canvas.Canvas;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static main.adapter.graphics.CardVector.*;
-import static main.adapter.graphics.CardVector.PLAYER_CARD_2;
 import static main.adapter.graphics.Vector.vector;
 
 public class VectorFunctions {
@@ -28,4 +26,19 @@ public class VectorFunctions {
         return vectorMap;
     }
 
+    public static List<List<Vector>> dealerReveal(Canvas canvas, int numDealerCards) {
+        final List<List<Vector>> vectors = new LinkedList<>();
+
+        double gapBetweenCards = (canvas.getWidth() * 0.15);
+        double cardWidth = (canvas.getWidth() * 0.08);
+        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
+        double verOriginPlayer = (canvas.getHeight() / 2) + 110;
+        double verOriginDealer = 100;
+
+        for (int i = 0; i < numDealerCards; i++) {
+
+        }
+
+        return vectors;
+    }
 }

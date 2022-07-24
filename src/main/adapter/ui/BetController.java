@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
-import main.adapter.graphics.ImageStore;
 import main.adapter.graphics.animations.ImageReel;
 import main.domain.model.Account;
 import main.usecase.Game;
@@ -62,7 +61,7 @@ public class BetController implements Initializable, ScreenObserver {
     private final static int MAX_BET = 500;
 
     private final Game game;
-    private final ImageStore images;
+    private final ImageService images;
     private final ScreenManagement screen;
     private final SelectionService selectionService;
 
@@ -70,7 +69,7 @@ public class BetController implements Initializable, ScreenObserver {
     private int bet = 0;
 
     @Inject
-    public BetController(ImageStore images,
+    public BetController(ImageService images,
                          SelectionService selectionService,
                          Game game,
                          ScreenManagement screen) {

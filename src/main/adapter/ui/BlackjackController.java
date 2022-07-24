@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
-import main.adapter.graphics.ImageStore;
 import main.adapter.graphics.animations.DealCards;
 import main.adapter.graphics.animations.TableDisplay;
 import main.domain.model.Table;
@@ -61,12 +60,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     private final Game game;
     private final ScreenManagement screenSupervisor;
-    private final ImageStore images;
+    private final ImageService images;
 
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
-                               ImageStore images) {
+                               ImageService images) {
         this.game = game;
         this.screenSupervisor = screenSupervisor;
         this.images = images;

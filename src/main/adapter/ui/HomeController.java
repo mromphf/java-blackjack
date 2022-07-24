@@ -9,7 +9,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import main.adapter.graphics.ImageStore;
 import main.adapter.graphics.animations.ImageReel;
 import main.domain.model.Account;
 import main.usecase.AccountStore;
@@ -52,18 +51,18 @@ public class HomeController implements Initializable, ScreenObserver {
 
     private final ScreenManagement screen;
     private final AlertService alertService;
-    private final ImageStore imageStore;
+    private final ImageService imageStore;
 
     @Inject
     public HomeController(
-            ImageStore imageStore,
+            ImageService imageService,
             AlertService alertService,
             AccountStore accountStore,
             ScreenManagement screen) {
         this.alertService = alertService;
         this.accountStore = accountStore;
         this.screen = screen;
-        this.imageStore = imageStore;
+        this.imageStore = imageService;
     }
 
     @Override

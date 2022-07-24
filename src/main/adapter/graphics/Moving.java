@@ -32,10 +32,10 @@ public class Moving<T> {
             a subclass.
          */
 
-        if ((direction == LEFT) && ((vector.position + vector.dimension) < 0)) {
+        if ((direction == LEFT) && ((vector.x + vector.y) < 0)) {
             vector.relocate(RIGHT_BOUNDARY);
-        } else if (vector.position >= RIGHT_BOUNDARY) {
-            vector.relocate((vector.dimension * (-1)));
+        } else if (vector.x >= RIGHT_BOUNDARY) {
+            vector.relocate((vector.y * (-1)));
         }
     }
 

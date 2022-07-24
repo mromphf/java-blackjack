@@ -4,27 +4,27 @@ import static main.adapter.graphics.Direction.LEFT;
 
 public class Vector {
 
-    public final int dimension;
-    public int position;
+    public int x;
+    public final int y;
 
-    private Vector(int position, int dimension) {
-        this.position = position;
-        this.dimension = dimension;
+    private Vector(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public static Vector vector(int position, int dimension) {
-        return new Vector(position, dimension);
+    public static Vector vector(int x, int y) {
+        return new Vector(x, y);
     }
 
     public void move(Direction direction, int velocity) {
         if (direction == LEFT) {
-            position = (position - velocity);
+            x = (x - velocity);
         } else {
-            position = (position + velocity);
+            x = (x + velocity);
         }
     }
 
     public void relocate(int position) {
-        this.position = position;
+        this.x = position;
     }
 }

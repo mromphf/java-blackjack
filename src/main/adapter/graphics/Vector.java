@@ -4,15 +4,15 @@ import static main.adapter.graphics.Direction.LEFT;
 
 public class Vector {
 
-    public int x;
-    public final int y;
+    public double x;
+    public final double y;
 
-    private Vector(int x, int y) {
+    private Vector(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Vector vector(int x, int y) {
+    public static Vector vector(double x, double y) {
         return new Vector(x, y);
     }
 
@@ -24,7 +24,7 @@ public class Vector {
         }
     }
 
-    public void relocate(int position) {
-        this.x = position;
+    public void relocate(double position) {
+        x = position;
     }
 }

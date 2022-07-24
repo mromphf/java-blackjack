@@ -28,10 +28,10 @@ public class ImageReel extends AnimationTimer {
         for (Moving<Image> img : imageReel) {
             img.move();
 
-            final int x = img.vector().x;
-            final int y = 0;
-            final int w = img.vector().y;
-            final int h = img.vector().y;
+            final double x = img.vector().x;
+            final double y = 0;
+            final double w = img.vector().y;
+            final double h = img.vector().y;
 
             graphics.drawImage(img.data(), x, y, w, h);
         }

@@ -154,9 +154,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.reset();
 
-            tableDisplay.drawScores(
-                    table.dealerScore(),
-                    table.playerScore());
+            tableDisplay.drawScores(table.dealerScore(), table.playerScore());
 
             tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
 

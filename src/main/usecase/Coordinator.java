@@ -1,13 +1,13 @@
 package main.usecase;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import main.domain.model.Action;
 import main.domain.model.Bets;
 import main.domain.model.Deck;
 import main.domain.model.Table;
 import main.domain.process.Round;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Properties;

@@ -14,7 +14,7 @@ import java.util.List;
 import static java.lang.System.currentTimeMillis;
 import static javafx.stage.Screen.getPrimary;
 
-public class OpeningDeal extends AnimationTimer {
+public class DealCards extends AnimationTimer {
 
     private static final int DELAY_1 = 500;
     private static final int DELAY_2 = 1000;
@@ -29,9 +29,9 @@ public class OpeningDeal extends AnimationTimer {
     private final GraphicsContext graphics;
     private final List<Image> images = new ArrayList<>();
 
-    public OpeningDeal(Canvas canvas,
-                       Collection<Image> dealerCards,
-                       Collection<Image> playerCards) {
+    public DealCards(Canvas canvas,
+                     Collection<Image> dealerCards,
+                     Collection<Image> playerCards) {
         this.graphics = canvas.getGraphicsContext2D();
 
         final Rectangle2D screen = getPrimary().getBounds();

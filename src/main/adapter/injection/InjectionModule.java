@@ -112,6 +112,7 @@ public class InjectionModule extends AbstractModule {
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);
         bind(Game.class).to(Coordinator.class);
+        bind(ImageService.class).to(ImageStore.class).in(Singleton.class);
 
         bind(ImageStore.class).in(Singleton.class);
         bind(AccountStore.class).in(Singleton.class);

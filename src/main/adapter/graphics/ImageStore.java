@@ -2,6 +2,7 @@ package main.adapter.graphics;
 
 import javafx.scene.image.Image;
 import main.Main;
+import main.adapter.ui.ImageService;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
 import main.domain.model.Suit;
@@ -20,7 +21,7 @@ import static main.adapter.graphics.Vector.vector;
 import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
 
-public class ImageStore {
+public class ImageStore implements ImageService {
 
     private final static int REEL_LENGTH = 23;
     private final static int REEL_SPEED = 1;
@@ -58,20 +59,20 @@ public class ImageStore {
                 .collect(toList());
     }
 
-    public Image blankCard() {
-        if (useBlueDeck) {
-            return symbolImages.get(BLUE_CARD);
-        } else {
-            return symbolImages.get(RED_CARD);
-        }
-    }
-
     public Collection<Moving<Image>> reelRight() {
         return symbolReel(RIGHT);
     }
 
     public Collection<Moving<Image>> reelLeft() {
         return symbolReel(LEFT);
+    }
+
+    private Image blankCard() {
+        if (useBlueDeck) {
+            return symbolImages.get(BLUE_CARD);
+        } else {
+            return symbolImages.get(RED_CARD);
+        }
     }
 
     private Collection<Moving<Image>> symbolReel(Direction direction) {
@@ -97,7 +98,7 @@ public class ImageStore {
         ).collect(toList());
     }
 
-    public Image symbolImage(Suit suit) {
+    private Image symbolImage(Suit suit) {
         switch (suit) {
             case SPADES:
                 return symbolImages.get(SYMBOL_SPADES);

@@ -23,7 +23,7 @@ public class Round {
     private final Map<Hand, ActionLog> actionLog = new HashMap<>();
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<Hand> handsToSettle = new Stack<>();
-    private final Properties config;
+    private final Properties rules;
 
     private Hand currentHand;
 
@@ -31,10 +31,10 @@ public class Round {
         return new Round(deck, bets, config);
     }
 
-    private Round(Deck deck, Bets bets, Properties config) {
+    private Round(Deck deck, Bets bets, Properties rules) {
         this.bets = bets;
         this.deck = deck;
-        this.config = config;
+        this.rules = rules;
 
         this.player = bets.accounts()
                 .stream()
@@ -94,7 +94,7 @@ public class Round {
     public void stand() throws EmptyStackException {
         final int deckValue = deck.stream().mapToInt(Card::blackjackValue).sum();
         final int deckValueRequired = deckValue - score(dealerHand);
-        final int minDealerScore = (int) config.get(MIN_DEALER_SCORE);
+        final int minDealerScore = (int) rules.get(MIN_DEALER_SCORE);
 
         if (deckValueRequired < minDealerScore) {
             refillDeck();
@@ -137,7 +137,7 @@ public class Round {
                 handsToPlay,
                 handsToSettle,
                 actionLog,
-                config
+                rules
         );
     }
 }

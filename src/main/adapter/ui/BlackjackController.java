@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.VectorFunctions;
-import main.adapter.graphics.animations.DealCards;
-import main.adapter.graphics.animations.TableDisplay;
+import main.adapter.graphics.animation.DealCards;
+import main.adapter.graphics.animation.TableDisplay;
 import main.domain.model.Table;
 import main.usecase.Game;
 

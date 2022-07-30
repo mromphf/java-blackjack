@@ -1,6 +1,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
-<?import main.adapter.graphics.animations.TableDisplay?>
+<?import main.adapter.graphics.animation.TableDisplay?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.ProgressBar?>

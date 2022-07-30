@@ -1,4 +1,4 @@
-package main.adapter.graphics.animations;
+package main.adapter.graphics.animation;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;

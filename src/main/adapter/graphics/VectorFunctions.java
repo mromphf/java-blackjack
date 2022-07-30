@@ -4,13 +4,13 @@ import javafx.scene.canvas.Canvas;
 
 import java.util.*;
 
-import static main.adapter.graphics.CardVector.*;
+import static main.adapter.graphics.VectorName.*;
 import static main.adapter.graphics.Vector.vector;
 
 public class VectorFunctions {
 
-    public static Map<CardVector, Vector> openingCardDeal(Canvas canvas) {
-        final Map<CardVector, Vector> vectorMap = new HashMap<>();
+    public static Map<VectorName, Vector> openingCardDeal(Canvas canvas) {
+        final Map<VectorName, Vector> vectorMap = new HashMap<>();
 
         double gapBetweenCards = (canvas.getWidth() * 0.15);
         double cardWidth = (canvas.getWidth() * 0.08);

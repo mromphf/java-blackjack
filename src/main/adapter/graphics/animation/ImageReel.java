@@ -1,4 +1,4 @@
-package main.adapter.graphics.animations;
+package main.adapter.graphics.animation;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;

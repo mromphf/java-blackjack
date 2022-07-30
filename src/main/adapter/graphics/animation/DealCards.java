@@ -1,15 +1,15 @@
-package main.adapter.graphics.animations;
+package main.adapter.graphics.animation;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import main.adapter.graphics.CardVector;
+import main.adapter.graphics.VectorName;
 import main.adapter.graphics.Vector;
 
 import java.util.*;
 
 import static java.lang.System.currentTimeMillis;
-import static main.adapter.graphics.CardVector.*;
+import static main.adapter.graphics.VectorName.*;
 
 public class DealCards extends AnimationTimer {
 
@@ -20,12 +20,12 @@ public class DealCards extends AnimationTimer {
 
     private final long START_TIME_MILLIS;
 
-    private final Map<CardVector, Vector> vectorMap;
+    private final Map<VectorName, Vector> vectorMap;
 
     private final GraphicsContext graphics;
     private final List<Image> images = new ArrayList<>();
 
-    public DealCards(Map<CardVector, Vector> vectorMap,
+    public DealCards(Map<VectorName, Vector> vectorMap,
                      GraphicsContext graphics,
                      Collection<Image> dealerCards,
                      Collection<Image> playerCards) {

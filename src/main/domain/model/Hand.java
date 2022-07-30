@@ -1,14 +1,14 @@
 package main.domain.model;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
 
-public class Hand extends HashSet<Card> {
+public class Hand extends LinkedList<Card> {
 
     private final UUID key = randomUUID();
 

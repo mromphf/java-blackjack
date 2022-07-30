@@ -11,13 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorFunctionsTest {
 
+    private final static Canvas TEST_CANVAS = new Canvas((500), (500));
+
     @Test
-    public void dealerAnimation_vectorsRootSize() {
-        final Canvas canvas = new Canvas((500), (500));
+    public void dealerReveal_vectorRootsSize() {
         final int numCards = 4;
         final int expectedLength = 3;
 
-        final List<List<Vector>> vectorsRoot = dealerReveal(canvas, numCards);
+        final List<List<Vector>> vectorsRoot = dealerReveal(TEST_CANVAS, numCards);
 
         assertEquals(expectedLength, vectorsRoot.size());
     }

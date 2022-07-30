@@ -45,7 +45,7 @@ public class TableDisplay extends Canvas {
     private final int CARD_HEIGHT;
     private final int GAP_BETWEEN_CARDS;
     private final int BOTTOM;
-    private final GraphicsContext context = getGraphicsContext2D();
+    private GraphicsContext context;
 
     public TableDisplay() {
         final Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
@@ -58,6 +58,10 @@ public class TableDisplay extends Canvas {
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
         GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
         BOTTOM = (int) getHeight();
+    }
+
+    public void setContext(GraphicsContext context) {
+        this.context = context;
     }
 
     public void reset() {

@@ -73,5 +73,7 @@ public class LowOrderPredicate {
             outcomeIsResolved.and(not(handsRemainToBePlayed)).and(not(handsRemainToBeSettled))).test(table);
 
     public static final Predicate<Table> timeForDealerReveal = table -> (
-            outcomeIsResolved.and(not(handsRemainToBeSettled).and(not(handsRemainToBePlayed))).test(table));
+            outcomeIsResolved.and(not(playerHasBusted)).and(
+                    not(handsRemainToBeSettled).and(
+                            not(handsRemainToBePlayed))).test(table));
 }

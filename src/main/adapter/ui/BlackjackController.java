@@ -3,12 +3,14 @@ package main.adapter.ui;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.VectorFunctions;
 import main.adapter.graphics.animation.DealCards;
+import main.adapter.graphics.animation.DealerReveal;
 import main.adapter.graphics.animation.TableDisplay;
 import main.domain.model.Table;
 import main.usecase.Game;
@@ -17,6 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
+import static main.adapter.graphics.VectorFunctions.dealerReveal;
 import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.LowOrderPredicate.*;
@@ -63,6 +66,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final ScreenManagement screenSupervisor;
     private final ImageService images;
 
+    private GraphicsContext context;
+
     @Inject
     public BlackjackController(Game game,
                                ScreenManagement screenSupervisor,
@@ -74,6 +79,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.context = tableDisplay.getGraphicsContext2D();
+        tableDisplay.setContext(context);
     }
 
     @Override
@@ -164,15 +171,25 @@ public class BlackjackController implements Initializable, ScreenObserver {
             if (startOfRound.test(table)) {
                 DealCards animation = new DealCards(
                         VectorFunctions.openingCardDeal(tableDisplay),
-                        tableDisplay.getGraphicsContext2D(),
+                        context,
                         images.fromCards(table.dealerHand(), outcomeResolved),
                         images.fromCards(table.playerHand(), outcomeResolved));
 
-                new Thread(animation::start, "Deal Animation Thread").start();
+                new Thread(animation::start, "Deal Cards Animation Thread").start();
+            } else if (timeForDealerReveal.test(table)) {
+                DealerReveal animation = new DealerReveal(
+                        context,
+                        dealerReveal(tableDisplay, table.dealerHand().size()),
+                        images.fromCards(table.dealerHand(), outcomeResolved));
+
+                tableDisplay.drawPlayerCards(images.fromCards(table.playerHand(), outcomeResolved));
+                tableDisplay.drawResults(table.outcome());
+
+                new Thread(animation::start, "Dealer Reveal Animation Thread").start();
             } else {
-                    tableDisplay.drawCards(
-                            images.fromCards(table.dealerHand(), outcomeResolved),
-                            images.fromCards(table.playerHand(), outcomeResolved));
+                tableDisplay.drawCards(
+                        images.fromCards(table.dealerHand(), outcomeResolved),
+                        images.fromCards(table.playerHand(), outcomeResolved));
             }
         });
     }

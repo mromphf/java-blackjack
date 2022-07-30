@@ -81,6 +81,10 @@ public class TableDisplay extends Canvas {
         drawLineOfCards(playerCards, VER_CENTER + 110);
     }
 
+    public void drawPlayerCards(Collection<Image> cards) {
+        drawLineOfCards(cards, VER_CENTER + 110);
+    }
+
     public void drawCardsToPlay(List<Image> images) {
         for (int i = 0, y = BOTTOM - 100; i < images.size(); i++, y -= 120) {
             drawSmallCard(images.get(i), y);

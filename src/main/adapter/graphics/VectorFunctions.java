@@ -27,18 +27,23 @@ public class VectorFunctions {
     }
 
     public static List<List<Vector>> dealerReveal(Canvas canvas, int numDealerCards) {
-        final List<List<Vector>> vectors = new LinkedList<>();
+        final List<List<Vector>> vectorsRoot = new LinkedList<>();
 
         double gapBetweenCards = (canvas.getWidth() * 0.15);
         double cardWidth = (canvas.getWidth() * 0.08);
         double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
-        double verOriginPlayer = (canvas.getHeight() / 2) + 110;
         double verOriginDealer = 100;
 
-        for (int i = 0; i < numDealerCards; i++) {
+        for (int i = 2; i <= numDealerCards; i++) {
+            List<Vector> vectorsInner = new LinkedList<>();
 
+            for (int j = 0; j < i; j++) {
+                vectorsInner.add(vector(horOrigin + (gapBetweenCards * j), verOriginDealer));
+            }
+
+            vectorsRoot.add(vectorsInner);
         }
 
-        return vectors;
+        return vectorsRoot;
     }
 }

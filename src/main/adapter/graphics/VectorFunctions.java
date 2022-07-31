@@ -1,9 +1,11 @@
 package main.adapter.graphics;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static main.adapter.graphics.Vector.vector;
 import static main.adapter.graphics.VectorName.*;
@@ -46,29 +48,5 @@ public class VectorFunctions {
         }
 
         return vectorsRoot;
-    }
-
-    public static List<List<Map<Vector, Image>>> associate(
-            List<List<Vector>> vectorsRoot,
-            Collection<Image> imageCollection) {
-
-        final List<List<Map<Vector, Image>>> associations = new ArrayList<>();
-
-        for (List<Vector> vectors : vectorsRoot) {
-            final List<Map<Vector, Image>> workingAssociations = new ArrayList<>();
-            final Map<Vector, Image> innerAssociations = new HashMap<>();
-            final Iterator<Image> images = imageCollection.iterator();
-
-            for (final Vector vec : vectors) {
-                final Image img = images.next();
-
-                innerAssociations.put(vec, img);
-            }
-
-            workingAssociations.add(innerAssociations);
-            associations.add(workingAssociations);
-        }
-
-        return associations;
     }
 }

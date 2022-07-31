@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.animation.DelayedSequence;
+import main.adapter.graphics.animation.ImageRow;
 import main.adapter.graphics.animation.TableDisplay;
 import main.domain.model.Table;
 import main.usecase.Game;
@@ -17,9 +18,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.runLater;
-import static main.adapter.graphics.VectorFunctions.vectorsDealerReveal;
-import static main.adapter.graphics.VectorFunctions.vectorsDealCards;
+import static main.adapter.graphics.VectorFunctions.*;
 import static main.adapter.graphics.animation.DelayedSequence.delayedSequence;
+import static main.adapter.graphics.animation.ImageRow.imageRow;
 import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
 import static main.domain.predicate.LowOrderPredicate.*;
@@ -143,6 +144,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
     public void updateTable(Table table) {
         final boolean outcomeResolved = outcomeIsResolved.test(table);
         final int numDealerCards = table.dealerHand().size();
+        final int numPlayerCards = table.playerHand().size();
 
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(table));
@@ -163,8 +165,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.reset();
 
-            // tableDisplay.drawScores(table.dealerScore(), table.playerScore());
-
             tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
 
             tableDisplay.drawResults(table.outcome());
@@ -180,14 +180,26 @@ public class BlackjackController implements Initializable, ScreenObserver {
                         context, vectorsDealerReveal(tableDisplay, numDealerCards),
                         images.fromDealerCards(table));
 
-                tableDisplay.drawPlayerCards(images.fromCards(table.playerHand(), outcomeResolved));
+                ImageRow playerRow = imageRow(
+                        context, vectorsPlayerRow(tableDisplay, numPlayerCards),
+                        images.fromPlayerCards(table));
+
+                playerRow.draw();
+
                 tableDisplay.drawResults(table.outcome());
 
                 new Thread(animation::start, "Dealer Reveal Animation Thread").start();
             } else {
-                tableDisplay.drawCards(
-                        images.fromCards(table.dealerHand(), outcomeResolved),
-                        images.fromCards(table.playerHand(), outcomeResolved));
+                ImageRow playerRow = imageRow(
+                        context, vectorsPlayerRow(tableDisplay, numPlayerCards),
+                        images.fromPlayerCards(table));
+
+                ImageRow dealerRow = imageRow(
+                        context, vectorsDealerReveal(tableDisplay, numDealerCards),
+                        images.fromDealerCards(table));
+
+                playerRow.draw();
+                dealerRow.draw();
             }
         });
     }

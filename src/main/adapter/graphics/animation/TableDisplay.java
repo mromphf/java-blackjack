@@ -8,12 +8,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import main.domain.model.Outcome;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.String.format;
 import static javafx.scene.paint.Color.*;
 import static main.domain.model.Outcome.*;
 
@@ -35,7 +33,6 @@ public class TableDisplay extends Canvas {
         put(PUSH, ORANGE);
     }};
 
-    private final static int TEXT_OFFSET = 50;
     private final static String TABLE_GREEN = "#228b22";
     private final static String FONT_NAME = "Arial";
 
@@ -43,7 +40,6 @@ public class TableDisplay extends Canvas {
     private final int VER_CENTER;
     private final int CARD_WIDTH;
     private final int CARD_HEIGHT;
-    private final int GAP_BETWEEN_CARDS;
     private final int BOTTOM;
     private GraphicsContext context;
 
@@ -56,7 +52,6 @@ public class TableDisplay extends Canvas {
         VER_CENTER = (int) getHeight() / 2;
         CARD_HEIGHT = (int) (screen.getHeight() * 0.175);
         CARD_WIDTH = (int) (screen.getWidth() * 0.08);
-        GAP_BETWEEN_CARDS = (int) (screen.getWidth() * 0.15);
         BOTTOM = (int) getHeight();
     }
 
@@ -70,25 +65,6 @@ public class TableDisplay extends Canvas {
         context.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    public void drawScores(int dealerScore, int playerScore) {
-        if (dealerScore > 21) {
-            drawLabel("BUST", 120);
-        } else {
-            drawLabel(format("Dealer: %s", dealerScore), 120);
-        }
-
-        drawLabel(format("You: %s", playerScore), VER_CENTER + 130);
-    }
-
-    public void drawCards(Collection<Image> dealerCards, Collection<Image> playerCards) {
-        drawLineOfCards(dealerCards, 100);
-        drawLineOfCards(playerCards, VER_CENTER + 110);
-    }
-
-    public void drawPlayerCards(Collection<Image> cards) {
-        drawLineOfCards(cards, VER_CENTER + 110);
-    }
-
     public void drawCardsToPlay(List<Image> images) {
         for (int i = 0, y = BOTTOM - 100; i < images.size(); i++, y -= 120) {
             drawSmallCard(images.get(i), y);
@@ -100,23 +76,6 @@ public class TableDisplay extends Canvas {
         context.setFont(f);
         context.setFill(OUTCOME_COLORS.get(outcome));
         context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 20);
-    }
-
-    private void drawLabel(String label, int y) {
-        final Font f = new Font(FONT_NAME, 30);
-        context.setFont(f);
-        context.setFill(WHITE);
-        context.fillText(label, (HOR_CENTER - TEXT_OFFSET), y - 50);
-    }
-
-    private void drawLineOfCards(Collection<Image> cards, int y) {
-        Object[] images = cards.toArray();
-
-        final int START_POS  = HOR_CENTER - (CARD_WIDTH * images.length) + (CARD_WIDTH / 2);
-
-        for (int i = 0, x = START_POS; i < images.length; i++, x += GAP_BETWEEN_CARDS) {
-            context.drawImage((Image) images[i], x, y, CARD_WIDTH, CARD_HEIGHT);
-        }
     }
 
     private void drawSmallCard(Image card, int y) {

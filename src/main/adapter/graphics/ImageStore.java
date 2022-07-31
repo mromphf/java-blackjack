@@ -63,6 +63,14 @@ public class ImageStore implements ImageService {
     }
 
     @Override
+    public List<Image> fromPlayerCards(Table table) {
+        return table.playerHand()
+                .stream()
+                .map(card -> determineImage(table, card))
+                .collect(toList());
+    }
+
+    @Override
     public List<Image> fromDealerCards(Table table) {
         return table.dealerHand()
                 .stream()

@@ -142,6 +142,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     public void updateTable(Table table) {
         final boolean outcomeResolved = outcomeIsResolved.test(table);
+        final int numDealerCards = table.dealerHand().size();
 
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(table));
@@ -162,7 +163,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.reset();
 
-            tableDisplay.drawScores(table.dealerScore(), table.playerScore());
+            // tableDisplay.drawScores(table.dealerScore(), table.playerScore());
 
             tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
 
@@ -172,15 +173,14 @@ public class BlackjackController implements Initializable, ScreenObserver {
                 DealCards animation = new DealCards(
                         VectorFunctions.openingCardDeal(tableDisplay),
                         context,
-                        images.fromCards(table.dealerHand(), outcomeResolved),
-                        images.fromCards(table.playerHand(), outcomeResolved));
+                        images.fromAllCards(table));
 
                 new Thread(animation::start, "Deal Cards Animation Thread").start();
             } else if (timeForDealerReveal.test(table)) {
                 DealerReveal animation = new DealerReveal(
                         context,
-                        dealerReveal(tableDisplay, table.dealerHand().size()),
-                        images.fromCards(table.dealerHand(), outcomeResolved));
+                        dealerReveal(tableDisplay, numDealerCards),
+                        images.fromDealerCards(table));
 
                 tableDisplay.drawPlayerCards(images.fromCards(table.playerHand(), outcomeResolved));
                 tableDisplay.drawResults(table.outcome());

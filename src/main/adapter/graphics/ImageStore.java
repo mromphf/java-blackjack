@@ -1,11 +1,13 @@
 package main.adapter.graphics;
 
+import com.google.common.collect.Streams;
 import javafx.scene.image.Image;
 import main.Main;
 import main.adapter.ui.ImageService;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
 import main.domain.model.Suit;
+import main.domain.model.Table;
 import main.util.InfiniteStack;
 
 import java.util.*;
@@ -20,6 +22,7 @@ import static main.adapter.graphics.Symbol.*;
 import static main.adapter.graphics.Vector.vector;
 import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
+import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
 
 public class ImageStore implements ImageService {
 
@@ -59,12 +62,43 @@ public class ImageStore implements ImageService {
                 .collect(toList());
     }
 
+    @Override
+    public List<Image> fromDealerCards(Table table) {
+        return table.dealerHand()
+                .stream()
+                .map(card -> determineImage(table, card))
+                .collect(toList());
+    }
+
+    @Override
+    public List<Image> fromAllCards(Table table) {
+        return Streams.concat(table.dealerHand().stream(), table.playerHand().stream())
+                .map(card -> determineImage(table, card))
+                .collect(toList());
+    }
+
     public Collection<Moving<Image>> reelRight() {
         return symbolReel(RIGHT);
     }
 
     public Collection<Moving<Image>> reelLeft() {
         return symbolReel(LEFT);
+    }
+
+    private Image determineImage(Table table, Card card) {
+        if (outcomeIsResolved.test(table)) {
+            return cardImages.get(card.anonymize());
+        } else {
+            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
+        }
+    }
+
+    private Image determineImage(Card card, boolean outcomeResolved) {
+        if (outcomeResolved) {
+            return cardImages.get(card.anonymize());
+        } else {
+            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
+        }
     }
 
     private Image blankCard() {
@@ -108,14 +142,6 @@ public class ImageStore implements ImageService {
                 return symbolImages.get(SYMBOL_DIAMONDS);
             default:
                 return symbolImages.get(SYMBOL_HEARTS);
-        }
-    }
-
-    private Image determineImage(Card card, boolean outcomeResolved) {
-        if (outcomeResolved) {
-            return cardImages.get(card.anonymize());
-        } else {
-            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
         }
     }
 }

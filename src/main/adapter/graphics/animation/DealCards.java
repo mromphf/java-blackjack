@@ -5,9 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import main.adapter.graphics.Vector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.System.currentTimeMillis;
@@ -18,26 +15,17 @@ public class DealCards extends AnimationTimer {
 
     private final List<Vector> vectors;
     private final GraphicsContext graphics;
-    private final List<Image> images = new ArrayList<>();
+    private final List<Image> images;
 
     public DealCards(List<Vector> vectors,
                      GraphicsContext graphics,
-                     Collection<Image> dealerCards,
-                     Collection<Image> playerCards) {
+                     List<Image> images) {
 
         this.vectors = vectors;
         this.graphics = graphics;
+        this.images = images;
 
         START_TIME_MILLIS = currentTimeMillis();
-
-        Iterator<Image> dealerItr = dealerCards.iterator();
-        Iterator<Image> playerItr = playerCards.iterator();
-
-        images.add(dealerItr.next());
-        images.add(dealerItr.next());
-        images.add(playerItr.next());
-        images.add(playerItr.next());
-
     }
 
     @Override

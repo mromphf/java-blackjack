@@ -9,7 +9,7 @@ import static main.adapter.graphics.Vector.vector;
 
 public class VectorFunctions {
 
-    public static List<Vector> openingCardDeal(Canvas canvas) {
+    public static List<Vector> vectorsDealCards(Canvas canvas) {
         final List<Vector> vectorMap = new LinkedList<>();
 
         double gapBetweenCards = (canvas.getWidth() * 0.15);
@@ -26,7 +26,7 @@ public class VectorFunctions {
         return vectorMap;
     }
 
-    public static List<Vector> dealerReveal(Canvas canvas, int numDealerCards) {
+    public static List<Vector> vectorsDealerReveal(Canvas canvas, int numDealerCards) {
         final List<Vector> vectorsRoot = new LinkedList<>();
 
         double gapBetweenCards = (canvas.getWidth() * 0.10);

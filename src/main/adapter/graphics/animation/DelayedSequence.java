@@ -9,7 +9,7 @@ import java.util.List;
 
 import static java.lang.System.currentTimeMillis;
 
-public class DealCards extends AnimationTimer {
+public class DelayedSequence extends AnimationTimer {
 
     private final long START_TIME_MILLIS;
 
@@ -17,9 +17,15 @@ public class DealCards extends AnimationTimer {
     private final GraphicsContext graphics;
     private final List<Image> images;
 
-    public DealCards(List<Vector> vectors,
-                     GraphicsContext graphics,
-                     List<Image> images) {
+    public static DelayedSequence delayedSequence(GraphicsContext graphics,
+                           List<Vector> vectors,
+                           List<Image> images) {
+        return new DelayedSequence(graphics, vectors, images);
+    }
+
+    private DelayedSequence(GraphicsContext graphics,
+                           List<Vector> vectors,
+                           List<Image> images) {
 
         this.vectors = vectors;
         this.graphics = graphics;

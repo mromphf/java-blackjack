@@ -18,7 +18,7 @@ class VectorFunctionsTest {
         final int numCards = 4;
         final int expectedLength = 3;
 
-        final List<List<Vector>> vectorsRoot = dealerReveal(TEST_CANVAS, numCards);
+        final List<Vector> vectorsRoot = dealerReveal(TEST_CANVAS, numCards);
 
         assertEquals(expectedLength, vectorsRoot.size());
     }

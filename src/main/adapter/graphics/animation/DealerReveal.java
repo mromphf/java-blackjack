@@ -14,10 +14,10 @@ public class DealerReveal extends AnimationTimer {
     private final long START_TIME_MILLIS;
 
     private final List<Image> images;
-    private final List<List<Vector>> vectorsRoot;
+    private final List<Vector> vectorsRoot;
     private final GraphicsContext graphics;
 
-    public DealerReveal(GraphicsContext graphics, List<List<Vector>> vectorsRoot, List<Image> images) {
+    public DealerReveal(GraphicsContext graphics, List<Vector> vectorsRoot, List<Image> images) {
         this.graphics = graphics;
         this.vectorsRoot = vectorsRoot;
         this.images = images;
@@ -31,10 +31,9 @@ public class DealerReveal extends AnimationTimer {
 
         for (int i = 0; i < images.size(); i++) {
             if (millis_elapsed >= (500d * i)) {
-                final List<Vector> vectors = vectorsRoot.get(vectorsRoot.size() - 1);
 
                 final Image img = images.get(i);
-                final Vector vec = vectors.get(i);
+                final Vector vec = vectorsRoot.get(i);
 
                 graphics.drawImage(img, vec.x, vec.y);
             }

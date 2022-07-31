@@ -29,22 +29,16 @@ public class VectorFunctions {
         return vectorMap;
     }
 
-    public static List<List<Vector>> dealerReveal(Canvas canvas, int numDealerCards) {
-        final List<List<Vector>> vectorsRoot = new LinkedList<>();
+    public static List<Vector> dealerReveal(Canvas canvas, int numDealerCards) {
+        final List<Vector> vectorsRoot = new LinkedList<>();
 
-        double gapBetweenCards = (canvas.getWidth() * 0.15);
+        double gapBetweenCards = (canvas.getWidth() * 0.10);
         double cardWidth = (canvas.getWidth() * 0.08);
         double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
         double verOriginDealer = 100;
 
-        for (int i = 2; i <= numDealerCards; i++) {
-            List<Vector> vectorsInner = new LinkedList<>();
-
-            for (int j = 0; j < i; j++) {
-                vectorsInner.add(vector(horOrigin + (gapBetweenCards * j), verOriginDealer));
-            }
-
-            vectorsRoot.add(vectorsInner);
+        for (int i = 0; i <= numDealerCards; i++) {
+            vectorsRoot.add(vector(horOrigin + (gapBetweenCards * i), verOriginDealer));
         }
 
         return vectorsRoot;

@@ -3,34 +3,29 @@ package main.adapter.graphics.animation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import main.adapter.graphics.VectorName;
 import main.adapter.graphics.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import static java.lang.System.currentTimeMillis;
-import static main.adapter.graphics.VectorName.*;
 
 public class DealCards extends AnimationTimer {
 
-    private static final int DELAY_1 = 500;
-    private static final int DELAY_2 = 1000;
-    private static final int DELAY_3 = 1500;
-    private static final int DELAY_4 = 2000;
-
     private final long START_TIME_MILLIS;
 
-    private final Map<VectorName, Vector> vectorMap;
-
+    private final List<Vector> vectors;
     private final GraphicsContext graphics;
     private final List<Image> images = new ArrayList<>();
 
-    public DealCards(Map<VectorName, Vector> vectorMap,
+    public DealCards(List<Vector> vectors,
                      GraphicsContext graphics,
                      Collection<Image> dealerCards,
                      Collection<Image> playerCards) {
 
-        this.vectorMap = vectorMap;
+        this.vectors = vectors;
         this.graphics = graphics;
 
         START_TIME_MILLIS = currentTimeMillis();
@@ -49,24 +44,18 @@ public class DealCards extends AnimationTimer {
     public void handle(long now) {
         final long millis_elapsed = (-START_TIME_MILLIS + currentTimeMillis());
 
-        if (millis_elapsed > DELAY_1) {
-            final Vector vec = vectorMap.get(DEALER_CARD_1);
-            graphics.drawImage(images.get(0), vec.x, vec.y);
+        for (int i = 0; i < images.size(); i++) {
+            if (millis_elapsed >= (500d * i)) {
+
+                final Image img = images.get(i);
+                final Vector vec = vectors.get(i);
+
+                graphics.drawImage(img, vec.x, vec.y);
+            }
+
         }
 
-        if (millis_elapsed > DELAY_2) {
-            final Vector vec = vectorMap.get(DEALER_CARD_2);
-            graphics.drawImage(images.get(1), vec.x, vec.y);
-        }
-
-        if (millis_elapsed > DELAY_3) {
-            final Vector vec = vectorMap.get(PLAYER_CARD_1);
-            graphics.drawImage(images.get(2), vec.x, vec.y);
-        }
-
-        if (millis_elapsed > DELAY_4) {
-            final Vector vec = vectorMap.get(PLAYER_CARD_2);
-            graphics.drawImage(images.get(3), vec.x, vec.y);
+        if (millis_elapsed > (500d * images.size())) {
             stop();
         }
     }

@@ -62,10 +62,10 @@ public class ScreenSupervisor implements ScreenManagement, AlertService {
         }
 
         if (screen == BACK) {
-            final Screen previousScreen = navHistory.pop();
+            navHistory.pop();
+            final Screen previousScreen = navHistory.peek();
             scene.setRoot(sceneMap.get(previousScreen));
             screenMap.get(previousScreen).onScreenChanged();
-
         } else {
             navHistory.add(screen);
             scene.setRoot(sceneMap.get(screen));

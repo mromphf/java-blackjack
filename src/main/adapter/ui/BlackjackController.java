@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import main.adapter.graphics.animation.DelayedSequence;
+import main.adapter.graphics.animation.RevealSequence;
 import main.adapter.graphics.animation.ImageRow;
 import main.adapter.graphics.animation.TableDisplay;
 import main.domain.model.Table;
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import static main.adapter.graphics.VectorFunctions.*;
 import static main.adapter.graphics.animation.DelayedSequence.delayedSequence;
+import static main.adapter.graphics.animation.RevealSequence.revealSequence;
 import static main.adapter.graphics.animation.ImageRow.imageRow;
 import static main.adapter.ui.Screen.BET;
 import static main.domain.model.Action.*;
@@ -167,7 +169,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
 
-            tableDisplay.drawResults(table.outcome());
 
             if (startOfRound.test(table)) {
                 DelayedSequence animation = delayedSequence(
@@ -175,9 +176,12 @@ public class BlackjackController implements Initializable, ScreenObserver {
                         images.fromAllCards(table));
 
                 new Thread(animation::start, "Deal Cards Animation Thread").start();
+
             } else if (timeForDealerReveal.test(table)) {
-                DelayedSequence animation = delayedSequence(
+                RevealSequence animation = revealSequence(
                         context, vectorsDealerReveal(tableDisplay, numDealerCards),
+                        center(tableDisplay),
+                        table.outcome(),
                         images.fromDealerCards(table));
 
                 ImageRow playerRow = imageRow(
@@ -185,8 +189,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
                         images.fromPlayerCards(table));
 
                 playerRow.draw();
-
-                tableDisplay.drawResults(table.outcome());
 
                 new Thread(animation::start, "Dealer Reveal Animation Thread").start();
             } else {
@@ -200,6 +202,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
                 playerRow.draw();
                 dealerRow.draw();
+
+                tableDisplay.drawResults(table.outcome());
             }
         });
     }

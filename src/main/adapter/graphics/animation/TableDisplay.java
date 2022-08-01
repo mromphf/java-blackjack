@@ -17,7 +17,7 @@ import static main.domain.model.Outcome.*;
 
 public class TableDisplay extends Canvas {
 
-    private final static Map<Outcome, String> OUTCOME_STRINGS = new HashMap<Outcome, String>() {{
+    public final static Map<Outcome, String> OUTCOME_STRINGS = new HashMap<Outcome, String>() {{
         put(BLACKJACK, "$$ Blackjack! $$");
         put(WIN, "Win");
         put(LOSE, "Lose");
@@ -25,7 +25,7 @@ public class TableDisplay extends Canvas {
         put(PUSH, "Push");
     }};
 
-    private final static Map<Outcome, Color> OUTCOME_COLORS = new HashMap<Outcome, Color>() {{
+    public final static Map<Outcome, Color> OUTCOME_COLORS = new HashMap<Outcome, Color>() {{
         put(BLACKJACK, WHITE);
         put(WIN, WHITE);
         put(LOSE, RED);

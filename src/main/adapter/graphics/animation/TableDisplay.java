@@ -18,7 +18,7 @@ import static main.domain.model.Outcome.*;
 public class TableDisplay extends Canvas {
 
     private final static Map<Outcome, String> OUTCOME_STRINGS = new HashMap<Outcome, String>() {{
-        put(BLACKJACK, "Blackjack!!!");
+        put(BLACKJACK, "$$ Blackjack! $$");
         put(WIN, "Win");
         put(LOSE, "Lose");
         put(BUST, "Bust");
@@ -75,7 +75,7 @@ public class TableDisplay extends Canvas {
         final Font f = new Font(FONT_NAME, 50);
         context.setFont(f);
         context.setFill(OUTCOME_COLORS.get(outcome));
-        context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 20);
+        context.fillText(OUTCOME_STRINGS.get(outcome), HOR_CENTER - 50, VER_CENTER + 50);
     }
 
     private void drawSmallCard(Image card, int y) {

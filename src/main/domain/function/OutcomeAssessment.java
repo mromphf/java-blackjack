@@ -5,12 +5,13 @@ import main.domain.model.*;
 import java.util.Collection;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
 import static java.util.Optional.empty;
 import static main.domain.function.CardFunctions.isBlackjack;
 import static main.domain.model.Action.DOUBLE;
 import static main.domain.model.Transaction.transaction;
-import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
 import static main.domain.predicate.LowOrderPredicate.insurancePurchased;
+import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
 
 public class OutcomeAssessment implements Assessment {
 
@@ -22,7 +23,7 @@ public class OutcomeAssessment implements Assessment {
     public Optional<Transaction> apply(Table table) {
         if (outcomeIsResolved.test(table)) {
             return Optional.of(transaction(
-                    table.timestamp(),
+                    now(),
                     table.playerAccountKey(),
                     table.outcome().name(),
                     settleBet(table)));

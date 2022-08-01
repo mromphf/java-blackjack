@@ -10,14 +10,12 @@ import main.domain.model.Transaction;
 import main.usecase.AccountRegistrar;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-import static java.time.LocalDateTime.now;
-import static java.util.UUID.randomUUID;
 import static main.adapter.ui.Screen.BACK;
 import static main.adapter.ui.Screen.HOME;
+import static main.domain.model.Account.newAccount;
 import static main.domain.model.Transaction.signingBonus;
 
 public class RegistrationController implements Initializable, ScreenObserver {
@@ -55,12 +53,11 @@ public class RegistrationController implements Initializable, ScreenObserver {
 
     @FXML
     public void onCreate() {
-        final LocalDateTime now = now();
-        final Account account = new Account(randomUUID(), txtName.getText(), 0, now);
-        final Transaction signingBonus = signingBonus(account);
+        final Account newAccount = newAccount(txtName.getText());
+        final Transaction signingBonus = signingBonus(newAccount);
 
         for (AccountRegistrar registrar : accountRegistrars) {
-            registrar.createNew(account.apply(signingBonus));
+            registrar.createNew(newAccount.apply(signingBonus));
         }
 
         txtName.clear();

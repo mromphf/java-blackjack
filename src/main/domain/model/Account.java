@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
+import static java.time.LocalDateTime.now;
 import static java.time.format.DateTimeFormatter.*;
+import static java.util.UUID.randomUUID;
 
 public class Account implements Function<Transaction, Account> {
 
@@ -13,7 +15,15 @@ public class Account implements Function<Transaction, Account> {
     private final int balance;
     private final LocalDateTime created;
 
-    public Account(UUID key, String name, int balance, LocalDateTime created) {
+    public static Account newAccount(String name) {
+        return new Account(randomUUID(), name, (0), now());
+    }
+
+    public static Account account(UUID key, String name, int balance, LocalDateTime created) {
+        return new Account(key, name, balance, created);
+    }
+
+    private Account(UUID key, String name, int balance, LocalDateTime created) {
         this.key = key;
         this.name = name;
         this.balance = balance;

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static java.time.ZonedDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+import static main.domain.model.Account.account;
 import static main.domain.model.Transaction.transaction;
 
 public class ResultSetUtil {
@@ -20,7 +21,7 @@ public class ResultSetUtil {
        final int balance = rs.getInt("balance");
        final ZonedDateTime timestamp = parse(rs.getString("timestamp"), ISO_OFFSET_DATE_TIME);
 
-       return new Account(key, name, balance, timestamp.toLocalDateTime());
+       return account(key, name, balance, timestamp.toLocalDateTime());
    }
 
    public static Transaction transactionFromResultSet(ResultSet rs) throws SQLException {

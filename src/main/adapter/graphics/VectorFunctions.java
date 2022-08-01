@@ -55,4 +55,8 @@ public class VectorFunctions {
 
         return vectorsRoot;
     }
+
+    public static Vector center(Canvas canvas) {
+        return vector((canvas.getWidth() / 2), (canvas.getHeight() / 2));
+    }
 }

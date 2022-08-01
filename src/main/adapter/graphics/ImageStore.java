@@ -23,6 +23,8 @@ import static main.adapter.graphics.Vector.vector;
 import static main.domain.function.DealerFunctions.anonymousDeck;
 import static main.domain.model.Suit.*;
 import static main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
+import static main.domain.predicate.LowOrderPredicate.playerHasBusted;
+import static main.util.LessCode.not;
 
 public class ImageStore implements ImageService {
 
@@ -94,7 +96,7 @@ public class ImageStore implements ImageService {
     }
 
     private Image determineImage(Table table, Card card) {
-        if (outcomeIsResolved.test(table)) {
+        if (outcomeIsResolved.and(not(playerHasBusted)).test(table)) {
             return cardImages.get(card.anonymize());
         } else {
             return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();

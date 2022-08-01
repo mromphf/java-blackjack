@@ -38,6 +38,9 @@ public class BetController implements Initializable, ScreenObserver {
     private Label lblBet;
 
     @FXML
+    private Label lblUpperBet;
+
+    @FXML
     private Label lblBalance;
 
     @FXML
@@ -146,7 +149,13 @@ public class BetController implements Initializable, ScreenObserver {
     private void refreshUI(int balance) {
         btnDeal.setDisable(bet > balance || bet <= 0);
         lblBet.setText("$" + bet);
-        lblBalance.setText(format("Balance: $%s", balance));
-        prgDeck.setProgress(game.peek().deckProgress());
+        lblUpperBet.setText("Bet $" + bet);
+        lblBalance.setText(format("Balance $%s", balance));
+        try {
+            prgDeck.setProgress(game.peek().deckProgress());
+        } catch (IllegalStateException ex) {
+            prgDeck.setProgress(100f);
+        }
+
     }
 }

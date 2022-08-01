@@ -46,10 +46,6 @@
     -fx-background-color: #228b22;
 }
 
-.upper-hud {
-    -fx-padding: 30 0 175 0;
-}
-
 .lower-hud {}
 
 .scrolling-animation {

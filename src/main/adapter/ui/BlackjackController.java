@@ -163,7 +163,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             lblBalance.setText(table.balanceText());
 
-            lblBet.setText(String.format("Bet: $%s", table.bet()));
+            lblBet.setText(String.format("Bet $%s", table.bet()));
 
             tableDisplay.reset();
 

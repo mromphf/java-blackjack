@@ -14,7 +14,7 @@ public class VectorFunctions {
 
         double gapBetweenCards = (canvas.getWidth() * 0.10);
         double cardWidth = (canvas.getWidth() * 0.08);
-        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
+        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth));
         double verOriginPlayer = (canvas.getHeight() / 2) + 110;
         double verOriginDealer = 100;
 
@@ -31,7 +31,7 @@ public class VectorFunctions {
 
         double gapBetweenCards = (canvas.getWidth() * 0.10);
         double cardWidth = (canvas.getWidth() * 0.08);
-        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
+        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth));
         double verOriginDealer = 100;
 
         for (int i = 0; i <= numDealerCards; i++) {
@@ -46,7 +46,7 @@ public class VectorFunctions {
 
         double gapBetweenCards = (canvas.getWidth() * 0.10);
         double cardWidth = (canvas.getWidth() * 0.08);
-        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth * 2));
+        double horOrigin = ((canvas.getWidth() / 2) - (cardWidth));
         double verOrigin = ((canvas.getHeight() / 2) + 110);
 
         for (int i = 0; i <= numDealerCards; i++) {

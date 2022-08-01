@@ -15,21 +15,52 @@
         <URL value="@../css/Bet.css"/>
     </stylesheets>
 
-    <GridPane styleClass="upper-hud" GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" hgap="20" minHeight="100">
-        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" minHeight="40">
-            Deck:
-            <font>
-                <Font name="Arial" size="30" />
-            </font>
-        </Label>
-        <ProgressBar fx:id="prgDeck" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="150" minHeight="40" style="-fx-accent:red"/>
+    <GridPane styleClass="upper-hud"
+              GridPane.rowIndex="0"
+              GridPane.columnIndex="0"
+              alignment="CENTER"
+              hgap="20"
+              minHeight="100">
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" minWidth="250" >
+            <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   alignment="BASELINE_CENTER">
+                Balance $0
+                <font>
+                    <Font name="Arial" size="30" />
+                </font>
+            </Label>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="250">
+            <Label fx:id="lblUpperBet" textAlignment="CENTER" style="-fx-text-fill:white" >
+                Bet ?
+                <font>
+                    <Font name="Arial" size="30"/>
+                </font>
+            </Label>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="2" alignment="BASELINE_CENTER" minWidth="250">
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0" minHeight="40">
+                Deck
+                <font>
+                    <Font name="Arial" size="30" />
+                </font>
+            </Label>
+            <ProgressBar fx:id="prgDeck"
+                         GridPane.rowIndex="0"
+                         GridPane.columnIndex="1"
+                         minWidth="150"
+                         minHeight="40"
+                         style="-fx-accent:red;"/>
+        </GridPane>
     </GridPane>
 
     <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="300" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="300" alignment="BASELINE_CENTER">
             $0
             <font>
-                <Font name="Arial" size="80" />
+                <Font name="Comic Sans" size="80" />
             </font>
         </Label>
     </GridPane>
@@ -42,7 +73,8 @@
         <Canvas fx:id="cvsScroller" onMouseClicked="#onClickScroller" height="40" width="450"/>
     </GridPane>
 
-    <GridPane styleClass="lower-hud" GridPane.rowIndex="3" GridPane.columnIndex="0" hgap="10" vgap="10">
+    <GridPane styleClass="lower-hud" GridPane.rowIndex="3" GridPane.columnIndex="0"
+              alignment="BASELINE_CENTER" hgap="10" vgap="10">
         <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="80" minHeight="80" styleClass="btn-chip,btn-grey">
             1
             <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
@@ -79,14 +111,5 @@
         <Button GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="125" minHeight="50" onAction="#onHistory" >
             History
         </Button>
-    </GridPane>
-
-    <GridPane GridPane.rowIndex="5" GridPane.columnIndex="0" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="250" minHeight="50" alignment="BASELINE_CENTER">
-            Balance: $0
-            <font>
-                <Font name="Arial" size="40" />
-            </font>
-        </Label>
     </GridPane>
 </GridPane>

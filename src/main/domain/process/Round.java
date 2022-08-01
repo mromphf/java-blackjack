@@ -5,12 +5,10 @@ import main.domain.model.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static java.time.LocalDateTime.now;
 import static main.adapter.injection.Bindings.MIN_DEALER_SCORE;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
 import static main.domain.function.DealerFunctions.openingHand;
-import static main.domain.model.Action.*;
 import static main.domain.model.ActionLog.emptyActionLog;
 import static main.domain.model.Hand.handOf;
 
@@ -122,7 +120,6 @@ public class Round {
     }
 
     public void refillDeck() {
-        record(now(), REFILL);
         deck.addAll(freshlyShuffledDeck());
     }
 

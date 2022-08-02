@@ -70,7 +70,7 @@
         </Button>
     </GridPane>
 
-    <TableView fx:id="tblAccounts" GridPane.rowIndex="4" GridPane.columnIndex="0" minHeight="600" minWidth="800"
+    <TableView fx:id="tblAccounts" GridPane.rowIndex="4" GridPane.columnIndex="0" minHeight="300" minWidth="800"
                onMouseClicked="#onClickList">
         <columns>
             <TableColumn prefWidth="270">

@@ -18,7 +18,7 @@ import static main.domain.model.Outcome.*;
 public class TableDisplay extends Canvas {
 
     public final static Map<Outcome, String> OUTCOME_STRINGS = new HashMap<Outcome, String>() {{
-        put(BLACKJACK, "$$ Blackjack! $$");
+        put(BLACKJACK, "Blackjack!");
         put(WIN, "Win");
         put(LOSE, "Lose");
         put(BUST, "Bust");
@@ -46,7 +46,7 @@ public class TableDisplay extends Canvas {
     public TableDisplay() {
         final Rectangle2D screen = javafx.stage.Screen.getPrimary().getBounds();
 
-        setHeight((int) screen.getHeight() * 0.6);
+        setHeight((int) screen.getHeight() * 0.7);
         setWidth((int) screen.getWidth());
         HOR_CENTER = (int) getWidth() / 2;
         VER_CENTER = (int) getHeight() / 2;

@@ -20,7 +20,7 @@
               GridPane.columnIndex="0"
               alignment="CENTER"
               hgap="20"
-              minHeight="100">
+              minHeight="50">
         <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" minWidth="250" >
             <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0"
                    alignment="BASELINE_CENTER">
@@ -57,10 +57,10 @@
     </GridPane>
 
     <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
-        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="300" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="150" alignment="BASELINE_CENTER">
             $0
             <font>
-                <Font name="Comic Sans" size="80" />
+                <Font name="Arial" size="80" />
             </font>
         </Label>
     </GridPane>

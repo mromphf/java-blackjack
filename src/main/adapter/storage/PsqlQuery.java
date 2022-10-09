@@ -9,7 +9,7 @@ public enum PsqlQuery {
 
     INSERT_NEW_ACCOUNT("INSERT INTO blackjack.accounts (key, name, timestamp) VALUES (?, ?, ?);"),
 
-    INSERT_NEW_TRANSACTION("INSERT INTO blackjack.transactions (accountkey, timestamp, amount, description) " +
+    INSERT_NEW_TRANSACTION("INSERT INTO blackjack.transactions (timestamp, accountkey, amount, description) " +
             "VALUES (?, ?, ?, ?);"),
 
     CLOSE_ACCOUNT("INSERT INTO blackjack.account_closures (key, timestamp) VALUES (?, ?);"),

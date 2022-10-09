@@ -29,8 +29,10 @@ public class Table {
     private final Map<Hand, ActionLog> actionLog;
     private final Outcome outcome;
     private final Properties config;
+    private final UUID roundKey;
 
     public Table(LocalDateTime timestamp,
+                 UUID roundKey,
                  Account player,
                  Bets bets,
                  Deck deck,
@@ -41,6 +43,7 @@ public class Table {
                  Map<Hand, ActionLog> actionsTaken,
                  Properties config) {
         this.timestamp = timestamp;
+        this.roundKey = roundKey;
         this.player = player;
         this.bets = bets;
         this.deck = deck;
@@ -129,7 +132,8 @@ public class Table {
 
     @Override
     public String toString() {
-        return format("\n\tAccount Key: %s\n\t" +
+        return format("\n\tRound Key: %s\n\t" +
+                        "Account Key: %s\n\t" +
                         "Balance: $%s,\n\t" +
                         "Cards in Deck: %s,\n\t" +
                         "Outcome: %s,\n\t" +
@@ -139,6 +143,7 @@ public class Table {
                         "ActionsTaken: {%s\n\t},\n\t" +
                         "Player: %s,\n\t" +
                         "Dealer: %s",
+                roundKey,
                 playerAccountKey(),
                 playerBalance(),
                 deckSize(),

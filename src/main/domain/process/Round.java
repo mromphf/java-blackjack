@@ -5,6 +5,7 @@ import main.domain.model.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.util.UUID.randomUUID;
 import static main.adapter.injection.Bindings.MIN_DEALER_SCORE;
 import static main.domain.function.CardFunctions.score;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
@@ -22,6 +23,7 @@ public class Round {
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<Hand> handsToSettle = new Stack<>();
     private final Properties rules;
+    private final UUID key;
 
     private Hand currentHand;
 
@@ -33,6 +35,7 @@ public class Round {
         this.bets = bets;
         this.deck = deck;
         this.rules = rules;
+        this.key = randomUUID();
 
         this.player = bets.accounts()
                 .stream()
@@ -126,6 +129,7 @@ public class Round {
     public Table getSnapshot(LocalDateTime timestamp) {
         return new Table(
                 timestamp,
+                key,
                 player,
                 bets,
                 deck,

@@ -9,10 +9,7 @@ import static java.lang.String.format;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Collectors.toList;
 import static main.adapter.injection.Bindings.MAX_CARDS;
-import static main.domain.function.CardFunctions.concealedScore;
-import static main.domain.function.CardFunctions.score;
 import static main.domain.function.OutcomeAssessment.settleBet;
-import static main.domain.model.Outcome.UNRESOLVED;
 import static main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static main.util.StringUtil.actionString;
 import static main.util.StringUtil.playerString;
@@ -116,18 +113,6 @@ public class Table {
 
     public double deckProgress() {
         return deck.size() / (double) config.get(MAX_CARDS);
-    }
-
-    public int dealerScore() {
-        if (outcome == UNRESOLVED) {
-            return concealedScore(dealerHand);
-        } else {
-            return score(dealerHand);
-        }
-    }
-
-    public int playerScore() {
-        return score(playerHand);
     }
 
     @Override

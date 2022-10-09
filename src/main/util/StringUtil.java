@@ -13,9 +13,10 @@ import static main.domain.function.CardFunctions.score;
 
 public class StringUtil {
     public static String playerString(Collection<Card> hand) {
-        return String.format("{\n\t\tScore: %s,\n\t\tCards: [\n\t\t\t%s\t]}", score(hand), concat(hand.stream()
-                .map(Card::toString)
-                .collect(Collectors.toList()), "\n\t\t\t"));
+        return String.format("{\n\t\tScore: %s,\n\t\tCards: [\n\t\t\t%s\t]}",
+                score(hand), concat(hand.stream()
+                        .map(Card::toString)
+                        .collect(Collectors.toList()), "\n\t\t\t"));
     }
 
     public static String actionString(Map<LocalDateTime, Action> timestampedActions) {

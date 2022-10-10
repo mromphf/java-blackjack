@@ -42,7 +42,7 @@ public class Round {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
 
-        if (deck.size() < 4) {
+        if (deck.size() < (2 * bets.keySet().size() + 2)) {
             refillDeck();
         }
 

@@ -1,22 +1,21 @@
 package main.adapter.storage;
 
 public enum SqliteQuery {
-    SELECT_ALL_ACCOUNTS("SELECT key, REPLACE(DATETIME(timestamp), ' ', 'T') || '-06:00' as timestamp, name, balance " +
-            " FROM account_balances;"),
+    SELECT_ALL_ACCOUNTS("SELECT key, timestamp, name, balance FROM account_balances;"),
 
-    SELECT_ALL_TRANSACTIONS("SELECT accountKey, description, amount, REPLACE(DATETIME(timestamp), ' ', 'T') || '-06:00' as timestamp " +
-            " FROM active_transactions;"),
+    SELECT_ALL_TRANSACTIONS("SELECT accountKey, description, amount, timestamp FROM active_transactions;"),
 
-    INSERT_NEW_ACCOUNT("INSERT INTO accounts (key, name, timestamp) VALUES (?, ?, ?);"),
+    INSERT_NEW_ACCOUNT("INSERT INTO accounts (key, name, timestamp) VALUES (?, ?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');"),
 
     INSERT_NEW_TRANSACTION("INSERT INTO transactions (accountKey, timestamp, amount, description) " +
-            "VALUES (?, ?, ?, ?);"),
+            "VALUES (?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00', ?, ?);"),
 
-    CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES (?, ?);"),
+    CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES (?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');"),
 
-    INSERT_NEW_ROUND("INSERT INTO rounds (key, timestamp) VALUES (?, ?);"),
+    INSERT_NEW_ROUND("INSERT INTO rounds (key, timestamp) VALUES (?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');"),
 
-    INSERT_NEW_ACTION("INSERT INTO action_instances(timestamp, roundKey, accountKey, actionName) VALUES (?, ?, ?, ?)"),
+    INSERT_NEW_ACTION("INSERT INTO action_instances(timestamp, roundKey, accountKey, actionName) " +
+            "VALUES (REPLACE(DATETIME(?), ' ', 'T') || '-06:00', ?, ?, ?)"),
 
     CONNECTION_URL("jdbc:sqlite:./db/blackjack.db");
 

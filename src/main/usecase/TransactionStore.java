@@ -46,21 +46,21 @@ public class TransactionStore implements AccountRegistrar, TableObserver {
                 .map(function -> function.apply(table))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(groupingBy(Transaction::getAccountKey))
+                .collect(groupingBy(Transaction::accountKey))
                 .forEach(this::save);
     }
 
     @Override
     public void createNew(Account account) {
         final Transaction signingBonus = signingBonus(account);
-        mapToCache(signingBonus.getAccountKey(), of(signingBonus).collect(toList()));
+        mapToCache(signingBonus.accountKey(), of(signingBonus).collect(toList()));
         transactionRepository.saveTransaction(signingBonus);
     }
 
     public Collection<Transaction> loadAll() {
         final Collection<Transaction> transactions = transactionRepository.loadAllTransactions();
         transactions.stream()
-                .collect(groupingBy(Transaction::getAccountKey))
+                .collect(groupingBy(Transaction::accountKey))
                 .forEach(this::mapToCache);
         return transactions;
     }

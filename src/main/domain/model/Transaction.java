@@ -6,39 +6,48 @@ import java.util.UUID;
 
 public class Transaction implements Comparable<Transaction> {
 
-    private final LocalDateTime time;
+    private final LocalDateTime timestamp;
     private final UUID accountKey;
     private final String description;
     private final int amount;
 
-    private Transaction(LocalDateTime time, UUID accountKey, String description, int amount) {
-        this.time = time;
+    private Transaction(
+            LocalDateTime timestamp,
+            UUID accountKey,
+            String description,
+            int amount) {
+        this.timestamp = timestamp;
         this.accountKey = accountKey;
         this.description = description;
         this.amount = amount;
     }
 
-    public static Transaction transaction(LocalDateTime time, UUID accountKey, String description, Integer amount) {
+    public static Transaction transaction(
+            LocalDateTime time,
+            UUID accountKey,
+            String description,
+            Integer amount) {
         return new Transaction(time, accountKey, description, amount);
     }
 
     public static Transaction signingBonus(Account account) {
-        return new Transaction(account.getTimestamp(), account.key(), "SIGNING BONUS", 200);
+        return new Transaction(
+                account.getTimestamp(), account.key(), ("SIGNING BONUS"), (200));
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime timestamp() {
+        return timestamp;
     }
 
-    public UUID getAccountKey() {
+    public UUID accountKey() {
         return accountKey;
     }
 
-    public int getAmount() {
+    public int amount() {
         return amount;
     }
 
-    public String getDescription() {
+    public String description() {
         return description;
     }
 
@@ -48,21 +57,21 @@ public class Transaction implements Comparable<Transaction> {
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
         return amount == that.amount &&
-               time.equals(that.time) &&
+               timestamp.equals(that.timestamp) &&
                accountKey.equals(that.accountKey) &&
                description.equals(that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(time, accountKey, description, amount);
+        return Objects.hash(timestamp, accountKey, description, amount);
     }
 
     @Override
     public int compareTo(Transaction target) {
-        if (time.isAfter(target.getTime())) {
+        if (timestamp.isAfter(target.timestamp())) {
             return 1;
-        } else if (time.isEqual(target.getTime())) {
+        } else if (timestamp.isEqual(target.timestamp())) {
             return 0;
         } else {
             return -1;

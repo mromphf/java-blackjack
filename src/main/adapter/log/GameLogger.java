@@ -61,9 +61,9 @@ public class GameLogger implements TableObserver, AccountRegistrar {
 
     public void onTransaction(Transaction transaction) {
         logger.log(INFO, format("%s: Transaction Issued - Account Key: %s - %s - $%s",
-                transaction.getTime(),
-                transaction.getAccountKey(),
-                transaction.getDescription(),
-                Math.abs(transaction.getAmount())));
+                transaction.timestamp(),
+                transaction.accountKey(),
+                transaction.description(),
+                Math.abs(transaction.amount())));
     }
 }

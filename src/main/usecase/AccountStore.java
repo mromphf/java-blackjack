@@ -70,7 +70,7 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
     }
 
     private void apply(Transaction transaction) {
-        final UUID accountKey = transaction.getAccountKey();
+        final UUID accountKey = transaction.accountKey();
         accountMap.put(accountKey, accountMap.get(accountKey).apply(transaction));
     }
 }

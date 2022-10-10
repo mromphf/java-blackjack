@@ -52,7 +52,7 @@ public class Account implements Function<Transaction, Account> {
 
     @Override
     public Account apply(Transaction transaction) {
-        return new Account(key, name, (balance + transaction.getAmount()), created);
+        return new Account(key, name, (balance + transaction.amount()), created);
     }
 
     @Override

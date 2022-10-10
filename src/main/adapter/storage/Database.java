@@ -122,10 +122,10 @@ public class Database implements AccountRepository, TransactionRepository {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(CREATE_NEW_TRANSACTION));
 
-            st.setString(1, transaction.getAccountKey().toString());
-            st.setString(2, transaction.getTime().toString());
-            st.setInt(3, transaction.getAmount());
-            st.setString(4, transaction.getDescription());
+            st.setString(1, transaction.accountKey().toString());
+            st.setString(2, transaction.timestamp().toString());
+            st.setInt(3, transaction.amount());
+            st.setString(4, transaction.description());
 
             st.executeUpdate();
             st.close();

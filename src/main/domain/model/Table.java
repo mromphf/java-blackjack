@@ -105,6 +105,10 @@ public class Table {
         return actionLog.get(playerHand).values();
     }
 
+    public Action lastActionTaken() {
+        return actionLog.get(playerHand).lastEntry().getValue();
+    }
+
     public UUID playerAccountKey() {
         return player.key();
     }

@@ -21,7 +21,11 @@ public class StateRecorder implements TableObserver {
         if (startOfRound.test(table)) {
             stateRepository.saveNewRound(table);
         } else {
-            stateRepository.saveLastActionTaken(table);
+            stateRepository.saveLastActionTaken(
+                    table.timestamp(),
+                    table.roundKey(),
+                    table.playerAccountKey(),
+                    table.lastActionTaken());
         }
     }
 }

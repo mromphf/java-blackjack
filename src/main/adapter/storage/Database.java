@@ -3,6 +3,7 @@ package main.adapter.storage;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.model.Account;
+import main.domain.model.Action;
 import main.domain.model.Table;
 import main.domain.model.Transaction;
 import main.usecase.AccountRepository;
@@ -10,10 +11,8 @@ import main.usecase.StateRepository;
 import main.usecase.TransactionRepository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Properties;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static java.sql.DriverManager.getConnection;
 import static main.adapter.injection.Bindings.QUERIES_SQLITE;
@@ -156,8 +155,26 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveLastActionTaken(Table table) {
-        System.out.println("I'm not going to save the last action...");
+    public void saveLastActionTaken(LocalDateTime timestamp,
+                                    UUID roundKey,
+                                    UUID accountKey,
+                                    Action action) {
+        try {
+            final Connection conn = openDbConnection();
+            final PreparedStatement st = conn.prepareStatement(
+                    queryMap.get(SAVE_ACTION));
+
+            st.setString(1, timestamp.toString());
+            st.setString(2, roundKey.toString());
+            st.setString(3, accountKey.toString());
+            st.setString(4, action.name());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     private Connection openDbConnection() throws SQLException {

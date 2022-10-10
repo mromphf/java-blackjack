@@ -9,10 +9,14 @@ public enum SqliteQuery {
 
     INSERT_NEW_ACCOUNT("INSERT INTO accounts (key, name, timestamp) VALUES (?, ?, ?);"),
 
-    INSERT_NEW_TRANSACTION("INSERT INTO transactions (accountkey, timestamp, amount, description) " +
+    INSERT_NEW_TRANSACTION("INSERT INTO transactions (accountKey, timestamp, amount, description) " +
             "VALUES (?, ?, ?, ?);"),
 
     CLOSE_ACCOUNT("INSERT INTO account_closures (key, timestamp) VALUES (?, ?);"),
+
+    INSERT_NEW_ROUND("INSERT INTO rounds (key, timestamp) VALUES (?, ?);"),
+
+    INSERT_NEW_ACTION("INSERT INTO action_instances(timestamp, roundKey, accountKey, actionName) VALUES (?, ?, ?, ?)"),
 
     CONNECTION_URL("jdbc:sqlite:./db/blackjack.db");
 

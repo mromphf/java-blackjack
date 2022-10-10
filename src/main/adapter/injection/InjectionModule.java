@@ -74,6 +74,8 @@ public class InjectionModule extends AbstractModule {
                             put(ALL_TRANSACTIONS, SqliteQuery.SELECT_ALL_TRANSACTIONS.query());
                             put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
                             put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
+                            put(CREATE_NEW_ROUND, SqliteQuery.INSERT_NEW_ROUND.query());
+                            put(SAVE_ACTION, SqliteQuery.INSERT_NEW_ACTION.query());
                             put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
                             put(URL, SqliteQuery.CONNECTION_URL.query());
                         }});

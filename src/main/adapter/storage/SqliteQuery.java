@@ -5,7 +5,7 @@ public enum SqliteQuery {
             " FROM account_balances;"),
 
     SELECT_ALL_TRANSACTIONS("SELECT accountKey, description, amount, REPLACE(DATETIME(timestamp), ' ', 'T') || '-06:00' as timestamp " +
-            " FROM transactions;"),
+            " FROM active_transactions;"),
 
     INSERT_NEW_ACCOUNT("INSERT INTO accounts (key, name, timestamp) VALUES (?, ?, ?);"),
 

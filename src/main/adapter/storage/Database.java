@@ -16,8 +16,8 @@ import java.util.Properties;
 import static java.sql.DriverManager.getConnection;
 import static main.adapter.injection.Bindings.QUERIES_SQLITE;
 import static main.adapter.storage.QueryKey.*;
-import static main.adapter.storage.ResultSetUtil.accountFromResultSet;
-import static main.adapter.storage.ResultSetUtil.transactionFromResultSet;
+import static main.adapter.storage.ResultSetDeserializer.accountFromResultSet;
+import static main.adapter.storage.ResultSetDeserializer.transactionFromResultSet;
 
 public class Database implements AccountRepository, TransactionRepository {
 

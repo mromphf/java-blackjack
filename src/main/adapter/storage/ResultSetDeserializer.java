@@ -13,7 +13,7 @@ import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static main.domain.model.Account.account;
 import static main.domain.model.Transaction.transaction;
 
-public class ResultSetUtil {
+public class ResultSetDeserializer {
 
    public static Account accountFromResultSet(ResultSet rs) throws SQLException {
        final UUID key = UUID.fromString(rs.getString("key"));

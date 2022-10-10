@@ -53,6 +53,8 @@ public class Table {
         this.config = config;
     }
 
+    public UUID roundKey() { return roundKey; }
+
     public LocalDateTime timestamp() {
         return timestamp;
     }

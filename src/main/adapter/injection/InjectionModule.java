@@ -108,6 +108,7 @@ public class InjectionModule extends AbstractModule {
 
         bind(AccountRepository.class).to(Database.class);
         bind(TransactionRepository.class).to(Database.class).in(Singleton.class);
+        bind(StateRepository.class).to(Database.class).in(Singleton.class);
         bind(SelectionService.class).to(AccountStore.class);
         bind(ScreenManagement.class).to(ScreenSupervisor.class);
         bind(AlertService.class).to(ScreenSupervisor.class);

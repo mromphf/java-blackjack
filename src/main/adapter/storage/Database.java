@@ -3,8 +3,10 @@ package main.adapter.storage;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.model.Account;
+import main.domain.model.Table;
 import main.domain.model.Transaction;
 import main.usecase.AccountRepository;
+import main.usecase.StateRepository;
 import main.usecase.TransactionRepository;
 
 import java.sql.*;
@@ -19,7 +21,7 @@ import static main.adapter.storage.QueryKey.*;
 import static main.adapter.storage.ResultSetDeserializer.accountFromResultSet;
 import static main.adapter.storage.ResultSetDeserializer.transactionFromResultSet;
 
-public class Database implements AccountRepository, TransactionRepository {
+public class Database implements AccountRepository, TransactionRepository, StateRepository {
 
     private final Map<QueryKey, String> queryMap;
 
@@ -133,6 +135,29 @@ public class Database implements AccountRepository, TransactionRepository {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    @Override
+    public void saveNewRound(Table table) {
+        try {
+            final Connection conn = openDbConnection();
+            final PreparedStatement st = conn.prepareStatement(
+                    queryMap.get(CREATE_NEW_ROUND));
+
+            st.setString(1, table.roundKey().toString());
+            st.setString(2, table.timestamp().toString());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    @Override
+    public void saveLastActionTaken(Table table) {
+        System.out.println("I'm not going to save the last action...");
     }
 
     private Connection openDbConnection() throws SQLException {

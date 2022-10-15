@@ -8,11 +8,11 @@ import java.util.Stack;
 
 import static main.domain.function.DealerFunctions.*;
 import static main.domain.model.Card.card;
+import static main.domain.model.Deck.emptySerializedDeck;
 import static main.domain.model.Rank.*;
 import static main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class DealerFunctionsTest {
@@ -70,26 +70,12 @@ class DealerFunctionsTest {
 
     @Test
     public void shuffle_shouldContain3Cards_whenPassedACollectionOf3Cards() {
-        Deck cards = new Deck() {{
-           add(card(FIVE, HEARTS));
-            add(card(THREE, SPADES));
-            add(card(QUEEN, CLUBS));
-        }};
+        final Deck cards = emptySerializedDeck();
+        cards.add(card(FIVE, HEARTS));
+        cards.add(card(THREE, SPADES));
+        cards.add(card(QUEEN, CLUBS));
 
         assertEquals(3, shuffle(cards).size());
-    }
-
-    @Test
-    public void shuffle_shouldContainTheSameCardAsTheStackPassedIn() {
-        final Card card = card(FIVE, HEARTS);
-
-        Deck cards = new Deck() {{
-            add(card);
-            add(card(THREE, SPADES));
-            add(card(QUEEN, CLUBS));
-        }};
-
-        assertTrue(shuffle(cards).contains(card));
     }
 
     @Test

@@ -7,13 +7,14 @@ import java.util.*;
 
 import static main.domain.model.AnonymousCard.anonymousCard;
 import static main.domain.model.Card.card;
+import static main.domain.model.Deck.emptySerializedDeck;
 import static main.domain.model.Hand.emptyHand;
 
 public class DealerFunctions {
 
     public static Deck freshDeck() {
 
-        Deck result = new Deck();
+        final Deck result = emptySerializedDeck();
 
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
@@ -42,7 +43,7 @@ public class DealerFunctions {
     }
 
     public static Deck shuffle(Deck deck) {
-        Deck stack = new Deck();
+        Deck stack = emptySerializedDeck();
         while(!deck.isEmpty()) {
             Random r = new Random();
             int ri = r.nextInt(deck.size());

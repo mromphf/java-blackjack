@@ -87,6 +87,8 @@ public class InjectionModule extends AbstractModule {
                     put(ALL_TRANSACTIONS, PsqlQuery.SELECT_ALL_TRANSACTIONS.query());
                     put(CREATE_NEW_ACCOUNT, PsqlQuery.INSERT_NEW_ACCOUNT.query());
                     put(CREATE_NEW_TRANSACTION, PsqlQuery.INSERT_NEW_TRANSACTION.query());
+                    put(CREATE_NEW_ROUND, "");
+                    put(SAVE_ACTION, "");
                     put(DELETE_ACCOUNT, PsqlQuery.CLOSE_ACCOUNT.query());
                     put(URL, PsqlQuery.CONNECTION_URL.query());
                 }});

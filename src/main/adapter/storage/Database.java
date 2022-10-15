@@ -2,10 +2,7 @@ package main.adapter.storage;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import main.domain.model.Account;
-import main.domain.model.Action;
-import main.domain.model.Table;
-import main.domain.model.Transaction;
+import main.domain.model.*;
 import main.usecase.AccountRepository;
 import main.usecase.StateRepository;
 import main.usecase.TransactionRepository;
@@ -152,6 +149,11 @@ public class Database implements AccountRepository, TransactionRepository, State
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    @Override
+    public void saveNewDeck(Deck deck) {
+        throw new RuntimeException("Not implemented.");
     }
 
     @Override

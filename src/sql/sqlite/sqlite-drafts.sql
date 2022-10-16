@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS decks
         REFERENCES suits (name),
     rank    INT         NOT NULL
         REFERENCES ranks (value),
-    UNIQUE (key, ordinal)
+    UNIQUE (key, ordinal),
+    UNIQUE (key, cardKey)
 );
 
 CREATE TABLE IF NOT EXISTS card_instances

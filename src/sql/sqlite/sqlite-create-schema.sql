@@ -71,6 +71,19 @@ VALUES (1, 'Ace', 1),
        (12, 'Queen', 10),
        (13, 'King', 10);
 
+CREATE TABLE IF NOT EXISTS cards
+(
+    deckKey TEXT        NOT NULL,
+    cardKey TEXT UNIQUE NOT NULL,
+    ordinal INT         NOT NULL,
+    suit    TEXT        NOT NULL
+        REFERENCES suits (name),
+    rank    INT         NOT NULL
+        REFERENCES ranks (value),
+    UNIQUE (deckKey, ordinal),
+    UNIQUE (deckKey, cardKey)
+);
+
 CREATE TABLE IF NOT EXISTS actions
 (
     name     TEXT PRIMARY KEY NOT NULL CHECK (

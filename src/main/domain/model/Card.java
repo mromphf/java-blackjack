@@ -38,6 +38,10 @@ public class Card extends AnonymousCard {
         return new Card(ordinal, key, rank, suit, (false));
     }
 
+    public Card assignOrdinal(int ord) {
+        return new Card(ord, key, rank, suit, isFaceUp);
+    }
+
     public AnonymousCard anonymize() {
         return anonymousCard(suit, rank);
     }

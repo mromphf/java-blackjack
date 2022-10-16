@@ -16,12 +16,9 @@ public class DealerFunctions {
 
         final Deck result = emptySerializedDeck();
 
-        int ordinal = 1;
-
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                result.add(card(ordinal, rank, suit));
-                ordinal++;
+                result.add(card(rank, suit));
             }
         }
 
@@ -47,10 +44,11 @@ public class DealerFunctions {
 
     public static Deck shuffle(Deck deck) {
         Deck stack = emptySerializedDeck();
+        int i = 0;
         while(!deck.isEmpty()) {
             Random r = new Random();
             int ri = r.nextInt(deck.size());
-            stack.add(deck.get(ri));
+            stack.add(deck.get(ri).assignOrdinal(++i));
             deck.remove(ri);
         }
         return stack;

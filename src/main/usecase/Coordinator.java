@@ -40,7 +40,16 @@ public class Coordinator implements Game {
     @Override
     public void bet(Bets bets) {
         roundStack.add(newRound(deck, bets, config));
-        notifyObservers(roundStack.peek().getSnapshot(now()));
+
+        final Round freshRound = roundStack.peek();
+
+        for (TableObserver observer : tableObservers) {
+            observer.newRoundStarted(freshRound.getSnapshot(now()));
+        }
+
+        freshRound.deal();
+
+        notifyObservers(freshRound.getSnapshot(now()));
     }
 
     @Override

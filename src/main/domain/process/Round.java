@@ -11,6 +11,7 @@ import static main.domain.function.CardFunctions.score;
 import static main.domain.function.DealerFunctions.freshlyShuffledDeck;
 import static main.domain.function.DealerFunctions.openingHand;
 import static main.domain.model.ActionLog.emptyActionLog;
+import static main.domain.model.Hand.emptyHand;
 import static main.domain.model.Hand.handOf;
 
 public class Round {
@@ -36,22 +37,25 @@ public class Round {
         this.deck = deck;
         this.rules = rules;
         this.key = randomUUID();
+        this.dealerHand = emptyHand();
+        this.currentHand = emptyHand();
+        actionLog.put(currentHand, emptyActionLog());
 
         this.player = bets.accounts()
                 .stream()
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
+    }
 
+    public void deal() {
         if (deck.size() < (2 * bets.keySet().size() + 2)) {
             refillDeck();
         }
 
         final Map<String, Hand> openingHands = openingHand(deck);
 
-        this.dealerHand = openingHands.get("dealer");
-        this.currentHand = openingHands.get("player");
-
-        actionLog.put(currentHand, emptyActionLog());
+        dealerHand.addAll(openingHands.get("dealer"));
+        currentHand.addAll(openingHands.get("player"));
     }
 
     public void record(LocalDateTime timestamp, Action action) {

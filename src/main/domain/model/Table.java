@@ -113,6 +113,14 @@ public class Table {
         return player.key();
     }
 
+    public Deck deck() {
+        return deck;
+    }
+
+    public UUID deckKey() {
+        return deck.key();
+    }
+
     public int deckSize() {
         return deck.size();
     }

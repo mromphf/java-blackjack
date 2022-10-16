@@ -8,28 +8,34 @@ import static java.util.UUID.randomUUID;
 public class Card extends AnonymousCard {
 
     protected final UUID key;
-    protected final int ordinal = 0;
+    protected final int ordinal;
 
-    private Card(UUID key, Rank rank, Suit suit, boolean isFaceUp) {
+    private Card(int ordinal, UUID key, Rank rank, Suit suit, boolean isFaceUp) {
         super(suit, rank, isFaceUp);
         this.key = key;
+        this.ordinal = ordinal;
     }
 
-    protected Card(Rank rank, Suit suit, boolean isFaceUp) {
+    protected Card(int ordinal, Rank rank, Suit suit, boolean isFaceUp) {
         super(suit, rank, isFaceUp);
         this.key = randomUUID();
+        this.ordinal = ordinal;
     }
 
-    public static Card card(Rank rank, Suit suit) {
-        return new Card(rank, suit, (true));
+    public static Card card (Rank rank, Suit suit) {
+        return new Card(1, rank, suit, true);
     }
 
-    public static Card card(Rank rank, Suit suit, boolean isFaceUp) {
-        return new Card(rank, suit, isFaceUp);
+    public static Card card(int ordinal, Rank rank, Suit suit) {
+        return new Card(ordinal, rank, suit, (true));
+    }
+
+    public static Card card(int ordinal, Rank rank, Suit suit, boolean isFaceUp) {
+        return new Card(ordinal, rank, suit, isFaceUp);
     }
 
     public Card faceDown() {
-        return new Card(key, rank, suit, (false));
+        return new Card(ordinal, key, rank, suit, (false));
     }
 
     public AnonymousCard anonymize() {

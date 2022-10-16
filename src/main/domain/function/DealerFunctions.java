@@ -16,9 +16,12 @@ public class DealerFunctions {
 
         final Deck result = emptySerializedDeck();
 
+        int ordinal = 1;
+
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                result.add(card(rank, suit));
+                result.add(card(ordinal, rank, suit));
+                ordinal++;
             }
         }
 

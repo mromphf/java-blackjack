@@ -11,6 +11,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.lang.String.format;
+import static java.lang.System.exit;
 import static java.sql.DriverManager.getConnection;
 import static main.adapter.injection.Bindings.QUERIES_SQLITE;
 import static main.adapter.storage.QueryKey.*;
@@ -46,7 +48,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
             return null;
         }
     }
@@ -65,7 +67,7 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
         }
     }
 
@@ -89,7 +91,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
 
             return null;
         }
@@ -109,7 +111,7 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
         }
     }
 
@@ -129,7 +131,7 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
         }
     }
 
@@ -147,13 +149,35 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
         }
     }
 
     @Override
     public void saveNewDeck(Deck deck) {
-        throw new RuntimeException("Not implemented.");
+        try (Connection conn = openDbConnection()) {
+            final String open = "INSERT INTO decks (key, cardKey, ordinal, suit, rank) VALUES (";
+            final StringBuilder body = new StringBuilder();
+
+            for (Card card : deck) {
+                body.append(format("(%s,%s,%s,%s,%s)",
+                        deck.key(),
+                        card.key(),
+                        card.ordinal(),
+                        card.suit(),
+                        card.rank()));
+            }
+
+            final String close = ",);";
+            final String sql = format("%s\n%s%s", open, body, close);
+            final PreparedStatement st = conn.prepareStatement(sql);
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exit(1);
+        }
     }
 
     @Override
@@ -175,7 +199,7 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            exit(1);
         }
     }
 

@@ -156,7 +156,7 @@ public class Database implements AccountRepository, TransactionRepository, State
     @Override
     public void saveNewDeck(Deck deck) {
         try (Connection conn = openDbConnection()) {
-            final String open = "INSERT INTO cards (key, cardKey, ordinal, suit, rank) VALUES ";
+            final String open = "INSERT INTO cards (deckKey, cardKey, ordinal, suit, rank) VALUES ";
             final StringBuilder body = new StringBuilder();
 
             for (Card card : deck) {

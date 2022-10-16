@@ -17,6 +17,10 @@ public class Deck extends Stack<Card> {
         return new Deck(randomUUID());
     }
 
+    public UUID key() {
+        return key;
+    }
+
     public Card drawCard() {
         return pop();
     }

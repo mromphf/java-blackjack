@@ -8,6 +8,7 @@ import static java.util.UUID.randomUUID;
 public class Card extends AnonymousCard {
 
     protected final UUID key;
+    protected final int ordinal = 0;
 
     private Card(UUID key, Rank rank, Suit suit, boolean isFaceUp) {
         super(suit, rank, isFaceUp);
@@ -33,6 +34,14 @@ public class Card extends AnonymousCard {
 
     public AnonymousCard anonymize() {
         return anonymousCard(suit, rank);
+    }
+
+    public UUID key() {
+        return key;
+    }
+
+    public int ordinal() {
+        return ordinal;
     }
 
     @Override

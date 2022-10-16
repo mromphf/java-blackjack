@@ -49,6 +49,10 @@ public class AnonymousCard {
         return rank.BLACKJACK_VALUE;
     }
 
+    public Suit suit() {
+        return suit;
+    }
+
     public Rank rank() {
         return rank;
     }

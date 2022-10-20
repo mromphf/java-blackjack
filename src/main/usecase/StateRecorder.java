@@ -23,10 +23,7 @@ public class StateRecorder implements TableObserver {
 
     @Override
     public void newRoundStarted(Table table) {
-        if (!deckSet.contains(table.deckKey())) {
-            deckSet.add(table.deckKey());
-            stateRepository.saveNewDeck(table.deck());
-        }
+        saveDeckIfNew(table);
     }
 
     @Override
@@ -39,6 +36,15 @@ public class StateRecorder implements TableObserver {
                     table.roundKey(),
                     table.playerAccountKey(),
                     table.lastActionTaken());
+        }
+
+        saveDeckIfNew(table);
+    }
+
+    private void saveDeckIfNew(Table table) {
+        if (!deckSet.contains(table.deckKey())) {
+            deckSet.add(table.deckKey());
+            stateRepository.saveNewDeck(table.deck());
         }
     }
 }

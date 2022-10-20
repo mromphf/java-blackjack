@@ -39,9 +39,8 @@ public class Coordinator implements Game {
 
     @Override
     public void bet(Bets bets) {
-        roundStack.add(newRound(deck, bets, config));
-
-        final Round freshRound = roundStack.peek();
+        final Round freshRound = newRound(deck, bets, config);
+        roundStack.add(freshRound);
 
         for (TableObserver observer : tableObservers) {
             observer.newRoundStarted(freshRound.getSnapshot(now()));

@@ -46,6 +46,9 @@ public class LowOrderPredicate {
     public static final Predicate<Table> turnEnded = table ->
             table.actionsTaken().stream().anyMatch(Action::turnEnded);
 
+    public static final Predicate<Table> chargeForInsurance = table ->
+            insurancePurchased.test(table) && table.actionsTaken().size() == 1;
+
     public static final Predicate<Table> startOfRound = table -> (
             outcomeIsUnresolved
                     .and(not(handsRemainToBePlayed))

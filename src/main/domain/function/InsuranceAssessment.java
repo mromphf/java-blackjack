@@ -8,7 +8,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import static main.domain.model.Action.BUY_INSURANCE;
 import static main.domain.model.Transaction.transaction;
-import static main.domain.predicate.LowOrderPredicate.insurancePurchased;
+import static main.domain.predicate.LowOrderPredicate.chargeForInsurance;
 
 public class InsuranceAssessment implements Assessment {
 
@@ -18,7 +18,7 @@ public class InsuranceAssessment implements Assessment {
 
     @Override
     public Optional<Transaction> apply(Table table) {
-        if (insurancePurchased.test(table)) {
+        if (chargeForInsurance.test(table)) {
             return Optional.of(transaction(
                     table.timestamp(),
                     table.playerAccountKey(),

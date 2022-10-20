@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS cards
 (
-    deckKey     TEXT        NOT NULL,
+    deckKey TEXT        NOT NULL,
     cardKey TEXT UNIQUE NOT NULL,
     ordinal INT         NOT NULL,
     suit    TEXT        NOT NULL
@@ -11,12 +11,13 @@ CREATE TABLE IF NOT EXISTS cards
     UNIQUE (deckKey, cardKey)
 );
 
-CREATE TABLE IF NOT EXISTS card_instances
+CREATE TABLE IF NOT EXISTS player_cards
 (
-    roundKey   TEXT NOT NULL
-        REFERENCES rounds (key),
+    handKey    TEXT NOT NULL,
     cardKey    TEXT NOT NULL
         REFERENCES cards (cardKey),
     accountKey TEXT NOT NULL
-        REFERENCES accounts (key)
+        REFERENCES accounts (key),
+    roundKey   TEXT NOT NULL
+        REFERENCES rounds (key)
 );

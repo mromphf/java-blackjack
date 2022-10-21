@@ -3,7 +3,10 @@ package main.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.google.common.collect.Streams.concat;
 import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableMap;
@@ -89,6 +92,19 @@ public class Table {
 
     public Collection<Card> playerHand() {
         return playerHand;
+    }
+
+    public Collection<Card> allPlayerCards() {
+        final Stream<Card> cardsToSettle = handsToSettle
+                .stream()
+                .flatMap(Collection::stream);
+        final Stream<Card> cardsToPlay = handsToPlay
+                .stream()
+                .flatMap(Collection::stream);
+        final Stream<Card> currentCards = playerHand.stream();
+
+        return concat(currentCards, concat(cardsToSettle, cardsToPlay))
+                .collect(Collectors.toSet());
     }
 
     public Collection<Card> cardsToPlay() {

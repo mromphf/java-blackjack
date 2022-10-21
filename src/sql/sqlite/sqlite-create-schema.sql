@@ -30,6 +30,14 @@ CREATE TABLE IF NOT EXISTS rounds
     timestamp TEXT UNIQUE             NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS decks
+(
+    roundKey TEXT        NOT NULL
+        REFERENCES rounds (key),
+    deckKey  TEXT UNIQUE NOT NULL,
+    UNIQUE(roundKey, deckKey)
+);
+
 CREATE TABLE IF NOT EXISTS suits
 (
     name TEXT PRIMARY KEY UNIQUE NOT NULL CHECK (
@@ -73,7 +81,8 @@ VALUES (1, 'Ace', 1),
 
 CREATE TABLE IF NOT EXISTS cards
 (
-    deckKey TEXT        NOT NULL,
+    deckKey TEXT        NOT NULL
+        REFERENCES decks (deckKey),
     cardKey TEXT UNIQUE NOT NULL,
     ordinal INT         NOT NULL,
     suit    TEXT        NOT NULL
@@ -82,6 +91,16 @@ CREATE TABLE IF NOT EXISTS cards
         REFERENCES ranks (value),
     UNIQUE (deckKey, ordinal),
     UNIQUE (deckKey, cardKey)
+);
+
+CREATE TABLE IF NOT EXISTS player_cards
+(
+    handKey    TEXT NOT NULL,
+    cardKey    TEXT NOT NULL
+        REFERENCES cards (cardKey),
+    accountKey TEXT NOT NULL
+        REFERENCES accounts (key),
+    UNIQUE (handKey, cardKey)
 );
 
 CREATE TABLE IF NOT EXISTS actions

@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS cards
 
 CREATE TABLE IF NOT EXISTS player_cards
 (
+    timestamp  TEXT NOT NULL,
     handKey    TEXT NOT NULL,
     cardKey    TEXT NOT NULL
         REFERENCES cards (cardKey),

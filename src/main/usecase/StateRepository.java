@@ -10,6 +10,10 @@ import java.util.UUID;
 public interface StateRepository {
     void saveNewRound(final Table table);
     void saveNewDeck(final Deck deck);
+    void saveCardDrawn(final UUID handKey,
+                       final UUID cardKey,
+                       final UUID accountKey,
+                       final UUID roundKey);
     void saveLastActionTaken(
             final LocalDateTime timestamp,
             final UUID roundKey,

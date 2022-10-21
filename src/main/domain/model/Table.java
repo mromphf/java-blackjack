@@ -90,7 +90,7 @@ public class Table {
         return dealerHand;
     }
 
-    public Collection<Card> playerHand() {
+    public Hand playerHand() {
         return playerHand;
     }
 

@@ -1,6 +1,7 @@
 package main.usecase;
 
 
+import main.domain.model.Card;
 import main.domain.model.Table;
 
 import javax.inject.Inject;
@@ -10,14 +11,17 @@ import java.util.UUID;
 
 import static main.domain.predicate.LowOrderPredicate.startOfRound;
 
-public class StateRecorder implements TableObserver {
+public class StateStore implements TableObserver {
 
     private final StateRepository stateRepository;
     private final Set<UUID> deckSet;
+    private final Set<Card> cardsDrawn;
 
     @Inject
-    public StateRecorder(final StateRepository stateRepository) {
+    public StateStore(final StateRepository stateRepository) {
         this.stateRepository = stateRepository;
+
+        this.cardsDrawn = new HashSet<>();
         this.deckSet = new HashSet<>();
     }
 
@@ -37,6 +41,20 @@ public class StateRecorder implements TableObserver {
                     table.playerAccountKey(),
                     table.lastActionTaken());
         }
+
+        for (Card c : table.allPlayerCards()) {
+            if (!cardsDrawn.contains(c)) {
+                stateRepository.saveCardDrawn(
+                        table.playerHand().key(),
+                        c.key(),
+                        table.playerAccountKey(),
+                        table.roundKey()
+                );
+
+                cardsDrawn.add(c);
+            }
+        }
+
 
         saveDeckIfNew(table);
     }

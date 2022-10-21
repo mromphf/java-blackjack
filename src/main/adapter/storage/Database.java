@@ -156,7 +156,7 @@ public class Database implements AccountRepository, TransactionRepository, State
     @Override
     public void saveNewDeck(Deck deck) {
         try (Connection conn = openDbConnection()) {
-            final String open = "INSERT INTO cards (deckKey, cardKey, ordinal, suit, rank) VALUES ";
+            final String query = "INSERT INTO cards (deckKey, cardKey, ordinal, suit, rank) VALUES ";
             final StringBuilder body = new StringBuilder();
 
             for (Card card : deck) {
@@ -170,9 +170,28 @@ public class Database implements AccountRepository, TransactionRepository, State
 
             body.deleteCharAt(body.length() - 1);
 
-            final String close = ";";
-            final String sql = format("%s\n%s%s", open, body, close);
+            final String sql = format("%s\n%s;", query, body);
             final PreparedStatement st = conn.prepareStatement(sql);
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            exit(1);
+        }
+    }
+
+
+    @Override
+    public void saveCardDrawn(UUID handKey, UUID cardKey, UUID accountKey, UUID roundKey) {
+        try (Connection conn = openDbConnection()) {
+            final String query = "INSERT INTO player_cards VALUES (?, ?, ?, ?);";
+            final PreparedStatement st = conn.prepareStatement(query);
+
+            st.setString(1, handKey.toString());
+            st.setString(2, cardKey.toString());
+            st.setString(3, accountKey.toString());
+            st.setString(4, roundKey.toString());
 
             st.executeUpdate();
             st.close();

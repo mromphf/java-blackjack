@@ -28,6 +28,10 @@ public class Hand extends LinkedList<Card> {
         return new Hand(asList(cards));
     }
 
+    public UUID key() {
+        return key;
+    }
+
     @Override
     public int hashCode() {
         return hash(key);

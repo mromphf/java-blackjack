@@ -137,8 +137,8 @@ public class InjectionModule extends AbstractModule {
     public Collection<TableObserver> snapshotListeners(AccountStore accountStore,
                                                        TransactionStore transactionStore,
                                                        GameLogger gameLogger,
-                                                        StateRecorder stateRecorder) {
-        return of(accountStore, transactionStore, gameLogger, stateRecorder).collect(toSet());
+                                                        StateStore stateStore) {
+        return of(accountStore, transactionStore, gameLogger, stateStore).collect(toSet());
     }
 
     @Provides

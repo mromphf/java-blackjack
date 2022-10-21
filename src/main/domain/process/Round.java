@@ -131,18 +131,10 @@ public class Round {
     }
 
     public Table getSnapshot(LocalDateTime timestamp) {
-        return new Table(
-                timestamp,
-                key,
-                player,
-                bets,
-                deck,
-                dealerHand,
-                currentHand,
-                handsToPlay,
-                handsToSettle,
-                actionLog,
-                rules
+        return new Table( timestamp,
+                key, player, bets, deck,
+                dealerHand, currentHand, handsToPlay,
+                handsToSettle, actionLog, rules
         );
     }
 }

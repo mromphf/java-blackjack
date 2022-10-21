@@ -183,15 +183,20 @@ public class Database implements AccountRepository, TransactionRepository, State
 
 
     @Override
-    public void saveCardDrawn(UUID handKey, UUID cardKey, UUID accountKey, UUID roundKey) {
+    public void saveCardDrawn(LocalDateTime timestamp,
+                              UUID handKey,
+                              UUID cardKey,
+                              UUID accountKey,
+                              UUID roundKey) {
         try (Connection conn = openDbConnection()) {
-            final String query = "INSERT INTO player_cards VALUES (?, ?, ?, ?);";
+            final String query = "INSERT INTO player_cards VALUES (?, ?, ?, ?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');";
             final PreparedStatement st = conn.prepareStatement(query);
 
             st.setString(1, handKey.toString());
             st.setString(2, cardKey.toString());
             st.setString(3, accountKey.toString());
             st.setString(4, roundKey.toString());
+            st.setString(5, timestamp.toString());
 
             st.executeUpdate();
             st.close();

@@ -45,6 +45,7 @@ public class StateStore implements TableObserver {
         for (Card c : table.allPlayerCards()) {
             if (!cardsDrawn.contains(c)) {
                 stateRepository.saveCardDrawn(
+                        table.timestamp(),
                         table.playerHand().key(),
                         c.key(),
                         table.playerAccountKey(),

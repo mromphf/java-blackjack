@@ -207,19 +207,16 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveLastActionTaken(LocalDateTime timestamp,
-                                    UUID roundKey,
-                                    UUID accountKey,
-                                    Action action) {
+    public void saveLastActionTaken(Table table) {
         try {
             final Connection conn = openDbConnection();
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(SAVE_ACTION));
 
-            st.setString(1, timestamp.toString());
-            st.setString(2, roundKey.toString());
-            st.setString(3, accountKey.toString());
-            st.setString(4, action.name());
+            st.setString(1, table.timestamp().toString());
+            st.setString(2, table.roundKey().toString());
+            st.setString(3, table.playerAccountKey().toString());
+            st.setString(4, table.lastActionTaken().name());
 
             st.executeUpdate();
             st.close();

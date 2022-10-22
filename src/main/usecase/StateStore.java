@@ -35,11 +35,7 @@ public class StateStore implements TableObserver {
         if (startOfRound.test(table)) {
             stateRepository.saveNewRound(table);
         } else {
-            stateRepository.saveLastActionTaken(
-                    table.timestamp(),
-                    table.roundKey(),
-                    table.playerAccountKey(),
-                    table.lastActionTaken());
+            stateRepository.saveLastActionTaken(table);
         }
 
         for (Card c : table.allPlayerCards()) {

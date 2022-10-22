@@ -1,6 +1,5 @@
 package main.usecase;
 
-import main.domain.model.Action;
 import main.domain.model.Deck;
 import main.domain.model.Table;
 
@@ -15,9 +14,5 @@ public interface StateRepository {
                        final UUID cardKey,
                        final UUID accountKey,
                        final UUID roundKey);
-    void saveLastActionTaken(
-            final LocalDateTime timestamp,
-            final UUID roundKey,
-            final UUID accountKey,
-            final Action action);
+    void saveLastActionTaken(Table table);
 }

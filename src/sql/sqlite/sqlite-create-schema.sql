@@ -93,6 +93,13 @@ CREATE TABLE IF NOT EXISTS cards
     UNIQUE (deckKey, cardKey)
 );
 
+CREATE TABLE IF NOT EXISTS dealer_cards
+(
+    timestamp TEXT NOT NULL,
+    cardKey TEXT NOT NULL
+        REFERENCES cards(cardKey)
+);
+
 CREATE TABLE IF NOT EXISTS player_cards
 (
     timestamp  TEXT NOT NULL,

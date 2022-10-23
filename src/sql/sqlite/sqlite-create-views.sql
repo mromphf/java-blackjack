@@ -1,6 +1,8 @@
 DROP VIEW IF EXISTS account_balances;
 DROP VIEW IF EXISTS account_balances_inc_closed;
+DROP VIEW IF EXISTS actions_taken;
 DROP VIEW IF EXISTS active_transactions;
+DROP VIEW IF EXISTS cards_drawn;
 
 
 CREATE VIEW active_transactions AS
@@ -44,9 +46,13 @@ SELECT pc.timestamp, a.name, rnk.name, c.suit
 FROM player_cards pc
          JOIN cards c on pc.cardKey = c.cardKey
          JOIN ranks rnk on c.rank = rnk.value
-         JOIN rounds r on pc.roundKey = r.key
          JOIN accounts a on pc.accountKey = a.key
-ORDER BY pc.timestamp DESC;
+UNION
+SELECT dc.timestamp, 'Dealer', rnk.name, c.suit
+FROM dealer_cards dc
+         JOIN cards c on dc.cardKey = c.cardKey
+         JOIN ranks rnk on c.rank = rnk.value
+ORDER BY timestamp DESC;
 
 
 CREATE VIEW actions_taken AS

@@ -41,7 +41,7 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
     @Override
     public void onUpdate(Table table) {
         assessments.stream()
-                .map(function -> function.apply(table))
+                .map(assessment -> assessment.apply(table))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(this::apply);

@@ -38,7 +38,7 @@ public class Coordinator implements Game {
     }
 
     @Override
-    public void bet(Bets bets) {
+    public void placeBets(Bets bets) {
         final Round freshRound = newRound(deck, bets, config);
         roundStack.add(freshRound);
 
@@ -61,7 +61,7 @@ public class Coordinator implements Game {
     }
 
     @Override
-    public Table action(Action action) {
+    public Table submitAction(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
             final Round round = roundStack.peek();

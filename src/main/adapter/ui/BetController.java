@@ -110,7 +110,7 @@ public class BetController implements Initializable, ScreenObserver {
         if (account.isPresent()) {
             final Account chargedAccount = account.get().debit(bet);
 
-            game.bet(bet(chargedAccount, bet));
+            game.placeBets(bet(chargedAccount, bet));
             screen.switchTo(GAME);
             bet = 0;
         } else {

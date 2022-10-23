@@ -6,6 +6,6 @@ import main.domain.model.Table;
 
 public interface Game {
     Table peek();
-    Table action(Action action);
-    void bet(Bets bets);
+    Table submitAction(Action action);
+    void placeBets(Bets bets);
 }

@@ -30,9 +30,8 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public Collection<Account> loadAllAccounts() {
-        try {
+        try (final Connection conn = openDbConnection()) {
             final ArrayList<Account> accounts = new ArrayList<>();
-            final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
             final ResultSet rs = st.executeQuery(queryMap.get(ALL_ACCOUNTS));
 
@@ -42,7 +41,6 @@ public class Database implements AccountRepository, TransactionRepository, State
 
             rs.close();
             st.close();
-            conn.close();
 
             return accounts;
 
@@ -55,8 +53,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public void createNew(Account account) {
-        try {
-            final Connection conn = openDbConnection();
+        try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(queryMap.get(CREATE_NEW_ACCOUNT));
 
             st.setString(1, account.key().toString());
@@ -73,9 +70,8 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public Collection<Transaction> loadAllTransactions() {
-        try {
+        try (final Connection conn = openDbConnection()) {
             final ArrayList<Transaction> transactions = new ArrayList<>();
-            final Connection conn = openDbConnection();
             final Statement st = conn.createStatement();
             final ResultSet rs = st.executeQuery(queryMap.get(ALL_TRANSACTIONS));
 
@@ -99,8 +95,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public void closeAccount(Account account) {
-        try {
-            final Connection conn = openDbConnection();
+        try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(DELETE_ACCOUNT));
 
@@ -117,8 +112,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        try {
-            final Connection conn = openDbConnection();
+        try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(CREATE_NEW_TRANSACTION));
 
@@ -137,8 +131,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public void saveNewRound(Table table) {
-        try {
-            final Connection conn = openDbConnection();
+        try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(CREATE_NEW_ROUND));
 
@@ -154,7 +147,24 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveNewDeck(Deck deck) {
+    public void saveNewDeck(Table table) {
+        try (final Connection conn = openDbConnection()) {
+            final PreparedStatement st = conn.prepareStatement(
+                    queryMap.get(CREATE_NEW_DECK));
+
+            st.setString(1, table.roundKey().toString());
+            st.setString(2, table.deckKey().toString());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            exit(1);
+        }
+    }
+
+    @Override
+    public void saveNewCards(Deck deck) {
         try (Connection conn = openDbConnection()) {
             final String query = "INSERT INTO cards (deckKey, cardKey, ordinal, suit, rank) VALUES ";
             final StringBuilder body = new StringBuilder();
@@ -208,8 +218,7 @@ public class Database implements AccountRepository, TransactionRepository, State
 
     @Override
     public void saveLastActionTaken(Table table) {
-        try {
-            final Connection conn = openDbConnection();
+        try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(SAVE_ACTION));
 

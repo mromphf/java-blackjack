@@ -14,6 +14,8 @@ public enum SqliteQuery {
 
     INSERT_NEW_ROUND("INSERT INTO rounds (key, timestamp) VALUES (?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');"),
 
+    INSERT_NEW_DECK("INSERT INTO decks (roundKey, deckKey) VALUES (?, ?);"),
+
     INSERT_NEW_ACTION("INSERT INTO action_instances(timestamp, roundKey, accountKey, actionName) " +
             "VALUES (REPLACE(DATETIME(?), ' ', 'T') || '-06:00', ?, ?, ?)"),
 

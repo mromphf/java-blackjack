@@ -75,6 +75,7 @@ public class InjectionModule extends AbstractModule {
                             put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
                             put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
                             put(CREATE_NEW_ROUND, SqliteQuery.INSERT_NEW_ROUND.query());
+                            put(CREATE_NEW_DECK, SqliteQuery.INSERT_NEW_DECK.query());
                             put(SAVE_ACTION, SqliteQuery.INSERT_NEW_ACTION.query());
                             put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
                             put(URL, SqliteQuery.CONNECTION_URL.query());
@@ -87,6 +88,7 @@ public class InjectionModule extends AbstractModule {
                     put(ALL_TRANSACTIONS, PsqlQuery.SELECT_ALL_TRANSACTIONS.query());
                     put(CREATE_NEW_ACCOUNT, PsqlQuery.INSERT_NEW_ACCOUNT.query());
                     put(CREATE_NEW_TRANSACTION, PsqlQuery.INSERT_NEW_TRANSACTION.query());
+                    put(CREATE_NEW_DECK, "");
                     put(CREATE_NEW_ROUND, "");
                     put(SAVE_ACTION, "");
                     put(DELETE_ACCOUNT, PsqlQuery.CLOSE_ACCOUNT.query());

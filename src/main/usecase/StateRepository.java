@@ -8,7 +8,8 @@ import java.util.UUID;
 
 public interface StateRepository {
     void saveNewRound(final Table table);
-    void saveNewDeck(final Deck deck);
+    void saveNewDeck(final Table table);
+    void saveNewCards(final Deck deck);
     void saveCardDrawn(final LocalDateTime timestamp,
                        final UUID handKey,
                        final UUID cardKey,

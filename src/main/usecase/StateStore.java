@@ -52,14 +52,14 @@ public class StateStore implements TableObserver {
             }
         }
 
-
         saveDeckIfNew(table);
     }
 
     private void saveDeckIfNew(Table table) {
         if (!deckSet.contains(table.deckKey())) {
             deckSet.add(table.deckKey());
-            stateRepository.saveNewDeck(table.deck());
+            stateRepository.saveNewDeck(table);
+            stateRepository.saveNewCards(table.deck());
         }
     }
 }

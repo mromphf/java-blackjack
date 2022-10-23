@@ -40,9 +40,10 @@ ORDER BY balance DESC;
 
 
 CREATE VIEW IF NOT EXISTS cards_drawn AS
-SELECT a.name, c.rank, c.suit
+SELECT pc.timestamp, a.name, rnk.name, c.suit
 FROM player_cards pc
          JOIN cards c on pc.cardKey = c.cardKey
+         JOIN ranks rnk on c.rank = rnk.value
          JOIN rounds r on pc.roundKey = r.key
          JOIN accounts a on pc.accountKey = a.key
 ORDER BY pc.timestamp DESC;

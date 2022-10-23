@@ -12,7 +12,7 @@ import main.adapter.graphics.animation.DelayedSequence;
 import main.adapter.graphics.animation.RevealSequence;
 import main.adapter.graphics.animation.ImageRow;
 import main.adapter.graphics.animation.TableDisplay;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.usecase.Game;
 
 import java.net.URL;
@@ -143,50 +143,50 @@ public class BlackjackController implements Initializable, ScreenObserver {
         updateTable(game.submitAction(NEXT));
     }
 
-    public void updateTable(Table table) {
-        final boolean outcomeResolved = outcomeIsResolved.test(table);
-        final int numDealerCards = table.dealerHand().size();
-        final int numPlayerCards = table.playerHand().size();
+    public void updateTable(TableView tableView) {
+        final boolean outcomeResolved = outcomeIsResolved.test(tableView);
+        final int numDealerCards = tableView.dealerHand().size();
+        final int numPlayerCards = tableView.playerHand().size();
 
         runLater(() -> {
-            insuranceControls.setVisible(isInsuranceAvailable.test(table));
-            gameControls.setVisible(isGameInProgress.test(table));
-            splitControls.setVisible(isSplitAvailable.test(table));
-            settleControls.setVisible(readyToSettleNextHand.test(table));
-            nextHandControls.setVisible(readyToPlayNextHand.test(table));
-            gameOverControls.setVisible(allBetsSettled.test(table));
+            insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
+            gameControls.setVisible(isGameInProgress.test(tableView));
+            splitControls.setVisible(isSplitAvailable.test(tableView));
+            settleControls.setVisible(readyToSettleNextHand.test(tableView));
+            nextHandControls.setVisible(readyToPlayNextHand.test(tableView));
+            gameOverControls.setVisible(allBetsSettled.test(tableView));
 
-            prgDeck.setProgress(table.deckProgress());
+            prgDeck.setProgress(tableView.deckProgress());
 
-            btnDouble.setDisable(atLeastOneCardDrawn.test(table) || !table.canAffordToSpendMore());
-            btnSplit.setDisable(!(isSplitAvailable.test(table) && table.canAffordToSpendMore()));
+            btnDouble.setDisable(atLeastOneCardDrawn.test(tableView) || !tableView.canAffordToSpendMore());
+            btnSplit.setDisable(!(isSplitAvailable.test(tableView) && tableView.canAffordToSpendMore()));
 
-            lblBalance.setText(table.balanceText());
+            lblBalance.setText(tableView.balanceText());
 
-            lblBet.setText(String.format("Bet $%s", table.bet()));
+            lblBet.setText(String.format("Bet $%s", tableView.bet()));
 
             tableDisplay.reset();
 
-            tableDisplay.drawCardsToPlay(images.fromCards(table.cardsToPlay(), outcomeResolved));
+            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
 
 
-            if (startOfRound.test(table)) {
+            if (startOfRound.test(tableView)) {
                 DelayedSequence animation = delayedSequence(
                         context, vectorsDealCards(tableDisplay),
-                        images.fromAllCards(table));
+                        images.fromAllCards(tableView));
 
                 new Thread(animation::start, "Deal Cards Animation Thread").start();
 
-            } else if (timeForDealerReveal.test(table)) {
+            } else if (timeForDealerReveal.test(tableView)) {
                 RevealSequence animation = revealSequence(
                         context, vectorsDealerReveal(tableDisplay, numDealerCards),
                         center(tableDisplay),
-                        table.outcome(),
-                        images.fromDealerCards(table));
+                        tableView.outcome(),
+                        images.fromDealerCards(tableView));
 
                 ImageRow playerRow = imageRow(
                         context, vectorsPlayerRow(tableDisplay, numPlayerCards),
-                        images.fromPlayerCards(table));
+                        images.fromPlayerCards(tableView));
 
                 playerRow.draw();
 
@@ -194,16 +194,16 @@ public class BlackjackController implements Initializable, ScreenObserver {
             } else {
                 ImageRow playerRow = imageRow(
                         context, vectorsPlayerRow(tableDisplay, numPlayerCards),
-                        images.fromPlayerCards(table));
+                        images.fromPlayerCards(tableView));
 
                 ImageRow dealerRow = imageRow(
                         context, vectorsDealerReveal(tableDisplay, numDealerCards),
-                        images.fromDealerCards(table));
+                        images.fromDealerCards(tableView));
 
                 playerRow.draw();
                 dealerRow.draw();
 
-                tableDisplay.drawResults(table.outcome());
+                tableDisplay.drawResults(tableView.outcome());
             }
         });
     }

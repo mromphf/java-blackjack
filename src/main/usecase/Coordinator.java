@@ -3,7 +3,7 @@ package main.usecase;
 import main.domain.model.Action;
 import main.domain.model.Bets;
 import main.domain.model.Deck;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.domain.process.Round;
 
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ public class Coordinator implements Game {
     }
 
     @Override
-    public Table peek() throws IllegalStateException {
+    public TableView peek() throws IllegalStateException {
         if (roundStack.size() > 0) {
             return roundStack.peek().getSnapshot(now());
         } else {
@@ -61,7 +61,7 @@ public class Coordinator implements Game {
     }
 
     @Override
-    public Table submitAction(Action action) {
+    public TableView submitAction(Action action) {
         if (roundStack.size() > 0) {
             final LocalDateTime timestamp = now();
             final Round round = roundStack.peek();
@@ -98,10 +98,10 @@ public class Coordinator implements Game {
         }
     }
 
-    private Table notifyObservers(final Table table) {
+    private TableView notifyObservers(final TableView tableView) {
         for (TableObserver observer : tableObservers) {
-            observer.onUpdate(table);
+            observer.onUpdate(tableView);
         }
-        return table;
+        return tableView;
     }
 }

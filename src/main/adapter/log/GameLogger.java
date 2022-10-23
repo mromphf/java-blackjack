@@ -3,7 +3,7 @@ package main.adapter.log;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import main.domain.model.Account;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 import main.usecase.AccountRegistrar;
 import main.usecase.TableObserver;
@@ -29,10 +29,10 @@ public class GameLogger implements TableObserver, AccountRegistrar {
     }
 
     @Override
-    public void onUpdate(Table table) {
+    public void onUpdate(TableView tableView) {
         logger.log(INFO, format("%s: Round Snapshot%s",
-                table.timestamp().toLocalTime(),
-                table));
+                tableView.timestamp().toLocalTime(),
+                tableView));
     }
 
     @Override

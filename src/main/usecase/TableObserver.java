@@ -1,8 +1,8 @@
 package main.usecase;
 
-import main.domain.model.Table;
+import main.domain.model.TableView;
 
 public interface TableObserver {
-    default void newRoundStarted(Table table) {}
-    void onUpdate(Table table);
+    default void newRoundStarted(TableView tableView) {}
+    void onUpdate(TableView tableView);
 }

@@ -1,7 +1,7 @@
 package main.domain.predicate;
 
 import main.domain.model.Outcome;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,42 +16,42 @@ import static main.util.LessCode.not;
 
 public class HighOrderPredicate {
 
-    public static final Predicate<Table> unresolvedOutcome = table -> (
+    public static final Predicate<TableView> unresolvedOutcome = table -> (
             (outcomeIsUnresolved.and(playerHasBusted).and(handsRemainToBePlayed)).or(
                     not(playerHasBusted).and(handsRemainToBePlayed).and(turnEnded)).or(
                     not(playerHasBusted).and(noActionsTaken.or(not(turnEnded)))).test(table));
 
-    private static final Predicate<Table> pushOutcome = table -> (
+    private static final Predicate<TableView> pushOutcome = table -> (
             turnEnded.and(not(readyToPlayNextHand)).test(table) &&
                     isPush(table.playerHand(), table.dealerHand()));
 
-    private static final Predicate<Table> blackjackOutcome = table -> (
+    private static final Predicate<TableView> blackjackOutcome = table -> (
             turnEnded.and(not(readyToPlayNextHand)).test(table) &&
                     playerWins(table.playerHand(), table.dealerHand()) &&
                     isBlackjack(table.playerHand()));
 
-    private static final Predicate<Table> winOutcome = (table) -> (
+    private static final Predicate<TableView> winOutcome = (table) -> (
             turnEnded.test(table) &&
                     playerWins(table.playerHand(), table.dealerHand()) &&
                     !(isBlackjack(table.playerHand())));
 
-    private static final Predicate<Table> bustOutcome = (table) -> (
+    private static final Predicate<TableView> bustOutcome = (table) -> (
             atLeastOneActionTaken.and(playerHasBusted).test(table));
 
-    private static final Predicate<Table> loseOutcome = (table) -> (
+    private static final Predicate<TableView> loseOutcome = (table) -> (
             turnEnded.and(not(playerHasBusted)).and(not(readyToPlayNextHand)).test(table) &&
                     !isPush(table.playerHand(), table.dealerHand()) &&
                     !playerWins(table.playerHand(), table.dealerHand()));
 
-    public static Outcome determineOutcome(Table table) {
+    public static Outcome determineOutcome(TableView tableView) {
         return predicateOutcomeMap.get(predicateOutcomeMap.keySet()
                 .stream()
-                .filter(predicate -> predicate.test(table))
+                .filter(predicate -> predicate.test(tableView))
                 .findFirst()
                 .orElse(unresolvedOutcome));
     }
 
-    private static final Map<Predicate<Table>, Outcome> predicateOutcomeMap = new HashMap<Predicate<Table>, Outcome>() {{
+    private static final Map<Predicate<TableView>, Outcome> predicateOutcomeMap = new HashMap<Predicate<TableView>, Outcome>() {{
         put(blackjackOutcome, BLACKJACK);
         put(pushOutcome, PUSH);
         put(winOutcome, WIN);

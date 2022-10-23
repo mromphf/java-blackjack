@@ -2,7 +2,7 @@ package main.usecase;
 
 import main.domain.function.Assessment;
 import main.domain.model.Account;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import javax.inject.Inject;
@@ -39,9 +39,9 @@ public class AccountStore implements SelectionService, AccountRegistrar, TableOb
     }
 
     @Override
-    public void onUpdate(Table table) {
+    public void onUpdate(TableView tableView) {
         assessments.stream()
-                .map(assessment -> assessment.apply(table))
+                .map(assessment -> assessment.apply(tableView))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(this::apply);

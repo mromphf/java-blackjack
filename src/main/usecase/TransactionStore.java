@@ -2,7 +2,7 @@ package main.usecase;
 
 import main.domain.function.Assessment;
 import main.domain.model.Account;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import javax.inject.Inject;
@@ -41,9 +41,9 @@ public class TransactionStore implements AccountRegistrar, TableObserver {
     }
 
     @Override
-    public void onUpdate(Table table) {
+    public void onUpdate(TableView tableView) {
         assessments.stream()
-                .map(function -> function.apply(table))
+                .map(function -> function.apply(tableView))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(groupingBy(Transaction::accountKey))

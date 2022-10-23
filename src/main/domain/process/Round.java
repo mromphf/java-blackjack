@@ -130,8 +130,8 @@ public class Round {
         deck.addAll(freshlyShuffledDeck());
     }
 
-    public Table getSnapshot(LocalDateTime timestamp) {
-        return new Table( timestamp,
+    public TableView getSnapshot(LocalDateTime timestamp) {
+        return new TableView( timestamp,
                 key, player, bets, deck,
                 dealerHand, currentHand, handsToPlay,
                 handsToSettle, actionLog, rules

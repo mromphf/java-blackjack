@@ -2,7 +2,7 @@ package main.usecase;
 
 
 import main.domain.model.Card;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -26,40 +26,40 @@ public class StateStore implements TableObserver {
     }
 
     @Override
-    public void newRoundStarted(Table table) {
-        saveDeckIfNew(table);
+    public void newRoundStarted(TableView tableView) {
+        saveDeckIfNew(tableView);
     }
 
     @Override
-    public void onUpdate(Table table) {
-        if (startOfRound.test(table)) {
-            stateRepository.saveNewRound(table);
+    public void onUpdate(TableView tableView) {
+        if (startOfRound.test(tableView)) {
+            stateRepository.saveNewRound(tableView);
         } else {
-            stateRepository.saveLastActionTaken(table);
+            stateRepository.saveLastActionTaken(tableView);
         }
 
-        for (Card c : table.allPlayerCards()) {
+        for (Card c : tableView.allPlayerCards()) {
             if (!cardsDrawn.contains(c)) {
                 stateRepository.saveCardDrawn(
-                        table.timestamp(),
-                        table.playerHand().key(),
+                        tableView.timestamp(),
+                        tableView.playerHand().key(),
                         c.key(),
-                        table.playerAccountKey(),
-                        table.roundKey()
+                        tableView.playerAccountKey(),
+                        tableView.roundKey()
                 );
 
                 cardsDrawn.add(c);
             }
         }
 
-        saveDeckIfNew(table);
+        saveDeckIfNew(tableView);
     }
 
-    private void saveDeckIfNew(Table table) {
-        if (!deckSet.contains(table.deckKey())) {
-            deckSet.add(table.deckKey());
-            stateRepository.saveNewDeck(table);
-            stateRepository.saveNewCards(table.deck());
+    private void saveDeckIfNew(TableView tableView) {
+        if (!deckSet.contains(tableView.deckKey())) {
+            deckSet.add(tableView.deckKey());
+            stateRepository.saveNewDeck(tableView);
+            stateRepository.saveNewCards(tableView.deck());
         }
     }
 }

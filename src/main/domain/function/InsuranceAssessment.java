@@ -1,6 +1,6 @@
 package main.domain.function;
 
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.domain.model.Transaction;
 
 import java.util.Optional;
@@ -17,13 +17,13 @@ public class InsuranceAssessment implements Assessment {
     }
 
     @Override
-    public Optional<Transaction> apply(Table table) {
-        if (chargeForInsurance.test(table)) {
+    public Optional<Transaction> apply(TableView tableView) {
+        if (chargeForInsurance.test(tableView)) {
             return Optional.of(transaction(
-                    table.timestamp(),
-                    table.playerAccountKey(),
+                    tableView.timestamp(),
+                    tableView.playerAccountKey(),
                     BUY_INSURANCE.name(),
-                    table.negativeBet()));
+                    tableView.negativeBet()));
         } else {
             return empty();
         }

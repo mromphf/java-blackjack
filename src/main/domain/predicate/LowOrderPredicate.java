@@ -2,7 +2,7 @@ package main.domain.predicate;
 
 import main.domain.model.Action;
 import main.domain.model.Card;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 
 import java.util.function.Predicate;
 
@@ -13,69 +13,69 @@ import static main.domain.model.Outcome.UNRESOLVED;
 import static main.util.LessCode.not;
 
 public class LowOrderPredicate {
-    public static final Predicate<Table> outcomeIsUnresolved = table ->
+    public static final Predicate<TableView> outcomeIsUnresolved = table ->
             table.outcome() != null && table.outcome() == UNRESOLVED;
 
-    public static final Predicate<Table> outcomeIsResolved = table ->
+    public static final Predicate<TableView> outcomeIsResolved = table ->
             table.outcome() != null && table.outcome() != UNRESOLVED;
 
-    public static final Predicate<Table> atLeastOneCardDrawn = table ->
+    public static final Predicate<TableView> atLeastOneCardDrawn = table ->
             table.playerHand().size() > 2;
 
-    public static final Predicate<Table> handsRemainToBePlayed = table ->
+    public static final Predicate<TableView> handsRemainToBePlayed = table ->
             !table.cardsToPlay().isEmpty();
 
-    public static final Predicate<Table> noActionsTaken = table ->
+    public static final Predicate<TableView> noActionsTaken = table ->
             table.actionsTaken().isEmpty();
 
-    public static final Predicate<Table> atLeastOneActionTaken = table ->
+    public static final Predicate<TableView> atLeastOneActionTaken = table ->
             table.actionsTaken().size() > 0;
 
-    public static final Predicate<Table> handsRemainToBeSettled = table ->
+    public static final Predicate<TableView> handsRemainToBeSettled = table ->
             !table.handsToSettle().isEmpty();
 
-    public static final Predicate<Table> playerHasBusted = table ->
+    public static final Predicate<TableView> playerHasBusted = table ->
             isBust(table.playerHand());
 
-    public static final Predicate<Table> dealerHasAce = table ->
+    public static final Predicate<TableView> dealerHasAce = table ->
             table.dealerHand().stream().filter(Card::isFaceUp).limit(1).allMatch(Card::isAce);
 
-    public static final Predicate<Table> insurancePurchased = table ->
+    public static final Predicate<TableView> insurancePurchased = table ->
             table.actionsTaken().stream().anyMatch(action -> action == BUY_INSURANCE);
 
-    public static final Predicate<Table> turnEnded = table ->
+    public static final Predicate<TableView> turnEnded = table ->
             table.actionsTaken().stream().anyMatch(Action::turnEnded);
 
-    public static final Predicate<Table> chargeForInsurance = table ->
+    public static final Predicate<TableView> chargeForInsurance = table ->
             insurancePurchased.test(table) && table.actionsTaken().size() == 1;
 
-    public static final Predicate<Table> startOfRound = table -> (
+    public static final Predicate<TableView> startOfRound = table -> (
             outcomeIsUnresolved
                     .and(not(handsRemainToBePlayed))
                     .and(not(handsRemainToBeSettled))
                     .and(noActionsTaken).test(table));
 
-    public static final Predicate<Table> readyToSettleNextHand = table ->
+    public static final Predicate<TableView> readyToSettleNextHand = table ->
             outcomeIsResolved.and(handsRemainToBeSettled).test(table);
 
-    public static final Predicate<Table> isInsuranceAvailable = table ->
+    public static final Predicate<TableView> isInsuranceAvailable = table ->
             dealerHasAce.and(noActionsTaken).test(table);
 
-    public static final Predicate<Table> readyToPlayNextHand = table -> (
+    public static final Predicate<TableView> readyToPlayNextHand = table -> (
             handsRemainToBePlayed.and(playerHasBusted.or(turnEnded)).test(table));
 
-    public static final Predicate<Table> isGameInProgress = table -> (
+    public static final Predicate<TableView> isGameInProgress = table -> (
             !canSplit(table.playerHand()) &&
                     outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(table));
 
-    public static final Predicate<Table> isSplitAvailable = table -> (
+    public static final Predicate<TableView> isSplitAvailable = table -> (
             canSplit(table.playerHand()) &&
                     outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(table));
 
-    public static final Predicate<Table> allBetsSettled = table -> (
+    public static final Predicate<TableView> allBetsSettled = table -> (
             outcomeIsResolved.and(not(handsRemainToBePlayed)).and(not(handsRemainToBeSettled))).test(table);
 
-    public static final Predicate<Table> timeForDealerReveal = table -> (
+    public static final Predicate<TableView> timeForDealerReveal = table -> (
             outcomeIsResolved.and(not(playerHasBusted)).and(
                     not(handsRemainToBeSettled).and(
                             not(handsRemainToBePlayed))).test(table));

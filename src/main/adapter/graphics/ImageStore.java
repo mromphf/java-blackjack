@@ -7,7 +7,7 @@ import main.adapter.ui.ImageService;
 import main.domain.model.AnonymousCard;
 import main.domain.model.Card;
 import main.domain.model.Suit;
-import main.domain.model.Table;
+import main.domain.model.TableView;
 import main.util.InfiniteStack;
 
 import java.util.*;
@@ -65,25 +65,25 @@ public class ImageStore implements ImageService {
     }
 
     @Override
-    public List<Image> fromPlayerCards(Table table) {
-        return table.playerHand()
+    public List<Image> fromPlayerCards(TableView tableView) {
+        return tableView.playerHand()
                 .stream()
-                .map(card -> determineImage(table, card))
+                .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }
 
     @Override
-    public List<Image> fromDealerCards(Table table) {
-        return table.dealerHand()
+    public List<Image> fromDealerCards(TableView tableView) {
+        return tableView.dealerHand()
                 .stream()
-                .map(card -> determineImage(table, card))
+                .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }
 
     @Override
-    public List<Image> fromAllCards(Table table) {
-        return Streams.concat(table.dealerHand().stream(), table.playerHand().stream())
-                .map(card -> determineImage(table, card))
+    public List<Image> fromAllCards(TableView tableView) {
+        return Streams.concat(tableView.dealerHand().stream(), tableView.playerHand().stream())
+                .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }
 
@@ -95,8 +95,8 @@ public class ImageStore implements ImageService {
         return symbolReel(LEFT);
     }
 
-    private Image determineImage(Table table, Card card) {
-        if (outcomeIsResolved.and(not(playerHasBusted)).test(table)) {
+    private Image determineImage(TableView tableView, Card card) {
+        if (outcomeIsResolved.and(not(playerHasBusted)).test(tableView)) {
             return cardImages.get(card.anonymize());
         } else {
             return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();

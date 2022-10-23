@@ -130,13 +130,13 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveNewRound(Table table) {
+    public void saveNewRound(TableView tableView) {
         try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(CREATE_NEW_ROUND));
 
-            st.setString(1, table.roundKey().toString());
-            st.setString(2, table.timestamp().toString());
+            st.setString(1, tableView.roundKey().toString());
+            st.setString(2, tableView.timestamp().toString());
 
             st.executeUpdate();
             st.close();
@@ -147,13 +147,13 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveNewDeck(Table table) {
+    public void saveNewDeck(TableView tableView) {
         try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(CREATE_NEW_DECK));
 
-            st.setString(1, table.roundKey().toString());
-            st.setString(2, table.deckKey().toString());
+            st.setString(1, tableView.roundKey().toString());
+            st.setString(2, tableView.deckKey().toString());
 
             st.executeUpdate();
             st.close();
@@ -217,15 +217,15 @@ public class Database implements AccountRepository, TransactionRepository, State
     }
 
     @Override
-    public void saveLastActionTaken(Table table) {
+    public void saveLastActionTaken(TableView tableView) {
         try (final Connection conn = openDbConnection()) {
             final PreparedStatement st = conn.prepareStatement(
                     queryMap.get(SAVE_ACTION));
 
-            st.setString(1, table.timestamp().toString());
-            st.setString(2, table.roundKey().toString());
-            st.setString(3, table.playerAccountKey().toString());
-            st.setString(4, table.lastActionTaken().name());
+            st.setString(1, tableView.timestamp().toString());
+            st.setString(2, tableView.roundKey().toString());
+            st.setString(3, tableView.playerAccountKey().toString());
+            st.setString(4, tableView.lastActionTaken().name());
 
             st.executeUpdate();
             st.close();

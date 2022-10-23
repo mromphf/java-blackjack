@@ -18,6 +18,7 @@ import static main.adapter.injection.Bindings.QUERIES_SQLITE;
 import static main.adapter.storage.QueryKey.*;
 import static main.adapter.storage.ResultSetDeserializer.accountFromResultSet;
 import static main.adapter.storage.ResultSetDeserializer.transactionFromResultSet;
+import static main.adapter.storage.SqliteQuery.INSERT_DEALER_CARD;
 
 public class Database implements AccountRepository, TransactionRepository, StateRepository {
 
@@ -212,6 +213,22 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            exit(1);
+        }
+    }
+
+    @Override
+    public void saveDealerCard(LocalDateTime timestamp, UUID cardKey) {
+        try (final Connection conn = openDbConnection()) {
+            final PreparedStatement st = conn.prepareStatement(INSERT_DEALER_CARD.query());
+
+            st.setString(1, timestamp.toString());
+            st.setString(2, cardKey.toString());
+
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             exit(1);
         }
     }

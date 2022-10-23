@@ -11,9 +11,8 @@ public interface StateRepository {
     void saveNewDeck(final TableView tableView);
     void saveNewCards(final Deck deck);
     void saveCardDrawn(final LocalDateTime timestamp,
-                       final UUID handKey,
-                       final UUID cardKey,
-                       final UUID accountKey,
-                       final UUID roundKey);
+                       final UUID handKey, final UUID cardKey,
+                       final UUID accountKey, final UUID roundKey);
+    void saveDealerCard(final LocalDateTime timestamp, final UUID cardKey);
     void saveLastActionTaken(TableView tableView);
 }

@@ -31,15 +31,10 @@ public class TableView {
     private final Properties config;
     private final UUID roundKey;
 
-    public TableView(LocalDateTime timestamp,
-                     UUID roundKey,
-                     Account player,
-                     Bets bets,
-                     Deck deck,
-                     Hand dealerHand,
-                     Hand playerHand,
-                     Stack<Hand> handsToPlay,
-                     Collection<Hand> handsToSettle,
+    public TableView(LocalDateTime timestamp, UUID roundKey,
+                     Account player, Bets bets, Deck deck,
+                     Hand dealerHand, Hand playerHand,
+                     Stack<Hand> handsToPlay, Collection<Hand> handsToSettle,
                      Map<Hand, ActionLog> actionsTaken,
                      Properties config) {
         this.timestamp = timestamp;

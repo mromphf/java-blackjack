@@ -16,7 +16,7 @@ public class Card extends AnonymousCard {
         this.ordinal = ordinal;
     }
 
-    protected Card(int ordinal, Rank rank, Suit suit, boolean isFaceUp) {
+    private Card(int ordinal, Rank rank, Suit suit, boolean isFaceUp) {
         super(suit, rank, isFaceUp);
         this.key = randomUUID();
         this.ordinal = ordinal;

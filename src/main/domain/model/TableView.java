@@ -117,6 +117,7 @@ public class TableView {
     }
 
     public Action lastActionTaken() {
+        // TODO: Protect against null pointer exceptions
         return actionLog.get(playerHand).lastEntry().getValue();
     }
 

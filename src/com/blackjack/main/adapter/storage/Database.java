@@ -40,9 +40,6 @@ public class Database implements AccountRepository, TransactionRepository, State
                 accounts.add(accountFromResultSet(rs));
             }
 
-            rs.close();
-            st.close();
-
             return accounts;
 
         } catch (SQLException e) {
@@ -62,7 +59,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(3, account.getTimestamp().toString());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -104,7 +100,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(2, account.getTimestamp().toString());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -123,7 +118,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(4, transaction.description());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -140,7 +134,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(2, tableView.timestamp().toString());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -157,7 +150,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(2, tableView.deckKey().toString());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
             exit(1);
@@ -172,20 +164,16 @@ public class Database implements AccountRepository, TransactionRepository, State
 
             for (Card card : deck) {
                 body.append(format("('%s','%s',%s,'%s',%s),",
-                        deck.key(),
-                        card.key(),
-                        card.ordinal(),
-                        card.suit(),
-                        card.rank().ORDINAL));
+                        deck.key(), card.key(), card.ordinal(), card.suit(), card.rank().ORDINAL));
             }
 
+            // SQL needs us to chop trailing comma from the last record
             body.deleteCharAt(body.length() - 1);
 
             final String sql = format("%s\n%s;", query, body);
             final PreparedStatement st = conn.prepareStatement(sql);
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -200,7 +188,7 @@ public class Database implements AccountRepository, TransactionRepository, State
                               UUID accountKey,
                               UUID roundKey) {
         try (Connection conn = openDbConnection()) {
-            final String query = "INSERT INTO player_cards VALUES (?, ?, ?, ?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');";
+            final String query = queryMap.get(SAVE_CARD_DRAWN);
             final PreparedStatement st = conn.prepareStatement(query);
 
             st.setString(1, handKey.toString());
@@ -210,7 +198,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(5, timestamp.toString());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);
@@ -245,7 +232,6 @@ public class Database implements AccountRepository, TransactionRepository, State
             st.setString(4, tableView.lastActionTaken().name());
 
             st.executeUpdate();
-            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);

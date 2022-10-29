@@ -18,6 +18,8 @@ public enum SqliteQuery {
 
     INSERT_DEALER_CARD("INSERT INTO dealer_cards (timestamp, cardKey) VALUES (REPLACE(DATETIME(?), ' ', 'T') || '-06:00', ?)"),
 
+    INSERT_CARD_DRAWN("INSERT INTO player_cards VALUES (?, ?, ?, ?, REPLACE(DATETIME(?), ' ', 'T') || '-06:00');"),
+
     INSERT_NEW_ACTION("INSERT INTO action_instances(timestamp, roundKey, accountKey, actionName) " +
             "VALUES (REPLACE(DATETIME(?), ' ', 'T') || '-06:00', ?, ?, ?)"),
 

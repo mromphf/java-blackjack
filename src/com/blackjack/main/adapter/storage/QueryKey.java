@@ -8,6 +8,7 @@ public enum QueryKey {
     CREATE_NEW_ROUND,
     CREATE_NEW_DECK,
     SAVE_ACTION,
+    SAVE_CARD_DRAWN,
     DELETE_ACCOUNT,
     URL,
 }

@@ -58,38 +58,43 @@ public class InjectionModule extends AbstractModule {
                 .annotatedWith(named(MAX_CARDS))
                 .toInstance(deck.size() * 1.0);
 
-        bind(new TypeLiteral<Deck>() {}).annotatedWith(named(DECK)).toInstance(deck);
+        bind(new TypeLiteral<Deck>() {
+        }).annotatedWith(named(DECK)).toInstance(deck);
 
         bind(new TypeLiteral<Map<UUID, Collection<Transaction>>>() {
         })
                 .annotatedWith(named(TRANSACTION_MAP))
                 .toInstance(new HashMap<>());
 
-        bind(new TypeLiteral<Map<QueryKey, String>>() {})
+        bind(new TypeLiteral<Map<QueryKey, String>>() {
+        })
                 .annotatedWith(named(QUERIES_SQLITE))
-                        .toInstance(new HashMap<QueryKey, String>() {{
-                            put(ALL_ACCOUNTS, SqliteQuery.SELECT_ALL_ACCOUNTS.query());
-                            put(ALL_TRANSACTIONS, SqliteQuery.SELECT_ALL_TRANSACTIONS.query());
-                            put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
-                            put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
-                            put(CREATE_NEW_ROUND, SqliteQuery.INSERT_NEW_ROUND.query());
-                            put(CREATE_NEW_DECK, SqliteQuery.INSERT_NEW_DECK.query());
-                            put(SAVE_ACTION, SqliteQuery.INSERT_NEW_ACTION.query());
-                            put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
-                            put(URL, SqliteQuery.CONNECTION_URL.query());
-                        }});
+                .toInstance(new HashMap<QueryKey, String>() {{
+                    put(ALL_ACCOUNTS, SqliteQuery.SELECT_ALL_ACCOUNTS.query());
+                    put(ALL_TRANSACTIONS, SqliteQuery.SELECT_ALL_TRANSACTIONS.query());
+                    put(CREATE_NEW_ACCOUNT, SqliteQuery.INSERT_NEW_ACCOUNT.query());
+                    put(CREATE_NEW_DECK, SqliteQuery.INSERT_NEW_DECK.query());
+                    put(CREATE_NEW_ROUND, SqliteQuery.INSERT_NEW_ROUND.query());
+                    put(CREATE_NEW_TRANSACTION, SqliteQuery.INSERT_NEW_TRANSACTION.query());
+                    put(DELETE_ACCOUNT, SqliteQuery.CLOSE_ACCOUNT.query());
+                    put(SAVE_ACTION, SqliteQuery.INSERT_NEW_ACTION.query());
+                    put(SAVE_CARD_DRAWN, SqliteQuery.INSERT_CARD_DRAWN.query());
+                    put(URL, SqliteQuery.CONNECTION_URL.query());
+                }});
 
-        bind(new TypeLiteral<Map<QueryKey, String>>() {})
+        bind(new TypeLiteral<Map<QueryKey, String>>() {
+        })
                 .annotatedWith(named(QUERIES_PSQL))
                 .toInstance(new HashMap<QueryKey, String>() {{
                     put(ALL_ACCOUNTS, PsqlQuery.SELECT_ALL_ACCOUNTS.query());
                     put(ALL_TRANSACTIONS, PsqlQuery.SELECT_ALL_TRANSACTIONS.query());
                     put(CREATE_NEW_ACCOUNT, PsqlQuery.INSERT_NEW_ACCOUNT.query());
-                    put(CREATE_NEW_TRANSACTION, PsqlQuery.INSERT_NEW_TRANSACTION.query());
                     put(CREATE_NEW_DECK, "");
                     put(CREATE_NEW_ROUND, "");
-                    put(SAVE_ACTION, "");
+                    put(CREATE_NEW_TRANSACTION, PsqlQuery.INSERT_NEW_TRANSACTION.query());
                     put(DELETE_ACCOUNT, PsqlQuery.CLOSE_ACCOUNT.query());
+                    put(SAVE_ACTION, "");
+                    put(SAVE_CARD_DRAWN, "");
                     put(URL, PsqlQuery.CONNECTION_URL.query());
                 }});
 
@@ -134,26 +139,29 @@ public class InjectionModule extends AbstractModule {
     }
 
     @Provides
-    public Collection<TableObserver> snapshotListeners(AccountStore accountStore,
-                                                       TransactionStore transactionStore,
-                                                       GameLogger gameLogger,
-                                                        StateStore stateStore) {
+    public Collection<TableObserver> snapshotListeners(
+            AccountStore accountStore,
+            TransactionStore transactionStore,
+            GameLogger gameLogger,
+            StateStore stateStore) {
         return of(accountStore, transactionStore, gameLogger, stateStore).collect(toSet());
     }
 
     @Provides
-    public Collection<AccountRegistrar> accountRegistrars(AccountStore accountStore,
-                                                          TransactionStore transactionStore,
-                                                          GameLogger gameLogger) {
+    public Collection<AccountRegistrar> accountRegistrars(
+            AccountStore accountStore,
+            TransactionStore transactionStore,
+            GameLogger gameLogger) {
         return of(accountStore, transactionStore, gameLogger).collect(toSet());
     }
 
     @Provides
-    public Map<Screen, ScreenObserver> screenObservers(HomeController homeController,
-                                                       RegistrationController registrationController,
-                                                       BlackjackController blackjackController,
-                                                       BetController betController,
-                                                       HistoryController historyController) {
+    public Map<Screen, ScreenObserver> screenObservers(
+            HomeController homeController,
+            RegistrationController registrationController,
+            BlackjackController blackjackController,
+            BetController betController,
+            HistoryController historyController) {
         final Map<Screen, ScreenObserver> screenMap = new HashMap<>();
 
         screenMap.put(HOME, homeController);
@@ -165,7 +173,8 @@ public class InjectionModule extends AbstractModule {
         return screenMap;
     }
 
-    @Provides Collection<Assessment> assessors() {
+    @Provides
+    Collection<Assessment> assessors() {
         final Collection<Assessment> evaluators = new HashSet<>();
 
         evaluators.add(doubleDownAssessment());

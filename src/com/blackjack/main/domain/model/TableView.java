@@ -3,19 +3,20 @@ package com.blackjack.main.domain.model;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Streams.concat;
-import static java.lang.Math.negateExact;
-import static java.lang.String.format;
-import static java.util.Collections.unmodifiableMap;
-import static java.util.stream.Collectors.toList;
 import static com.blackjack.main.adapter.injection.Bindings.MAX_CARDS;
 import static com.blackjack.main.domain.function.OutcomeAssessment.settleBet;
 import static com.blackjack.main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static com.blackjack.main.util.StringUtil.actionString;
 import static com.blackjack.main.util.StringUtil.playerString;
+import static com.google.common.collect.Streams.concat;
+import static java.lang.Math.negateExact;
+import static java.lang.String.format;
+import static java.util.Collections.unmodifiableMap;
+import static java.util.Optional.empty;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class TableView {
     private final Account player;
@@ -99,7 +100,7 @@ public class TableView {
         final Stream<Card> currentCards = playerHand.stream();
 
         return concat(currentCards, concat(cardsToSettle, cardsToPlay))
-                .collect(Collectors.toSet());
+                .collect(toSet());
     }
 
     public Collection<Card> cardsToPlay() {
@@ -116,9 +117,14 @@ public class TableView {
         return actionLog.get(playerHand).values();
     }
 
-    public Action lastActionTaken() {
-        // TODO: Protect against null pointer exceptions
-        return actionLog.get(playerHand).lastEntry().getValue();
+    public Optional<Action> lastActionTaken() {
+        if (actionLog.get(playerHand).isEmpty()) {
+            return empty();
+        } else {
+            return Optional.of(actionLog.get(playerHand)
+                    .lastEntry()
+                    .getValue());
+        }
     }
 
     public UUID playerAccountKey() {

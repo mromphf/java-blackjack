@@ -40,11 +40,7 @@ public class StateStore implements TableObserver {
 
         for (Card c : tableView.dealerHand()) {
             if (!cardsDrawn.contains(c)) {
-                stateRepository.saveDealerCard(
-                        tableView.timestamp(),
-                        c.key()
-                );
-
+                stateRepository.saveDealerCard(tableView.timestamp(), c.key());
                 cardsDrawn.add(c);
             }
         }

@@ -223,15 +223,17 @@ public class Database implements AccountRepository, TransactionRepository, State
     @Override
     public void saveLastActionTaken(TableView tableView) {
         try (final Connection conn = openDbConnection()) {
-            final PreparedStatement st = conn.prepareStatement(
-                    queryMap.get(SAVE_ACTION));
+            if (tableView.lastActionTaken().isPresent()) {
+                final PreparedStatement st = conn.prepareStatement(
+                        queryMap.get(SAVE_ACTION));
 
-            st.setString(1, tableView.timestamp().toString());
-            st.setString(2, tableView.roundKey().toString());
-            st.setString(3, tableView.playerAccountKey().toString());
-            st.setString(4, tableView.lastActionTaken().name());
+                st.setString(1, tableView.timestamp().toString());
+                st.setString(2, tableView.roundKey().toString());
+                st.setString(3, tableView.playerAccountKey().toString());
+                st.setString(4, tableView.lastActionTaken().get().name());
 
-            st.executeUpdate();
+                st.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             exit(1);

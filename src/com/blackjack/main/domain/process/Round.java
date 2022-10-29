@@ -55,7 +55,9 @@ public class Round {
     }
 
     public void deal() {
-        if (deck.size() < (2 * bets.keySet().size() + 2)) {
+        final boolean needToRefill = deck.size() < (2 * bets.keySet().size() + 2);
+
+        if (needToRefill) {
             refillDeck();
         }
 

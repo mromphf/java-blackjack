@@ -32,7 +32,7 @@ public class VectorFunctions {
         return vectorMap;
     }
 
-    public static List<Vector> vectorsDealerReveal(Canvas canvas, int numDealerCards) {
+    public static List<Vector> vectorsDealerReveal(Canvas canvas, int numCards) {
         final List<Vector> vectorsRoot = new LinkedList<>();
         final Vector center = center(canvas);
 
@@ -41,14 +41,14 @@ public class VectorFunctions {
         double horOrigin = (center.x - cardWidth);
         double verOrigin = (canvas.getHeight() * VER_ORIGIN_DEALER);
 
-        for (int i = 0; i <= numDealerCards; i++) {
+        for (int i = 0; i <= numCards; i++) {
             vectorsRoot.add(vector(horOrigin + (gapBetweenCards * i), verOrigin));
         }
 
         return vectorsRoot;
     }
 
-    public static List<Vector> vectorsPlayerRow(Canvas canvas, int numDealerCards) {
+    public static List<Vector> vectorsPlayerRow(Canvas canvas, int numCards) {
         final List<Vector> vectorsRoot = new LinkedList<>();
         final Vector center = center(canvas);
 
@@ -57,7 +57,7 @@ public class VectorFunctions {
         double horOrigin = (center.x - cardWidth);
         double verOrigin = (center.y + (canvas.getHeight() * VER_ORIGIN_PLAYER));
 
-        for (int i = 0; i <= numDealerCards; i++) {
+        for (int i = 0; i <= numCards; i++) {
             vectorsRoot.add(vector(horOrigin + (gapBetweenCards * i), verOrigin));
         }
 

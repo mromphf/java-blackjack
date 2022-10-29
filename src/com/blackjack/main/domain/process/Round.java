@@ -22,8 +22,8 @@ public class Round {
     private final Hand dealerHand;
     private final Map<Hand, ActionLog> actionLog = new HashMap<>();
     private final Map<Account, Hand> playerHands = new HashMap<>();
-    private final Stack<Hand> handsToPlay = new Stack<>();
-    private final Stack<Hand> handsToSettle = new Stack<>();
+    private final Map<Account, Stack<Hand>> handsToPlay = new HashMap<>();
+    private final Map<Account, Stack<Hand>> handsToSettle = new HashMap<>();
     private final Properties rules;
     private final UUID key;
 
@@ -42,6 +42,8 @@ public class Round {
 
         bets.keySet().forEach(player -> {
             playerHands.put(player, emptyHand());
+            handsToPlay.put(player, new Stack<>());
+            handsToSettle.put(player, new Stack<>());
             actionLog.put(playerHands.get(player), emptyActionLog());
         });
 
@@ -84,7 +86,7 @@ public class Round {
         currentHand.add(firstCard);
         currentHand.add(deck.drawCard());
 
-        handsToPlay.add(secondHand);
+        handsToPlay.get(currentPlayer).add(secondHand);
 
         actionLog.put(secondHand, emptyActionLog());
     }
@@ -123,13 +125,13 @@ public class Round {
             refillDeck();
         }
 
-        handsToSettle.add(currentHand);
-        currentHand = handsToPlay.pop();
+        handsToSettle.get(currentPlayer).add(currentHand);
+        currentHand = handsToPlay.get(currentPlayer).pop();
         currentHand.add(deck.drawCard());
     }
 
     public void settleNextHand() {
-        currentHand = handsToSettle.pop();
+        currentHand = handsToSettle.get(currentPlayer).pop();
     }
 
     public void refillDeck() {
@@ -139,8 +141,10 @@ public class Round {
     public TableView getSnapshot(LocalDateTime timestamp) {
         return new TableView( timestamp,
                 key, currentPlayer, bets, deck,
-                dealerHand, currentHand, handsToPlay,
-                handsToSettle, actionLog, rules
+                dealerHand, currentHand,
+                handsToPlay.get(currentPlayer),
+                handsToSettle.get(currentPlayer),
+                actionLog, rules
         );
     }
 }

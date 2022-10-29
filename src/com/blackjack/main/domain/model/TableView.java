@@ -8,8 +8,7 @@ import java.util.stream.Stream;
 import static com.blackjack.main.adapter.injection.Bindings.MAX_CARDS;
 import static com.blackjack.main.domain.function.OutcomeAssessment.settleBet;
 import static com.blackjack.main.domain.predicate.HighOrderPredicate.determineOutcome;
-import static com.blackjack.main.util.StringUtil.actionString;
-import static com.blackjack.main.util.StringUtil.playerString;
+import static com.blackjack.main.util.StringUtil.*;
 import static com.google.common.collect.Streams.concat;
 import static java.lang.Math.negateExact;
 import static java.lang.String.format;
@@ -113,8 +112,16 @@ public class TableView {
         return handsToSettle;
     }
 
+    public Collection<Hand> handsToPlay() {
+        return handsToPlay;
+    }
+
     public Collection<Action> actionsTaken() {
         return actionLog.get(playerHand).values();
+    }
+
+    public Map<LocalDateTime, Action> actionsTimestamped() {
+        return actionLog.get(playerHand);
     }
 
     public Optional<Action> lastActionTaken() {
@@ -150,26 +157,11 @@ public class TableView {
     @Override
     public String toString() {
         return format("\n\tRound Key: %s\n\t" +
-                        "Account Key: %s\n\t" +
-                        "Balance: $%s,\n\t" +
                         "Cards in Deck: %s,\n\t" +
                         "Outcome: %s,\n\t" +
-                        "Bet: $%s,\n\t" +
-                        "Hands to Play: %s,\n\t" +
-                        "Hands to Settle: %s,\n\t" +
-                        "ActionsTaken: {%s\n\t},\n\t" +
                         "Player: %s,\n\t" +
                         "Dealer: %s",
-                roundKey,
-                playerAccountKey(),
-                playerBalance(),
-                deckSize(),
-                outcome,
-                bets.get(player),
-                handsToPlay.size(),
-                handsToSettle.size(),
-                actionString(actionLog.get(playerHand)),
-                playerString(playerHand),
-                playerString(dealerHand));
+                roundKey, deckSize(), outcome,
+                playerString(this), dealerString(dealerHand));
     }
 }

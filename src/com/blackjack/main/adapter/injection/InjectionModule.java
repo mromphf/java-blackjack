@@ -45,16 +45,14 @@ public class InjectionModule extends AbstractModule {
     @Override
     public void configure() {
         final Deck deck = freshlyShuffledDeck();
-        final Properties props = new Properties();
 
-        try {
-            final FileInputStream filoIo = new FileInputStream(CONFIG_PATH);
+        try (final FileInputStream filoIo = new FileInputStream(CONFIG_PATH)) {
+            final Properties props = new Properties();
             props.load(filoIo);
+            bindProperties(binder(), props);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        bindProperties(binder(), props);
 
         bind(Double.class)
                 .annotatedWith(named(MAX_CARDS))

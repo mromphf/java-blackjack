@@ -5,7 +5,7 @@ import java.util.UUID;
 import static java.util.Objects.hash;
 import static java.util.UUID.randomUUID;
 
-public class Card extends AnonymousCard {
+public class Card extends AnonymousCard implements Comparable<Card> {
 
     protected final UUID key;
     protected final int ordinal;
@@ -71,5 +71,16 @@ public class Card extends AnonymousCard {
     @Override
     public String toString() {
         return String.format("%s of %s", rank.NAME, suit);
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        if (ordinal < o.ordinal()) {
+            return -1;
+        } else if (ordinal == o.ordinal) {
+            return 0;
+        }
+
+        return 1;
     }
 }

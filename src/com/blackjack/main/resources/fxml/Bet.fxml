@@ -1,0 +1,115 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Tooltip?>
+
+<?import java.net.URL?>
+
+<?import javafx.scene.canvas.Canvas?>
+<GridPane fx:controller="com.blackjack.main.adapter.ui.BetController"
+          xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" vgap="50" styleClass="background">
+
+    <stylesheets>
+        <URL value="@../css/Bet.css"/>
+    </stylesheets>
+
+    <GridPane styleClass="upper-hud"
+              GridPane.rowIndex="0"
+              GridPane.columnIndex="0"
+              alignment="CENTER"
+              hgap="20"
+              minHeight="50">
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="BASELINE_CENTER" minWidth="250" >
+            <Label fx:id="lblBalance" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   alignment="BASELINE_CENTER">
+                Balance $0
+                <font>
+                    <Font name="Arial" size="30" />
+                </font>
+            </Label>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="250">
+            <Label fx:id="lblUpperBet" textAlignment="CENTER" style="-fx-text-fill:white" >
+                Bet ?
+                <font>
+                    <Font name="Arial" size="30"/>
+                </font>
+            </Label>
+        </GridPane>
+
+        <GridPane GridPane.rowIndex="0" GridPane.columnIndex="2" alignment="BASELINE_CENTER" minWidth="250">
+            <Label GridPane.rowIndex="0" GridPane.columnIndex="0" minHeight="40">
+                Deck
+                <font>
+                    <Font name="Arial" size="30" />
+                </font>
+            </Label>
+            <ProgressBar fx:id="prgDeck"
+                         GridPane.rowIndex="0"
+                         GridPane.columnIndex="1"
+                         minWidth="150"
+                         minHeight="40"
+                         style="-fx-accent:red;"/>
+        </GridPane>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" vgap="20" alignment="BASELINE_CENTER">
+        <Label fx:id="lblBet" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="150" alignment="BASELINE_CENTER">
+            $0
+            <font>
+                <Font name="Arial" size="80" />
+            </font>
+        </Label>
+    </GridPane>
+
+    <GridPane
+            GridPane.rowIndex="2"
+            GridPane.columnIndex="0"
+            alignment="CENTER"
+            styleClass="scrolling-animation">
+        <Canvas fx:id="cvsScroller" onMouseClicked="#onClickScroller" height="40" width="450"/>
+    </GridPane>
+
+    <GridPane styleClass="lower-hud" GridPane.rowIndex="3" GridPane.columnIndex="0"
+              alignment="BASELINE_CENTER" hgap="10" vgap="10">
+        <Button fx:id="btnBet1" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="80" minHeight="80" styleClass="btn-chip,btn-grey">
+            1
+            <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
+        </Button>
+
+        <Button fx:id="btnBet5" GridPane.rowIndex="0" GridPane.columnIndex="1" minWidth="80" minHeight="80" styleClass="btn-chip,btn-blue">
+            5
+            <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
+        </Button>
+
+        <Button fx:id="btnBet10" GridPane.rowIndex="0" GridPane.columnIndex="2" minWidth="80" minHeight="80" styleClass="btn-chip,btn-green">
+            10
+            <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
+        </Button>
+
+        <Button fx:id="btnBet25" GridPane.rowIndex="0" GridPane.columnIndex="3" minWidth="80" minHeight="80" styleClass="btn-chip,btn-red">
+            25
+            <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
+        </Button>
+
+        <Button fx:id="btnBet100" GridPane.rowIndex="0" GridPane.columnIndex="4" minWidth="80" minHeight="80" styleClass="btn-chip,btn-black">
+            100
+            <tooltip><Tooltip text="Right-click to decrease."/></tooltip>
+        </Button>
+    </GridPane>
+
+    <GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" alignment="BASELINE_CENTER" vgap="5">
+        <Button fx:id="btnDeal" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" minWidth="250" minHeight="50" disable="true" onAction="#onDeal">
+            Bet
+        </Button>
+        <Button GridPane.rowIndex="1" GridPane.columnIndex="0" minWidth="125" minHeight="50" onAction="#onQuit">
+            Quit
+        </Button>
+        <Button GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="125" minHeight="50" onAction="#onHistory" >
+            History
+        </Button>
+    </GridPane>
+</GridPane>

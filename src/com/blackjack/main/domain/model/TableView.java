@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.blackjack.main.adapter.injection.Bindings.MAX_CARDS;
-import static com.blackjack.main.domain.function.OutcomeAssessment.settleBet;
+import static com.blackjack.main.domain.function.Settlement.settleBet;
 import static com.blackjack.main.domain.predicate.HighOrderPredicate.determineOutcome;
 import static com.blackjack.main.util.StringUtil.*;
 import static com.google.common.collect.Streams.concat;

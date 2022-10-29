@@ -6,9 +6,9 @@ import com.blackjack.main.domain.model.TableView;
 
 import java.util.function.Predicate;
 
-import static com.blackjack.main.domain.function.CardFunctions.canSplit;
-import static com.blackjack.main.domain.function.CardFunctions.isBust;
+import static com.blackjack.main.domain.function.CardFunctions.*;
 import static com.blackjack.main.domain.model.Action.BUY_INSURANCE;
+import static com.blackjack.main.domain.model.Action.DOUBLE;
 import static com.blackjack.main.domain.model.Outcome.UNRESOLVED;
 import static com.blackjack.main.util.LessCode.not;
 
@@ -43,8 +43,14 @@ public class LowOrderPredicate {
     public static final Predicate<TableView> insurancePurchased = table ->
             table.actionsTaken().stream().anyMatch(action -> action == BUY_INSURANCE);
 
+    public static final Predicate<TableView> playerDoubledDown = table ->
+            table.actionsTaken().stream().anyMatch(a -> a.equals(DOUBLE));
+
     public static final Predicate<TableView> turnEnded = table ->
             table.actionsTaken().stream().anyMatch(Action::turnEnded);
+
+    public static final Predicate<TableView> insurancePaysOut = table ->
+            insurancePurchased.test(table) && isBlackjack(table.dealerHand());
 
     public static final Predicate<TableView> chargeForInsurance = table ->
             insurancePurchased.test(table) && table.actionsTaken().size() == 1;

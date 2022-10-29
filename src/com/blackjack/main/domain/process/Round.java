@@ -5,14 +5,13 @@ import com.blackjack.main.domain.model.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static java.util.UUID.randomUUID;
 import static com.blackjack.main.adapter.injection.Bindings.MIN_DEALER_SCORE;
 import static com.blackjack.main.domain.function.CardFunctions.score;
-import static com.blackjack.main.domain.function.DealerFunctions.freshlyShuffledDeck;
-import static com.blackjack.main.domain.function.DealerFunctions.openingHand;
+import static com.blackjack.main.domain.function.DealerFunctions.shuffledFreshDeck;
 import static com.blackjack.main.domain.model.ActionLog.emptyActionLog;
 import static com.blackjack.main.domain.model.Hand.emptyHand;
 import static com.blackjack.main.domain.model.Hand.handOf;
+import static java.util.UUID.randomUUID;
 
 public class Round {
 
@@ -60,10 +59,13 @@ public class Round {
             refillDeck();
         }
 
-        final Map<String, Hand> openingHands = openingHand(deck);
+        for (Hand hand : playerHands.values()) { hand.add(deck.drawCard()); }
 
-        dealerHand.addAll(openingHands.get("dealer"));
-        currentHand.addAll(openingHands.get("player"));
+        dealerHand.add(deck.drawCard());
+
+        for (Hand hand : playerHands.values()) { hand.add(deck.drawCard()); }
+
+        dealerHand.add(deck.drawCard().faceDown());
     }
 
     public void record(LocalDateTime timestamp, Action action) {
@@ -113,7 +115,7 @@ public class Round {
             refillDeck();
         }
 
-        if (handsToPlay.isEmpty()) {
+        if (handsToPlay.get(currentPlayer).isEmpty()) {
             while (score(dealerHand) < minDealerScore) {
                 dealerHand.add(deck.drawCard());
             }
@@ -135,11 +137,11 @@ public class Round {
     }
 
     public void refillDeck() {
-        deck.addAll(freshlyShuffledDeck());
+        deck.addAll(shuffledFreshDeck());
     }
 
     public TableView getSnapshot(LocalDateTime timestamp) {
-        return new TableView( timestamp,
+        return new TableView(timestamp,
                 key, currentPlayer, bets, deck,
                 dealerHand, currentHand,
                 handsToPlay.get(currentPlayer),

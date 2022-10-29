@@ -30,7 +30,7 @@ import static com.blackjack.main.adapter.injection.Bindings.*;
 import static com.blackjack.main.adapter.storage.QueryKey.*;
 import static com.blackjack.main.adapter.ui.Screen.*;
 import static com.blackjack.main.domain.function.BetAssessment.betAssessment;
-import static com.blackjack.main.domain.function.DealerFunctions.freshlyShuffledDeck;
+import static com.blackjack.main.domain.function.DealerFunctions.shuffledFreshDeck;
 import static com.blackjack.main.domain.function.DoubleDownAssessment.doubleDownAssessment;
 import static com.blackjack.main.domain.function.InsuranceAssessment.insuranceAssessment;
 import static com.blackjack.main.domain.function.OutcomeAssessment.outcomeAssessment;
@@ -44,7 +44,7 @@ public class InjectionModule extends AbstractModule {
 
     @Override
     public void configure() {
-        final Deck deck = freshlyShuffledDeck();
+        final Deck deck = shuffledFreshDeck();
 
         try (final FileInputStream filoIo = new FileInputStream(CONFIG_PATH)) {
             final Properties props = new Properties();

@@ -1,18 +1,15 @@
 package com.blackjack.test.domain;
 
-import com.blackjack.main.domain.model.Card;
 import com.blackjack.main.domain.model.Deck;
 import org.junit.jupiter.api.Test;
 
-import java.util.Stack;
-
-import static com.blackjack.main.domain.function.DealerFunctions.*;
+import static com.blackjack.main.domain.function.DealerFunctions.freshDeck;
+import static com.blackjack.main.domain.function.DealerFunctions.shuffle;
 import static com.blackjack.main.domain.model.Card.card;
 import static com.blackjack.main.domain.model.Deck.emptySerializedDeck;
 import static com.blackjack.main.domain.model.Rank.*;
 import static com.blackjack.main.domain.model.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class DealerFunctionsTest {
@@ -76,30 +73,5 @@ class DealerFunctionsTest {
         cards.add(card(QUEEN, CLUBS));
 
         assertEquals(3, shuffle(cards).size());
-    }
-
-    @Test
-    public void openingHand_shouldThrowIllegalArgumentException_whenGivenACollectionOfFewerThanFourCards() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(card(FIVE, HEARTS));
-            add(card(THREE, SPADES));
-            add(card(QUEEN, CLUBS));
-        }};
-
-        assertThrows(IllegalArgumentException.class, () -> openingHand(cards));
-    }
-
-    @Test
-    public void openingHand_shouldRemoveFourCards_whenGivenAStackOfMoreThanThreeCards() {
-        Stack<Card> cards = new Stack<Card>() {{
-            add(card(FIVE, HEARTS));
-            add(card(THREE, SPADES));
-            add(card(QUEEN, CLUBS));
-            add(card(ACE, CLUBS));
-        }};
-
-        openingHand(cards);
-
-        assertEquals(0, cards.size());
     }
 }

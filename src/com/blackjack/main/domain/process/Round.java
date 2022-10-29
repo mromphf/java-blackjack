@@ -16,11 +16,12 @@ import static com.blackjack.main.domain.model.Hand.handOf;
 
 public class Round {
 
-    private final Account player;
+    private final Account currentPlayer;
     private final Bets bets;
     private final Deck deck;
     private final Hand dealerHand;
     private final Map<Hand, ActionLog> actionLog = new HashMap<>();
+    private final Map<Account, Hand> playerHands = new HashMap<>();
     private final Stack<Hand> handsToPlay = new Stack<>();
     private final Stack<Hand> handsToSettle = new Stack<>();
     private final Properties rules;
@@ -38,13 +39,18 @@ public class Round {
         this.rules = rules;
         this.key = randomUUID();
         this.dealerHand = emptyHand();
-        this.currentHand = emptyHand();
-        actionLog.put(currentHand, emptyActionLog());
 
-        this.player = bets.accounts()
+        bets.keySet().forEach(player -> {
+            playerHands.put(player, emptyHand());
+            actionLog.put(playerHands.get(player), emptyActionLog());
+        });
+
+        currentPlayer = bets.accounts()
                 .stream()
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
+
+        currentHand = playerHands.get(currentPlayer);
     }
 
     public void deal() {
@@ -132,7 +138,7 @@ public class Round {
 
     public TableView getSnapshot(LocalDateTime timestamp) {
         return new TableView( timestamp,
-                key, player, bets, deck,
+                key, currentPlayer, bets, deck,
                 dealerHand, currentHand, handsToPlay,
                 handsToSettle, actionLog, rules
         );

@@ -10,7 +10,6 @@ import com.blackjack.main.util.InfiniteStack;
 import javafx.scene.image.Image;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.blackjack.main.adapter.graphics.Direction.LEFT;
 import static com.blackjack.main.adapter.graphics.Direction.RIGHT;
@@ -22,9 +21,9 @@ import static com.blackjack.main.domain.predicate.LowOrderPredicate.outcomeIsRes
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.playerHasBusted;
 import static com.blackjack.main.util.LessCode.not;
 import static java.lang.String.format;
-import static java.util.Collections.reverseOrder;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 public class ImageStore implements ImageService {
@@ -69,6 +68,7 @@ public class ImageStore implements ImageService {
     public List<Image> fromPlayerCards(TableView tableView) {
         return tableView.playerHand()
                 .stream()
+                .sorted()
                 .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }
@@ -77,14 +77,17 @@ public class ImageStore implements ImageService {
     public List<Image> fromDealerCards(TableView tableView) {
         return tableView.dealerHand()
                 .stream()
+                .sorted()
                 .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }
 
     @Override
     public List<Image> fromAllCards(TableView tableView) {
-        return Stream.concat(tableView.dealerHand().stream(), tableView.playerHand().stream())
-                .sorted(reverseOrder())
+        return concat(
+                tableView.dealerHand().stream(),
+                tableView.playerHand().stream())
+                .sorted()
                 .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }

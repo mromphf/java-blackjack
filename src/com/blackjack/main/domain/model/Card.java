@@ -76,11 +76,11 @@ public class Card extends AnonymousCard implements Comparable<Card> {
     @Override
     public int compareTo(Card o) {
         if (ordinal < o.ordinal()) {
-            return -1;
+            return 1;
         } else if (ordinal == o.ordinal) {
             return 0;
         }
 
-        return 1;
+        return -1;
     }
 }

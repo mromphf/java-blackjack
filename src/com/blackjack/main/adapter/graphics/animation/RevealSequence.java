@@ -27,19 +27,19 @@ public class RevealSequence extends AnimationTimer {
 
     private final static String FONT_NAME = "Arial";
 
-    public static RevealSequence revealSequence(GraphicsContext graphics,
-                                                SortedMap<Integer, Vector> vectors,
-                                                Vector center,
-                                                Outcome outcome,
-                                                List<Image> images) {
+    public static RevealSequence revealSequence(
+            GraphicsContext graphics,
+            SortedMap<Integer, Vector> vectors,
+            Vector center, Outcome outcome,
+            List<Image> images) {
         return new RevealSequence(graphics, vectors, center, outcome, images);
     }
 
-    private RevealSequence(GraphicsContext graphics,
-                           SortedMap<Integer, Vector> vectors,
-                           Vector center,
-                           Outcome outcome,
-                           List<Image> images) {
+    private RevealSequence(
+            GraphicsContext graphics,
+            SortedMap<Integer, Vector> vectors,
+            Vector center, Outcome outcome,
+            List<Image> images) {
 
         this.vectors = vectors;
         this.graphics = graphics;

@@ -17,11 +17,12 @@ public class VectorFunctions {
     private final double horOrigin;
     private final double verOriginPlayer;
     private final double verOriginDealer;
+    private final Vector center;
 
     public VectorFunctions(Canvas canvas) {
-        final Vector center = center(canvas);
         final double cardWidth = (canvas.getWidth() * CARD_WIDTH);
 
+        this.center = vector((canvas.getWidth() / 2), (canvas.getHeight() / 2));
         this.gapBetweenCards = (cardWidth * GAP);
         this.horOrigin = (center.x - cardWidth);
         this.verOriginPlayer = (center.y) + (canvas.getHeight() * VER_ORIGIN_PLAYER);
@@ -59,7 +60,7 @@ public class VectorFunctions {
         return vectorsRoot;
     }
 
-    public static Vector center(Canvas canvas) {
-        return vector((canvas.getWidth() / 2), (canvas.getHeight() / 2));
+    public Vector center() {
+        return center;
     }
 }

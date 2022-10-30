@@ -1,7 +1,6 @@
 package com.blackjack.main.adapter.ui;
 
-import com.blackjack.main.adapter.graphics.Vector;
-import com.blackjack.main.adapter.graphics.VectorFunctions;
+import com.blackjack.main.adapter.graphics.animation.AnimationFactory;
 import com.blackjack.main.adapter.graphics.animation.DelayedSequence;
 import com.blackjack.main.adapter.graphics.animation.RevealSequence;
 import com.blackjack.main.adapter.graphics.animation.TableDisplay;
@@ -14,18 +13,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.SortedMap;
 
-import static com.blackjack.main.adapter.graphics.VectorFunctions.center;
-import static com.blackjack.main.adapter.graphics.animation.DelayedSequence.delayedSequence;
-import static com.blackjack.main.adapter.graphics.animation.ImageRow.imageRow;
-import static com.blackjack.main.adapter.graphics.animation.RevealSequence.revealSequence;
 import static com.blackjack.main.adapter.ui.Screen.BET;
 import static com.blackjack.main.domain.model.Action.*;
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.*;
@@ -176,37 +168,26 @@ public class BlackjackController implements Initializable, ScreenObserver {
     }
 
     private void render(TableView tableView) {
-        final VectorFunctions vectorFunctions = new VectorFunctions(tableDisplay);
-
-        final List<Image> dealerImages = images.fromCards(tableView.dealerHand().stream());
-        final List<Image> playerImages = images.fromCards(tableView.playerHand().stream());
-        final List<Image> allCardImages = images.fromCards(tableView.allCardsInPlay());
-
-        final SortedMap<Integer, Vector> vectorsDealerRow = vectorFunctions.dealer(tableView.dealerHand().size());
-        final SortedMap<Integer, Vector> vectorsPlayerRow = vectorFunctions.player(tableView.playerHand().size());
-        final SortedMap<Integer, Vector> vectorsDeal = vectorFunctions.deal();
+        final AnimationFactory factory =
+                new AnimationFactory(graphics, tableDisplay, images);
 
         if (startOfRound.test(tableView)) {
-
             final DelayedSequence animation =
-                    delayedSequence(graphics, vectorsDeal, allCardImages);
+                    factory.dealAnimation(tableView.allCardsInPlay());
 
             new Thread(animation::start, ANIMATION_DEAL).start();
 
         } else if (timeForDealerReveal.test(tableView)) {
+            final RevealSequence animation =
+                    factory.revealAnimation(tableView);
 
-            final RevealSequence animation = revealSequence(
-                    graphics, vectorsDealerRow,
-                    center(tableDisplay), tableView.outcome(),
-                    dealerImages);
-
-            imageRow(graphics, vectorsPlayerRow, playerImages).draw();
+            factory.playerImageRow(tableView).draw();
 
             new Thread(animation::start, ANIMATION_REVEAL).start();
 
         } else {
-            imageRow(graphics, vectorsPlayerRow, playerImages).draw();
-            imageRow(graphics, vectorsDealerRow, dealerImages).draw();
+            factory.playerImageRow(tableView).draw();
+            factory.dealerImageRow(tableView).draw();
 
             tableDisplay.drawResults(tableView.outcome());
         }

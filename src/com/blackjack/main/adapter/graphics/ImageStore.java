@@ -49,9 +49,7 @@ public class ImageStore implements ImageService {
     }
 
     public void loadMiscImages() {
-        for (int i = 0; i < Symbol.values().length; i++) {
-            final Symbol symbol = Symbol.values()[i];
-
+        for (Symbol symbol: Symbol.values()) {
             symbolImages.put(symbol, new Image(requireNonNull(
                     Main.class.getResource(format("/png/%s.png", symbol.VALUE))).toString()
             ));

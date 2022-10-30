@@ -19,9 +19,12 @@ import java.util.ResourceBundle;
 import static com.blackjack.main.adapter.ui.Screen.BET;
 import static com.blackjack.main.domain.model.Action.*;
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.*;
+import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 public class BlackjackController implements Initializable, ScreenObserver {
+
+    private static final String BET_STRING = "Bet $%s";
 
     @FXML
     private Label lblBet;
@@ -154,7 +157,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             lblBalance.setText(tableView.balanceText());
 
-            lblBet.setText(String.format("Bet $%s", tableView.bet()));
+            lblBet.setText(format(BET_STRING, tableView.bet()));
 
             tableDisplay.reset();
 

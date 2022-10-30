@@ -31,10 +31,10 @@ public class VectorFunctions {
     public SortedMap<Integer, Vector> deal() {
         final SortedMap<Integer, Vector> vectorMap = new TreeMap<>();
 
-        vectorMap.put(0, vector(horOrigin, verOriginDealer));
-        vectorMap.put(1, vector((horOrigin + gapBetweenCards), verOriginDealer));
-        vectorMap.put(2, vector(horOrigin, verOriginPlayer));
-        vectorMap.put(3, vector((horOrigin + gapBetweenCards), verOriginPlayer));
+        vectorMap.put(0, vector(horOrigin, verOriginPlayer));
+        vectorMap.put(1, vector(horOrigin, verOriginDealer));
+        vectorMap.put(2, vector((horOrigin + gapBetweenCards), verOriginPlayer));
+        vectorMap.put(3, vector((horOrigin + gapBetweenCards), verOriginDealer));
 
         return vectorMap;
     }

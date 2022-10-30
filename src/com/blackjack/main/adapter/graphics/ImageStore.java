@@ -1,7 +1,5 @@
 package com.blackjack.main.adapter.graphics;
 
-import com.google.common.collect.Streams;
-import javafx.scene.image.Image;
 import com.blackjack.main.Main;
 import com.blackjack.main.adapter.ui.ImageService;
 import com.blackjack.main.domain.model.AnonymousCard;
@@ -9,13 +7,11 @@ import com.blackjack.main.domain.model.Card;
 import com.blackjack.main.domain.model.Suit;
 import com.blackjack.main.domain.model.TableView;
 import com.blackjack.main.util.InfiniteStack;
+import javafx.scene.image.Image;
 
 import java.util.*;
+import java.util.stream.Stream;
 
-import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 import static com.blackjack.main.adapter.graphics.Direction.LEFT;
 import static com.blackjack.main.adapter.graphics.Direction.RIGHT;
 import static com.blackjack.main.adapter.graphics.Symbol.*;
@@ -25,6 +21,11 @@ import static com.blackjack.main.domain.model.Suit.*;
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.playerHasBusted;
 import static com.blackjack.main.util.LessCode.not;
+import static java.lang.String.format;
+import static java.util.Collections.reverseOrder;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 public class ImageStore implements ImageService {
 
@@ -82,7 +83,8 @@ public class ImageStore implements ImageService {
 
     @Override
     public List<Image> fromAllCards(TableView tableView) {
-        return Streams.concat(tableView.dealerHand().stream(), tableView.playerHand().stream())
+        return Stream.concat(tableView.dealerHand().stream(), tableView.playerHand().stream())
+                .sorted(reverseOrder())
                 .map(card -> determineImage(tableView, card))
                 .collect(toList());
     }

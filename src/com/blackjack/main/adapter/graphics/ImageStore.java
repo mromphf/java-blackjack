@@ -58,16 +58,16 @@ public class ImageStore implements ImageService {
                 .collect(toList());
     }
 
+    private Image determineImage(Card card) {
+        return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
+    }
+
     public Collection<Moving<Image>> reelRight() {
         return symbolReel(RIGHT);
     }
 
     public Collection<Moving<Image>> reelLeft() {
         return symbolReel(LEFT);
-    }
-
-    private Image determineImage(Card card) {
-        return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
     }
 
     private Image blankCard() {

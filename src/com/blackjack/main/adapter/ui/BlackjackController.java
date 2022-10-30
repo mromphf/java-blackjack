@@ -70,9 +70,10 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private GraphicsContext graphics;
 
     @Inject
-    public BlackjackController(Game game,
-                               ScreenManagement screenSupervisor,
-                               ImageService images) {
+    public BlackjackController(
+            Game game,
+            ScreenManagement screenSupervisor,
+            ImageService images) {
         this.game = game;
         this.screenSupervisor = screenSupervisor;
         this.images = images;

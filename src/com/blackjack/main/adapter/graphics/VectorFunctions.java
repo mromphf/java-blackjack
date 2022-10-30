@@ -6,6 +6,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.blackjack.main.adapter.graphics.Vector.vector;
+import static java.util.stream.IntStream.range;
 
 public class VectorFunctions {
 
@@ -43,9 +44,8 @@ public class VectorFunctions {
     public SortedMap<Integer, Vector> dealer(int numCards) {
         final SortedMap<Integer, Vector> vectorsRoot = new TreeMap<>();
 
-        for (int i = 0; i <= numCards; i++) {
-            vectorsRoot.put(i, vector(horOrigin + (gapBetweenCards * i), verOriginDealer));
-        }
+        range(0, numCards).forEach(i ->
+                vectorsRoot.put(i, vector(horOrigin + (gapBetweenCards * i), verOriginDealer)));
 
         return vectorsRoot;
     }
@@ -53,9 +53,8 @@ public class VectorFunctions {
     public SortedMap<Integer, Vector> player(int numCards) {
         final SortedMap<Integer, Vector> vectorsRoot = new TreeMap<>();
 
-        for (int i = 0; i <= numCards; i++) {
-            vectorsRoot.put(i, (vector(horOrigin + (gapBetweenCards * i), verOriginPlayer)));
-        }
+        range(0, numCards).forEach(i ->
+                vectorsRoot.put(i, (vector(horOrigin + (gapBetweenCards * i), verOriginPlayer))));
 
         return vectorsRoot;
     }

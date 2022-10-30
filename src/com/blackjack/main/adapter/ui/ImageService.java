@@ -6,9 +6,10 @@ import javafx.scene.image.Image;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface ImageService {
-    List<Image> fromCards(Collection<Card> cards);
+    List<Image> fromCards(Stream<Card> cards);
     Collection<Moving<Image>> reelLeft();
     Collection<Moving<Image>> reelRight();
 }

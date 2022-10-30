@@ -169,7 +169,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.reset();
 
-            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay()));
+            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay().stream()));
 
             render(tableView);
         });
@@ -178,25 +178,26 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private void render(TableView tableView) {
         final VectorFunctions vectorFunctions = new VectorFunctions(tableDisplay);
 
-        final List<Image> dealerImages = images.fromCards(tableView.dealerHand());
-        final List<Image> playerImages = images.fromCards(tableView.playerHand());
+        final List<Image> dealerImages = images.fromCards(tableView.dealerHand().stream());
+        final List<Image> playerImages = images.fromCards(tableView.playerHand().stream());
         final List<Image> allCardImages = images.fromCards(tableView.allCardsInPlay());
 
         final SortedMap<Integer, Vector> vectorsDealerRow = vectorFunctions.dealer(tableView.dealerHand().size());
         final SortedMap<Integer, Vector> vectorsPlayerRow = vectorFunctions.player(tableView.playerHand().size());
+        final SortedMap<Integer, Vector> vectorsDeal = vectorFunctions.deal();
 
         if (startOfRound.test(tableView)) {
-            final DelayedSequence animation = delayedSequence(
-                    graphics, vectorFunctions.deal(),
-                    allCardImages);
+
+            final DelayedSequence animation =
+                    delayedSequence(graphics, vectorsDeal, allCardImages);
 
             new Thread(animation::start, ANIMATION_DEAL).start();
 
         } else if (timeForDealerReveal.test(tableView)) {
+
             final RevealSequence animation = revealSequence(
                     graphics, vectorsDealerRow,
-                    center(tableDisplay),
-                    tableView.outcome(),
+                    center(tableDisplay), tableView.outcome(),
                     dealerImages);
 
             imageRow(graphics, vectorsPlayerRow, playerImages).draw();

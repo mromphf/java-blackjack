@@ -1,8 +1,6 @@
 package com.blackjack.main.domain.model;
 
 
-import com.google.common.collect.Streams;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
@@ -99,8 +97,8 @@ public class TableView {
         return playerHand;
     }
 
-    public Collection<Card> allCardsInPlay() {
-        return concat(playerHand.stream(), dealerHand().stream()).collect(toSet());
+    public Stream<Card> allCardsInPlay() {
+        return concat(playerHand.stream(), dealerHand().stream());
     }
 
     public Collection<Card> allPlayerCards() {
@@ -112,7 +110,7 @@ public class TableView {
                 .flatMap(Collection::stream);
         final Stream<Card> currentCards = playerHand.stream();
 
-        return Streams.concat(currentCards, concat(cardsToSettle, cardsToPlay))
+        return Stream.concat(currentCards, concat(cardsToSettle, cardsToPlay))
                 .collect(toSet());
     }
 

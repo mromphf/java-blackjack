@@ -9,6 +9,7 @@ import com.blackjack.main.util.InfiniteStack;
 import javafx.scene.image.Image;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.blackjack.main.adapter.graphics.Direction.LEFT;
 import static com.blackjack.main.adapter.graphics.Direction.RIGHT;
@@ -51,9 +52,8 @@ public class ImageStore implements ImageService {
         }
     }
 
-    public List<Image> fromCards(Collection<Card> cards) {
-        return cards.stream()
-                .sorted()
+    public List<Image> fromCards(Stream<Card> cards) {
+        return cards.sorted()
                 .map(this::determineImage)
                 .collect(toList());
     }

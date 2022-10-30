@@ -150,8 +150,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
     }
 
     public void updateTable(TableView tableView) {
-        final boolean outcomeResolved = outcomeIsResolved.test(tableView);
-
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
             gameControls.setVisible(isGameInProgress.test(tableView));
@@ -171,21 +169,21 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.reset();
 
-            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
+            tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay()));
 
             render(tableView);
         });
     }
 
     private void render(TableView tableView) {
-        final int numDealerCards = tableView.dealerHand().size();
-        final int numPlayerCards = tableView.playerHand().size();
         final VectorFunctions vectorFunctions = new VectorFunctions(tableDisplay);
-        final List<Image> dealerImages = images.fromDealerCards(tableView);
-        final List<Image> playerImages = images.fromPlayerCards(tableView);
-        final List<Image> allCardImages = images.fromAllCards(tableView);
-        final SortedMap<Integer, Vector> vectorsDealerRow = vectorFunctions.dealer(numDealerCards);
-        final SortedMap<Integer, Vector> vectorsPlayerRow = vectorFunctions.player(numPlayerCards);
+
+        final List<Image> dealerImages = images.fromCards(tableView.dealerHand());
+        final List<Image> playerImages = images.fromCards(tableView.playerHand());
+        final List<Image> allCardImages = images.fromCards(tableView.allCardsInPlay());
+
+        final SortedMap<Integer, Vector> vectorsDealerRow = vectorFunctions.dealer(tableView.dealerHand().size());
+        final SortedMap<Integer, Vector> vectorsPlayerRow = vectorFunctions.player(tableView.playerHand().size());
 
         if (startOfRound.test(tableView)) {
             final DelayedSequence animation = delayedSequence(

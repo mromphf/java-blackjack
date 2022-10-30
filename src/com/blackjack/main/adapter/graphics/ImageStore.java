@@ -5,7 +5,6 @@ import com.blackjack.main.adapter.ui.ImageService;
 import com.blackjack.main.domain.model.AnonymousCard;
 import com.blackjack.main.domain.model.Card;
 import com.blackjack.main.domain.model.Suit;
-import com.blackjack.main.domain.model.TableView;
 import com.blackjack.main.util.InfiniteStack;
 import javafx.scene.image.Image;
 
@@ -17,13 +16,9 @@ import static com.blackjack.main.adapter.graphics.Symbol.*;
 import static com.blackjack.main.adapter.graphics.Vector.vector;
 import static com.blackjack.main.domain.function.DealerFunctions.anonymousDeck;
 import static com.blackjack.main.domain.model.Suit.*;
-import static com.blackjack.main.domain.predicate.LowOrderPredicate.outcomeIsResolved;
-import static com.blackjack.main.domain.predicate.LowOrderPredicate.playerHasBusted;
-import static com.blackjack.main.util.LessCode.not;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 public class ImageStore implements ImageService {
@@ -56,37 +51,10 @@ public class ImageStore implements ImageService {
         }
     }
 
-    public List<Image> fromCards(Collection<Card> cards, boolean outcomeResolved) {
+    public List<Image> fromCards(Collection<Card> cards) {
         return cards.stream()
-                .map(card -> determineImage(card, outcomeResolved))
-                .collect(toList());
-    }
-
-    @Override
-    public List<Image> fromPlayerCards(TableView tableView) {
-        return tableView.playerHand()
-                .stream()
                 .sorted()
-                .map(card -> determineImage(tableView, card))
-                .collect(toList());
-    }
-
-    @Override
-    public List<Image> fromDealerCards(TableView tableView) {
-        return tableView.dealerHand()
-                .stream()
-                .sorted()
-                .map(card -> determineImage(tableView, card))
-                .collect(toList());
-    }
-
-    @Override
-    public List<Image> fromAllCards(TableView tableView) {
-        return concat(
-                tableView.dealerHand().stream(),
-                tableView.playerHand().stream())
-                .sorted()
-                .map(card -> determineImage(tableView, card))
+                .map(this::determineImage)
                 .collect(toList());
     }
 
@@ -98,20 +66,8 @@ public class ImageStore implements ImageService {
         return symbolReel(LEFT);
     }
 
-    private Image determineImage(TableView tableView, Card card) {
-        if (outcomeIsResolved.and(not(playerHasBusted)).test(tableView)) {
-            return cardImages.get(card.anonymize());
-        } else {
-            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
-        }
-    }
-
-    private Image determineImage(Card card, boolean outcomeResolved) {
-        if (outcomeResolved) {
-            return cardImages.get(card.anonymize());
-        } else {
-            return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
-        }
+    private Image determineImage(Card card) {
+        return card.isFaceUp() ? cardImages.get(card.anonymize()) : blankCard();
     }
 
     private Image blankCard() {

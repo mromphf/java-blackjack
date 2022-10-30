@@ -38,6 +38,10 @@ public class Card extends AnonymousCard implements Comparable<Card> {
         return new Card(ordinal, key, rank, suit, (false));
     }
 
+    public Card faceUp() {
+        return new Card(ordinal, key, rank, suit, (true));
+    }
+
     public Card assignOrdinal(int ord) {
         return new Card(ord, key, rank, suit, isFaceUp);
     }

@@ -1,6 +1,8 @@
 package com.blackjack.main.domain.model;
 
 
+import com.google.common.collect.Streams;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
@@ -8,14 +10,16 @@ import java.util.stream.Stream;
 import static com.blackjack.main.adapter.injection.Bindings.MAX_CARDS;
 import static com.blackjack.main.domain.function.Settlement.settleBet;
 import static com.blackjack.main.domain.predicate.HighOrderPredicate.determineOutcome;
-import static com.blackjack.main.util.StringUtil.*;
-import static com.google.common.collect.Streams.concat;
+import static com.blackjack.main.domain.predicate.LowOrderPredicate.timeForDealerReveal;
+import static com.blackjack.main.util.StringUtil.dealerString;
+import static com.blackjack.main.util.StringUtil.playerString;
 import static java.lang.Math.negateExact;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.concat;
 
 public class TableView {
     private final Account player;
@@ -82,11 +86,21 @@ public class TableView {
     }
 
     public Collection<Card> dealerHand() {
+        if (timeForDealerReveal.test(this)) {
+            return dealerHand.stream()
+                    .map(Card::faceUp)
+                    .collect(toSet());
+        }
+
         return dealerHand;
     }
 
     public Hand playerHand() {
         return playerHand;
+    }
+
+    public Collection<Card> allCardsInPlay() {
+        return concat(playerHand.stream(), dealerHand().stream()).collect(toSet());
     }
 
     public Collection<Card> allPlayerCards() {
@@ -98,7 +112,7 @@ public class TableView {
                 .flatMap(Collection::stream);
         final Stream<Card> currentCards = playerHand.stream();
 
-        return concat(currentCards, concat(cardsToSettle, cardsToPlay))
+        return Streams.concat(currentCards, concat(cardsToSettle, cardsToPlay))
                 .collect(toSet());
     }
 

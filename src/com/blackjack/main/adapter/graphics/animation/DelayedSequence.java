@@ -40,7 +40,7 @@ public class DelayedSequence extends AnimationTimer {
         final long millis_elapsed = (-START_TIME_MILLIS + currentTimeMillis());
 
         for (int i = 0; i < images.size(); i++) {
-            if (millis_elapsed >= (500d * i)) {
+            if (millis_elapsed >= (DELAY * i)) {
 
                 final Image img = images.get(i);
                 final Vector vec = vectors.get(i);
@@ -49,7 +49,7 @@ public class DelayedSequence extends AnimationTimer {
             }
         }
 
-        if (millis_elapsed > (500d * images.size())) {
+        if (millis_elapsed > (DELAY * images.size())) {
             stop();
         }
     }

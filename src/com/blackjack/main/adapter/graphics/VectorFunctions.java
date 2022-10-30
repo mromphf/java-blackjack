@@ -2,8 +2,8 @@ package com.blackjack.main.adapter.graphics;
 
 import javafx.scene.canvas.Canvas;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import static com.blackjack.main.adapter.graphics.Vector.vector;
 
@@ -14,8 +14,8 @@ public class VectorFunctions {
     private static final double VER_ORIGIN_PLAYER = 0.15;
     private static final double VER_ORIGIN_DEALER = 0.15;
 
-    public static List<Vector> vectorsDealCards(Canvas canvas) {
-        final List<Vector> vectorMap = new LinkedList<>();
+    public static SortedMap<Integer, Vector> vectorsDealCards(Canvas canvas) {
+        final SortedMap<Integer, Vector> vectorMap = new TreeMap<>();
         final Vector center = center(canvas);
 
         double cardWidth = (canvas.getWidth() * CARD_WIDTH);
@@ -24,16 +24,16 @@ public class VectorFunctions {
         double verOriginPlayer = (center.y) + (canvas.getHeight() * VER_ORIGIN_PLAYER);
         double verOriginDealer = (canvas.getHeight() * VER_ORIGIN_DEALER);
 
-        vectorMap.add(vector(horOrigin, verOriginDealer));
-        vectorMap.add(vector((horOrigin + gapBetweenCards), verOriginDealer));
-        vectorMap.add(vector(horOrigin, verOriginPlayer));
-        vectorMap.add(vector((horOrigin + gapBetweenCards), verOriginPlayer));
+        vectorMap.put(0, vector(horOrigin, verOriginDealer));
+        vectorMap.put(1, vector((horOrigin + gapBetweenCards), verOriginDealer));
+        vectorMap.put(2, vector(horOrigin, verOriginPlayer));
+        vectorMap.put(3, vector((horOrigin + gapBetweenCards), verOriginPlayer));
 
         return vectorMap;
     }
 
-    public static List<Vector> vectorsDealerReveal(Canvas canvas, int numCards) {
-        final List<Vector> vectorsRoot = new LinkedList<>();
+    public static SortedMap<Integer, Vector> vectorsDealerReveal(Canvas canvas, int numCards) {
+        final SortedMap<Integer, Vector> vectorsRoot = new TreeMap<>();
         final Vector center = center(canvas);
 
         double cardWidth = (canvas.getWidth() * CARD_WIDTH);
@@ -42,14 +42,14 @@ public class VectorFunctions {
         double verOrigin = (canvas.getHeight() * VER_ORIGIN_DEALER);
 
         for (int i = 0; i <= numCards; i++) {
-            vectorsRoot.add(vector(horOrigin + (gapBetweenCards * i), verOrigin));
+            vectorsRoot.put(i, vector(horOrigin + (gapBetweenCards * i), verOrigin));
         }
 
         return vectorsRoot;
     }
 
-    public static List<Vector> vectorsPlayerRow(Canvas canvas, int numCards) {
-        final List<Vector> vectorsRoot = new LinkedList<>();
+    public static SortedMap<Integer, Vector> vectorsPlayerRow(Canvas canvas, int numCards) {
+        final SortedMap<Integer, Vector> vectorsRoot = new TreeMap<>();
         final Vector center = center(canvas);
 
         double cardWidth = (canvas.getWidth() * CARD_WIDTH);
@@ -58,7 +58,7 @@ public class VectorFunctions {
         double verOrigin = (center.y + (canvas.getHeight() * VER_ORIGIN_PLAYER));
 
         for (int i = 0; i <= numCards; i++) {
-            vectorsRoot.add(vector(horOrigin + (gapBetweenCards * i), verOrigin));
+            vectorsRoot.put(i, (vector(horOrigin + (gapBetweenCards * i), verOrigin)));
         }
 
         return vectorsRoot;

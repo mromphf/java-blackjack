@@ -1,27 +1,28 @@
 package com.blackjack.main.adapter.graphics.animation;
 
+import com.blackjack.main.adapter.graphics.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import com.blackjack.main.adapter.graphics.Vector;
 
 import java.util.List;
+import java.util.SortedMap;
 
 public class ImageRow {
 
-    private final List<Vector> vectors;
+    private final SortedMap<Integer, Vector> vectors;
     private final GraphicsContext graphics;
     private final List<Image> images;
 
     public static ImageRow imageRow(
             GraphicsContext graphics,
-            List<Vector> vectors,
+            SortedMap<Integer, Vector> vectors,
             List<Image> images) {
         return new ImageRow(graphics, vectors, images);
     }
 
     private ImageRow(
             GraphicsContext graphics,
-            List<Vector> vectors,
+            SortedMap<Integer, Vector> vectors,
             List<Image> images) {
 
         this.graphics = graphics;

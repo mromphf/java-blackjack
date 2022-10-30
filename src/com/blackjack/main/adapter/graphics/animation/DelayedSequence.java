@@ -1,11 +1,12 @@
 package com.blackjack.main.adapter.graphics.animation;
 
+import com.blackjack.main.adapter.graphics.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import com.blackjack.main.adapter.graphics.Vector;
 
 import java.util.List;
+import java.util.SortedMap;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -16,16 +17,16 @@ public class DelayedSequence extends AnimationTimer {
     private final GraphicsContext graphics;
     private final List<Image> images;
     private final long START_TIME_MILLIS;
-    private final List<Vector> vectors;
+    private final SortedMap<Integer, Vector> vectors;
 
     public static DelayedSequence delayedSequence(GraphicsContext graphics,
-                                                  List<Vector> vectors,
+                                                  SortedMap<Integer, Vector> vectors,
                                                   List<Image> images) {
         return new DelayedSequence(graphics, vectors, images);
     }
 
     private DelayedSequence(GraphicsContext graphics,
-                            List<Vector> vectors,
+                            SortedMap<Integer, Vector> vectors,
                             List<Image> images) {
 
         this.vectors = vectors;

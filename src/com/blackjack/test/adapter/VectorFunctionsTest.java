@@ -1,12 +1,12 @@
 package com.blackjack.test.adapter;
 
 import com.blackjack.main.adapter.graphics.Vector;
+import com.blackjack.main.adapter.graphics.VectorFunctions;
 import javafx.scene.canvas.Canvas;
 import org.junit.jupiter.api.Test;
 
 import java.util.SortedMap;
 
-import static com.blackjack.main.adapter.graphics.VectorFunctions.vectorsDealerReveal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorFunctionsTest {
@@ -18,7 +18,9 @@ class VectorFunctionsTest {
         final int numCards = 4;
         final int expectedLength = 3;
 
-        final SortedMap<Integer, Vector> vectorsRoot = vectorsDealerReveal(TEST_CANVAS, numCards);
+        final VectorFunctions vectorFunctions = new VectorFunctions(TEST_CANVAS);
+
+        final SortedMap<Integer, Vector> vectorsRoot = vectorFunctions.dealer(numCards);
 
         assertEquals(expectedLength, vectorsRoot.size());
     }

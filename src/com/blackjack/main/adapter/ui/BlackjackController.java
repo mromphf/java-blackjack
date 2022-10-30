@@ -1,5 +1,12 @@
 package com.blackjack.main.adapter.ui;
 
+import com.blackjack.main.adapter.graphics.Vector;
+import com.blackjack.main.adapter.graphics.VectorFunctions;
+import com.blackjack.main.adapter.graphics.animation.DelayedSequence;
+import com.blackjack.main.adapter.graphics.animation.RevealSequence;
+import com.blackjack.main.adapter.graphics.animation.TableDisplay;
+import com.blackjack.main.domain.model.TableView;
+import com.blackjack.main.usecase.Game;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,28 +14,27 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import com.blackjack.main.adapter.graphics.animation.DelayedSequence;
-import com.blackjack.main.adapter.graphics.animation.RevealSequence;
-import com.blackjack.main.adapter.graphics.animation.ImageRow;
-import com.blackjack.main.adapter.graphics.animation.TableDisplay;
-import com.blackjack.main.domain.model.TableView;
-import com.blackjack.main.usecase.Game;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.SortedMap;
 
-import static javafx.application.Platform.runLater;
-import static com.blackjack.main.adapter.graphics.VectorFunctions.*;
+import static com.blackjack.main.adapter.graphics.VectorFunctions.center;
 import static com.blackjack.main.adapter.graphics.animation.DelayedSequence.delayedSequence;
-import static com.blackjack.main.adapter.graphics.animation.RevealSequence.revealSequence;
 import static com.blackjack.main.adapter.graphics.animation.ImageRow.imageRow;
+import static com.blackjack.main.adapter.graphics.animation.RevealSequence.revealSequence;
 import static com.blackjack.main.adapter.ui.Screen.BET;
 import static com.blackjack.main.domain.model.Action.*;
 import static com.blackjack.main.domain.predicate.LowOrderPredicate.*;
+import static javafx.application.Platform.runLater;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 
+    public final static String ANIMATION_DEAL = "Animation: Deal Cards";
+    private final static String ANIMATION_REVEAL = "Animation: Dealer Reveal";
     @FXML
     private Label lblBet;
 
@@ -69,7 +75,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
     private final ScreenManagement screenSupervisor;
     private final ImageService images;
 
-    private GraphicsContext context;
+    private GraphicsContext graphics;
 
     @Inject
     public BlackjackController(Game game,
@@ -82,8 +88,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.context = tableDisplay.getGraphicsContext2D();
-        tableDisplay.setContext(context);
+        this.graphics = tableDisplay.getGraphicsContext2D();
+        tableDisplay.setContext(graphics);
     }
 
     @Override
@@ -145,8 +151,6 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
     public void updateTable(TableView tableView) {
         final boolean outcomeResolved = outcomeIsResolved.test(tableView);
-        final int numDealerCards = tableView.dealerHand().size();
-        final int numPlayerCards = tableView.playerHand().size();
 
         runLater(() -> {
             insuranceControls.setVisible(isInsuranceAvailable.test(tableView));
@@ -169,42 +173,43 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             tableDisplay.drawCardsToPlay(images.fromCards(tableView.cardsToPlay(), outcomeResolved));
 
-
-            if (startOfRound.test(tableView)) {
-                DelayedSequence animation = delayedSequence(
-                        context, vectorsDealCards(tableDisplay),
-                        images.fromAllCards(tableView));
-
-                new Thread(animation::start, "Deal Cards Animation Thread").start();
-
-            } else if (timeForDealerReveal.test(tableView)) {
-                RevealSequence animation = revealSequence(
-                        context, vectorsDealerReveal(tableDisplay, numDealerCards),
-                        center(tableDisplay),
-                        tableView.outcome(),
-                        images.fromDealerCards(tableView));
-
-                ImageRow playerRow = imageRow(
-                        context, vectorsPlayerRow(tableDisplay, numPlayerCards),
-                        images.fromPlayerCards(tableView));
-
-                playerRow.draw();
-
-                new Thread(animation::start, "Dealer Reveal Animation Thread").start();
-            } else {
-                ImageRow playerRow = imageRow(
-                        context, vectorsPlayerRow(tableDisplay, numPlayerCards),
-                        images.fromPlayerCards(tableView));
-
-                ImageRow dealerRow = imageRow(
-                        context, vectorsDealerReveal(tableDisplay, numDealerCards),
-                        images.fromDealerCards(tableView));
-
-                playerRow.draw();
-                dealerRow.draw();
-
-                tableDisplay.drawResults(tableView.outcome());
-            }
+            render(tableView);
         });
+    }
+
+    private void render(TableView tableView) {
+        final int numDealerCards = tableView.dealerHand().size();
+        final int numPlayerCards = tableView.playerHand().size();
+        final VectorFunctions vectorFunctions = new VectorFunctions(tableDisplay);
+        final List<Image> dealerImages = images.fromDealerCards(tableView);
+        final List<Image> playerImages = images.fromPlayerCards(tableView);
+        final List<Image> allCardImages = images.fromAllCards(tableView);
+        final SortedMap<Integer, Vector> vectorsDealerRow = vectorFunctions.dealer(numDealerCards);
+        final SortedMap<Integer, Vector> vectorsPlayerRow = vectorFunctions.player(numPlayerCards);
+
+        if (startOfRound.test(tableView)) {
+            final DelayedSequence animation = delayedSequence(
+                    graphics, vectorFunctions.deal(),
+                    allCardImages);
+
+            new Thread(animation::start, ANIMATION_DEAL).start();
+
+        } else if (timeForDealerReveal.test(tableView)) {
+            final RevealSequence animation = revealSequence(
+                    graphics, vectorsDealerRow,
+                    center(tableDisplay),
+                    tableView.outcome(),
+                    dealerImages);
+
+            imageRow(graphics, vectorsPlayerRow, playerImages).draw();
+
+            new Thread(animation::start, ANIMATION_REVEAL).start();
+
+        } else {
+            imageRow(graphics, vectorsPlayerRow, playerImages).draw();
+            imageRow(graphics, vectorsDealerRow, dealerImages).draw();
+
+            tableDisplay.drawResults(tableView.outcome());
+        }
     }
 }

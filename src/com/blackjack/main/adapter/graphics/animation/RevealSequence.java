@@ -13,6 +13,7 @@ import java.util.SortedMap;
 import static com.blackjack.main.adapter.graphics.animation.TableDisplay.OUTCOME_COLORS;
 import static com.blackjack.main.adapter.graphics.animation.TableDisplay.OUTCOME_STRINGS;
 import static java.lang.System.currentTimeMillis;
+import static java.util.stream.IntStream.range;
 
 public class RevealSequence extends AnimationTimer {
 
@@ -54,7 +55,7 @@ public class RevealSequence extends AnimationTimer {
     public void handle(long now) {
         final long millis_elapsed = (-START_TIME_MILLIS + currentTimeMillis());
 
-        for (int i = 0; i < images.size(); i++) {
+        range(0, images.size()).forEach(i -> {
             if (millis_elapsed >= (DELAY * i)) {
 
                 final Image img = images.get(i);
@@ -62,7 +63,8 @@ public class RevealSequence extends AnimationTimer {
 
                 graphics.drawImage(img, vec.x, vec.y);
             }
-        }
+        });
+
 
         if (millis_elapsed > (DELAY * images.size())) {
             final Font f = new Font(FONT_NAME, 50);

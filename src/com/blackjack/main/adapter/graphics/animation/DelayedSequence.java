@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.SortedMap;
 
 import static java.lang.System.currentTimeMillis;
+import static java.util.stream.IntStream.range;
 
 public class DelayedSequence extends AnimationTimer {
 
@@ -40,7 +41,7 @@ public class DelayedSequence extends AnimationTimer {
     public void handle(long now) {
         final long millis_elapsed = (-START_TIME_MILLIS + currentTimeMillis());
 
-        for (int i = 0; i < images.size(); i++) {
+        range(0, images.size()).forEach(i -> {
             if (millis_elapsed >= (DELAY * i)) {
 
                 final Image img = images.get(i);
@@ -48,7 +49,7 @@ public class DelayedSequence extends AnimationTimer {
 
                 graphics.drawImage(img, vec.x, vec.y);
             }
-        }
+        });
 
         if (millis_elapsed > (DELAY * images.size())) {
             stop();

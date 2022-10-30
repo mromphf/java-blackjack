@@ -1,8 +1,6 @@
 package com.blackjack.main.adapter.ui;
 
 import com.blackjack.main.adapter.graphics.animation.AnimationFactory;
-import com.blackjack.main.adapter.graphics.animation.DelayedSequence;
-import com.blackjack.main.adapter.graphics.animation.RevealSequence;
 import com.blackjack.main.adapter.graphics.animation.TableDisplay;
 import com.blackjack.main.domain.model.TableView;
 import com.blackjack.main.usecase.Game;
@@ -25,8 +23,6 @@ import static javafx.application.Platform.runLater;
 
 public class BlackjackController implements Initializable, ScreenObserver {
 
-    public final static String ANIMATION_DEAL = "Animation: Deal Cards";
-    private final static String ANIMATION_REVEAL = "Animation: Dealer Reveal";
     @FXML
     private Label lblBet;
 
@@ -77,8 +73,8 @@ public class BlackjackController implements Initializable, ScreenObserver {
         this.game = game;
         this.screenSupervisor = screenSupervisor;
         this.images = images;
-    }
 
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.graphics = tableDisplay.getGraphicsContext2D();
@@ -169,26 +165,18 @@ public class BlackjackController implements Initializable, ScreenObserver {
     }
 
     private void render(TableView tableView) {
-        final AnimationFactory factory =
-                new AnimationFactory(graphics, tableDisplay, images);
+        final AnimationFactory animations = new AnimationFactory(graphics, tableDisplay, images);
 
         if (startOfRound.test(tableView)) {
-            final DelayedSequence animation =
-                    factory.dealAnimation(tableView.allCardsInPlay());
-
-            new Thread(animation::start, ANIMATION_DEAL).start();
+            animations.dealAnimation(tableView.allCardsInPlay()).start();
 
         } else if (timeForDealerReveal.test(tableView)) {
-            final RevealSequence animation =
-                    factory.revealAnimation(tableView);
-
-            factory.playerImageRow(tableView).draw();
-
-            new Thread(animation::start, ANIMATION_REVEAL).start();
+            animations.playerImageRow(tableView).draw();
+            animations.revealAnimation(tableView).start();
 
         } else {
-            factory.playerImageRow(tableView).draw();
-            factory.dealerImageRow(tableView).draw();
+            animations.playerImageRow(tableView).draw();
+            animations.dealerImageRow(tableView).draw();
 
             tableDisplay.drawResults(tableView.outcome());
         }

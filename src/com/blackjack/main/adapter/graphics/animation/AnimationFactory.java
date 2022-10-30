@@ -15,6 +15,9 @@ import static com.blackjack.main.adapter.graphics.animation.RevealSequence.revea
 
 public class AnimationFactory {
 
+    public final static String ANIMATION_DEAL = "Animation: Deal Cards";
+    private final static String ANIMATION_REVEAL = "Animation: Dealer Reveal";
+
     private final GraphicsContext graphics;
     private final VectorFunctions vectorFunctions;
     private final ImageService images;
@@ -29,20 +32,24 @@ public class AnimationFactory {
         this.vectorFunctions = new VectorFunctions(tableDisplay);
     }
 
-    public DelayedSequence dealAnimation(Stream<Card> cards) {
-        return delayedSequence(graphics,
+    public Thread dealAnimation(Stream<Card> cards) {
+        final DelayedSequence delayedSequence = delayedSequence(graphics,
                 vectorFunctions.deal(),
                 images.fromCards(cards));
+
+        return new Thread(delayedSequence::start, ANIMATION_DEAL);
     }
 
-    public RevealSequence revealAnimation(TableView tableView) {
+    public Thread revealAnimation(TableView tableView) {
         final OutcomeSequence outcomeSequence = outcomeSequence(graphics,
                 tableView.outcome(), vectorFunctions.center());
 
-        return revealSequence(graphics,
+        final RevealSequence revealSequence = revealSequence(graphics,
                 vectorFunctions.dealer(tableView.dealerHand().size()),
                 images.fromCards(tableView.dealerHand().stream()),
                 outcomeSequence);
+
+        return new Thread(revealSequence::start, ANIMATION_REVEAL);
     }
 
     public ImageRow playerImageRow(TableView tableView) {

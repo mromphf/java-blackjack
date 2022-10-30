@@ -19,8 +19,8 @@ public class LowOrderPredicate {
     public static final Predicate<TableView> outcomeIsResolved = table ->
             table.outcome() != null && table.outcome() != UNRESOLVED;
 
-    public static final Predicate<TableView> atLeastOneCardDrawn = table ->
-            table.playerHand().size() > 2;
+    public static final Predicate<TableView> noCardsDrawn = table ->
+            table.playerHand().size() == 2;
 
     public static final Predicate<TableView> handsRemainToBePlayed = table ->
             !table.cardsToPlay().isEmpty();
@@ -63,6 +63,9 @@ public class LowOrderPredicate {
 
     public static final Predicate<TableView> readyToSettleNextHand = table ->
             outcomeIsResolved.and(handsRemainToBeSettled).test(table);
+
+    public static final Predicate<TableView> isDoubleDownAvailable = table ->
+            noCardsDrawn.test(table) && table.canAffordToSpendMore();
 
     public static final Predicate<TableView> isInsuranceAvailable = table ->
             dealerHasAce.and(noActionsTaken).test(table);

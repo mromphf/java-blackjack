@@ -149,7 +149,7 @@ public class BlackjackController implements Initializable, ScreenObserver {
 
             prgDeck.setProgress(tableView.deckProgress());
 
-            btnDouble.setDisable(atLeastOneCardDrawn.test(tableView) || !tableView.canAffordToSpendMore());
+            btnDouble.setDisable(!isDoubleDownAvailable.test(tableView));
             btnSplit.setDisable(!(isSplitAvailable.test(tableView) && tableView.canAffordToSpendMore()));
 
             lblBalance.setText(tableView.balanceText());

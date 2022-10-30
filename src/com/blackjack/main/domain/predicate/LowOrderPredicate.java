@@ -79,7 +79,8 @@ public class LowOrderPredicate {
 
     public static final Predicate<TableView> isSplitAvailable = table -> (
             canSplit(table.playerHand()) &&
-                    outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(table));
+                    outcomeIsUnresolved.and(not(isInsuranceAvailable).and(not(readyToPlayNextHand))).test(table))
+            && table.canAffordToSpendMore();
 
     public static final Predicate<TableView> allBetsSettled = table -> (
             outcomeIsResolved.and(not(handsRemainToBePlayed)).and(not(handsRemainToBeSettled))).test(table);
